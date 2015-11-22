@@ -5,6 +5,7 @@ var dbconf = require('./conf/db');
 var conf = require('./conf/conf');
 var models = require('./models/index');
 
+//shell test
 //连接mongodb
 mongoose.connect('mongodb://' + dbconf.mongo.host + '/' + dbconf.mongo.database);
 var db = mongoose.connection;
