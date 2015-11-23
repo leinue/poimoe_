@@ -19,7 +19,7 @@ module.exports = {
   
     var User = this.models.User();
     var realUser = new User({
-      name: 'function loguser'
+      name: 'function loguser modify'
     });
   
     return util.retMsg(200, realUser.name);
