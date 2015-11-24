@@ -6,6 +6,7 @@ var conf = require('./conf/conf');
 var models = require('./models/index');
 
 //连接mongodb
+//test github
 mongoose.connect('mongodb://' + dbconf.mongo.host + '/' + dbconf.mongo.database);
 var db = mongoose.connection;
 
