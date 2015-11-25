@@ -34,9 +34,10 @@ module.exports = {
 
       console.log('===========');
 
-      console.log(err.toString());
+      console.log(err);
       
       if(err) {
+        console.log('*****');
         ret = util.retMsg(500, err.toString());
       }
 
