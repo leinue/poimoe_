@@ -34,7 +34,6 @@ module.exports = {
 
       console.log('===========');
 
-      console.log(err);
       console.log(err.toString());
       
       if(err) {
@@ -44,11 +43,11 @@ module.exports = {
       ret = util.retMsg(200, 'save successed');
 
       console.log(ret);
-            console.log('===========');
+      console.log('===========');
 
     });
 
-    return ret;
+    // return ret;
   
   }
 
