@@ -31,6 +31,7 @@ module.exports = {
     realUser.save(function(err) {
 
       console.log(err);
+      console.log(err.toString());
       
       if(err) {
         return util.retMsg(500, err.toString());
