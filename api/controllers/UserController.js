@@ -37,7 +37,6 @@ module.exports = {
       console.log(err);
       
       if(err) {
-        console.log('*****');
         ret = util.retMsg(500, err.toString());
       }
 
@@ -48,7 +47,7 @@ module.exports = {
 
     });
 
-    // return ret;
+    return ret;
   
   }
 
