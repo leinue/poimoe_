@@ -32,6 +32,8 @@ module.exports = {
 
     realUser.save(function(err) {
 
+      console.log('===========');
+
       console.log(err);
       console.log(err.toString());
       
@@ -42,6 +44,7 @@ module.exports = {
       ret = util.retMsg(200, 'save successed');
 
       console.log(ret);
+            console.log('===========');
 
     });
 
