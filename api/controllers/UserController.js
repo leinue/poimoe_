@@ -29,6 +29,8 @@ module.exports = {
     });
 
     realUser.save(function(err) {
+
+      console.log(err);
       
       if(err) {
         return util.retMsg(500, err.toString());
@@ -38,8 +40,6 @@ module.exports = {
 
     });
   
-    return util.retMsg(200, realUser.name);
-
   }
 
 };
