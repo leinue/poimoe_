@@ -17,6 +17,8 @@ module.exports = {
   
     this.prev();
 
+    var ret = '';
+
     var User = this.models.User();
     var realUser = new User({
       username: 'xieyang_',
@@ -34,12 +36,14 @@ module.exports = {
       console.log(err.toString());
       
       if(err) {
-        return util.retMsg(500, err.toString());
+        ret = util.retMsg(500, err.toString());
       }
 
-      return util.retMsg(200, 'save successed');
+      ret = util.retMsg(200, 'save successed');
 
     });
+
+    return ret;
   
   }
 
