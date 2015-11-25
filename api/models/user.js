@@ -14,40 +14,28 @@ module.exports = {
       region: String,
       // group: Schema.Types.ObjectId,
       createdAt: {
-      	{
-      		type: Date,
-      		default: Date.now
-      	}
+  		type: Date,
+  		default: Date.now
       },
       updatedAt: {
-      	{
-      		type: Date,
-      		default: Date.now
-      	}
+  		type: Date,
+  		default: Date.now
       },
       isBlocked: {
-      	{
-      		type: Boolean,
-      		default: false
-      	}
+  		type: Boolean,
+  		default: false
       },
       blockedAt: {
-      	{
-      		type: Date,
-      		default: Date.now
-      	}
+  		type: Date,
+  		default: Date.now
       },
       isDeleted: {
-      	{
-      		type: Boolean,
-      		default: false
-      	}
+  		type: Boolean,
+  		default: false
       },
       deletedAt: {
-      	{
-      		type: Date,
-      		default: Date.now
-      	}
+  		type: Date,
+  		default: Date.now
       }
     });     
 
