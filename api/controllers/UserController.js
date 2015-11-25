@@ -19,13 +19,13 @@ module.exports = {
 
     var User = this.models.User();
     var realUser = new User({
-      username: 'xieyang',
-      email: 'ivydomco@gmail.com',
-      password: '123456',
-      sex: '男',
-      photo: 'unknown',
-      intro: 'fuck',
-      region: 'hell'
+      username: 'xieyang_',
+      email: 'ivydomco_@gmail.com',
+      password: '123456_',
+      sex: '男_',
+      photo: '_unknown',
+      intro: '_fuck',
+      region: '_hell'
     });
 
     realUser.save(function(err) {
