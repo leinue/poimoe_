@@ -16,10 +16,26 @@ module.exports = {
   logUser: function() {
   
     this.prev();
-  
+
     var User = this.models.User();
     var realUser = new User({
-      name: 'function loguser modify test'
+      username: 'xieyang',
+      email: 'ivydomco@gmail.com',
+      password: '123456',
+      sex: '男',
+      photo: 'unknown',
+      intro: 'fuck',
+      region: 'hell'
+    });
+
+    realUser.save(function(err) {
+      
+      if(err) {
+        return util.retMsg(500, err.toString());
+      }
+
+      return util.retMsg(200, 'save successed');
+
     });
   
     return util.retMsg(200, realUser.name);
@@ -27,4 +43,3 @@ module.exports = {
   }
 
 };
-
