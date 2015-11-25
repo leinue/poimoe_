@@ -11,7 +11,7 @@ module.exports = {
   
     server.get('/log/', function(req, res, next) {
       
-      res.send(util.retMsg(500, ctrl.userCtrl.logUser()));
+      res.send(ctrl.userCtrl.logUser());
       
     });
   
