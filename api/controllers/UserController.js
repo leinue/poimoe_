@@ -13,7 +13,7 @@ module.exports = {
     return util.retUndefinedError(this.models);
   },
 
-  logUser: function() {
+  logUser: function(req, res, next) {
   
     this.prev();
 
@@ -42,12 +42,12 @@ module.exports = {
 
       ret = util.retMsg(200, 'save successed');
 
+      res.send(ret);
+
       console.log(ret);
       console.log('===========');
 
     });
-
-    return ret;
   
   }
 
