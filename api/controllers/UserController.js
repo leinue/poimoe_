@@ -10,23 +10,23 @@ var index = {
 
     var User = ctrlInitial.models.User();
     var realUser = new User({
-      username: 'xieyang_',
-      email: 'ivydomco_@gmail.com',
-      password: '123456_',
-      sex: '男_',
-      photo: '_unknown', 
-      intro: '_fuck',
-      region: '_hell'
+      username: 'xieyangss_',
+      email: 'ivydomcdo_@gmail.com',
+      password: '12345dd6_',
+      sex: '男_d',
+      photo: '_udnknown', 
+      intro: '_fucddk',
+      region: '_hdell'
     });
 
-    realUser.save(function(err) {
+    realUser.save(function(err,user) {
       
       if(err) {
         ret = util.retMsg(500, err.toString());
         res.send(ret);
       }
 
-      ret = util.retMsg(200, err);
+      ret = util.retMsg(200, user);
       res.send(ret);
 
     });

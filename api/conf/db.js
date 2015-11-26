@@ -4,7 +4,7 @@ module.exports = {
 		user: 'root',
 		password: 'lanjia7758',
 		database: 'test',
-		post: 3306	
+		post: 3306
 	}
 
 }

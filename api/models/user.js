@@ -39,7 +39,7 @@ module.exports = {
       }
     });     
 
-    var user = mongoose.model('User', userSchema);
+    var user = mongoose.model('users', userSchema);
 
     return user;
 

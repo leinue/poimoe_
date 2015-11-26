@@ -7,7 +7,9 @@ var models = require('./models/index');
 
 //连接mongodb
 mongoose.connect('mongodb://' + dbconf.mongo.host + '/' + dbconf.mongo.database);
+
 var db = mongoose.connection;
+var Schema = mongoose.Schema;
 
 db.on('error', console.error.bind(console,'connection error'));
 
