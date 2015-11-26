@@ -117,7 +117,7 @@ var index = {
         res.send(util.retMsg(400, "账号为：" + thisEmail + " 的用户不存在"));
       }
 
-      if(u.password == thisPwd) {
+      if(u[0].password == thisPwd) {
         res.send(util.retMsg(200, "登录成功", u));
       }else {
         res.send(util.retMsg(400, "登录失败，密码错误"));
@@ -125,8 +125,6 @@ var index = {
     };
 
     util.isEmail(thisEmail) === true ? User.findByEmail(thisEmail, _verify) : User.findByUsername(thisEmail, _verify); ;
-
-    res.send(util.retMsg(400, "登录失败，未知错误"));
 
   }
 
