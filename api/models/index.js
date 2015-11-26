@@ -12,7 +12,7 @@ module.exports = {
   		this.mongoose = mongoose;
   	}
   	return this.mongoose;
-  }
+  },
   
   init: function(mongoose) {
     cacheMongoose(mongoose);    
