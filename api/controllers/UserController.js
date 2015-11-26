@@ -14,7 +14,7 @@ var index = {
       email: 'ivydomco_@gmail.com',
       password: '123456_',
       sex: '男_',
-      photo: '_unknown',
+      photo: '_unknown', 
       intro: '_fuck',
       region: '_hell'
     });
@@ -26,7 +26,7 @@ var index = {
         res.send(ret);
       }
 
-      ret = util.retMsg(200, 'save successed');
+      ret = util.retMsg(200, err);
       res.send(ret);
 
     });

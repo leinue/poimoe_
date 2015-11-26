@@ -2,6 +2,7 @@ var ctrl = require('./controllers/index');
 var util = require('./util/index');
 
 module.exports = {
+
   mongoose: undefined,
  
   init: function(server, mongo) {
