@@ -20,21 +20,14 @@ var index = {
     });
 
     realUser.save(function(err) {
-
-      console.log('===========');
-
-      console.log(err);
       
       if(err) {
         ret = util.retMsg(500, err.toString());
+        res.send(ret);
       }
 
       ret = util.retMsg(200, 'save successed');
-
       res.send(ret);
-
-      console.log(ret);
-      console.log('===========');
 
     });
 
