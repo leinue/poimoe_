@@ -1,25 +1,30 @@
 var util = require('../util/index');
 
-module.exports = {
-  
-  models: undefined,
-  
+var ctrlInitial = {
+
+  model: undefined,
+
   init: function(model) {
-    this.models = model; 
-    return this;
+    this.models = model;
   },
-  
+
   prev: function() {
     util.retUndefinedError(this.models);
-  },
+  }
+
+};
+
+module.exports = ctrlInitial;
+
+module.exports = {
 
   logUser: function(req, res, next) {
   
-    //this.prev();
+    //ctrlInitial.prev();
 
     var ret = '';
 
-    var User = this.models.User();
+    var User = ctrlInitial.models.User();
     var realUser = new User({
       username: 'xieyang_',
       email: 'ivydomco_@gmail.com',
