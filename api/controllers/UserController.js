@@ -59,12 +59,12 @@ var index = {
 
     sha1Pwd = sha1.digest(thisPwd);
 
-    var randomNumer = Math.random();
+    var randomNumer = Math.random(0,100).toString();
 
     var User = ctrlInitial.models.User();
     var user = new User({
       email: thisEmail,
-      username: thisEmail + Math.random()
+      username: thisEmail + randomNumer,
       password: sha1Pwd
     });
 
