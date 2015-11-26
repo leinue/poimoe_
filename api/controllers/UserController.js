@@ -48,11 +48,11 @@ var index = {
     }
 
     var sha1Pwd = '';
-    var sha1 = crypto.createHash('sha1');
+    // var sha1 = crypto.createHash('sha1');
 
-    sha1Pwd = sha1.digest(thisPwd);
+    // sha1Pwd = sha1.digest(thisPwd);
 
-    console.log(sha1Pwd);
+    console.log('hhhh');
 
     // var User = ctrlInitial.models.User();
     // var user = new User({
