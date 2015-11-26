@@ -55,18 +55,26 @@ var index = {
 
 
     var sha1Pwd = '';
-    // var sha1 = crypto.createHash('sha1');
+    var sha1 = crypto.createHash('sha1');
 
-    // sha1Pwd = sha1.digest(thisPwd);
+    sha1Pwd = sha1.digest(thisPwd);
 
     var User = ctrlInitial.models.User();
     var user = new User({
       email: thisEmail,
       password: sha1Pwd
     });
-  
-    res.send(util.retMsg(200, '注册成功'));
 
+    user.save(function(err, u) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
+
+      res.send(util.retMsg(200, '注册成功' + JSON.stringify(u)));
+
+    });
+  
   },
 
   login: function(req, res, next) {
