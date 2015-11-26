@@ -4,11 +4,18 @@ var util = require('../util/index.js');
 
 module.exports = {
   
-  mongoose: '',
+  mongoose: undefined,
   userModel: undefined,
+
+  cacheMongoose: function(mongoose) {
+  	if(util.checkIsUndefined(this.mongoose)) {
+  		this.mongoose = mongoose;
+  	}
+  	return this.mongoose;
+  }
   
   init: function(mongoose) {
-    this.mongoose = mongoose;    
+    cacheMongoose(mongoose);    
   },
 
   cacheModel: function(v) {
