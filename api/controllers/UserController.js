@@ -47,6 +47,8 @@ var index = {
       res.send(util.retMsg(400, "邮箱或密码不能为空"));
     }
 
+    console.log(this.config.PASSWORD_LENGTH);
+
     if(util.lengthIsGreaterThan(thisPwd, this.config.PASSWORD_LENGTH)) {
       res.send(util.retMsg(400, "您的密码不能大于16位"));
     }
