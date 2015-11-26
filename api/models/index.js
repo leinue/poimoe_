@@ -15,7 +15,7 @@ module.exports = {
   },
   
   init: function(mongoose) {
-    cacheMongoose(mongoose);    
+    this.cacheMongoose(mongoose);    
   },
 
   cacheModel: function(v) {
