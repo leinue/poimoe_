@@ -53,8 +53,6 @@ var index = {
       res.send(util.retMsg(400, "请输入合法的邮箱地址"));
     }
 
-    var isEmailExists = model.getUserByEmail(thisEmail);
-
     if(isEmailExists) {
       res.send(util.retMsg(400, "该邮箱已被注册过"));
     }
@@ -104,7 +102,7 @@ var index = {
 
 var ctrlInitial = {
 
-  model: undefined,
+  models: undefined,
 
   init: function(model) {
     this.models = model;
