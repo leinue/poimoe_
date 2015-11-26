@@ -1,22 +1,6 @@
 var util = require('../util/index');
 
-var ctrlInitial = {
-
-  model: undefined,
-
-  init: function(model) {
-    this.models = model;
-  },
-
-  prev: function() {
-    util.retUndefinedError(this.models);
-  }
-
-};
-
-module.exports.initial = ctrlInitial;
-
-module.exports = {
+var index = {
 
   logUser: function(req, res, next) {
   
@@ -57,3 +41,20 @@ module.exports = {
   }
 
 };
+
+var ctrlInitial = {
+
+  model: undefined,
+
+  init: function(model) {
+    this.models = model;
+    return index;
+  },
+
+  prev: function() {
+    util.retUndefinedError(this.models);
+  }
+
+};
+
+module.exports = ctrlInitial;
