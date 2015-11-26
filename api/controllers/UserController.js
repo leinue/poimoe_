@@ -76,7 +76,7 @@ var index = {
     var user = new User({
       email: thisEmail,
       username: thisEmail + randomNumer,
-      password: sha1Pwd
+      password: thisPwd
     });
 
     user.save(function(err, u) {
