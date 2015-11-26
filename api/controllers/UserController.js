@@ -53,10 +53,6 @@ var index = {
       res.send(util.retMsg(400, "请输入合法的邮箱地址"));
     }
 
-    if(isEmailExists) {
-      res.send(util.retMsg(400, "该邮箱已被注册过"));
-    }
-
     var User = ctrlInitial.models.User();
 
     User.findByEmail(thisEmail, function(err, u) {
