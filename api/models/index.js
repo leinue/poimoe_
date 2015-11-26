@@ -1,5 +1,6 @@
 
 var user = require('./user');
+var util = require('../util/index.js');
 
 module.exports = {
   
@@ -9,12 +10,15 @@ module.exports = {
   init: function(mongoose) {
     this.mongoose = mongoose;    
   },
+
+  cacheModel: function(v) {
+  	if(util.checkIsUndefined(v)) {
+  		v = user.init(this.mongoose);
+  	}
+  }
   
   User: function() {
-  	if(this.userModel == undefined) {
-  		this.userModel = user.init(this.mongoose);
-  	}
-
+  	this.cacheModel(this.userModel);
   	return this.userModel;
   }
 
