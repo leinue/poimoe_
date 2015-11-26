@@ -14,15 +14,15 @@ module.exports = {
   	return this.mongoose;
   },
   
-  init: function(mongoose) {
-    this.cacheMongoose(mongoose);    
-  },
-
   cacheModel: function(v) {
   	if(util.checkIsUndefined(v)) {
   		v = user.init(this.mongoose);
   	}
   	return v;
+  },
+
+  init: function(mongoose) {
+    this.cacheMongoose(mongoose);    
   },
   
   User: function() {
