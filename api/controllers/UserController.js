@@ -48,17 +48,17 @@ var index = {
     }
 
     var sha1Pwd = '';
-    // var sha1 = crypto.createHash('sha1');
+    var sha1 = crypto.createHash('sha1');
 
-    // sha1Pwd = sha1.digest(thisPwd);
+    sha1Pwd = sha1.digest(thisPwd);
 
-    console.log('hhhh');
-
-    // var User = ctrlInitial.models.User();
-    // var user = new User({
-    //   email: thisEmail,
-    //   password: sha1Pwd
-    // });
+    var User = ctrlInitial.models.User();
+    var user = new User({
+      email: thisEmail,
+      password: sha1Pwd
+    });
+  
+    res.send(util.retMsg(200, '注册成功'));
 
   },
 
