@@ -18,6 +18,21 @@ var util = {
       return this.retMsg(500, 'undefined');
     } 
 
+  },
+
+  isEmail: function(email) {
+
+    if(email == null || email =='' || email == undefined) {
+      return false;
+    }
+
+    var emailReg = /[^\@\s]{1,}\@(?:[^\s\.]{1,}\.){1,}(?:[a-z]{2,4}\.?){1,2}/gim;
+    return emailReg.test(email);
+  },
+
+  lengthIsGreaterThan: function(str, len, equal) {
+    equal = equal == null ? false : equal;
+    return equal == true ? str.length >= len : str.length > len;
   }
 
 };

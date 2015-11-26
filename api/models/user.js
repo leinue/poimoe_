@@ -8,10 +8,22 @@ module.exports = {
       username: String,
       email: String,
       password: String,
-      sex: String,
-      photo: String,
-      intro: String,
-      region: String,
+      sex: {
+      	type: String,
+      	default: ''
+      },
+      photo: {
+      	type: String,
+      	default: ''
+      },
+      intro: {
+      	type: String,
+      	default: ''
+      },
+      region: {
+      	type: String,
+      	default: '天朝'
+      },
       // group: Schema.Types.ObjectId,
       createdAt: {
   		type: Date,

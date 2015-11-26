@@ -1,4 +1,5 @@
 var util = require('../util/index');
+var crypto = require('crypto');
 
 var index = {
 
@@ -35,6 +36,48 @@ var index = {
 
   register: function(req, res) {
 
+    var thisEmail = req.params.email;
+    var thisPwd = req.params.password;
+
+    var PASSWORD_LENGTH = 16;
+
+    if(thisEmail == undefined || thisPwd == undefined || thisEmail == '' || thisPwd == '') {
+      res.send(util.retMsg(400, "邮箱或密码不能为空"));
+    }
+
+    if(util.lengthIsGreaterThan(thisPwd, PASSWORD_LENGTH)) {
+      res.send(util.retMsg(400, "您的密码不能大于16位"));
+    }
+
+    if(!util.isEmail(thisEmail)) {
+      res.send(util.retMsg(400, "请输入合法的邮箱地址"));
+    }
+
+
+    var sha1Pwd = '';
+    var sha1 = crypto.createHash('sha1');
+
+    sha1Pwd = sha1.digest(thisPwd);
+
+    var randomNumer = Math.random();
+
+    var User = ctrlInitial.models.User();
+    var user = new User({
+      email: thisEmail,
+      username: thisEmail + Math.random()
+      password: sha1Pwd
+    });
+
+    user.save(function(err, u) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
+
+      res.send(util.retMsg(200, '注册成功');
+
+    });
+  
   },
 
   login: function(req, res, next) {
