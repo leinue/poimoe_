@@ -93,8 +93,8 @@ var index = {
 
   login: function(req, res, next) {
 
-    var thisEmail = res.params.email;
-    var thisPwd = res.params.password;
+    var thisEmail = req.params.email;
+    var thisPwd = req.params.password;
 
     if(thisEmail == '' || thisEmail == undefined || thisPwd == '' || thisPwd == undefined) {
       res.send(util.retMsg(400, "用户名/邮箱或密码不能为空"));
