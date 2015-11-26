@@ -74,7 +74,7 @@ var index = {
         res.send(util.retMsg(401, err.toString()));
       }
 
-      res.send(util.retMsg(200, '注册成功');
+      res.send(util.retMsg(200, '注册成功'));
 
     });
   
