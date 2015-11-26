@@ -53,6 +53,12 @@ module.exports = {
 
     var user = mongoose.model('users', userSchema);
 
+    user.statics.findByEmail = function(e, cb) {
+    	return this.find({
+    		email: e
+    	},cb);
+    };
+
     return user;
 
   }

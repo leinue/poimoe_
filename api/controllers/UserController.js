@@ -53,6 +53,23 @@ var index = {
       res.send(util.retMsg(400, "请输入合法的邮箱地址"));
     }
 
+    var isEmailExists = model.getUserByEmail(thisEmail);
+
+    if(isEmailExists) {
+      res.send(util.retMsg(400, "该邮箱已被注册过"));
+    }
+
+    var User = ctrlInitial.models.User();
+
+    User.findByEmail(thisEmail, function(err, u) {
+
+      if(err) {
+        res.send(util.retMsg(400, err.toString()));
+      }
+
+      console.log(u);
+
+    });
 
     var sha1Pwd = '';
     var sha1 = crypto.createHash('sha1');
@@ -61,7 +78,6 @@ var index = {
 
     var randomNumer = Math.random(0,100).toString();
 
-    var User = ctrlInitial.models.User();
     var user = new User({
       email: thisEmail,
       username: thisEmail + randomNumer,

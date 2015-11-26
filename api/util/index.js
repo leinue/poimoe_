@@ -34,7 +34,7 @@ var util = {
     equal = equal == null ? false : equal;
     return equal == true ? str.length >= len : str.length > len;
   }
-
+  
 };
 
 module.exports = util;
