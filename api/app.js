@@ -20,11 +20,13 @@ var server = restify.createServer({
 	name: 'poimoe'
 });
 
-//初始化路由
-routes.init(server, mongoose);
+
 
 //开始监听服务器端口
 server.listen(2333, function() {
+//初始化路由
+routes.init(server, mongoose);
+	
   console.log('%s listening at %s', server.name, server.url);
 });
 
