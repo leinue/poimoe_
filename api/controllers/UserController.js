@@ -42,7 +42,7 @@ var index = {
     console.log(thisEmail);
     console.log(thisPwd);
 
-    if(thisEmail == null || thisPwd == null) {
+    if(thisEmail == undefined || thisPwd == undefined || thisEmail == '' || thisPwd == '') {
       res.send(util.retMsg(400, "用户邮箱或密码不能为空"));
     }
 

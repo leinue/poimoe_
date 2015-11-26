@@ -10,6 +10,11 @@ module.exports = {
     
     ctrl.init(mongo);
     this.mongoose = mongo;
+
+    server.pre(function(req, res, next) {
+    	res.charSet('utf-8');
+    	return next();
+    });
   
     server.get('/log/', ctrl.userCtrl.logUser);
 
