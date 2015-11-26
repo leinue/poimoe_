@@ -1,4 +1,5 @@
 var util = require('../util/index');
+var crypto = require('crypto');
 
 var index = {
 
@@ -34,6 +35,31 @@ var index = {
   },
 
   register: function(req, res) {
+
+    var thisEmail = req.params.email;
+    var thisPwd = req.params.password;
+
+    console.log(thisEmail);
+    console.log(thisPwd);
+
+    if(thisEmail == null || thisPwd == null) {
+      res.send(util.retMsg(400, "用户邮箱或密码不能为空"));
+    }
+
+    if(thisPwd.length > 16) {
+      res.send(util.retMsg(400, "用户密码不能大于16位"));
+    }
+
+    var sha1Pwd = '';
+    var sha1 = crypto.createHash('sha1');
+
+    sha1Pwd = sha1.digest(thisPwd);
+
+    var User = ctrlInitial.models.User();
+    var user = new User({
+      email: thisEmail,
+      password: sha1Pwd
+    });
 
   },
 
