@@ -39,9 +39,6 @@ var index = {
     var thisEmail = req.params.email;
     var thisPwd = req.params.password;
 
-    console.log(thisEmail);
-    console.log(thisPwd);
-
     if(thisEmail == undefined || thisPwd == undefined || thisEmail == '' || thisPwd == '') {
       res.send(util.retMsg(400, "用户邮箱或密码不能为空"));
     }
@@ -55,11 +52,13 @@ var index = {
 
     sha1Pwd = sha1.digest(thisPwd);
 
-    var User = ctrlInitial.models.User();
-    var user = new User({
-      email: thisEmail,
-      password: sha1Pwd
-    });
+    console.log(sha1Pwd);
+
+    // var User = ctrlInitial.models.User();
+    // var user = new User({
+    //   email: thisEmail,
+    //   password: sha1Pwd
+    // });
 
   },
 
