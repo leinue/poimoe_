@@ -33,7 +33,7 @@ module.exports = {
 		};
 
 		smtpTransport.sendMail(mailOptions, function(err, response) {
-			if(error) {
+			if(err) {
 				res.send(err);
 			}else {
 				res.send('message senf:' + response.message);
