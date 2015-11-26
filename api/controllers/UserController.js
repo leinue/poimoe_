@@ -39,18 +39,25 @@ var index = {
     var thisEmail = req.params.email;
     var thisPwd = req.params.password;
 
+    var PASSWORD_LENGTH = 16;
+
     if(thisEmail == undefined || thisPwd == undefined || thisEmail == '' || thisPwd == '') {
-      res.send(util.retMsg(400, "用户邮箱或密码不能为空"));
+      res.send(util.retMsg(400, "邮箱或密码不能为空"));
     }
 
-    if(thisPwd.length > 16) {
-      res.send(util.retMsg(400, "用户密码不能大于16位"));
+    if(util.lengthIsGreaterThan(thisPwd, PASSWORD_LENGTH)) {
+      res.send(util.retMsg(400, "您的密码不能大于16位"));
     }
+
+    if(!util.isEmail(thisEmail)) {
+      res.send(util.retMsg(400, "请输入合法的邮箱地址"));
+    }
+
 
     var sha1Pwd = '';
-    var sha1 = crypto.createHash('sha1');
+    // var sha1 = crypto.createHash('sha1');
 
-    sha1Pwd = sha1.digest(thisPwd);
+    // sha1Pwd = sha1.digest(thisPwd);
 
     var User = ctrlInitial.models.User();
     var user = new User({
