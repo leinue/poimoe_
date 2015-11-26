@@ -15,10 +15,11 @@ module.exports = {
   	if(util.checkIsUndefined(v)) {
   		v = user.init(this.mongoose);
   	}
+  	return v;
   },
   
   User: function() {
-  	this.cacheModel(this.userModel);
+  	this.userModel = this.cacheModel(this.userModel);
   	return this.userModel;
   }
 
