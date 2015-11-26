@@ -9,11 +9,7 @@ module.exports = {
     ctrl.init(mongo);
     this.mongoose = mongo;
   
-    server.get('/log/', function(req, res, next) {
-      
-      res.send(ctrl.userCtrl.logUser());
-      
-    });
+    server.get('/log/', ctrl.userCtrl.logUser);
   
   }
 

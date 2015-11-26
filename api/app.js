@@ -16,7 +16,9 @@ db.once('open', function(callback) {
 });
 
 //创建restify服务器
-var server = restify.createServer();
+var server = restify.createServer({
+	name: 'poimoe'
+});
 
 //初始化路由
 routes.init(server, mongoose);
