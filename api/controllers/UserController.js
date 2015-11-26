@@ -61,7 +61,9 @@ var index = {
         res.send(util.retMsg(400, err.toString()));
       }
 
-      console.log(u);
+      if(u.length > 0) {
+        res.send(util.retMsg(400, "该邮箱已被注册过"));
+      }
 
     });
 
