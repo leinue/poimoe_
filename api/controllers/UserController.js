@@ -10,12 +10,12 @@ module.exports = {
   },
   
   prev: function() {
-    return util.retUndefinedError(this.models);
+    util.retUndefinedError(this.models);
   },
 
   logUser: function(req, res, next) {
   
-    this.prev();
+    //this.prev();
 
     var ret = '';
 
