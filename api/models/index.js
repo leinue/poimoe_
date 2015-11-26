@@ -11,7 +11,11 @@ module.exports = {
   },
   
   User: function() {
-    return this.userModel == undefined ? user.init(this.mongoose) : this.userModel;
+  	if(this.userModel == undefined) {
+  		this.userModel = user.init(this.mongoose);
+  	}
+
+  	return this.userModel;
   }
 
 };
