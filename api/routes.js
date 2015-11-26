@@ -19,6 +19,8 @@ module.exports = {
     server.get('/log/', ctrl.userCtrl.logUser);
 
     server.get('/user/register/:email/:password', ctrl.userCtrl.register);
+
+    server.get('/user/login/:email/:password', ctrl.userCtrl.login);
   
   }
 

@@ -54,7 +54,13 @@ module.exports = {
     userSchema.statics.findByEmail = function(e, cb) {
     	return this.find({
     		email: e
-    	},cb);
+    	}, cb);
+    };
+
+    userSchema.statics.findByUsername = function(e, cb) {
+    	return this.find({
+    		username: e
+    	}, cb);
     };
 
     var user = mongoose.model('users', userSchema);

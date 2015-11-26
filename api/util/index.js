@@ -1,13 +1,16 @@
+var crypto = require('crypto');
+
 var util = {
   
   checkIsUndefined: function(v) {
      return typeof v === 'undefined' || v === undefined;
   },
 
-  retMsg: function(c, msg) {
+  retMsg: function(c, msg, d) {
     return {
       code: c,
-      message: msg
+      message: msg,
+      data: d
     };
   },
 
@@ -33,8 +36,13 @@ var util = {
   lengthIsGreaterThan: function(str, len, equal) {
     equal = equal == null ? false : equal;
     return equal == true ? str.length >= len : str.length > len;
+  },
+
+  sha1Pwd: function(pw) {
+    var sha1 = crypto.createHash('sha1');
+    return sha1.digest(pw);
   }
-  
+
 };
 
 module.exports = util;

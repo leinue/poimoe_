@@ -3,6 +3,10 @@ var crypto = require('crypto');
 
 var index = {
 
+  config: {
+    PASSWORD_LENGTH: 16
+  },
+
   logUser: function(req, res, next) {
   
     //ctrlInitial.prev();
@@ -39,13 +43,11 @@ var index = {
     var thisEmail = req.params.email;
     var thisPwd = req.params.password;
 
-    var PASSWORD_LENGTH = 16;
-
     if(thisEmail == undefined || thisPwd == undefined || thisEmail == '' || thisPwd == '') {
       res.send(util.retMsg(400, "邮箱或密码不能为空"));
     }
 
-    if(util.lengthIsGreaterThan(thisPwd, PASSWORD_LENGTH)) {
+    if(util.lengthIsGreaterThan(thisPwd, config.PASSWORD_LENGTH)) {
       res.send(util.retMsg(400, "您的密码不能大于16位"));
     }
 
@@ -67,10 +69,7 @@ var index = {
 
     });
 
-    var sha1Pwd = '';
-    var sha1 = crypto.createHash('sha1');
-
-    sha1Pwd = sha1.digest(thisPwd);
+    var thisPwd = util.sha1Pwd(thisPwd);
 
     var randomNumer = Math.random(0,100).toString();
 
@@ -93,6 +92,41 @@ var index = {
   },
 
   login: function(req, res, next) {
+
+    var thisEmail = res.params.email;
+    var thisPwd = res.params.password;
+
+    if(thisEmail == '' || thisEmail == undefined || thisPwd == '' || thisPwd == undefined) {
+      res.send(util.retMsg(400, "用户名/邮箱或密码不能为空"));
+    }
+
+    if(util.lengthIsGreaterThan(thisPwd, config.PASSWORD_LENGTH)) {
+      res.send(util.retMsg(400, "您的密码不能大于16位"));
+    }
+
+    var User = ctrlInitial.models.User();
+
+    thisPwd = util.sha1Pwd(thisPwd);
+
+    var _verify = function(err, u) {
+      if(err) {
+        res.send(util.retMsg(400, err.toString()));
+      }
+
+      if(u.length === 0) {
+        res.send(util.retMsg(400, "账号为：" + thisEmail + " 的用户不存在"));
+      }
+
+      if(u.password == thisPwd) {
+        res.send(util.retMsg(200, "登录成功", u));
+      }else {
+        res.send(util.retMsg(400, "登录失败，密码错误"));
+      }
+    };
+
+    util.isEmail(thisEmail) === true ? User.findByEmail(thisEmail, _verify) : User.findByUsername(thisEmail, _verify); ;
+
+    res.send(util.retMsg(400, "登录失败，未知错误"));
 
   }
 
