@@ -14,7 +14,7 @@ var ctrlInitial = {
 
 };
 
-module.exports = ctrlInitial;
+module.exports.initial = ctrlInitial;
 
 module.exports = {
 

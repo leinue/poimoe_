@@ -11,5 +11,5 @@ module.exports.init = function(mongo) {
   models.init(db.mongoose);
 };
 
-module.exports.userCtrl = userCtrl.init(models);
+module.exports.userCtrl = userCtrl.initial.init(models);
 
