@@ -46,9 +46,14 @@ var util = {
   userAuth: function() {
 
     return {
-      
-      generatorAccessToken: function() {
 
+      generatorAccessToken: function(str) {
+        var current = Date.getTime();
+        current = current.toString();
+
+        var raw = str + current;
+
+        return this.sha1Pwd(raw);
       }
 
     };

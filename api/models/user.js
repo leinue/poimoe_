@@ -25,29 +25,45 @@ module.exports = {
       	default: '天朝'
       },
       // group: Schema.Types.ObjectId,
+      accessToken: {
+        type: String,
+        default: 'undefined'
+      },
+      tokenExpire: {
+        type: Number,
+        default: 77760000 //15天
+      },
+      tokenCreatedAt: {
+        type: Number,
+        default: undefined
+      },
+      tokenDestoriedAt: {
+        type: Number,
+        default: undefined
+      },
       createdAt: {
-  		type: Date,
-  		default: Date.now
+  		  type: Date,
+  		  default: Date.now
       },
       updatedAt: {
-  		type: Date,
-  		default: Date.now
+  		  type: Date,
+  		  default: Date.now
       },
       isBlocked: {
-  		type: Boolean,
-  		default: false
+  		  type: Boolean,
+  		  default: false
       },
       blockedAt: {
-  		type: Date,
-  		default: Date.now
+  		  type: Date,
+  		  default: Date.now
       },
       isDeleted: {
-  		type: Boolean,
-  		default: false
+    		type: Boolean,
+    		default: false
       },
       deletedAt: {
-  		type: Date,
-  		default: Date.now
+  		  type: Date,
+  		  default: Date.now
       }
     });     
 
@@ -61,6 +77,34 @@ module.exports = {
     	return this.find({
     		username: e
     	}, cb);
+    };
+
+    userSchema.statics.findByAccessToken = function(at, cb) {
+      return this.find({
+        accessToken: at
+      },cb);
+    }；
+
+    userSchema.statics.updateAccessToken = function(e, at, cAt, cb) {
+
+      var createdAt = cAt;
+      var destoriedAt = createdAt + 77760000;
+
+      var query = {
+        email: e
+      };
+
+      var options = {
+        new: true
+      };
+
+      var update = {
+        accessToken: at,
+        tokenCreatedAt: createdAt,
+        tokenDestoriedAt: destoriedAt
+      };
+
+      return this.findOneAndUpdate(query, update, options, cb);
     };
 
     var user = mongoose.model('users', userSchema);

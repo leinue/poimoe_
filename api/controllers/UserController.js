@@ -43,6 +43,25 @@ var index = {
     if(req.username == 'anonymous') {
       res.send(util.retMsg(401, "用户无权限"));
     }else {
+      var User = ctrlInitial.models.User();
+      User.findByAccessToken(req.authorization, function(err, u) {
+
+        if(err) {
+          res.send(util.retMsg(400, err.toString()));
+        }
+
+        if(u.tokenCreatedAt == undefined || u.tokenDestoriedAt == undefined) {
+          res.send(util.retMsg(401, "用户未登录"));
+        }
+
+        var currentTimestamp = Date.getTime();
+        if(currentTimestamp > u.tokenDestoriedAt) {
+          res.send(util.retMsg(401, "access_token已过期"));
+        }
+
+        return next();
+
+      });
       next();
     }
 
@@ -120,7 +139,7 @@ var index = {
 
     var _verify = function(err, u) {
       if(err) {
-        res.send(util.retMsg(400, err.toString()));
+        res.send(util.retMsg(400, "find user error: " + err.toString()));
       }
 
       if(u.length === 0) {
@@ -128,16 +147,31 @@ var index = {
       }
 
        if(u[0].password == thisPwd) {
-        u[o].oauth = {
-          access_token: ''
-        };
-        res.send(util.retMsg(200, "登录成功", u[0]));
+
+        var accessToken = util.userAuth().generatorAccessToken(thisEmail);
+        var atCreatedAt = Date.getTime();
+        var atDestoried = atCreatedAt + 77760000;
+
+        User.updateAccessToken(thisEmail, accessToken, atCreatedAt, function(err, uUpdated) {
+
+          if(err) {
+            res.send(util.retMsg(400, "access_token error: " + err.toString()));
+          }
+
+          res.send(util.retMsg(200, "登录成功", uUpdated));
+
+        });
+
       }else {
         res.send(util.retMsg(400, "登录失败，密码错误"));
       }
     };
 
     util.isEmail(thisEmail) === true ? User.findByEmail(thisEmail, _verify) : User.findByUsername(thisEmail, _verify); ;
+
+  },
+
+  logout: function(req, res, next) {
 
   }
 
