@@ -38,6 +38,16 @@ var index = {
 
   },
 
+  auth: function(req, res, next) {
+
+    if(req.username == 'anonymous') {
+      res.send(util.retMsg(401, "用户无权限"));
+    }else {
+      next();
+    }
+
+  },
+
   register: function(req, res) {
 
     var thisEmail = req.params.email;

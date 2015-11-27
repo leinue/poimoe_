@@ -41,6 +41,17 @@ var util = {
   sha1Pwd: function(pw) {
     var sha1 = crypto.createHash('sha1');
     return sha1.digest(pw);
+  },
+
+  userAuth: function() {
+
+    return {
+      
+      generatorAccessToken: function() {
+
+      }
+
+    };
   }
 
 };
