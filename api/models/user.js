@@ -108,6 +108,28 @@ module.exports = {
 
     };
 
+    userSchema.statics.rollbackAccessToken = function(e, cb) {
+
+      var createdAt = undefined;
+      var destoriedAt = undefined;
+
+      var query = {
+        accessToken: e
+      };
+
+      var options = {
+        new: true
+      };
+
+      var update = {
+        tokenCreatedAt: createdAt,
+        tokenDestoriedAt: destoriedAt
+      };
+
+      return this.findOneAndUpdate(query, update, options, cb);
+
+    };
+
     var user = mongoose.model('users', userSchema);
 
     return user;

@@ -25,6 +25,8 @@ module.exports = {
 
     server.get('/user/login/:email/:password', ctrl.userCtrl.login);
 
+    server.get('/user/logout/', ctrl.userCtrl.logout);
+
     server.get('/session/:name', function(req, res, next) {
       res.send(util.retMsg(200, "您通过了验证"));
     });

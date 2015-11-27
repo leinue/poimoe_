@@ -55,7 +55,6 @@ var index = {
 
     }else {
       var User = ctrlInitial.models.User();
-      console.log(req.authorization.credentials);
       User.findByAccessToken(req.authorization.credentials, function(err, u) {
 
         if(err) {
@@ -187,6 +186,27 @@ var index = {
   },
 
   logout: function(req, res, next) {
+
+    var thisToken = req.authorization.credentials;
+
+    if(thisToken == '' || thisToken == undefined) {
+      res.send(util.retMsg(200, "缺少access_token或未登录"));      
+    }
+
+    var User = ctrlInitial.models.User();
+
+    var _verify = function(err, u) {
+
+      var realUser = u;
+
+      if(realUser.tokenDestoriedAt == undefined || realUser.tokenCreatedAt == undefined) {
+        res.send(util.retMsg(200, "注销成功"));
+      }
+
+      res.send(util.retMsg(200, "注销失败"));
+    }
+
+    User.rollbackAccessToken(thisToken, _verify);
 
   }
 
