@@ -83,7 +83,7 @@ module.exports = {
       return this.find({
         accessToken: at
       },cb);
-    }；
+    };
 
     userSchema.statics.updateAccessToken = function(e, at, cAt, cb) {
 
@@ -105,6 +105,7 @@ module.exports = {
       };
 
       return this.findOneAndUpdate(query, update, options, cb);
+
     };
 
     var user = mongoose.model('users', userSchema);
