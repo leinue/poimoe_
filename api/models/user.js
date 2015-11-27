@@ -31,7 +31,7 @@ module.exports = {
       },
       tokenExpire: {
         type: Number,
-        default: 77760000 //15天
+        default: 77760000000 //15天
       },
       tokenCreatedAt: {
         type: Number,
@@ -88,7 +88,7 @@ module.exports = {
     userSchema.statics.updateAccessToken = function(e, at, cAt, cb) {
 
       var createdAt = cAt;
-      var destoriedAt = createdAt + 77760000;
+      var destoriedAt = createdAt + 77760000000;
 
       var query = {
         email: e

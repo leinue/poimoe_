@@ -54,7 +54,7 @@ var index = {
           res.send(util.retMsg(401, "用户未登录"));
         }
 
-        var currentTimestamp = Date.getTime();
+        var currentTimestamp = Date.now();
         if(currentTimestamp > u.tokenDestoriedAt) {
           res.send(util.retMsg(401, "access_token已过期"));
         }

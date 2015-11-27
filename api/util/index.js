@@ -48,7 +48,7 @@ var util = {
     return {
 
       generatorAccessToken: function(str) {
-        var current = Date.getTime();
+        var current = Date.now();
         current = current.toString();
 
         var raw = str + current;
