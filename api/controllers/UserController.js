@@ -40,29 +40,44 @@ var index = {
 
   auth: function(req, res, next) {
 
+    var reqRoute = req.route.path;
+
     if(req.username == 'anonymous') {
-      res.send(util.retMsg(401, "用户无权限"));
+
+      var reqRouteList = reqRoute.split('/');
+
+      //只有登录和注册api不需要验证权限
+      if((reqRouteList[1] == 'user' && reqRouteList[2] == 'register') || (reqRouteList[1] == 'user' && reqRouteList[2] == 'login' )) {
+        return next();
+      }else {
+        res.send(util.retMsg(401, "用户无权限"));
+      }
+
     }else {
       var User = ctrlInitial.models.User();
-      User.findByAccessToken(req.authorization, function(err, u) {
+      console.log(req.authorization.credentials);
+      User.findByAccessToken(req.authorization.credentials, function(err, u) {
 
         if(err) {
           res.send(util.retMsg(400, err.toString()));
         }
 
-        if(u.tokenCreatedAt == undefined || u.tokenDestoriedAt == undefined) {
-          res.send(util.retMsg(401, "用户未登录"));
+        if(u.length === 0) {
+          res.send(util.retMsg(401, "access_token非法"));
+        }
+
+        if(u[0].tokenCreatedAt == undefined || u[0].tokenDestoriedAt == undefined) {
+          res.send(util.retMsg(401, "access_token非法或用户登录已失效"));
         }
 
         var currentTimestamp = Date.now();
-        if(currentTimestamp > u.tokenDestoriedAt) {
+        if(currentTimestamp > u[0].tokenDestoriedAt) {
           res.send(util.retMsg(401, "access_token已过期"));
         }
 
         return next();
 
       });
-      next();
     }
 
   },
@@ -149,7 +164,7 @@ var index = {
        if(u[0].password == thisPwd) {
 
         var accessToken = util.userAuth().generatorAccessToken(thisEmail);
-        var atCreatedAt = Date.getTime();
+        var atCreatedAt = Date.now();
         var atDestoried = atCreatedAt + 77760000;
 
         User.updateAccessToken(thisEmail, accessToken, atCreatedAt, function(err, uUpdated) {

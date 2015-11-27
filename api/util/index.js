@@ -53,7 +53,9 @@ var util = {
 
         var raw = str + current;
 
-        return this.sha1Pwd(raw);
+        var sha1 = crypto.createHash('sha1');
+        return sha1.digest(raw);
+
       }
 
     };
