@@ -34,11 +34,11 @@ module.exports = {
         default: 77760000000 //15天
       },
       tokenCreatedAt: {
-        type: Number,
+        type: Date,
         default: undefined
       },
       tokenDestoriedAt: {
-        type: Number,
+        type: Date,
         default: undefined
       },
       createdAt: {
