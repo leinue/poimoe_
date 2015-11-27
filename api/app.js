@@ -22,11 +22,14 @@ var server = restify.createServer({
 	name: 'poimoe'
 });
 
+//开启cors
 server.use(restify.CORS({
 	origins: ['*'],
 	credentials: true,
 	headers: ['x-poimoe']
 }));
+
+server.user(restify.authorizationParser());
 
 //初始化路由
 routes.init(server, mongoose);

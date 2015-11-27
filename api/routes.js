@@ -18,6 +18,12 @@ module.exports = {
 
     server.pre(function(req, res, next) {
     	res.charSet('utf-8');
+
+      console.log('*****================*');
+
+      res.send(res.toString());
+      console.log(req.authorization);
+
     	return next();
     });
   
@@ -27,13 +33,18 @@ module.exports = {
 
     server.get('/user/login/:email/:password', ctrl.userCtrl.login);
 
-    server.get('/session', function(req, res, next) {
-      req.session.username="sess_username";
-      req.session.password="sess_admin";
-      req.session.your = {username:"sess_name",password:"sess_pwd"};
-      //使用
-      console.log(req.session.username);
-      console.log(req.session.your);
+    server.get('/session/:name', function(req, res, next) {
+
+      console.log('==============');
+
+      console.log(req.params);
+      console.log(res.header('x-poimoe'));
+      console.log(res.header('Content-Length'));
+
+      console.log(req.authorization);
+
+      console.log('*****==============*****');
+
     });
   
   }

@@ -118,7 +118,10 @@ var index = {
       }
 
        if(u[0].password == thisPwd) {
-        res.send(util.retMsg(200, "登录成功", u));
+        u[o].oauth = {
+          access_token: ''
+        };
+        res.send(util.retMsg(200, "登录成功", u[0]));
       }else {
         res.send(util.retMsg(400, "登录失败，密码错误"));
       }
