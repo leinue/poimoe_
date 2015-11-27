@@ -22,6 +22,12 @@ var server = restify.createServer({
 	name: 'poimoe'
 });
 
+server.use(restify.CORS({
+	origins: ['*'],
+	credentials: true,
+	headers: ['x-poimoe']
+}));
+
 //初始化路由
 routes.init(server, mongoose);
 
