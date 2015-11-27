@@ -29,7 +29,7 @@ server.use(restify.CORS({
 	headers: ['x-poimoe']
 }));
 
-server.user(restify.authorizationParser());
+server.use(restify.authorizationParser());
 
 //初始化路由
 routes.init(server, mongoose);
