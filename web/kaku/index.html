@@ -10,7 +10,14 @@
 
 <script type="text/javascript">
 	
-	
+	var socket = io('ws://socket.poimoe.com');
+
+	socket.on('news', function(data) {
+		console.log(data);
+		socket.emit('my other event', {
+			my: 'data'
+		});
+	});
 
 </script>
 
