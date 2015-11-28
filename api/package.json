@@ -1,0 +1,23 @@
+{
+  "name": "poimoe_api",
+  "version": "0.0.1",
+  "description": "poimoe api",
+  "main": "app.js",
+  "dependencies": {
+    "connect": "^3.4.0",
+    "mongoose": "^4.2.6",
+    "nodemailer": "^1.10.0",
+    "restify": "^4.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node app.js/supervisor app.js"
+  },
+  "keywords": [
+    "oauth2.0",
+    "restful"
+  ],
+  "author": "xieyang",
+  "license": "ISC",
+  "private": true
+}
