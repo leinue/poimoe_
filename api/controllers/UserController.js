@@ -50,7 +50,7 @@ var index = {
       if((reqRouteList[1] == 'user' && reqRouteList[2] == 'register') || (reqRouteList[1] == 'user' && reqRouteList[2] == 'login' )) {
         return next();
       }else {
-        res.send(util.retMsg(401, "用户无权限"));
+        res.send(util.retMsg(401, "用户未登录或无权限"));
       }
 
     }else {
