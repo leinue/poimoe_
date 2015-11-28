@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 	
-	var socket = io('ws://socket.poimoe.com');
+	var socket = io('ws://socket.poimoe.com/chat');
 
 	socket.on('chat message', function(data) {
 		console.log(data);
