@@ -1,19 +1,9 @@
 {
-  "name": "poimoe_socket",
+  "name": "socket-chat-example",
   "version": "0.0.1",
-  "description": "poimoe socket.io server",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "socket"
-  ],
-  "author": "xieyang",
-  "license": "ISC",
-  "devDependencies": {
-    "restify": "^4.0.3",
-    "socket.io": "^1.3.7"
-  },
-  "private": true
+  "description": "my first socket.io app",
+  "dependencies": {
+    "express": "~4.10.2",
+    "socket.io": "~1.2.0"
+  }
 }
