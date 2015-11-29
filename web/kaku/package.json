@@ -1,0 +1,15 @@
+{
+  "name": "kaku",
+  "version": "0.0.1",
+  "description": "poimoe kaku programms",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "xieyang",
+  "license": "ISC",
+  "devDependencies": {
+    "bower": "^1.6.8",
+    "gulp": "^3.9.0"
+  }
+}
