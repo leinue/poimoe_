@@ -1,12 +1,13 @@
 {
-  "name": "poi",
+  "name": "poimoe_poi",
   "version": "0.0.1",
-  "description": "poimoe poi discuss",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "xieyang",
+  "private": true,
+  "author": "",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.2.1",
@@ -15,14 +16,15 @@
     "babel-preset-es2015": "^6.1.18",
     "babel-runtime": "^6.2.0",
     "css-loader": "^0.23.0",
-    "gulp": "^3.9.0",
-    "gulp-webpack": "^1.5.0",
+    "file-loader": "^0.8.5",
+    "jsx-loader": "^0.13.2",
     "style-loader": "^0.13.0",
-    "vinyl-named": "^1.1.0",
+    "url-loader": "^0.5.7",
     "vue": "^1.0.10",
     "vue-hot-reload-api": "^1.2.2",
     "vue-html-loader": "^1.0.0",
-    "vue-loader": "^7.1.5",
+    "vue-loader": "^7.1.7",
+    "vue-router": "^0.7.7",
     "webpack": "^1.12.9"
   }
 }

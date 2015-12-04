@@ -1,25 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Poimoe kaku</title>
+	<title id="app-title">{{title}}</title>
 </head>
 <body>
-
-<script type="text/javascript" src="/bower_components/socket.io-client/socket.io.js"></script>
-<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
-
-<script type="text/javascript">
-	
-	var socket = io('ws://socket.poimoe.com/chat');
-
-	socket.on('chat message', function(data) {
-		console.log(data);
-		socket.emit('chat message', {
-			my: 'data'
-		});
-	});
-
-</script>
+  
+  <div id="app"></div>
+	<script type="text/javascript" src="./dist/build.js"></script>
 
 </body>
 </html>
