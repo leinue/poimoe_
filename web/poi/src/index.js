@@ -1,8 +1,12 @@
 var vue = require('vue');
 var vueRouter = require('vue-router');
 var configRouter = require('./routes.js');
+var filter = require('./filters/index.js');
 
 require('./commons/styles/app.css');
+
+//初始化过滤器
+filter.init(vue);
 
 //初始化配置项
 var config = {
