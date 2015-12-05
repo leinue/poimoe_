@@ -2,11 +2,15 @@
 
 	<header>
 		<poi-header></poi-header>
-		<ul class="nav">
-        	<li><a v-link="{ path: '/index' }">Home</a></li>
-        	<li><a v-link="{ path: '/list' }">List</a></li>
-        	<li><a v-link="{ path: '/about' }">About</a></li>
-    	</ul>
+		<alert type="danger">
+		  <strong>Oh snap!</strong> Change a few things up and try submitting again.
+		</alert>
+		<alert type="danger" dismissable>
+		  <strong>Oh snap!</strong> Change a few things up and try submitting again.
+		</alert>
+		<button class="btn btn-danger btn-lg">
+		  Click to toggle alert on right
+		</button>
 	</header>
 
 	<section>
@@ -37,9 +41,9 @@
 		template: footer.template
 	});
 
-	console.log(header);
-
-
+	var alert = vueStrap.alert;
+	vue.component('alert',alert);
+	
 </script>
 
 <style>
