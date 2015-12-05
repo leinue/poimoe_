@@ -27,6 +27,16 @@ var entryId = config.entry.replace('#', '');
 var entryId = entryId.replace('.', '');
 entry.setAttribute('id', entryId);
 
+//讲bootstrap部件注册到vue中
+for(var key in vueStrap){
+	var current = vueStrap[key];
+	if(key === 'select' || key === 'option') {
+		key = key.replace(/(\w)/,function(v){return v.toUpperCase()});
+		key = 'v' + key;
+	}
+	vue.component(key, current);
+}
+
 //初始化应用程序路由
 vue.use(vueRouter);
 

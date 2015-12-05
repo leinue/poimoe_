@@ -11,6 +11,32 @@
 		<button class="btn btn-danger btn-lg">
 		  Click to toggle alert on right
 		</button>
+		<dropdown>
+  <button type="button" class="btn btn-default" data-toggle="dropdown">
+    Action
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+
+
+
+
+</dropdown>
+
+<v-select>
+  <v-option value="Apple"></v-option>
+  <v-option value="Banana"></v-option>
+  <v-option value="Cherry"></v-option>
+  <v-option value="Orange"></v-option>
+  <v-option value="Grape"></v-option>
+</v-select>
+
 	</header>
 
 	<section>
@@ -40,9 +66,6 @@
 		name: 'poi-footer',
 		template: footer.template
 	});
-
-	var alert = vueStrap.alert;
-	vue.component('alert',alert);
 	
 </script>
 
