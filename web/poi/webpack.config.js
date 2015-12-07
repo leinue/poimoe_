@@ -17,6 +17,10 @@ module.exports = {
             { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=image/svg+xml" }
         ]
     },
+    babel: {
+        presets: ['es2015', 'stage-0'],
+        plugins: ['transform-runtime']
+    },
     resolve: {
         //自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名
         extensions: ['', '.js', '.json', '.css'],
@@ -25,4 +29,22 @@ module.exports = {
             'vue-strap': './node_modules/vue-strap/dist/vue-strap.min.js'
         }
     }
+}
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports.plugins = [ 
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }   
+    }), 
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }   
+    }), 
+    new webpack.optimize.OccurenceOrderPlugin()
+  ]
+} else {
+  module.exports.devtool = '#source-map'
 }

@@ -1,6 +1,6 @@
 <template>
 
-	<p>hello,ooooooooo</p>
+	<p>{{msg}}</p>
 	<ul class="nav">
     	<li><a v-link="{ path: '/index' }">Home</a></li>
     	<li><a v-link="{ path: '/list' }">List</a></li>
@@ -12,8 +12,10 @@
 <script type="text/javascript">
 
 	module.exports = {
-		fuck: function() {
-			console.log('fuck');
+		data: function() {
+			return {
+				msg: 'hello'
+			};
 		}
 	}
 

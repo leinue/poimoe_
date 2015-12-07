@@ -8,6 +8,8 @@ var vueStrap = require('../node_modules/vue-strap/dist/vue-strap.min.js');
 require('../node_modules/bootstrap/dist/css/bootstrap.min.css');
 require('./commons/styles/app.css');//公用定制css
 
+var appEntry = require('./app.vue');
+
 //初始化过滤器
 filter.init(vue);
 
@@ -27,13 +29,14 @@ var entryId = config.entry.replace('#', '');
 var entryId = entryId.replace('.', '');
 entry.setAttribute('id', entryId);
 
-//讲bootstrap部件注册到vue中
+//注册bootstrap部件到vue中
 for(var key in vueStrap){
 	var current = vueStrap[key];
 	if(key === 'select' || key === 'option') {
 		key = key.replace(/(\w)/,function(v){return v.toUpperCase()});
 		key = 'v' + key;
 	}
+	key = key === 'tabset' ? 'tabs' : key;
 	vue.component(key, current);
 }
 
@@ -45,8 +48,11 @@ configRouter(router);
 
 window.vueStrap = vueStrap;
 
-var app = vue.extend(require('./app.vue'));
-router.start(app, config.entry);
+console.log(appEntry);
+
+appEntry.created('q');
+
+var app = vue.extend(appEntry);
 
 new vue({
 	el: '#app-title',
@@ -55,4 +61,18 @@ new vue({
 	}
 });
 
+//每次路由之前请求该方法
+router.beforeEach(function () {
+	console.log('before each');
+});
+
+//默认路由至主页
+router.redirect({
+  '*': '/index'
+});
+
+router.start(app, config.entry);
+
 window.router = router;
+
+// appEntry.init('q');

@@ -2,42 +2,26 @@
 
 	<header>
 		<poi-header></poi-header>
-		<alert type="danger">
-		  <strong>Oh snap!</strong> Change a few things up and try submitting again.
-		</alert>
-		<alert type="danger" dismissable>
-		  <strong>Oh snap!</strong> Change a few things up and try submitting again.
-		</alert>
-		<button class="btn btn-danger btn-lg">
-		  Click to toggle alert on right
-		</button>
-		<dropdown>
-  <button type="button" class="btn btn-default" data-toggle="dropdown">
-    Action
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-
-
-
-
-</dropdown>
-
-<v-select>
-  <v-option value="Apple"></v-option>
-  <v-option value="Banana"></v-option>
-  <v-option value="Cherry"></v-option>
-  <v-option value="Orange"></v-option>
-  <v-option value="Grape"></v-option>
-</v-select>
-
 	</header>
+
+	<div id="mymodal">
+	
+	<button class="btn btn-default btn-lg" @click="showModal = true">Show modal</button>
+      <modal title="Modal title" :show.sync="showModal" effect="fade" :width="400">
+        <div class="modal-header">
+          <h4 class="modal-title">Modal <b>Title</b></h4>
+        </div>
+        <div class="modal-body">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+      </modal>
+
+	</div>
 
 	<section>
 	    <div class="page">
@@ -66,7 +50,41 @@
 		name: 'poi-footer',
 		template: footer.template
 	});
-	
+
+	console.log(header);
+
+	module.exports = {
+
+		created: function(b) {
+
+			if(b === 'q') {
+
+
+				var a = new vue({
+					el: '#mymodal',
+					data: {
+						showModal: false
+					}
+				});
+
+				console.log('=========');
+				console.log(document.getElementById('mymodal'));
+				console.log('=========');
+
+				console.log(a.showModal);
+
+			}
+
+		},
+
+		data: function() {
+			return {
+
+			}
+		}
+
+	};
+
 </script>
 
 <style>
