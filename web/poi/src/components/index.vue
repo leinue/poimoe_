@@ -2,8 +2,8 @@
    <p>hello im index.vue</p>
 </template>
 <script>
-    module.exports = {
-        data : function () {
+    export default {
+        data() {
             return {
                 msg: 'Hello World!!'
             }

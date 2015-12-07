@@ -24,6 +24,7 @@
 	</div>
 
 	<section>
+	{{haha}}
 	    <div class="page">
     	    <router-view></router-view>
     	</div>
@@ -36,55 +37,23 @@
 </template>
 
 <script>
-	var vue = require('vue');
-	var util = require('./commons/scripts/commons.js');
-	var header = require('./components/header.vue');
-	var footer = require('./components/footer.vue');
+	import poiHeader from './components/header.vue';
+	import poiFooter from './components/footer.vue';
 
-	util.registerComponent({
-		name: 'poi-header',
-		template: header.template
-	});
-
-	util.registerComponent({
-		name: 'poi-footer',
-		template: footer.template
-	});
-
-	console.log(header);
-
-	module.exports = {
-
-		created: function(b) {
-
-			if(b === 'q') {
-
-
-				var a = new vue({
-					el: '#mymodal',
-					data: {
-						showModal: false
-					}
-				});
-
-				console.log('=========');
-				console.log(document.getElementById('mymodal'));
-				console.log('=========');
-
-				console.log(a.showModal);
-
-			}
-
-		},
-
-		data: function() {
+	export default {
+		data() {
 			return {
-
+				haha: 'fuck',
+				showModal: false
 			}
+		},
+		components: {
+			poiHeader,
+			poiFooter
 		}
-
 	};
 
+	console.log(poiFooter);
 </script>
 
 <style>

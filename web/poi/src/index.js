@@ -48,10 +48,6 @@ configRouter(router);
 
 window.vueStrap = vueStrap;
 
-console.log(appEntry);
-
-appEntry.created('q');
-
 var app = vue.extend(appEntry);
 
 new vue({
@@ -74,5 +70,3 @@ router.redirect({
 router.start(app, config.entry);
 
 window.router = router;
-
-// appEntry.init('q');

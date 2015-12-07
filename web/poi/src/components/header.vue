@@ -11,12 +11,20 @@
 
 <script type="text/javascript">
 
-	module.exports = {
-		data: function() {
+	export default {
+		data() {
 			return {
-				msg: 'hello'
+				msg: 'hello ftom header.vue'
 			};
 		}
-	}
+	};
+
+	// module.exports = {
+	// 	data: function() {
+	// 		return {
+	// 			msg: 'hello'
+	// 		}
+	// 	}
+	// }
 
 </script>
