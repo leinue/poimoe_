@@ -23,7 +23,8 @@ module.exports = {
 
     server.get('/user/register/:email/:password', ctrl.userCtrl.register);
     server.get('/user/login/:email/:password', ctrl.userCtrl.login);
-    server.get('/user/logout/', ctrl.userCtrl.logout);
+    server.get('/user/logout', ctrl.userCtrl.logout);
+    server.get('/user/getAll/:page/:count', ctrl.userCtrl.findAll);
 
     server.get('/session/:name', function(req, res, next) {
       res.send(util.retMsg(200, "您通过了验证"));
@@ -39,6 +40,8 @@ module.exports = {
     server.get('/settings/add/:title/:logo/:footer', ctrl.settingsCtrl.add);
     server.get('/settings/update/:field/:value', ctrl.settingsCtrl.update);
     server.get('/settings/other/update/:value', ctrl.settingsCtrl.updateOther);
+
+    server.get('/relations/follow/:followerId/:followingId', ctrl.relationsCtrl.follow);
 
   }
 

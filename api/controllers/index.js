@@ -23,6 +23,8 @@ module.exports = {
 
 	tagsCtrl: tagsCtrl.init(models),
 
-	settingsCtrl: settingsCtrl.init(models)
+	settingsCtrl: settingsCtrl.init(models),
+
+	relationsCtrl: relationsCtrl.init(models)
 
 };

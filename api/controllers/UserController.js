@@ -222,6 +222,25 @@ var index = {
 
     User.rollbackAccessToken(thisToken, _verify);
 
+  },
+
+  findAll: function(req, res, next) {
+
+    var page = req.params.page;
+    var count = req.params.count;
+
+    var User = ctrlInitial.models.User();
+
+    User.findAll(page, count, function(err, u) {
+
+      if(err) {
+        res.send(400, err.toString());
+      }
+
+      res.send(util.retMsg(200, u));
+
+    });
+
   }
 
 };

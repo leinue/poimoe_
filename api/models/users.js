@@ -65,7 +65,25 @@ module.exports = {
   		  type: Date,
   		  default: Date.now
       }
-    });     
+    });
+
+    userSchema.statics.findAll = function(page, count, cb) {
+      page = page || 10;
+      count = count || 20;
+
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+        isDeleted: false
+      }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
+    }
+
+    userSchema.statics.findById = function(id, cb) {
+      return this.find({
+        _id: id,
+        isDeleted: false
+      },cb);
+    };
 
     userSchema.statics.findByEmail = function(e, cb) {
     	return this.find({
