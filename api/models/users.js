@@ -24,7 +24,7 @@ module.exports = {
       	type: String,
       	default: '天朝'
       },
-      // group: Schema.Types.ObjectId,
+      group: Schema.Types.ObjectId,
       accessToken: {
         type: String,
         default: 'undefined'

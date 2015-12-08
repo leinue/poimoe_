@@ -4,7 +4,7 @@ module.exports = {
 
   	var Schema = mongoose.Schema;
 
-    var userSchema = Schema({
+    var userGroupsSchema = Schema({
       name: String,
       description: String,
       createdAt: {
@@ -15,6 +15,10 @@ module.exports = {
   		  type: Date,
   		  default: Date.now
       },
+      rightsList: {
+        type: Schema.Types.Mixed,
+        default: {}
+      },
       isDeleted: {
     		type: Boolean,
     		default: false
@@ -23,74 +27,11 @@ module.exports = {
   		  type: Date,
   		  default: Date.now
       }
-    });     
+    });
 
-    userSchema.statics.findByEmail = function(e, cb) {
-    	return this.find({
-    		email: e
-    	}, cb);
-    };
+    var userGroups = mongoose.model('userGroups', userGroupsSchema);
 
-    userSchema.statics.findByUsername = function(e, cb) {
-    	return this.find({
-    		username: e
-    	}, cb);
-    };
-
-    userSchema.statics.findByAccessToken = function(at, cb) {
-      return this.find({
-        accessToken: at
-      },cb);
-    };
-
-    userSchema.statics.updateAccessToken = function(e, at, cAt, cb) {
-
-      var createdAt = cAt;
-      var destoriedAt = createdAt + 77760000000;
-
-      var query = {
-        email: e
-      };
-
-      var options = {
-        new: true
-      };
-
-      var update = {
-        accessToken: at,
-        tokenCreatedAt: createdAt,
-        tokenDestoriedAt: destoriedAt
-      };
-
-      return this.findOneAndUpdate(query, update, options, cb);
-
-    };
-
-    userSchema.statics.rollbackAccessToken = function(e, cb) {
-
-      var createdAt = undefined;
-      var destoriedAt = undefined;
-
-      var query = {
-        accessToken: e
-      };
-
-      var options = {
-        new: true
-      };
-
-      var update = {
-        tokenCreatedAt: createdAt,
-        tokenDestoriedAt: destoriedAt
-      };
-
-      return this.findOneAndUpdate(query, update, options, cb);
-
-    };
-
-    var user = mongoose.model('users', userSchema);
-
-    return user;
+    return userGroups;
 
   }
 };

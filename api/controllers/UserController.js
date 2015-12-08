@@ -9,8 +9,6 @@ var index = {
 
   logUser: function(req, res, next) {
   
-    //ctrlInitial.prev();
-
     var ret = '';
 
     var User = ctrlInitial.models.User();

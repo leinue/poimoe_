@@ -17,7 +17,7 @@ module.exports = {
     	return next();
     });
 
-    server.use(ctrl.userCtrl.auth);
+    // server.use(ctrl.userCtrl.auth);
   
     server.get('/log/', ctrl.userCtrl.logUser);
 
@@ -30,6 +30,8 @@ module.exports = {
     server.get('/session/:name', function(req, res, next) {
       res.send(util.retMsg(200, "您通过了验证"));
     });
+
+    server.get('/tags/add/:name/:description', ctrl.tagsCtrl.add);
   
   }
 
