@@ -28,7 +28,7 @@ module.exports = {
       }
     });
 
-    tags.statics._find = function(page, count, deleted, cb) {
+    tagsSchema.statics._find = function(page, count, deleted, cb) {
 
       page = page == null ? 1 : page;
       count = count == null ? 20 : count;
@@ -42,22 +42,22 @@ module.exports = {
 
     };
 
-    tags.statics.findAll = function(page, count, cb) {
+    tagsSchema.statics.findAll = function(page, count, cb) {
       this._find(page, count, false, cb);
     };
 
-    tags.statics.findAllRemoved = function(page, count, cb) {
+    tagsSchema.statics.findAllRemoved = function(page, count, cb) {
       this._find(page, count, true, cb);
     };
 
-    tags.statics.findById = function(id, cb) {
+    tagsSchema.statics.findById = function(id, cb) {
       return this.find({
         _id: id,
         isDeleted: false
       },cb);
     };
 
-    tags.statics._remove = function(id, cb){
+    tagsSchema.statics._remove = function(id, cb){
       var query = {
         _id: id
       };
@@ -68,13 +68,13 @@ module.exports = {
 
       var update = {
         isDeleted: true,
-        deletedAt: Date.now
+        deletedAt: Date.now()
       };
 
       return this.findOneAndUpdate(query, update, options, cb);
     };
 
-    tags.statics.update = function(obj, cb) {
+    tagsSchema.statics.update = function(obj, cb) {
       var query = {
         _id: id
       };

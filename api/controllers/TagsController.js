@@ -34,19 +34,35 @@ var index = {
 
 		var thisTagId = req.params.id;
 
-		if(thisTagId == undefined || thisTagName == '') {
+		if(thisTagId == undefined || thisTagId == '') {
 			res.send(util.retMsg(401, "缺少参数：标签id"));
 		}
 
 		var Tags = ctrlInitial.models.Tags();
 
-		Tags._remove(thisTagId, function(err, tag) {
+		Tags.findById(thisTagId, function(err, tag) {
 
 			if(err) {
 	        	res.send(util.retMsg(401, err.toString()));
 	      	}
 
-	      	res.send(util.retMsg(200, "删除标签成功"));
+	      	if(tag.length === 0) {
+	      		res.send(util.retMsg(401, '无此标签'));
+	      	}
+
+	      	if(tag[0].isDeleted === false) {
+	      		res.send(util.retMsg(401, '该标签已被删除'));
+	      	}
+
+			Tags._remove(thisTagId, function(err, tag) {
+
+				if(err) {
+		        	res.send(util.retMsg(401, err.toString()));
+		      	}
+
+		      	res.send(util.retMsg(200, "删除标签成功" + tag.toString()));
+
+			});
 
 		});
 
@@ -62,21 +78,37 @@ var index = {
 			res.send(util.retMsg(401, "标签名不能为空"));
 		}
 
+		if(thisTagId == undefined || thisTagId == '') {
+			res.send(util.retMsg(401, "缺少参数：标签id"));
+		}
+
 		var Tags = ctrlInitial.models.Tags();
 
-		Tags.update({
-			_id: thisTagId,
-			name: thisTagName,
-			description: thisTagDescription
-		}, function(err, tag) {
+		Tags.findById(thisTagId, function(err, tag) {
 
 			if(err) {
 	        	res.send(util.retMsg(401, err.toString()));
 	      	}
 
-	      	res.send(util.retMsg(200, tag));
+	      	if(tag.length === 0) {
+	      		res.send(util.retMsg(401, '无此标签'));
+	      	}
 
-		});
+	      	Tags.update({
+				_id: thisTagId,
+				name: thisTagName,
+				description: thisTagDescription
+			}, function(err, tag) {
+
+				if(err) {
+		        	res.send(util.retMsg(401, err.toString()));
+		      	}
+
+		      	res.send(util.retMsg(200, tag));
+
+			});
+
+	     });
 
 	},
 
@@ -115,7 +147,6 @@ var index = {
 	      	res.send(util.retMsg(200, tags));
 
 		});
-
 
 	}
 

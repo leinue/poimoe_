@@ -22,9 +22,7 @@ module.exports = {
     server.get('/log/', ctrl.userCtrl.logUser);
 
     server.get('/user/register/:email/:password', ctrl.userCtrl.register);
-
     server.get('/user/login/:email/:password', ctrl.userCtrl.login);
-
     server.get('/user/logout/', ctrl.userCtrl.logout);
 
     server.get('/session/:name', function(req, res, next) {
@@ -32,8 +30,11 @@ module.exports = {
     });
 
     server.get('/tags/add/:name/:description', ctrl.tagsCtrl.add);
+    server.get('/tags/select/all', ctrl.tagsCtrl.getAll);
+    server.get('/tags/select/removed', ctrl.tagsCtrl.getAllRemoved);
+    server.get('/tags/remove/:id', ctrl.tagsCtrl.remove);
+    server.get('/tags/update/:id/:name/:description', ctrl.tagsCtrl.update);
   
   }
 
 };
-
