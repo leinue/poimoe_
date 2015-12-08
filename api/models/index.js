@@ -1,5 +1,13 @@
 
-var user = require('./user');
+var user = require('./users');
+var userGroups = require('./userGroups');
+var groupRights = require('./groupRights');
+var relations = require('./relations');
+var replys = require('./replys');
+var tags = require('./tags');
+var themes = require('./themes');
+var settings = require('./settings');
+
 var util = require('../util/index.js');
 
 module.exports = {

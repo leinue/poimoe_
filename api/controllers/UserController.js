@@ -74,6 +74,14 @@ var index = {
           res.send(util.retMsg(401, "access_token已过期"));
         }
 
+        if(u[0].isBlocked === true) {
+          res.send(util(400, "账号为：" + thisEmail + " 的用户已被锁定"));
+        }
+
+        if(u[0].isDeleted === true) {
+          res.send(util(400, "账号为：" + thisEmail + " 的用户已被删除"));
+        }
+
         return next();
 
       });
@@ -165,6 +173,14 @@ var index = {
         var accessToken = util.userAuth().generatorAccessToken(thisEmail);
         var atCreatedAt = Date.now();
         var atDestoried = atCreatedAt + 77760000;
+
+        if(u[0].isBlocked === true) {
+          res.send(util(400, "账号为：" + thisEmail + " 的用户已被锁定"));
+        }
+
+        if(u[0].isDeleted === true) {
+          res.send(util(400, "账号为：" + thisEmail + " 的用户已被删除"));
+        }
 
         User.updateAccessToken(thisEmail, accessToken, atCreatedAt, function(err, uUpdated) {
 

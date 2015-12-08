@@ -33,10 +33,12 @@ entry.setAttribute('id', entryId);
 for(var key in vueStrap){
 	var current = vueStrap[key];
 	if(key === 'select' || key === 'option') {
+		//带-的标签自动转换为骆驼书写方式
 		key = key.replace(/(\w)/,function(v){return v.toUpperCase()});
 		key = 'v' + key;
 	}
-	key = key === 'tabset' ? 'tabs' : key;
+	key = key === 'tabset' ? 'tabs' : key;//如果是tabset，则我们给它的标签迷宫是tabs
+	key = key === 'aside' ? 'sidebar' : key; //如果是aisde，则我们给它的标签名是sidebar
 	vue.component(key, current);
 }
 

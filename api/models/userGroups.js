@@ -5,55 +5,13 @@ module.exports = {
   	var Schema = mongoose.Schema;
 
     var userSchema = Schema({
-      username: String,
-      email: String,
-      password: String,
-      sex: {
-      	type: String,
-      	default: ''
-      },
-      photo: {
-      	type: String,
-      	default: ''
-      },
-      intro: {
-      	type: String,
-      	default: ''
-      },
-      region: {
-      	type: String,
-      	default: '天朝'
-      },
-      // group: Schema.Types.ObjectId,
-      accessToken: {
-        type: String,
-        default: 'undefined'
-      },
-      tokenExpire: {
-        type: Number,
-        default: 77760000000 //15天
-      },
-      tokenCreatedAt: {
-        type: Date,
-        default: undefined
-      },
-      tokenDestoriedAt: {
-        type: Date,
-        default: undefined
-      },
+      name: String,
+      description: String,
       createdAt: {
   		  type: Date,
   		  default: Date.now
       },
       updatedAt: {
-  		  type: Date,
-  		  default: Date.now
-      },
-      isBlocked: {
-  		  type: Boolean,
-  		  default: false
-      },
-      blockedAt: {
   		  type: Date,
   		  default: Date.now
       },

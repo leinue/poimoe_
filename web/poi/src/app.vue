@@ -7,7 +7,7 @@
 	<div id="mymodal">
 	
 	<button class="btn btn-default btn-lg" @click="showModal = true">Show modal</button>
-      <modal title="Modal title" :show.sync="showModal" effect="fade" :width="400">
+      <modal title="蛤蛤" :show.sync="showModal" effect="fade" :width="400">
         <div class="modal-header">
           <h4 class="modal-title">Modal <b>Title</b></h4>
         </div>
@@ -24,7 +24,22 @@
 	</div>
 
 	<section>
-	{{haha}}
+		{{haha}}
+
+		<button class="btn btn-success btn-lg" @click="showRight = true">Show Aside on right</button>
+
+	      <sidebar :show.sync="showRight" placement="right" header="蛤蛤蛤蛤" :width="350">
+	        <h4>的颠三倒四的</h4>
+	          <pre><code class="language-javascript">
+	if (talk === cheap){
+	  code.style.display = 'block'
+	}
+	        </code></pre>
+	        <div class="aside-footer">
+	          <button type="button" class="btn btn-default" @click="showRight=false">关闭</button>
+	        </div>
+	      </sidebar>
+
 	    <div class="page">
     	    <router-view></router-view>
     	</div>
@@ -44,16 +59,20 @@
 		data() {
 			return {
 				haha: 'fuck',
-				showModal: false
+				showModal: false,
+				showRight: false
 			}
 		},
 		components: {
 			poiHeader,
 			poiFooter
+		},
+		methods: {
+			showRight: function() {
+
+			}
 		}
 	};
-
-	console.log(poiFooter);
 </script>
 
 <style>
