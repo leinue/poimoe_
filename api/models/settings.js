@@ -18,8 +18,8 @@ module.exports = {
         default: 'poimoe'
       },
       other: {
-        type: Schema.Types.Mixed,
-        default: {}
+        type: String,
+        default: ''
       },
       createdAt: {
   		  type: Date,
@@ -30,6 +30,34 @@ module.exports = {
   		  default: Date.now
       }
     });
+
+    settingsSchema.statics.findAll = function(cb) {
+      return this.find(cb);
+    };
+
+    // settingsSchema.statics.add = function(, cb) {
+
+    // };
+
+    // settingsSchema.statics.modify = function(, cb) {
+    //   this.getAll();
+
+    //   var createdAt = Date.now();
+
+    //   var query = {
+    //     email: e
+    //   };
+
+    //   var options = {
+    //     new: true
+    //   };
+
+    //   var update = {
+    //     createdAt: createdAt
+    //   };
+
+    //   return this.findOneAndUpdate(query, update, options, cb);
+    // };
 
     var settings = mongoose.model('settings', settingsSchema);
 

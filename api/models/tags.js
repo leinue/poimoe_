@@ -36,18 +36,18 @@ module.exports = {
 
       var skipFrom = (page * count) - count;
 
-      this.find({
+      return this.find({
         isDeleted: deleted
       }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
 
     };
 
     tagsSchema.statics.findAll = function(page, count, cb) {
-      this._find(page, count, false, cb);
+      return this._find(page, count, false, cb);
     };
 
     tagsSchema.statics.findAllRemoved = function(page, count, cb) {
-      this._find(page, count, true, cb);
+      return this._find(page, count, true, cb);
     };
 
     tagsSchema.statics.findById = function(id, cb) {
