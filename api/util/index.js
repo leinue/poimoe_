@@ -67,7 +67,7 @@ var util = {
       return false;
     }
 
-    userModel.findByAccessToken(accessToken, cb;
+    userModel.findByAccessToken(accessToken, cb);
 
   }
 
