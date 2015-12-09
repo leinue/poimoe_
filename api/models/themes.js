@@ -12,7 +12,7 @@ module.exports = {
         default: ''
       },
       tag_list: {
-        type: [Schema.types.ObjectId],
+        type: [Schema.Types.ObjectId],
         default: []
       },
       image: {
