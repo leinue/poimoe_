@@ -43,6 +43,12 @@ module.exports = {
 
     server.get('/relations/follow/:followerId/:followingId', ctrl.relationsCtrl.follow);
 
+    server.get('/themes/select/all/:page/:count', ctrl.themesCtrl.getAll);
+    server.get('/themes/select/removed/:page/:count', ctrl.themesCtrl.getAllRemoved);
+    server.get('/themes/add', ctrl.themesCtrl.add);
+    server.get('/themes/update', ctrl.themesCtrl.update);
+    server.get('/themes/delete/:id', ctrl.themesCtrl.remove);
+
   }
 
 };
