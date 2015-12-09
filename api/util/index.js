@@ -59,6 +59,16 @@ var util = {
       }
 
     };
+  },
+
+  getCurrentUser: function(userModel, accessToken, cb) {
+
+    if(userModel == undefined || accessToken == undefined) {
+      return false;
+    }
+
+    userModel.findByAccessToken(accessToken, cb;
+
   }
 
 };

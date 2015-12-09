@@ -64,6 +64,23 @@ module.exports = {
       }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
     };
 
+    themesSchema.statics._remove = function(id, cb) {
+      var query = {
+        _id: id
+      };
+
+      var options = {
+        new: true
+      };
+
+      var update = {
+        isDeleted: true,
+        deletedAt: Date.now()
+      };
+
+      return this.findOneAndUpdate(query, update, options, cb);
+    };
+
     var themes = mongoose.model('themes', themesSchema);
 
     return themes;

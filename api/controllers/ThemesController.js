@@ -32,35 +32,35 @@ var index = {
 
 	remove: function(req, res, next) {
 
-		var thisTagId = req.params.id;
+		var thisThemeId = req.params.id;
 
-		if(thisTagId == undefined || thisTagId == '') {
-			res.send(util.retMsg(401, "缺少参数：标签id"));
+		if(thisThemeId == undefined || thisThemeId == '') {
+			res.send(util.retMsg(401, "缺少参数：主题id"));
 		}
 
 		var Themes = ctrlInitial.models.Themes();
 
-		Themes.findById(thisTagId, function(err, tag) {
+		Themes.findById(thisThemeId, function(err, theme) {
 
 			if(err) {
 	        	res.send(util.retMsg(401, err.toString()));
 	      	}
 
-	      	if(tag.length === 0) {
-	      		res.send(util.retMsg(401, '无此标签'));
+	      	if(theme.length === 0) {
+	      		res.send(util.retMsg(401, '无此主题'));
 	      	}
 
-	      	if(tag[0].isDeleted === false) {
-	      		res.send(util.retMsg(401, '该标签已被删除'));
+	      	if(theme[0].isDeleted === false) {
+	      		res.send(util.retMsg(401, '该主题已被删除'));
 	      	}
 
-			Themes._remove(thisTagId, function(err, tag) {
+			Themes._remove(thisThemeId, function(err, theme) {
 
 				if(err) {
 		        	res.send(util.retMsg(401, err.toString()));
 		      	}
 
-		      	res.send(util.retMsg(200, "删除标签成功" + tag.toString()));
+		      	res.send(util.retMsg(200, "删除主题成功" + theme.toString()));
 
 			});
 
