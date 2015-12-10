@@ -245,53 +245,43 @@ var index = {
         res.send(util.retMsg(401, "用户已被锁定，无权操作"));
       }
 
-      var Themes = ctrlInitial.models.Themes();
+      var Replys = ctrlInitial.models.Replys();
 
-      Themes.findById(_tid, function(err, t) {
+      var _child = [];
+
+      Replys.findById(_rid, function(err, r) {
 
         if(err) {
-          res.send(401, util.retMsg('主题不存在'));
+          res.send(util.retMsg(401, err.toString()));
         }
 
-        var Replys = ctrlInitial.models.Replys();
+        if(r.length === 0) {
+          res.send(util.retMsg(401, "回复不存在"));
+        }
 
-        var _child = [];
+        _child = r[0].child;
 
-        Replys.findById(_rid, function(err, r) {
+        var _childValue = {};
 
-          if(err) {
-            res.send(util.retMsg(401, err.toString()));
-          }
+        _childValue.uid = _uid;
+        _childValue.content = _content;
+        _childValue.createdAt = Date.now();
 
-          if(r.length === 0) {
-            res.send(util.retMsg(401, "回复不存在"));
-          }
+        _child.push(_childValue);
 
-          _child = r[0].child;
+        Replys.findOneAndUpdate({
+          _id: _rid
+        }, {
+          content: _child
+        }, {
+          new: true
+        }, function(err, newReply) {
 
-          var _childValue = {};
+            if(err) {
+              res.send(util.retMsg(401, err.toString()));
+            }
 
-          _childValue.uid = _uid;
-          _childValue.content = _content;
-          _childValue.createdAt = Date.now();
-
-          _child.push(_childValue);
-
-          Replys.findOneAndUpdate({
-            _id: _rid
-          }, {
-            content: _child
-          }, {
-            new: true
-          }, function(err, newReply) {
-
-              if(err) {
-                res.send(util.retMsg(401, err.toString()));
-              }
-
-              res.send(util.retMsg(200, newReply));
-
-          });
+            res.send(util.retMsg(200, newReply));
 
         });
 
