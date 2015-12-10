@@ -8,6 +8,10 @@ module.exports = {
       user_id: Schema.Types.ObjectId,
       theme_id: Schema.Types.ObjectId,
       content: String,
+      parent: {
+        type: Schema.Types.ObjectId,
+        default: []
+      },
       child: {
         type: Schema.Types.ObjectId,
         default: []
@@ -30,24 +34,83 @@ module.exports = {
       }
     });
 
-    replysSchema.statics.findById = function() {
+    replysSchema.statics.findById = function(id, cb) {
+      return this.find({
+        _id: id
+      }, cb);
+    };
+
+    replysSchema.statics.findByThemeId = function(id, cb) {
+      return this.find({
+        theme_id: id
+      }, cb);
+    };
+
+    replysSchema.statics.findByUid = function(id, cb) {
+      return this.find({
+        user_id: id
+      }, cb);
+    };
+
+    replysSchema.statics.findAll = function(page, count, cb) {
+      page = page || 1;
+      count = count || 20;
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+       isDeleted: false 
+      }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
+    };
+
+    replysSchema.statics.findAllRemoved = function(page, count, cb) {
+      page = page || 1;
+      count = count || 20;
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+       isDeleted: true 
+      }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
+    };
+
+    replysSchema.statics._remove = function(id, cb) {
+      var query = {
+        _id: id
+      };
+
+      var options = {
+        new: true
+      };
+
+      var update = {
+        isDeleted: true,
+        deletedAt: Date.now()
+      };
+
+      return this.findOneAndUpdate(query, update, options, cb);
+    };
+
+    replysSchema.statics.add = function(tid, uid, cb) {
+
 
     };
 
-    replysSchema.statics.findByThemeId = function() {
+    replysSchema.statics.updateChild = function(tid, cid, cb) {
+      var query = {
+        _id: id
+      };
 
-    };
+      var options = {
+        new: true
+      };
 
-    replysSchema.statics.findByUid = function() {
+      var child = [];
 
-    };
+      var update = {
+        child: child,
+        updatedAt: Date.now()
+      };
 
-    replysSchema.statics._remove = function() {
-
-    };
-
-    replysSchema.statics.add = function() {
-
+      return this.findOneAndUpdate(query, update, options, cb);
     };
 
     replysSchema.statics.replyTo = function() {
