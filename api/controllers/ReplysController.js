@@ -292,7 +292,7 @@ var index = {
 
     var tid = req.params.tid;
 
-    id(tid === undefined || tid === '') {
+    if(tid === undefined || tid === '') {
       res.send(util.retMsg(401, "缺少参数：主题id"));
     }
 
