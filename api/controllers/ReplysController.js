@@ -261,18 +261,30 @@ var index = {
 
         _child = r[0].child;
 
+        console.log('==========');
+        console.log(_child);
+        console.log('==========');
+
         var _childValue = {};
 
         _childValue.uid = _uid;
         _childValue.content = _content;
         _childValue.createdAt = Date.now();
 
+        console.log('------------');
+        console.log(_childValue);
+        console.log('------------');
+
         _child.push(_childValue);
+
+        console.log('*************');
+        console.log(_child);
+        console.log('*************');
 
         Replys.findOneAndUpdate({
           _id: _rid
         }, {
-          content: _child
+          child: _child
         }, {
           new: true
         }, function(err, newReply) {
