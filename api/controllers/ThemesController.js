@@ -1,5 +1,25 @@
 var util = require('../util/index');
 
+var _util = {
+
+	generatorTagList: function(_tag_list) {
+
+		if(_tag_list != undefined) {
+	   	 	_tag_list = JSON.parse(_tag_list);
+
+	   	 	if(typeof _tag_list.list == undefined) {
+				return false;   		 		
+   	 		}
+
+   	 		_tag_list = _tag_list.list;
+
+   	 		return _tag_list;
+   	 	}
+
+	}
+
+};
+
 var index = {
 
 	add: function(req, res, next) {
@@ -16,6 +36,12 @@ var index = {
 
    	 	if(_uid == undefined || _uid == '') {
    	 		res.send(util.retMsg(401, "缺少参数：用户id"));
+   	 	}
+
+   	 	_tag_list = _util.generatorTagList(_tag_list);
+
+   	 	if(!_tag_list) {
+   	 		res.send(util.retMsg(401, "标签参数列表非法"));
    	 	}
 
    	 	var User = ctrlInitial.models.User();
@@ -109,6 +135,12 @@ var index = {
 			res.send(util.retMsg(401, "缺少参数：用户id"));
 		}
 
+   	 	_tag_list = _util.generatorTagList(_tag_list);
+
+   	 	if(!_tag_list) {
+   	 		res.send(util.retMsg(401, "标签参数列表非法"));
+   	 	}
+
    	 	var User = ctrlInitial.models.User();
 
    	 	User.findById(_uid, function(err, u) {
@@ -190,6 +222,10 @@ var index = {
 	      	res.send(util.retMsg(200, themes));
 
 		});
+
+	},
+
+	getAllReplys: function(req, res, next) {
 
 	}
 

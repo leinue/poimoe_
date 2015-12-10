@@ -12,8 +12,8 @@ module.exports = {
         default: ''
       },
       tag_list: {
-        type: String,
-        default: ''
+        type: Schema.Types.ObjectId,
+        default: []
       },
       image: {
         type: String,
