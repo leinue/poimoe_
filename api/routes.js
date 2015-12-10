@@ -24,7 +24,7 @@ module.exports = {
     server.get('/user/register/:email/:password', ctrl.userCtrl.register);
     server.get('/user/login/:email/:password', ctrl.userCtrl.login);
     server.get('/user/logout', ctrl.userCtrl.logout);
-    server.get('/user/getAll/:page/:count', ctrl.userCtrl.findAll);
+    server.get('/user/select/all/:page/:count', ctrl.userCtrl.findAll);
 
     server.get('/session/:name', function(req, res, next) {
       res.send(util.retMsg(200, "您通过了验证"));
@@ -45,15 +45,9 @@ module.exports = {
 
     server.get('/themes/select/all/:page/:count', ctrl.themesCtrl.getAll);
     server.get('/themes/select/removed/:page/:count', ctrl.themesCtrl.getAllRemoved);
-    server.get('/themes/add', ctrl.themesCtrl.add);
-    server.get('/themes/update', ctrl.themesCtrl.update);
-    server.get('/themes/delete/:id', ctrl.themesCtrl.remove);
-
-    server.post('/post', {
-      hello: 'world'
-    }, function(err, req, res, obj) {
-      console.log(obj);
-    });
+    server.post('/themes/add', ctrl.themesCtrl.add);
+    server.post('/themes/update', ctrl.themesCtrl.update);
+    server.get('/themes/remove/:id', ctrl.themesCtrl.remove);
 
   }
 

@@ -4,21 +4,33 @@ var index = {
 
 	add: function(req, res, next) {
 
-		var thisTagName = req.params.name;
-   	 	var thisTagDescription = req.params.description;
+		var _title = req.params.title;
+   	 	var _content = req.params.content;
+   	 	var _uid = req.params.uid;
+   	 	var _tag_list = req.params.tag_list;
+   	 	var _image = req.params.image;
 
-   	 	if(thisTagName == undefined || thisTagName == '') {
-	      res.send(util.retMsg(401, "标签名不能为空"));
+   	 	if(_title == undefined || _title == '') {
+	      res.send(util.retMsg(401, "文章标题不能为空"));
    	 	}
+
+   	 	if(_uid == undefined || _uid == '') {
+   	 		res.send(util.retMsg(401, "缺少参数：用户id"));
+   	 	}
+
+   	 	console.log(_tag_list);
 
 		var Themes = ctrlInitial.models.Themes();
 
-	    var tag = new Themes({
-	    	name: thisTagName,
-	    	description: thisTagDescription
+	    var theme = new Themes({
+	    	user_id: _uid,
+	    	title: _title,
+	    	content: _content,
+	    	tag_list: _tag_list,
+	    	image: _image
 	    });
 
-	    tag.save(function(err, t) {
+	    theme.save(function(err, t) {
 
 	      if(err) {
 	        res.send(util.retMsg(401, err.toString()));
