@@ -118,7 +118,7 @@ var index = {
               Replys.findOneAndUpdate({
                   _id: _to_rid
               }, {
-                child: _child
+                child: _child,
                 updatedAt: Date.now()
               }, {
                 new: true
