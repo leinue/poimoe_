@@ -52,7 +52,6 @@ module.exports = {
     server.get('/replys/select/all/:page/:count', ctrl.replysCtrl.getAll);
     server.get('/replys/select/removed/:page/:count', ctrl.replysCtrl.getAllRemoved);
     server.post('/replys/add', ctrl.replysCtrl.add);
-    server.post('/replys/update', ctrl.replysCtrl.add);
     server.get('/replys/remove', ctrl.replysCtrl.remove);
 
   }

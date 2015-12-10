@@ -116,7 +116,7 @@ var index = {
               _child = r_parent[0],child;
 
               Replys.findOneAndUpdate({
-                  _id, _to_rid
+                  _id: _to_rid
               }, {
                 child: _child
                 updatedAt: Date.now()
@@ -177,75 +177,6 @@ var index = {
         res.send(util.retMsg(200, "删除回复成功" + reply_removed.toString()));
 
       });
-
-    });
-
-  },
-
-  update: function(req, res, next) {
-
-    var _title = req.params.title;
-      var _content = req.params.content;
-      var _uid = req.params.uid;
-      var _tag_list = req.params.tag_list;
-      var _image = req.params.image;
-      var id = req.params._id;
-
-    if(_title == undefined || _title == '') {
-      res.send(util.retMsg(401, "主题名不能为空"));
-    }
-
-    if(_uid == undefined || _uid == '') {
-      res.send(util.retMsg(401, "缺少参数：用户id"));
-    }
-
-      _tag_list = _util.generatorTagList(_tag_list);
-
-      if(!_tag_list) {
-        res.send(util.retMsg(401, "标签参数列表非法"));
-      }
-
-      var User = ctrlInitial.models.User();
-
-      User.findById(_uid, function(err, u) {
-
-        if(err) {
-          res.send(util.retMsg(401, err.toString()));
-        }
-
-        if(u.length === 0) {
-          res.send(util.retMsg(401, "无此用户"));
-        }
-
-        var Themes = ctrlInitial.models.Themes();
-
-        Themes.findById(id, function(err, theme) {
-
-          if(err) {
-            res.send(util.retMsg(401, err.toString()));
-          }
-
-          if(theme.length === 0) {
-            res.send(util.retMsg(401, '无此主题'));
-          }
-
-          Themes.update(id, {
-            title: _title,
-            content: _content,
-            tag_list: _tag_list,
-            image: _image,
-            updatedAt: Date.now()
-          }, function(err, theme_new) {
-
-            if(err) {
-              res.send(util.retMsg(401, err.toString()));
-            }
-
-            res.send(util.retMsg(200, theme_new));
-
-          });
-
-        });
 
     });
 
