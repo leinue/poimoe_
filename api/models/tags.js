@@ -74,7 +74,7 @@ module.exports = {
       return this.findOneAndUpdate(query, update, options, cb);
     };
 
-    tagsSchema.statics.update = function(obj, cb) {
+    tagsSchema.statics.update = function(id, obj, cb) {
       var query = {
         _id: id
       };

@@ -81,6 +81,20 @@ module.exports = {
       return this.findOneAndUpdate(query, update, options, cb);
     };
 
+    themesSchema.statics.update = function(id, obj, cb) {
+      var query = {
+        _id: id
+      };
+
+      var options = {
+        new: true
+      };
+
+      var update = obj;
+
+      return this.findOneAndUpdate(query, update, options, cb);
+    }
+
     var themes = mongoose.model('themes', themesSchema);
 
     return themes;

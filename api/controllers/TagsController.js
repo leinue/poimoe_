@@ -94,8 +94,7 @@ var index = {
 	      		res.send(util.retMsg(401, '无此标签'));
 	      	}
 
-	      	Tags.update({
-				_id: thisTagId,
+	      	Tags.update(thisTagId, {
 				name: thisTagName,
 				description: thisTagDescription
 			}, function(err, tag) {

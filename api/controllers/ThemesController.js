@@ -18,27 +18,39 @@ var index = {
    	 		res.send(util.retMsg(401, "缺少参数：用户id"));
    	 	}
 
-   	 	console.log(_tag_list);
+   	 	var User = ctrlInitial.models.User();
 
-		var Themes = ctrlInitial.models.Themes();
+   	 	User.findById(_uid, function(err, u) {
 
-	    var theme = new Themes({
-	    	user_id: _uid,
-	    	title: _title,
-	    	content: _content,
-	    	tag_list: _tag_list,
-	    	image: _image
-	    });
+   	 		if(err) {
+   	 			res.send(util.retMsg(401, err.toString()));
+   	 		}
 
-	    theme.save(function(err, t) {
+   	 		if(u.length === 0) {
+   	 			res.send(util.retMsg(401, "无此用户"));
+   	 		}
 
-	      if(err) {
-	        res.send(util.retMsg(401, err.toString()));
-	      }
+   	 		var Themes = ctrlInitial.models.Themes();
 
-	      res.send(util.retMsg(200, t));
+		    var theme = new Themes({
+		    	user_id: _uid,
+		    	title: _title,
+		    	content: _content,
+		    	tag_list: _tag_list,
+		    	image: _image
+		    });
 
-	    });
+		    theme.save(function(err, t) {
+
+		      if(err) {
+		        res.send(util.retMsg(401, err.toString()));
+		      }
+
+		      res.send(util.retMsg(200, t));
+
+		    });
+
+   	 	});
 
 	},
 
@@ -62,7 +74,7 @@ var index = {
 	      		res.send(util.retMsg(401, '无此主题'));
 	      	}
 
-	      	if(theme[0].isDeleted === false) {
+	      	if(theme[0].isDeleted === true) {
 	      		res.send(util.retMsg(401, '该主题已被删除'));
 	      	}
 
@@ -82,45 +94,64 @@ var index = {
 
 	update: function(req, res, next) {
 
-		var thisTagName = req.params.name;
-		var thisTagDescription = req.params.description;
-		var thisTagId = req.params.id;
+		var _title = req.params.title;
+   	 	var _content = req.params.content;
+   	 	var _uid = req.params.uid;
+   	 	var _tag_list = req.params.tag_list;
+   	 	var _image = req.params.image;
+   	 	var id = req.params._id;
 
-		if(thisTagName == undefined || thisTagName == '') {
-			res.send(util.retMsg(401, "标签名不能为空"));
+		if(_title == undefined || _title == '') {
+			res.send(util.retMsg(401, "主题名不能为空"));
 		}
 
-		if(thisTagId == undefined || thisTagId == '') {
-			res.send(util.retMsg(401, "缺少参数：标签id"));
+		if(_uid == undefined || _uid == '') {
+			res.send(util.retMsg(401, "缺少参数：用户id"));
 		}
 
-		var Themes = ctrlInitial.models.Themes();
+   	 	var User = ctrlInitial.models.User();
 
-		Themes.findById(thisTagId, function(err, tag) {
+   	 	User.findById(_uid, function(err, u) {
 
-			if(err) {
-	        	res.send(util.retMsg(401, err.toString()));
-	      	}
+   	 		if(err) {
+   	 			res.send(util.retMsg(401, err.toString()));
+   	 		}
 
-	      	if(tag.length === 0) {
-	      		res.send(util.retMsg(401, '无此标签'));
-	      	}
+   	 		if(u.length === 0) {
+   	 			res.send(util.retMsg(401, "无此用户"));
+   	 		}
 
-	      	Themes.update({
-				_id: thisTagId,
-				name: thisTagName,
-				description: thisTagDescription
-			}, function(err, tag) {
+			var Themes = ctrlInitial.models.Themes();
+
+			Themes.findById(id, function(err, theme) {
 
 				if(err) {
 		        	res.send(util.retMsg(401, err.toString()));
 		      	}
 
-		      	res.send(util.retMsg(200, tag));
+		      	if(theme.length === 0) {
+		      		res.send(util.retMsg(401, '无此主题'));
+		      	}
 
-			});
+		      	Themes.update(id, {
+					title: _title,
+					content: _content,
+					tag_list: _tag_list,
+					image: _image,
+					updatedAt: Date.now()
+				}, function(err, theme_new) {
 
-	     });
+					if(err) {
+			        	res.send(util.retMsg(401, err.toString()));
+			      	}
+
+			      	res.send(util.retMsg(200, theme_new));
+
+				});
+
+		     });
+
+   	 	});
 
 	},
 
