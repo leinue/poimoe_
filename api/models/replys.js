@@ -8,12 +8,8 @@ module.exports = {
       user_id: Schema.Types.ObjectId,
       theme_id: Schema.Types.ObjectId,
       content: String,
-      parent: {
-        type: Schema.Types.ObjectId,
-        default: []
-      },
       child: {
-        type: Schema.Types.ObjectId,
+        type: [Schema.Types.Mixed],
         default: []
       },
       createdAt: {
@@ -36,19 +32,23 @@ module.exports = {
 
     replysSchema.statics.findById = function(id, cb) {
       return this.find({
-        _id: id
+        _id: id,
+        isDeleted: false
       }, cb);
     };
 
     replysSchema.statics.findByThemeId = function(id, cb) {
       return this.find({
-        theme_id: id
-      }, cb);
+        theme_id: id,
+        isDeleted: false 
+      }).sort('createdAt').exec(cb);
+
     };
 
     replysSchema.statics.findByUid = function(id, cb) {
       return this.find({
-        user_id: id
+        user_id: id,
+        isDeleted: false
       }, cb);
     };
 
@@ -89,11 +89,6 @@ module.exports = {
       return this.findOneAndUpdate(query, update, options, cb);
     };
 
-    replysSchema.statics.add = function(tid, uid, cb) {
-
-
-    };
-
     replysSchema.statics.updateChild = function(tid, cid, cb) {
       var query = {
         _id: id
@@ -111,10 +106,6 @@ module.exports = {
       };
 
       return this.findOneAndUpdate(query, update, options, cb);
-    };
-
-    replysSchema.statics.replyTo = function() {
-
     };
 
     var replys = mongoose.model('replys', replysSchema);

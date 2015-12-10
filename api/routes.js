@@ -51,7 +51,8 @@ module.exports = {
 
     server.get('/replys/select/all/:page/:count', ctrl.replysCtrl.getAll);
     server.get('/replys/select/removed/:page/:count', ctrl.replysCtrl.getAllRemoved);
-    server.post('/replys/add', ctrl.replysCtrl.add);
+    server.post('/replys/reply', ctrl.replysCtrl.reply);
+    server.post('/replys/reply/to', ctrl.replysCtrl.replyTo);
     server.get('/replys/remove', ctrl.replysCtrl.remove);
 
   }

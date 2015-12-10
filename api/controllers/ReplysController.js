@@ -144,6 +144,74 @@ var index = {
 
   },
 
+  reply: function(req, res, next) {
+
+    var _tid = req.params.tid;
+    var _uid = req.params.uid;
+    var _content = req.params.content;
+
+    if(_tid == undefined || _tid == '') {
+      res.send(util.retMsg(401, "缺少参数：主题id"));
+    }
+
+    if(_uid == undefined || _uid == '') {
+      res.send(util.retMsg(401, "缺少参数：用户id"));
+    }
+
+    if(_content == undefined || _content == '') {
+      res.send(util.retMsg(401, "回复内容不能为空"));
+    }
+
+    var User = ctrlInitial.models.User();
+
+    User.findById(_uid, function(err, u) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
+
+      if(u.length === 0) {
+        res.send(util.retMsg(401, "无此用户"));
+      }
+
+      var Themes = ctrlInitial.models.Themes();
+
+      Themes.findById(_tid, function(err, t) {
+
+        if(err) {
+          res.send(401, util.retMsg('主题不存在'));
+        }
+
+        var Replys = ctrlInitial.models.Replys();
+
+        var reply = new Replys({
+          user_id: _uid,
+          theme_id: _tid,
+          content: _content,
+          child: []
+        });
+
+        reply.save(function(err, r) {
+
+          if(err) {
+            res.send(util.retMsg(401, err.toString()));
+          }
+
+          res.send(util.retMsg(200, r));
+
+        });
+
+      });
+
+    });
+
+  },
+
+  replyTo: function(req, res, next) {
+
+
+  },
+
   remove: function(req, res, next) {
 
     var thisReplyId = req.params.id;
@@ -221,6 +289,52 @@ var index = {
   },
 
   getAllReplys: function(req, res, next) {
+
+    var tid = req.params.tid;
+
+    id(tid === undefined || tid === '') {
+      res.send(util.retMsg(401, "缺少参数：主题id"));
+    }
+
+    var Themes = ctrlInitial.models.Themes();
+
+    Themes.findById(tid, function(err, t) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
+
+      if(t.length === 0) {
+        res.send(util.retMsg(401, "主题不存在"));
+      }
+
+      if(t[0].isDeleted) {
+        res.send(util.retMsg(401, "主题已被删除"));
+      }
+
+      var Replys = ctrlInitial.models.Replys();
+
+      Replys.findByThemeId(tid, function(err, r) {
+
+        if(err) {
+          res.send(util.retMsg(401, err.toString()));
+        }
+
+        if(r.length === 0) {
+          res.send(util,retMsg(200, []));
+        }
+
+        for (var i = 0; i < r.length; i++) {
+
+          var curr = r[i];
+
+
+
+        };
+
+      });
+
+    });
 
   }
 
