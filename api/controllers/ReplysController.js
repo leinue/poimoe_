@@ -174,6 +174,10 @@ var index = {
         res.send(util.retMsg(401, "无此用户"));
       }
 
+      if(u[0].isBlocked) {
+        res.send(util.retMsg(401, "用户已被锁定，无权操作"));
+      }
+
       var Themes = ctrlInitial.models.Themes();
 
       Themes.findById(_tid, function(err, t) {
@@ -209,6 +213,91 @@ var index = {
 
   replyTo: function(req, res, next) {
 
+    var _rid = req.params.rid;
+    var _uid = req.params.uid;
+    var _content = req.params.content;
+
+    if(_rid == undefined || _rid == '') {
+      res.send(util.retMsg(401, "缺少参数：回复id"));
+    }
+
+    if(_content == undefined || _content == '') {
+      res.send(util.retMsg(401, "回复内容不能为空"));
+    }
+
+    if(_uid == undefined || _uid == '') {
+      res.send(util.retMsg(401, "缺少参数：用户id"));
+    }
+
+    var User = ctrlInitial.models.User();
+
+    User.findById(_uid, function(err, u) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
+
+      if(u.length === 0) {
+        res.send(util.retMsg(401, "用户不存在"));
+      }
+
+      if(u[0].isBlocked) {
+        res.send(util.retMsg(401, "用户已被锁定，无权操作"));
+      }
+
+      var Themes = ctrlInitial.models.Themes();
+
+      Themes.findById(_tid, function(err, t) {
+
+        if(err) {
+          res.send(401, util.retMsg('主题不存在'));
+        }
+
+        var Replys = ctrlInitial.models.Replys();
+
+        var _child = [];
+
+        Replys.findById(_rid, function(err, r) {
+
+          if(err) {
+            res.send(util.retMsg(401, err.toString()));
+          }
+
+          if(r.length === 0) {
+            res.send(util.retMsg(401, "回复不存在"));
+          }
+
+          _child = r[0].child;
+
+          var _childValue = {};
+
+          _childValue.uid = _uid;
+          _childValue.content = _content;
+          _childValue.createdAt = Date.now();
+
+          _child.push(_childValue);
+
+          Replys.findOneAndUpdate({
+            _id: _rid
+          }, {
+            content: _child
+          }, {
+            new: true
+          }, function(err, newReply) {
+
+              if(err) {
+                res.send(util.retMsg(401, err.toString()));
+              }
+
+              res.send(util.retMsg(200, newReply));
+
+          });
+
+        });
+
+      });
+
+    });
 
   },
 
