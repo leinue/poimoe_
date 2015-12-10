@@ -1,52 +1,90 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Poimoe</title>
+<head>
+	<meta charset="utf-8">
+	<title>Poimoe</title>
+	<link rel="stylesheet" type="text/css" href="widgets/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<script src="widgets/jquery.js"></script>
+	<script src="js/scripts.js"></script>
+	<script src="widgets/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+	
+	<nav class="navbar navbar-default">
+	  <div class="container container-fluid">
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#"><img width="60px" height="60px" alt="poimoe" src="images/logo.png"></a>
+	    </div>
+
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	   		<ul class="nav navbar-nav"></ul>
+	      	<ul class="nav navbar-nav navbar-right">
+	        	<li class=""><a href="">What I Do</a></li>
+	        	<li class=""><a href="http://me.ivydom.com">Blog</a></li>
+	        	<li class=""><a href="">Poi</a></li>
+	        	<li><a href="">下载</a></li>
+	       	</ul>
+	    </div>
+	  </div>
+	</nav>	
+	
+	<section id="home">
+		<div style="margin-top:-200px;opacity:0.2" class="home-text animated fadeInDown">
+            <h1>Publish your CGs with joy</h1>
+            <h3>Edit your CGs with friends</h3>
+            <div class="col-md-12">
+            	<a href="/manifesto/" class="btn btn-default btn-doc">下载</a>
+            <a href="/manifesto/" class="btn btn-default btn-doc">Web</a>
+            </div>
+    	</div>
+	</section>
+
+	<div id="whatido">
+	    
+	</div>
+
+	<div class="quotes" style="background-color: #efaac3;">
 		
-		<style>
-			html,body{
-				height:100%;
-			}
+	</div>
 
-			body{
-				margin:0;
-				padding:0;
-				width:100%;
-				display:table;
-				font-weight:100;
-				font-family:'Lato';
-			}
+	<div class="quotes" style="background-color: #9daae0;">
+		
+	</div>
 
-			.container{
-				text-align:center;
-				display:table-cell;
-				vertical-align:middle;
-				width:100%;
-			}
+	<div class="quotes" style="background-color: #baebf2;">
+		
+	</div>
 
-			.content{
-				text-align:center;
-				display:inline-block;
-			}
-			
-			.title{
-				font-size:30px;
-			}
-			
-			a{
-				text-decoration:none;
-			}
-
-		</style>
-	</head>
-	<body>
-		<div class="container">
-			<div class="content">
-				<div class="title">
-					<p><strong>Poimoe</strong> is Under Construction,Just wait for me.</p>
-					<p>You can also visit <a target="_blank" href="http://ivydom.com">ivydom.com</a> to contact me.</p>
-				</div>
+	<footer>
+		<div class="row" style="width: 100%;text-align:center">
+			<div class="col-md-12">
+				<img width="80" height="80" src="images/logo.png" alt="">
 			</div>
 		</div>
-	</body>
+		<div class="footer-links">
+			Poimoe All Rights Reserved © 2015 | <a href="http://ivydom.com">&nbsp;Contact</a>
+		</div>
+	</footer>
+
+	<script type="text/javascript">
+
+		$(function(){
+			setTimeout(function(){
+				$('.fadeInDown').css({
+					'marginTop':'0px',
+					'opacity':'1'
+				});
+			},10);
+		});
+
+	</script>
+
+</body>
 </html>

@@ -49,6 +49,12 @@ module.exports = {
     server.get('/themes/update', ctrl.themesCtrl.update);
     server.get('/themes/delete/:id', ctrl.themesCtrl.remove);
 
+    server.post('/post', {
+      hello: 'world'
+    }, function(err, req, res, obj) {
+      console.log(obj);
+    });
+
   }
 
 };

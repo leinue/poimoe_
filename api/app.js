@@ -30,6 +30,8 @@ server.use(restify.CORS({
 }));
 
 server.use(restify.authorizationParser());
+server.use(restify.bodyParser());
+server.use(restify.queryParser());
 
 //初始化路由
 routes.init(server, mongoose);
