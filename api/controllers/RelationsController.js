@@ -123,6 +123,13 @@ var index = {
 
 	unfollow: function(req, res, next) {
 
+		var unfollowerId = req.params.unfollowerId;
+		var unfollowingId = req.params.unfollowingId;
+
+		if(unfollowerId == undefined || unfollowingId == '') {
+			res.send();
+		}
+
 	},
 
 	getFollowing:  function(req, res, next) {

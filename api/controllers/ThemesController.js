@@ -223,10 +223,6 @@ var index = {
 
 		});
 
-	},
-
-	getAllReplys: function(req, res, next) {
-
 	}
 
 };

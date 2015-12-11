@@ -215,6 +215,7 @@ var index = {
 
     var _rid = req.params.rid;
     var _uid = req.params.uid;
+    var _parent = req.params.parent;
     var _content = req.params.content;
 
     if(_rid == undefined || _rid == '') {
@@ -364,54 +365,6 @@ var index = {
       }
 
       res.send(util.retMsg(200, reply));
-
-    });
-
-  },
-
-  getAllReplys: function(req, res, next) {
-
-    var tid = req.params.tid;
-
-    if(tid === undefined || tid === '') {
-      res.send(util.retMsg(401, "缺少参数：主题id"));
-    }
-
-    var Themes = ctrlInitial.models.Themes();
-
-    Themes.findById(tid, function(err, t) {
-
-      if(err) {
-        res.send(util.retMsg(401, err.toString()));
-      }
-
-      if(t.length === 0) {
-        res.send(util.retMsg(401, "主题不存在"));
-      }
-
-      if(t[0].isDeleted) {
-        res.send(util.retMsg(401, "主题已被删除"));
-      }
-
-      var Replys = ctrlInitial.models.Replys();
-
-      Replys.findByThemeId(tid, function(err, r) {
-
-        if(err) {
-          res.send(util.retMsg(401, err.toString()));
-        }
-
-        if(r.length === 0) {
-          res.send(util,retMsg(200, []));
-        }
-
-        for (var i = 0; i < r.length; i++) {
-
-          var curr = r[i];
-
-        };
-
-      });
 
     });
 

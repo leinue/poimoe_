@@ -42,6 +42,10 @@ module.exports = {
     server.get('/settings/other/update/:value', ctrl.settingsCtrl.updateOther);
 
     server.get('/relations/follow/:followerId/:followingId', ctrl.relationsCtrl.follow);
+    server.get('/relations/unfollow/:unfollowerId／:unfollowingid', ctrl.relationsCtrl.unfollow);
+    server.get('/relations/select/following/:id', ctrl.relationsCtrl.getFollowing);
+    server.get('/relations/select/follower/:id', ctrl.relationsCtrl.getFollower);
+    server.get('/relations/twoway/:id1/:id2', ctrl.relationsCtrl.isTwoWay);
 
     server.get('/themes/select/all/:page/:count', ctrl.themesCtrl.getAll);
     server.get('/themes/select/removed/:page/:count', ctrl.themesCtrl.getAllRemoved);
