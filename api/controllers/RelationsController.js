@@ -229,7 +229,7 @@ var index = {
 
 	},
 
-	getFollowing:  function(req, res, next) {
+	getFollow:  function(req, res, next) {
 
 		var uid = req.params.uid;
 
@@ -265,15 +265,75 @@ var index = {
 
 	},
 
-	getFollower: function(req, res, next) {
-
-	},
-
-	isFollowedBy: function(req, res, next) {
-
-	},
-
 	isTwoWay: function(req, res, next) {
+
+		var id1 = req.params.id1;
+		var id2 = req.params.id2;
+
+		if(id1 == undefined || id1 == '') {
+			res.send(util.retMsg(401, "缺少参数：对比id"));
+		}
+
+		if(id2 == undefined || id2 == '') {
+			res.send(util.retMsg(401, "缺少参数：对比id"));
+		}
+
+		var id1HasId2 = false;
+		var id2HasId1 = false;
+
+		var user.ctrlInitial.models.User();
+
+		user.findById(id1, function(err, u1) {
+
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+			if(u1.length === 0) {
+				res.send(util.retMsg(401, "用户不存在"));
+			}
+
+			var followList = u1[0].follow;
+
+			for (var i = 0; i < followList.length; i++) {
+				var curr = followList[i];
+
+				if(curr == id1) {
+					id1HasId2 = true;
+					break;
+				}
+			};
+
+			user.findById(id2, function(err, u2) {
+
+				if(err) {
+					res.send(util.retMsg(401, err.toString()));
+				}
+
+				if(u2.length === 0) {
+					res.send(util.retMsg(401, "用户不存在"));
+				}
+
+				var followList = u2[0].follow;
+
+				for (var i = 0; i < followList.length; i++) {
+					var curr = followList[i];
+
+					if(curr == id1) {
+						id1HasId2 = true;
+						break;
+					}
+				};
+
+				if(id1HasId2 && id2HasId1) {
+					res.send(util.retMsg(200, true));
+				}
+
+				res.send(util.retMsg(200, false));
+
+			});
+
+		});
 
 	}
 
