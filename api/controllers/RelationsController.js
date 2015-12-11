@@ -126,13 +126,142 @@ var index = {
 		var unfollowerId = req.params.unfollowerId;
 		var unfollowingId = req.params.unfollowingId;
 
-		if(unfollowerId == undefined || unfollowingId == '') {
-			res.send();
+		if(unfollowerId == undefined || unfollowerId == '') {
+			res.send(util.retMsg(401, "缺少参数：取消关注者id"));
 		}
+
+		if(unfollowingId == undefined || unfollowingId == '') {
+			res.send(util.retMsg(401, "缺少参数：被取消关注者id"));
+		}
+
+		var relations = ctrlInitial.models.Relations();
+		var user = ctrlInitial.models.User();
+
+		user.findById(unfollowerId, function(err, unfollower) {
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+			if(unfollower.length === 0) {
+				res.send(util.retMsg(401, "该关注者ID不存在"));
+			}
+
+			if(unfollower[0].isBlocked === true) {
+				res.send(util.retMsg(401, "该关注者已被锁定，无权操作"));
+			}
+
+			if(unfollower[0].isDeleted === true) {
+				res.send(util.retMsg(401, "该关注者已被删除，无权操作"));
+			}
+
+			user.findById(unfollowingId, function(err, unfollowing) {
+				if(err) {
+					res.send(util.retMsg(401, err.toString()));
+				}
+
+				if(unfollowing.length === 0) {
+					res.send(util.retMsg(401, "该被关注者ID不存在"));
+				}
+
+				if(unfollowing[0].isBlocked === true) {
+					res.send(util.retMsg(401, "该被关注者已被锁定，无权操作"));
+				}
+
+				if(unfollowing[0].isDeleted === true) {
+					res.send(util.retMsg(401, "该被关注者已被删除，无权操作"));
+				}
+
+				relations.findById(unfollowerId, function(err, unfollower_realtion) {
+
+					if(err) {
+						res.send(util.retMsg(401, err.toString()));
+					}
+
+					if(unfollower_realtion.length === 0) {
+						res.send(util.retMsg(401, "此用户无任何关注的人"));
+					}
+
+					var followList = unfollower_realtion[0].follow;
+
+					var flag = false;
+
+					for (var i = 0; i < followList.length; i++) {
+						var curr = followList[i];
+
+						if(curr === unfollowingId) {
+							delete followList[i];
+							flag = true;
+							break;
+						}
+
+					};
+
+					if(!flag) {
+						res.send(util.retMsg(401, "无此被关注的人"));
+					}
+
+					var query = {
+			        	user_id: unfollowerId
+			      	};
+
+			      	var options = {
+			        	new: true
+			      	};
+
+			      	var update = {
+			        	follow: followList
+			      	};
+
+			      	relations.findOneAndUpdate(query, update, options, function(err, new_follow) {
+
+			      		if(err) {
+		      				res.send(util.retMsg(401, err.toString()));
+		      			}
+
+		      			res.send(util.retMsg(200, new_follow));
+
+			      	});
+
+				});
+
+			});
+		});
 
 	},
 
 	getFollowing:  function(req, res, next) {
+
+		var uid = req.params.uid;
+
+		if(uid == undefined || uid == '') {
+			res.send(util.retMsg(401, "缺少参数：用户id"));
+		}
+
+		var user = ctrlInitial.models.User();
+
+		user.findById(uid, function(err, u) {
+
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+			if(u.length === 0) {
+				res.send(util.retMsg(401, "用户不存在"));
+			}
+
+			var relations = ctrlInitial.models.Relations();
+
+			relations.findById(uid, function(err, r) {
+
+				if(err) {
+					res.send(util.retMsg(401, err.toString()));
+				}
+
+				res.send(200, r);
+
+			});
+
+		});
 
 	},
 
