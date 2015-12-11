@@ -281,7 +281,7 @@ var index = {
 		var id1HasId2 = false;
 		var id2HasId1 = false;
 
-		var user.ctrlInitial.models.User();
+		var user = ctrlInitial.models.User();
 
 		user.findById(id1, function(err, u1) {
 
