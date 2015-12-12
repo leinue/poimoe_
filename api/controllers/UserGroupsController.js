@@ -30,7 +30,8 @@ var index = {
 
     var ug = new UG({
       name: name,
-      description: description
+      description: description,
+      rightsList: rights
     });
 
     ug.save(function(err, g) {
