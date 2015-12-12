@@ -62,3 +62,41 @@ div.container-fluid {
 .navbar>.container-fluid .navbar-brand:hover {
 	color: rgb(255, 255, 255);
 }
+
+.search-area {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.input-group .form-control:first-child {
+	box-shadow: none;
+}
+
+.tag-list {
+	margin-top: 10px;
+}
+
+.tag-list span {
+	cursor: pointer;
+}
+
+.row {
+	margin-right: 0px;
+	margin-left: 0px;
+}
+
+/* always present */
+.expand-transition {
+  transition: all .3s ease;
+  background-color: #eee;
+  overflow: hidden;
+}
+
+/* .expand-enter defines the starting state for entering */
+/* .expand-leave defines the ending state for leaving */
+.expand-enter, .expand-leave {
+  height: 0;
+  padding: 0px 20px;
+  opacity: 0;
+}
+

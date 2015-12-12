@@ -6,7 +6,7 @@
 
 	<div id="mymodal">
 	
-	<button class="btn btn-default btn-lg" @click="showModal = true">Show modal</button>
+	<!-- <button class="btn btn-default btn-lg" @click="showModal = true">Show modal</button> -->
       <modal title="蛤蛤" :show.sync="showModal" effect="fade" :width="400">
         <div class="modal-header">
           <h4 class="modal-title">Modal <b>Title</b></h4>
@@ -24,9 +24,8 @@
 	</div>
 
 	<section>
-		{{haha}}
 	    <div class="page">
-    	    <router-view></router-view>
+    	    <router-view transition="expand"></router-view>
     	</div>
 	</section>
 

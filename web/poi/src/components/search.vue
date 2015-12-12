@@ -1,15 +1,13 @@
 <template>
 
-	<div>
-		dfghjkl		
-	</div>
-
 </template>
 
 <script>
-	
+
 </script>
 
 <style>
-	
+
+
+
 </style>

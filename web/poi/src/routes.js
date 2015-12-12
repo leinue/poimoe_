@@ -1,4 +1,5 @@
 module.exports = function(router){
+	router.transitionOnLoad = true;
 	router.map({
 		'/index': {
 			component: require('./components/index.vue'),
