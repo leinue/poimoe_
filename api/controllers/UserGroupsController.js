@@ -33,7 +33,7 @@ var index = {
       description: description
     });
 
-    UG.save(function(err, g) {
+    ug.save(function(err, g) {
 
       if(err) {
         res.send(util.retMsg(401, err.toString()));

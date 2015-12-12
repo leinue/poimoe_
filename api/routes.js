@@ -58,11 +58,11 @@ module.exports = {
     server.post('/replys/reply/to', ctrl.replysCtrl.replyTo);
     server.get('/replys/remove', ctrl.replysCtrl.remove);
 
-    server.get('/groups/select/all', ctrl.userGroupCtrl.getAll);
-    server.get('/groups/select/removed', ctrl.userGroupCtrl.getAllRemoved);
-    server.post('/group/add', ctrl.userGroupCtrl.add);
-    server.post('/group/update', ctrl.userGroupCtrl.update);
-    server.get('/group/remove', ctrl.userGroupCtrl.remove);
+    server.get('/groups/select/all', ctrl.userGroupsCtrl.getAll);
+    server.get('/groups/select/removed', ctrl.userGroupsCtrl.getAllRemoved);
+    server.post('/groups/add', ctrl.userGroupsCtrl.add);
+    server.post('/groups/update', ctrl.userGroupsCtrl.update);
+    server.get('/groups/remove', ctrl.userGroupsCtrl.remove);
 
   }
 

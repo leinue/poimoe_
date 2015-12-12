@@ -6,7 +6,7 @@ var settingsCtrl = require('./SettingsController');
 var relationsCtrl = require('./RelationsController');
 var replysCtrl = require('./ReplysController');
 var themesCtrl = require('./ThemesController');
-var userGroupCtrl = require('./UserGroupsController');
+var userGroupsCtrl = require('./UserGroupsController');
 
 var db = {
   mongoose: undefined
@@ -31,6 +31,6 @@ module.exports = {
 
 	replysCtrl: replysCtrl.init(models),
 
-	userGroupCtrl: userGroupCtrl.init(models)
+	userGroupsCtrl: userGroupsCtrl.init(models)
 
 };
