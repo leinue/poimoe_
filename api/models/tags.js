@@ -59,7 +59,8 @@ module.exports = {
 
     tagsSchema.statics._remove = function(id, cb){
       var query = {
-        _id: id
+        _id: id,
+        isDeleted: false
       };
 
       var options = {
@@ -76,7 +77,8 @@ module.exports = {
 
     tagsSchema.statics.update = function(id, obj, cb) {
       var query = {
-        _id: id
+        _id: id,
+        isDeleted: false
       };
 
       var options = {

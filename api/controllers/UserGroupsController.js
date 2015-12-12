@@ -4,63 +4,78 @@ var index = {
 
   add: function(req, res, next) {
 
-    var thisTagName = req.params.name;
-      var thisTagDescription = req.params.description;
+    var name = req.params.name;
+    var description = req.params.description;
+    var rights = req.params.rights;
 
-      if(thisTagName == undefined || thisTagName == '') {
-        res.send(util.retMsg(401, "标签名不能为空"));
+    if(name == undefined || name == '') {
+      res.send(util.retMsg(401, "用户组名不能为空"));
+    }
+
+    if(description == undefined || description == '') {
+      res.send(util.retMsg(401, "描述内容不能为空"));
+    }
+
+    if(rights == undefined || rights == '') {
+      res.send(util.retMsg(401, "权限列表不能为空"));
+    }
+
+    rights = JSON.parse(rights);
+
+    if(rights.length === 0) {
+      res.send(util.retMsg(401, "权限列表不能为空"));
+    }
+
+    var UG = ctrlInitial.models.UserGroups();
+
+    var ug = new UG({
+      name: name,
+      description: description
+    });
+
+    UG.save(function(err, g) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
       }
 
-    var Tags = ctrlInitial.models.Tags();
+      res.send(util.retMsg(200, g));
 
-      var tag = new Tags({
-        name: thisTagName,
-        description: thisTagDescription
-      });
-
-      tag.save(function(err, t) {
-
-        if(err) {
-          res.send(util.retMsg(401, err.toString()));
-        }
-
-        res.send(util.retMsg(200, t));
-
-      });
+    });
 
   },
 
   remove: function(req, res, next) {
 
-    var thisTagId = req.params.id;
+    var thisUGId = req.params.id;
 
-    if(thisTagId == undefined || thisTagId == '') {
+    if(thisUGId == undefined || thisUGId == '') {
       res.send(util.retMsg(401, "缺少参数：标签id"));
     }
 
-    var Tags = ctrlInitial.models.Tags();
+    var UG = ctrlInitial.models.UserGroups();
 
-    Tags.findById(thisTagId, function(err, tag) {
+    UG.findById(thisUGId, function(err, tag) {
 
       if(err) {
-            res.send(util.retMsg(401, err.toString()));
-          }
+        res.send(util.retMsg(401, err.toString()));
+      }
 
-          if(tag.length === 0) {
-            res.send(util.retMsg(401, '无此标签'));
-          }
+      if(tag.length === 0) {
+        res.send(util.retMsg(401, '无此用户组'));
+      }
 
-          if(tag[0].isDeleted === false) {
-            res.send(util.retMsg(401, '该标签已被删除'));
-          }
+      if(tag[0].isDeleted === false) {
+        res.send(util.retMsg(401, '该用户组已被删除'));
+      }
 
-      Tags._remove(thisTagId, function(err, tag) {
+      UG._remove(thisUGId, function(err, tag) {
 
         if(err) {
-              res.send(util.retMsg(401, err.toString()));
-            }
+          res.send(util.retMsg(401, err.toString()));
+        }
 
-            res.send(util.retMsg(200, "删除标签成功" + tag.toString()));
+        res.send(util.retMsg(200, "删除用户组成功" + tag.toString()));
 
       });
 
@@ -70,44 +85,57 @@ var index = {
 
   update: function(req, res, next) {
 
-    var thisTagName = req.params.name;
-    var thisTagDescription = req.params.description;
-    var thisTagId = req.params.id;
+    var name = req.params.name;
+    var description = req.params.description;
+    var rights = req.params.rights;
+    var id = req.params.id;
 
-    if(thisTagName == undefined || thisTagName == '') {
-      res.send(util.retMsg(401, "标签名不能为空"));
+    if(name == undefined || name == '') {
+      res.send(util.retMsg(401, "用户组名不能为空"));
     }
 
-    if(thisTagId == undefined || thisTagId == '') {
-      res.send(util.retMsg(401, "缺少参数：标签id"));
+    if(description == undefined || description == '') {
+      res.send(util.retMsg(401, "缺少参数：用户组id"));
     }
 
-    var Tags = ctrlInitial.models.Tags();
+    if(rights == undefined || rights == '') {
+      res.send(util.retMsg(401, "权限列表不能为空"));
+    }
 
-    Tags.findById(thisTagId, function(err, tag) {
+    rights = JSON.parse(rights);
+
+    if(rights.length === 0) {
+      res.send(util.retMsg(401, "权限列表不能为空"));
+    }
+
+    var UG = ctrlInitial.models.UserGroups();
+
+    UG.findById(id, function(err, ug) {
 
       if(err) {
-            res.send(util.retMsg(401, err.toString()));
-          }
+        res.send(util.retMsg(401, err.toString()));
+      }
 
-          if(tag.length === 0) {
-            res.send(util.retMsg(401, '无此标签'));
-          }
+      if(ug.length === 0) {
+        res.send(util.retMsg(401, '无此用户组'));
+      }
 
-          Tags.update(thisTagId, {
-        name: thisTagName,
-        description: thisTagDescription
-      }, function(err, tag) {
+      UG.update(id, {
+        name: name,
+        description: description,
+        rightsList: rights,
+        updatedAt: Date.now()
+      }, function(err, ug) {
 
         if(err) {
-              res.send(util.retMsg(401, err.toString()));
-            }
+          res.send(util.retMsg(401, err.toString()));
+        }
 
-            res.send(util.retMsg(200, tag));
+        res.send(util.retMsg(200, ug));
 
       });
 
-       });
+    });
 
   },
 
@@ -116,15 +144,15 @@ var index = {
     var page = req.params.page;
     var count = req.params.count;
 
-    var Tags = ctrlInitial.models.Tags();
+    var ug = ctrlInitial.models.UserGroups();
 
-    Tags.findAll(page, count, function(err, tags) {
+    ug.findAll(page, count, function(err, g) {
 
       if(err) {
-            res.send(util.retMsg(401, err.toString()));
-          }
+        res.send(util.retMsg(401, err.toString()));
+      }
 
-          res.send(util.retMsg(200, tags));
+      res.send(util.retMsg(200, g));
 
     });
 
@@ -135,15 +163,15 @@ var index = {
     var page = req.params.page;
     var count = req.params.count;
 
-    var Tags = ctrlInitial.models.Tags();
+    var ug = ctrlInitial.models.UserGroups();
 
-    Tags.findAllRemoved(page, count, function(err, tags) {
+    ug.findAllRemoved(page, count, function(err, g) {
 
       if(err) {
-            res.send(util.retMsg(401, err.toString()));
-          }
+        res.send(util.retMsg(401, err.toString()));
+      }
 
-          res.send(util.retMsg(200, tags));
+      res.send(util.retMsg(200, g));
 
     });
 
