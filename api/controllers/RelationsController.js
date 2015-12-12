@@ -325,11 +325,7 @@ var index = {
 					}
 				};
 
-				if(id1HasId2 && id2HasId1) {
-					res.send(util.retMsg(200, true));
-				}
-
-				res.send(util.retMsg(200, false));
+				res.send(util.retMsg(200, id1HasId2 && id2HasId1));
 
 			});
 
