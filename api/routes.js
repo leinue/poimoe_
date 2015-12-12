@@ -58,6 +58,8 @@ module.exports = {
     server.post('/replys/reply/to', ctrl.replysCtrl.replyTo);
     server.get('/replys/remove', ctrl.replysCtrl.remove);
 
+    server.get('', ctrl.userGroupCtrl.add);
+
   }
 
 };

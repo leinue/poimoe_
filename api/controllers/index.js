@@ -29,6 +29,8 @@ module.exports = {
 
 	themesCtrl: themesCtrl.init(models),
 
-	replysCtrl: replysCtrl.init(models)
+	replysCtrl: replysCtrl.init(models),
+
+	userGroupCtrl: userGroupCtrl.init(models)
 
 };
