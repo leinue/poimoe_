@@ -62,7 +62,7 @@ module.exports = {
     server.get('/groups/select/removed', ctrl.userGroupsCtrl.getAllRemoved);
     server.post('/groups/add', ctrl.userGroupsCtrl.add);
     server.post('/groups/update', ctrl.userGroupsCtrl.update);
-    server.get('/groups/remove', ctrl.userGroupsCtrl.remove);
+    server.get('/groups/remove/:id', ctrl.userGroupsCtrl.remove);
 
   }
 
