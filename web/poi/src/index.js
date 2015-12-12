@@ -3,6 +3,7 @@ var vueRouter = require('vue-router');
 var configRouter = require('./routes.js');
 var filter = require('./filters/index.js');
 var vueStrap = require('../node_modules/vue-strap/dist/vue-strap.min.js');
+var config = require('./config.js');
 
 //初始化全局css
 require('../node_modules/bootstrap/dist/css/bootstrap.min.css');
@@ -12,12 +13,6 @@ var appEntry = require('./app.vue');
 
 //初始化过滤器
 filter.init(vue);
-
-//初始化配置项
-var config = {
-	entry: '#poi',
-	title: 'poi - Poimoe'
-}
 
 var entry = document.getElementById('main');
 var selector = config.entry.split('');

@@ -25,21 +25,6 @@
 
 	<section>
 		{{haha}}
-
-		<button class="btn btn-success btn-lg" @click="showRight = true">Show Aside on right</button>
-
-	      <sidebar :show.sync="showRight" placement="right" header="蛤蛤蛤蛤" :width="350">
-	        <h4>的颠三倒四的</h4>
-	          <pre><code class="language-javascript">
-	if (talk === cheap){
-	  code.style.display = 'block'
-	}
-	        </code></pre>
-	        <div class="aside-footer">
-	          <button type="button" class="btn btn-default" @click="showRight=false">关闭</button>
-	        </div>
-	      </sidebar>
-
 	    <div class="page">
     	    <router-view></router-view>
     	</div>
@@ -59,8 +44,7 @@
 		data() {
 			return {
 				haha: 'fuck',
-				showModal: false,
-				showRight: false
+				showModal: false
 			}
 		},
 		components: {
