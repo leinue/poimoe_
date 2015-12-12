@@ -38,10 +38,10 @@
   		<div class="col-xs-12" style="padding-left: 0px;padding-right: 0px">
   			<div class="menu-header">
 	  			<ul>
-					<li><span @click="show()" class="active">主页</span></span></li>
-					<li><span @click="show()" >时间线</span></li>
-					<li><span @click="show()" >我的投稿</span></li>
-					<li><span @click="show()" >我的收藏</span></li>
+					<li><span @click="pathTo('index')" v-bind:class="menu.currentName != 'index' ? '' : 'active'">主页</span></span></li>
+					<li><span @click="pathTo('timeline')" v-bind:class="menu.currentName != 'timeline' ? '' : 'active'">时间线</span></li>
+					<li><span @click="pathTo('works')" v-bind:class="menu.currentName != 'works' ? '' : 'active'">我的投稿</span></li>
+					<li><span @click="pathTo('favourites')" v-bind:class="menu.currentName != 'favourites' ? '' : 'active'">我的收藏</span></li>
 	  			</ul>
   			</div>
   		</div>
@@ -51,17 +51,27 @@
 
 <script>
 
+	var vue = require('vue');
+	var Router = require('vue-router');
+
+	vue.use(Router);
+	var router = new Router({});
+
 	export default {
 		data() {
 			return {
 				msg: 'hello from header.vue',
-				showRight: false
+				showRight: false,
+				menu: {
+					currentName: 'index'
+				}
 			};
 		},
 
 		methods: {
-			show: function(){
-				alert('sdfghj');
+			pathTo: function(path){
+				this.menu.currentName = path;
+				router.go('/' + path);
 			}
 		}
 	};

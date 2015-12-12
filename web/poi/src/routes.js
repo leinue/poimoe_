@@ -6,13 +6,14 @@ module.exports = function(router){
 
 			}
 		},
-		'/list': {
-			component: require('./components/list.vue'),
-			subRoutes: {
-				'/user/:userId': {
-					component: require('./components/list/list.vue')
-				}
-			}
+		'/timeline': {
+			component: require('./components/timeline/index.vue')
+		},
+		'/works': {
+			component: require('./components/works/index.vue')
+		},
+		'/favourites': {
+			component: require('./components/favourites/index.vue')
 		},
 		'*': {
 			component: {
