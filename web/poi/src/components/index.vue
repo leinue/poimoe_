@@ -38,20 +38,20 @@
                             <div class="profile-photo"></div>
                             <div class="profile-detail">
 
-                                <div class="col-xs-6 col-sm-4 outer-column">
+                                <div class="col-xs-6 col-md-4 outer-column">
                                     <div class="column">
                                         <p>124</p>
                                         <span>关注</span>
                                     </div>
                                 </div>
-                                <div class="col-xs-6 col-sm-4 outer-column">
+                                <div class="col-xs-6 col-md-4 outer-column">
                                     <div class="column">
                                         <p>123</p>
                                         <span>粉丝</span>
                                     </div>                                    
                                 </div>
                                 <div class="clearfix visible-xs-block"></div>
-                                <div class="col-xs-6 col-sm-4 outer-column">
+                                <div class="col-xs-6 col-md-4 outer-column">
                                     <div class="column none">
                                         <p>1234</p>
                                         <span>投稿</span>
@@ -61,10 +61,37 @@
                             </div>
                         </div>
                         <div class="recommend-user">
-                            
+                            <div class="panel-header">
+                                推荐用户
+                            </div>
+                            <div class="panel-section">
+                                    
+                                <div class="photo-group">
+                                     <ul>
+                                         <li></li>
+                                         <li></li>
+                                         <li></li>
+                                         <li></li>
+                                         <li></li>
+                                     </ul>
+                                     <ul>
+                                         <li></li>
+                                         <li></li>
+                                         <li></li>
+                                         <li></li>
+                                         <li></li>
+                                     </ul>
+                                </div>
+
+                            </div>
+                            <div class="panel-footer">
+                                查看更多
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xs-6 col-sm-9">.col-xs-6 .col-sm-3</div>
+                    <div class="col-xs-6 col-sm-9">
+                        
+                    </div>
                     <div class="clearfix visible-xs-block"></div>
                 </div>
 
@@ -154,6 +181,56 @@
 
     .profile .column span {
         color: rgb(170, 170, 170);
+    }
+
+    .recommend-user {
+        border-top: 1px solid rgb(220, 220, 220);
+        margin-top: 60px;
+    }
+
+    .panel-header{
+        background: rgb(245, 245, 245);
+        padding: 10px 15px;
+        font-size: 14px;
+        font-weight: 400;
+        border-bottom: 1px solid rgb(220, 220, 220);
+    }
+
+    .panel-footer {
+        font-size: 14px;
+    }
+
+    .panel-section {
+        padding: 10px;
+    }
+
+    .media-body {
+        text-align: left;
+        padding-left: 10px;
+    }
+
+    .photo-group {
+        display: table;
+        margin: 0 auto;
+    }
+
+    .photo-group ul {
+        list-style: none;
+        margin-left: -40px;
+        display: table-row;
+        margin-bottom: 5px;
+    }
+
+    .photo-group ul li {
+        /*float: left;*/
+        display: table-cell;
+        margin-right: 10px;
+        cursor: pointer;
+        border-radius:50%;
+        width:60px;
+        height:60px;
+        background-image: url(http://tp2.sinaimg.cn/2354504421/180/40057719478/0);
+        background-size:60px;
     }
 
 </style>

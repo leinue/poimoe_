@@ -95,7 +95,7 @@
 	.menu-header ul li {
 		display: table-cell;
 		text-align: center;
-		padding: 6px 10px 8px 38px;
+		padding-bottom: 8px;
 	}
 
 	.menu-header ul li span {

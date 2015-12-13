@@ -42,6 +42,21 @@ div.container-fluid {
 	border-radius: 0px!important;
 }
 
+.navbar-default .navbar-toggle {
+	border: none!important;
+	margin-top: 10px;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+	background-color: rgb(255, 255, 255);
+	height: 2px;
+	width: 20px;
+}
+
+.navbar-default .navbar-toggle:hover {
+	background: rgb(35, 119, 186);
+}
+
 .navbar-default .navbar-nav>.active>a {
 	background: rgb(0, 133, 242)!important;
 	color: rgb(255, 255, 255)!important;
