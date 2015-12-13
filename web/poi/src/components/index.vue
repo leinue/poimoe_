@@ -84,8 +84,77 @@
                                 </div>
 
                             </div>
-                            <div class="panel-footer">
-                                查看更多
+                        </div>
+                        <div class="recommend-user" style="margin-top:0px">
+                            <div class="panel-header">
+                                今日插画推荐
+                            </div>
+                            <div class="panel-section">
+
+                                <div class="cg-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                                    <div class="span">1</div>
+                                                    <h4>蛤蛤</h4>
+                                                    <p>xieyang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                                    <div class="span">2</div>
+                                                    <h4>蛤蛤</h4>
+                                                    <p>xieyang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                                    <div class="span">3</div>
+                                                    <h4>蛤蛤</h4>
+                                                    <p>xieyang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                                    <div class="span">4</div>
+                                                    <h4>蛤蛤</h4>
+                                                    <p>xieyang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                                    <div class="span">5</div>
+                                                    <h4>蛤蛤</h4>
+                                                    <p>xieyang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                                    <div class="span">6</div>
+                                                    <h4>蛤蛤</h4>
+                                                    <p>xieyang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -106,7 +175,9 @@
     export default {
         data() {
             return {
-                msg: 'Hello World!!'
+                cgReco: {
+                    showCover: false
+                }
             }
         },
 
@@ -115,8 +186,12 @@
         },
 
         methods: {
-            show: function() {
-                alert('sdfghj');
+            showCover: function() {
+                this.cgReco.showCover = true;
+            },
+
+            hideCover: function() {
+                this.cgReco.showCover = false;
             }
         }
     };
@@ -222,7 +297,6 @@
     }
 
     .photo-group ul li {
-        /*float: left;*/
         display: table-cell;
         margin-right: 10px;
         cursor: pointer;
@@ -231,6 +305,54 @@
         height:60px;
         background-image: url(http://tp2.sinaimg.cn/2354504421/180/40057719478/0);
         background-size:60px;
+    }
+
+    .cg-img {
+        width: 100%;
+        height: 120px;
+        background-size: 100% 120px;
+        background-repeat: no-repeat;
+        margin-top: 15px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .cg-img:hover {
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .cg-group .col-md-6:nth-child(odd) {
+        padding-right: 6px;
+    }
+
+    .cg-group .col-md-6:nth-child(even) {
+        padding-left: 6px;
+    }
+
+    .cg-img-cover {
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        color: rgb(255, 255, 255);
+        text-align: left;
+        padding-left: 10px;
+        font-weight: 200;
+    }
+
+    .cg-img-cover .span {
+        text-align: right;
+        width: 100%;
+        font-size: 2.4em;
+        padding-right: 5px;
+    }
+
+    .cg-img-cover p {
+        font-size: 1em!important;
+    }
+
+    .cg-img-cover h4 {
+        font-weight: 200;
     }
 
     @media screen and (max-width: 960px) {
@@ -257,6 +379,16 @@
             margin-top: 0px;
         }
 
+    }
+
+    .cgrecocover-transition {
+        transition: all .3s ease;
+        opacity: 1;
+    }
+
+    .cgrecocover-enter, .cgrecocover-leave {
+        padding: 0 10px;
+        opacity: 0;
     }
 
 </style>
