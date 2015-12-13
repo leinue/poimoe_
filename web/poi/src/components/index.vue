@@ -38,20 +38,20 @@
                             <div class="profile-photo"></div>
                             <div class="profile-detail">
 
-                                <div class="col-xs-6 col-md-4 outer-column">
+                                <div class=" col-md-4 outer-column">
                                     <div class="column">
                                         <p>124</p>
                                         <span>关注</span>
                                     </div>
                                 </div>
-                                <div class="col-xs-6 col-md-4 outer-column">
+                                <div class=" col-md-4 outer-column">
                                     <div class="column">
                                         <p>123</p>
                                         <span>粉丝</span>
                                     </div>                                    
                                 </div>
                                 <div class="clearfix visible-xs-block"></div>
-                                <div class="col-xs-6 col-md-4 outer-column">
+                                <div class=" col-md-4 outer-column">
                                     <div class="column none">
                                         <p>1234</p>
                                         <span>投稿</span>
@@ -231,6 +231,32 @@
         height:60px;
         background-image: url(http://tp2.sinaimg.cn/2354504421/180/40057719478/0);
         background-size:60px;
+    }
+
+    @media screen and (max-width: 960px) {
+        .photo-group ul li {
+            width: 30px;
+            height: 30px;
+            background-size: 30px;
+        }
+    }
+
+    @media screen and (max-width: 1023px) {
+        .profile .outer-column {
+            border-bottom: 1px solid rgb(220, 220, 220);
+            border-right: none;
+            padding-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .profile .outer-column:last-child {
+            border-bottom: none;
+        }
+
+        .recommend-user {
+            margin-top: 0px;
+        }
+
     }
 
 </style>
