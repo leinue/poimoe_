@@ -88,7 +88,6 @@ div.container-fluid {
 /* always present */
 .expand-transition {
   transition: all .3s ease;
-  background-color: #eee;
   overflow: hidden;
 }
 
