@@ -8,7 +8,7 @@
 		</div>
 		<div v-show="footer.show" transition="realfooter" class="footer-real">
 			<a href="http://poimoe.com" target="_blank">© poimoe</a>
-			<a href="http://ivydom.com" target="_blank">Powered by ivydom.com</a>
+			Powered by <a href="http://ivydom.com" target="_blank">ivydom.com</a>
 		</div>
 	</div>
 

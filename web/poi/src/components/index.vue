@@ -153,13 +153,201 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                                    <div class="span">7</div>
+                                                    <h4>蛤蛤</h4>
+                                                    <p>xieyang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                                    <div class="span">8</div>
+                                                    <h4>蛤蛤</h4>
+                                                    <p>xieyang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                                    <div class="span">9</div>
+                                                    <h4>蛤蛤</h4>
+                                                    <p>xieyang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                                    <div class="span">10</div>
+                                                    <h4>蛤蛤</h4>
+                                                    <p>xieyang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-6 col-sm-9">
-                        
+                    <div class="col-xs-6 col-sm-9" style="padding-left:0px;padding-right:0px;">
+
+                        <div class="newest-cg">
+                            <div class="panel-header">
+                                最新作品
+                            </div>
+                        </div>
+
+                        <div class="img-box">
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-item2">
+                                
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item item3">
+                                
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-img-item2">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-item2">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="img-box">
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-item2">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item item3">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="img-box">
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-item2">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item item3">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="img-box">
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-item2">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-item2">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item item3">
+                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
+                                    <h4>蛤蛤</h4>
+                                    <p>xieyang</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hot-cg">
+                            <div class="panel-header">
+                                热门标签
+                            </div>
+                        </div>
+
                     </div>
                     <div class="clearfix visible-xs-block"></div>
                 </div>
@@ -172,10 +360,15 @@
 
 <script>
 
+    import common from '../commons/scripts/commons.js';
+
     export default {
         data() {
             return {
                 cgReco: {
+                    showCover: false
+                },
+                cgIndex: {
                     showCover: false
                 }
             }
@@ -192,6 +385,14 @@
 
             hideCover: function() {
                 this.cgReco.showCover = false;
+            },
+
+            showIndexCover: function(obj) {
+                obj.target.getElementsByTagName('div')[0].setAttribute('style','opacity:1;padding-top:76px;');
+            },
+
+            hideIndexCover: function(obj) {
+                obj.target.getElementsByTagName('div')[0].setAttribute('style','opacity:0;padding-top:60px;');
             }
         }
     };
@@ -355,12 +556,36 @@
         font-weight: 200;
     }
 
+    .cg-img-cover.index {
+        padding-top: 60px;
+    }
+
+    .cg-img-cover.index h4 {
+        margin-top: 0px;
+    }
+
     @media screen and (max-width: 960px) {
         .photo-group ul li {
             width: 30px;
             height: 30px;
             background-size: 30px;
         }
+
+        .img-box {
+            display: flex;
+            /*flex-wrap: wrap;*/
+            flex-direction: column;
+            flex: none;
+        }
+
+        .img-item {
+            width: 100%;
+        }
+
+        .img-item2 {
+            width: 100%;
+        }
+
     }
 
     @media screen and (max-width: 1023px) {
@@ -389,6 +614,25 @@
     .cgrecocover-enter, .cgrecocover-leave {
         padding: 0 10px;
         opacity: 0;
+    }
+
+    .img-box {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+    }
+
+    .img-item {
+        flex: 1;
+        height: 140px;
+        cursor: pointer;
+        background-image: url(http://i0.hdslb.com/320_200/video/f2/f2b119b4270f1a7c5bf03716065d35be.jpg);
+        background-size: 100% 100%;
+        background-position: center;
+    }
+
+    .img-item2 {
+        flex: 2;
     }
 
 </style>
