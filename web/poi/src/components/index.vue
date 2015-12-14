@@ -2,7 +2,7 @@
     
     <div>
         <div class="row" style="border-bottom: 1px solid rgb(220, 220, 220);background-color: #eee;">
-            <div class="col-md-6 col-md-offset-3">
+            <div class="col-md-6 col-md-offset-3" style="padding:10px;">
                 <div class="search-area">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="请输入搜索内容">
@@ -32,8 +32,11 @@
             <div class="col-xs-12" style="padding-left:0px;padding-right:0px">
                 
                 <div class="row">
-                    <div class="col-xs-6 col-sm-3" style="border-right: 1px solid rgb(220, 220, 220);padding-left:0px;padding-right:0px;text-align:center">
+                    <div class="col-md-3 col-sm-3" style="padding-left:0px;padding-right:0px;text-align:center">
                         <div class="profile">
+                            <div class="panel-header" style="border-right:1px solid rgb(220, 220, 220)">
+                                我的信息
+                            </div>
                             <div class="profile-img"></div>
                             <div class="profile-photo"></div>
                             <div class="profile-detail">
@@ -198,7 +201,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-6 col-sm-9" style="padding-left:0px;padding-right:0px;">
+                    <div class="col-md-9 col-sm-9" style="padding-left:0px;padding-right:0px;">
 
                         <div class="newest-cg">
                             <div class="panel-header">
@@ -345,6 +348,84 @@
                         <div class="hot-cg">
                             <div class="panel-header">
                                 热门标签
+                            </div>
+
+                            <div class="panel-section">
+                                <div class="hot-tags-content">
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 hot-tags-section-padding">
+                                            <div class="hot-tags-section">
+                                                <div class="hot-tags-header">
+                                                    <h4>暗杀教室</h4>
+                                                </div>
+                                                <div class="hot-tags-img">
+                                                    <ul>
+                                                        <li></li>
+                                                        <li></li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li style="background-image: url(http://tp2.sinaimg.cn/2354504421/180/40057719478/0)"></li>
+                                                        <li></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 hot-tags-section-padding">
+                                            <div class="hot-tags-section">
+                                                <div class="hot-tags-header">
+                                                    <h4>暗杀教室</h4>
+                                                </div>
+                                                <div class="hot-tags-img">
+                                                    <ul>
+                                                        <li></li>
+                                                        <li></li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li style="background-image: url(http://tp2.sinaimg.cn/2354504421/180/40057719478/0)"></li>
+                                                        <li></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 hot-tags-section-padding">
+                                            <div class="hot-tags-section">
+                                                <div class="hot-tags-header">
+                                                    <h4>暗杀教室</h4>
+                                                </div>
+                                                <div class="hot-tags-img">
+                                                    <ul>
+                                                        <li></li>
+                                                        <li></li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li style="background-image: url(http://tp2.sinaimg.cn/2354504421/180/40057719478/0)"></li>
+                                                        <li></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 hot-tags-section-padding">
+                                            <div class="hot-tags-section">
+                                                <div class="hot-tags-header">
+                                                    <h4>暗杀教室</h4>
+                                                </div>
+                                                <div class="hot-tags-img">
+                                                    <ul>
+                                                        <li></li>
+                                                        <li></li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li style="background-image: url(http://tp2.sinaimg.cn/2354504421/180/40057719478/0)"></li>
+                                                        <li></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
                             </div>
                         </div>
 
@@ -511,11 +592,12 @@
     .cg-img {
         width: 100%;
         height: 120px;
-        background-size: 100% 120px;
+        /*background-size: 100% 120px;*/
         background-repeat: no-repeat;
         margin-top: 15px;
         border-radius: 3px;
         cursor: pointer;
+        background-position: center;
     }
 
     .cg-img:hover {
@@ -627,12 +709,73 @@
         height: 140px;
         cursor: pointer;
         background-image: url(http://i0.hdslb.com/320_200/video/f2/f2b119b4270f1a7c5bf03716065d35be.jpg);
-        background-size: 100% 100%;
+        /*background-size: 100% 100%;*/
         background-position: center;
     }
 
     .img-item2 {
         flex: 2;
+    }
+
+    .hot-tags-content {
+        width: 100%;
+    }
+
+    .hot-tags-section {
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 0 1px 1px rgb(220, 220, 220);
+    }
+
+    .hot-tags-section h4 {
+        font-weight: 200;
+        margin-top: 0px!important;
+        padding-top: 5px!important;
+        margin-bottom: 5px!important;
+    }
+
+    .hot-tags-img {
+        display: table;
+        width: 100%;
+    }
+
+    .hot-tags-img ul {
+        list-style: none;
+        display: table-row;
+        margin-left: -40px;
+    }
+
+    .hot-tags-img ul li {
+        display: table-cell;
+        border: 1px solid rgb(255, 255, 255);
+        height: 220px;
+        background-image: url(http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg);
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: pointer;
+    }
+
+    .hot-tags-img ul li:hover {
+        transition: all .3s ease;
+        padding: 10px;
+    }
+
+    .hot-tags-section-padding {
+        padding: 7px;
+    }
+
+    .hot-cg {
+        border-left: 1px solid rgb(220, 220, 220);
+    }
+
+    .col-md-6 {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .hot-tags-content .col-md-6 {
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
 </style>
