@@ -29,9 +29,9 @@ module.exports = function(router){
 		'/favourites': {
 			component: require('./components/favourites/index.vue')
 		},
-		'*': {
+		'/404': {
 			component: {
-				template: '<h1>not found</h1>'
+				component: require('./404.vue')
 			}
 		}
 	});

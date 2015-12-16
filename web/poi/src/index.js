@@ -68,7 +68,7 @@ router.afterEach(function() {
 	// console.log(appEntry.components.poiHeader.options.methods.pathTo);
 });
 
-//默认路由至主页
+//默认路由至404
 router.redirect({
   '*': '/index'
 });

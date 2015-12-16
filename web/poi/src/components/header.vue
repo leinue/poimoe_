@@ -58,10 +58,10 @@
   		<div class="col-xs-12" style="padding-left: 0px;padding-right: 0px">
   			<div class="menu-header" id="poi-header">
 	  			<ul>
-					<li route="index"><span @click="pathTo('/index')" v-bind:class="menu.currentName != '/index' ? '' : 'active'">主页</span></span></li>
-					<li route="timeline"><span @click="pathTo('/timeline')" v-bind:class="menu.currentName != '/timeline' ? '' : 'active'">时间线</span></li>
-					<li route="draft"><span @click="pathTo('/works')" v-bind:class="menu.currentName != '/works' ? '' : 'active'">我的投稿</span></li>
-					<li route="star"><span @click="pathTo('/favourites')" v-bind:class="menu.currentName != '/favourites' ? '' : 'active'">我的收藏</span></li>
+					<li route="/index"><span @click="pathTo('/index')" v-bind:class="menu.currentName != '/index' ? '' : 'active'">主页</span></span></li>
+					<li route="/timeline"><span @click="pathTo('/timeline')" v-bind:class="menu.currentName != '/timeline' ? '' : 'active'">时间线</span></li>
+					<li route="/works"><span @click="pathTo('/works')" v-bind:class="menu.currentName != '/works' ? '' : 'active'">我的投稿</span></li>
+					<li route="/favourites"><span @click="pathTo('/favourites')" v-bind:class="menu.currentName != '/favourites' ? '' : 'active'">我的收藏</span></li>
 	  			</ul>
   			</div>
   		</div>
@@ -117,7 +117,7 @@
 						var span = li.childNodes.item(0);
 
 						span.setAttribute('class', '');
-						if('/' + route == currentRoute) {
+						if(currentRoute.indexOf(route) != -1) {
 							span.setAttribute('class', 'active');
 						}
 					};
