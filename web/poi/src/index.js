@@ -44,9 +44,12 @@ vue.use(vueRouter);
 var router = new vueRouter({});
 configRouter(router);
 
+window.router = router;
 window.vueStrap = vueStrap;
 
 var app = vue.extend(appEntry);
+
+router.start(app, config.entry);
 
 new vue({
 	el: '#app-title',
@@ -60,11 +63,12 @@ router.beforeEach(function () {
 	console.log('before each');
 });
 
+router.afterEach(function() {
+	var currentPath = router._currentRoute.path;
+	// console.log(appEntry.components.poiHeader.options.methods.pathTo);
+});
+
 //默认路由至主页
 router.redirect({
   '*': '/index'
 });
-
-router.start(app, config.entry);
-
-window.router = router;

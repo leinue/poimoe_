@@ -56,12 +56,12 @@
 
   	<div class="row" style="margin-right:0px">
   		<div class="col-xs-12" style="padding-left: 0px;padding-right: 0px">
-  			<div class="menu-header">
+  			<div class="menu-header" id="poi-header">
 	  			<ul>
-					<li><span @click="pathTo('index')" v-bind:class="menu.currentName != 'index' ? '' : 'active'">主页</span></span></li>
-					<li><span @click="pathTo('timeline')" v-bind:class="menu.currentName != 'timeline' ? '' : 'active'">时间线</span></li>
-					<li><span @click="pathTo('works')" v-bind:class="menu.currentName != 'works' ? '' : 'active'">我的投稿</span></li>
-					<li><span @click="pathTo('favourites')" v-bind:class="menu.currentName != 'favourites' ? '' : 'active'">我的收藏</span></li>
+					<li route="index"><span @click="pathTo('/index')" v-bind:class="menu.currentName != '/index' ? '' : 'active'">主页</span></span></li>
+					<li route="timeline"><span @click="pathTo('/timeline')" v-bind:class="menu.currentName != '/timeline' ? '' : 'active'">时间线</span></li>
+					<li route="draft"><span @click="pathTo('/works')" v-bind:class="menu.currentName != '/works' ? '' : 'active'">我的投稿</span></li>
+					<li route="star"><span @click="pathTo('/favourites')" v-bind:class="menu.currentName != '/favourites' ? '' : 'active'">我的收藏</span></li>
 	  			</ul>
   			</div>
   		</div>
@@ -70,12 +70,6 @@
 </template>
 
 <script>
-
-	var vue = require('vue');
-	var Router = require('vue-router');
-
-	vue.use(Router);
-	var router = new Router({});
 
 	export default {
 		data() {
@@ -90,10 +84,48 @@
 
 		methods: {
 			pathTo: function(path){
+				var poiHeader = document.getElementById('poi-header');
+				var ul = poiHeader.childNodes;
+				var lis = ul.item(1).getElementsByTagName('li');
+
+				for (var i = 0; i < lis.length; i++) {
+					var li = lis[i];
+					var route = li.getAttribute('route');
+					var span = li.childNodes.item(0);
+
+					span.setAttribute('class', '');
+				};
 				this.menu.currentName = path;
-				router.go('/' + path);
+				router.go(path);
 			}
+		},
+
+		created(obj) {
+			var routerInterval = 0;
+			routerInterval = setInterval(function() {
+				if(router != null) {
+					clearInterval(routerInterval);
+					var currentRoute = router._currentRoute.path;
+
+					var poiHeader = document.getElementById('poi-header');
+					var ul = poiHeader.childNodes;
+					var lis = ul.item(1).getElementsByTagName('li');
+
+					for (var i = 0; i < lis.length; i++) {
+						var li = lis[i];
+						var route = li.getAttribute('route');
+						var span = li.childNodes.item(0);
+
+						span.setAttribute('class', '');
+						if('/' + route == currentRoute) {
+							span.setAttribute('class', 'active');
+						}
+					};
+
+				}
+			}, 1);
 		}
+
 	};
 
 </script>

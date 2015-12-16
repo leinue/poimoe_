@@ -20,12 +20,6 @@
 
 <script>
 
-	var vue = require('vue');
-	var vueRouter = require('vue-router');
-
-	vue.use(vueRouter);
-	var router = new vueRouter({});
-
 	export default {
 
 		data() {
@@ -49,13 +43,19 @@
 			scrollTop=document.body.scrollTop;
 			var _public = document.getElementById('public-timeline');
 			var _personal = document.getElementById('personal-timeline');
-			if(scrollTop > 94) {
-				_public.setAttribute('style','top:10px;');
-				_personal.setAttribute('style', 'top:80px;');
-			}else {
-				_public.setAttribute('style','top:110px;');
-				_personal.setAttribute('style', 'top:180px;');				
+
+			if(_public != null) {
+
+				if(scrollTop > 94) {
+					_public.setAttribute('style','top:10px;');
+					_personal.setAttribute('style', 'top:80px;');
+				}else {
+					_public.setAttribute('style','top:110px;');
+					_personal.setAttribute('style', 'top:180px;');				
+				}
+
 			}
+
 		},1);
 	}
 	
