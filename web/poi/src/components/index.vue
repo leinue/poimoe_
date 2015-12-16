@@ -441,8 +441,6 @@
 
 <script>
 
-    import common from '../commons/scripts/commons.js';
-
     export default {
         data() {
             return {

@@ -25,6 +25,7 @@ var entryId = entryId.replace('.', '');
 entry.setAttribute('id', entryId);
 
 //注册bootstrap部件到vue中
+
 for(var key in vueStrap){
 	var current = vueStrap[key];
 	if(key === 'select' || key === 'option') {

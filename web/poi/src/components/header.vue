@@ -10,7 +10,7 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand" v-link="{ path: '/list' }">poimoe</a>
+	      <a class="navbar-brand" v-link="{ path: '/list' }">Poimoe</a>
 	    </div>
 
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -22,16 +22,36 @@
 	  </div><!-- /.container-fluid -->
 	</nav>
 
-  	<sidebar :show.sync="showRight" placement="right" header="个人中心" :width="600">
-	    <h4>的颠三倒四的</h4>
-	      <pre><code class="language-javascript">
-			if (talk === cheap){
-			code.style.display = 'block'
-			}
-	    </code></pre>
-	    <div class="aside-footer">
-	      <button type="button" class="btn btn-default" @click="showRight=false">关闭</button>
-	    </div>
+  	<sidebar :show.sync="showRight" placement="right" header="Poimoe" :width="600">
+  		<div class="side-profile">
+		    <div class="side-profile-photo"></div>
+		    <div class="side-profile-detail">
+		    	<p style="margin-bottom:10px">ivy</p>
+		    	<span class="description">注册膜法师</span>
+		    	<p class="relations">
+			    	<span>0 关注</span>
+			    	<span>0 粉丝</span>
+		    	</p>
+		    </div>
+		    <div class="side-profile-footer">
+			    <div class="col-md-6 col-md-offset-3">
+					<div class="side-profile-footer-content">
+						<div class="col-xs-4 block">
+							<p>0</p>
+							<span>投稿</span>
+						</div>
+						<div class="col-xs-4 block">
+							<p>0</p>
+							<span>收藏</span>
+						</div>
+						<div class="col-xs-4 block">
+							<p>0</p>
+							<span>删除</span>
+						</div>
+					</div>			    	
+			    </div>
+		    </div>
+  		</div>
   	</sidebar>
 
   	<div class="row" style="margin-right:0px">
@@ -112,6 +132,74 @@
 	.menu-header ul li span.active {
 		border-bottom: 2px solid rgb(0, 133, 242);
 		color: rgb(0, 133, 242)!important;
+	}
+
+	.side-profile-photo {
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		background-size: 100% 100%;
+		background-image: url(http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg);
+		background-position: center;
+		background-repeat: no-repeat;
+		margin: 0 auto;
+	}
+
+	.side-profile-detail {
+		text-align: center;
+		padding: 15px;
+	}
+
+	.side-profile-detail span.description {
+		color: rgb(209, 202, 192)!important;
+		font-size: .8em!important;
+	}
+
+	.side-profile-detail .relations {
+		font-size:1em!important;
+		margin-top:15px;
+		font-weight:200;
+	}
+
+	.side-profile-detail .relations span:hover {
+		cursor: pointer;
+		color: rgb(0, 149, 219);
+	}
+
+	.side-profile-footer {
+		height: 100%;
+		padding-top: 20px;
+		padding-bottom: 20px;
+	}
+
+	.aside .aside-dialog .aside-body {
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+
+	.side-profile-footer-content {
+		padding-top: 20px;
+		border-top: 1px solid rgb(220, 220, 220);
+		text-align: center;
+		font-size: 1.2em!important;
+		font-weight: 200!important;
+	}
+
+	.side-profile-footer-content p {
+		font-size: 3em!important;
+		font-weight: 200!important;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+
+	.side-profile-footer-content div.col-xs-4.block {
+		transition: all .2s ease;
+	}
+
+	.side-profile-footer-content div.col-xs-4.block:hover {
+		color: rgb(0, 149, 219)!important;
+		cursor: pointer;
+		transform: scale(1.1);
 	}
 
 </style>

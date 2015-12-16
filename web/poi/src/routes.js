@@ -8,7 +8,20 @@ module.exports = function(router){
 			}
 		},
 		'/timeline': {
-			component: require('./components/timeline/index.vue')
+			component: require('./components/timeline/index.vue'),
+			subRoutes: {
+				'/': {
+					component: require('./components/timeline/personal.vue')
+				},
+
+				'public': {
+					component: require('./components/timeline/public.vue')
+				},
+
+				'personal': {
+					component: require('./components/timeline/personal.vue')
+				}
+			}
 		},
 		'/works': {
 			component: require('./components/works/index.vue')

@@ -100,17 +100,14 @@ div.container-fluid {
 	margin-left: 0px;
 }
 
-/* always present */
 .expand-transition {
-  transition: all .3s ease;
-  overflow: hidden;
+  	transition: all .3s ease;
+  	overflow: hidden;
 }
 
-/* .expand-enter defines the starting state for entering */
-/* .expand-leave defines the ending state for leaving */
 .expand-enter, .expand-leave {
-	height: 0;
-  padding: 0px 10px;
-  opacity: 0;
+  	height: 0;
+  	padding: 0px 10px;
+  	opacity: 0;
 }
 
