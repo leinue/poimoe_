@@ -22,17 +22,8 @@ var index = {
       region: '_hdell'
     });
 
-    realUser.save(function(err,user) {
-      
-      if(err) {
-        ret = util.retMsg(500, err.toString());
-        res.send(ret);
-      }
-
-      ret = util.retMsg(200, user);
-      res.send(ret);
-
-    });
+    ret = util.retMsg(200, server);
+    res.send(ret);
 
   },
 

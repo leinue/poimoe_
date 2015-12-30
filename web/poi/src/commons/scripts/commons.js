@@ -20,6 +20,42 @@ module.exports = {
       		}
     	}
     	return elements;
+    },
+
+    cancelActiveMenu: function() {
+		var poiHeader = document.getElementById('poi-header');
+		var ul = poiHeader.childNodes;
+		var lis = ul.item(1).getElementsByTagName('li');
+
+		for (var i = 0; i < lis.length; i++) {
+			var li = lis[i];
+			var route = li.getAttribute('route');
+			var span = li.childNodes.item(0);
+
+			span.setAttribute('class', '');
+		};
+    },
+
+    tologin: function() {
+    	router.go('/login');
+    	localStorage.logPrev = router.path;
+    },
+
+    toRegister: function() {
+    	router.go('/register');
+    	localStorage.logPrev = router.path; 
+    },
+
+    resetNavSearchSize: function() {
+        var indexSearchNav = document.getElementById('index-nav-search');
+
+        if(indexSearchNav != null) {
+            var indexSearchInput = document.getElementById('index-search-input');
+
+            var isiWidth = indexSearchInput.clientWidth + 1;
+            indexSearchNav.setAttribute('style', 'width: ' + isiWidth + 'px');
+        }
     }
+
 
 };

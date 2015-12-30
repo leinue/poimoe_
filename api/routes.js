@@ -2,6 +2,7 @@ var ctrl = require('./controllers/index');
 var util = require('./util/index');
 var nodemailer = require('nodemailer');
 var connect = require('connect');
+var restify = require('restify');
 
 module.exports = {
 
@@ -12,14 +13,23 @@ module.exports = {
     ctrl.init(mongo);
     this.mongoose = mongo;
 
+    server.use(restify.CORS({
+        origins: ['*'],
+        credentials: true,
+        headers: ['x-poimoe']
+    }));
+
     server.pre(function(req, res, next) {
     	res.charSet('utf-8');
     	return next();
     });
 
-    // server.use(ctrl.userCtrl.auth);
+    server.use(ctrl.userCtrl.auth);
   
-    server.get('/log/', ctrl.userCtrl.logUser);
+    server.get('/log/', function(req, res, next) {
+        ret = util.retMsg(200, '膜蛤');
+        res.send(ret);
+    });
 
     server.get('/user/register/:email/:password', ctrl.userCtrl.register);
     server.get('/user/login/:email/:password', ctrl.userCtrl.login);

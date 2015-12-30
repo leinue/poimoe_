@@ -29,6 +29,39 @@ module.exports = function(router){
 		'/favourites': {
 			component: require('./components/favourites/index.vue')
 		},
+		'/cg/new':{
+			component: require('./components/works/new.vue')
+		},
+		'/login': {
+			name: 'login',
+			component: require('./components/users/login.vue')
+		},
+		'/register': {
+			name: 'register',
+			component: require('./components/users/signin.vue')
+		},
+		'/profile': {
+			component: require('./components/users/profile.vue')
+		},
+		'/view/:id': {
+			component: require('./components/works/view.vue')
+		},
+		'/relations': {
+			component: require('./components/users/relations/following.vue')
+		},
+		'/relations/following': {
+			component: require('./components/users/relations/following.vue')
+		},
+		'/relations/follower': {
+			component: require('./components/users/relations/follower.vue')
+		},
+		'/search': {
+			component: require('./components/search.vue')
+		},
+		'/search/key/:keywords': {
+			name: 'search-key',
+			component: require('./components/search.vue')
+		},
 		'/404': {
 			component: {
 				component: require('./404.vue')

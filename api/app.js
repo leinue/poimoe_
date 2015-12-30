@@ -22,13 +22,6 @@ var server = restify.createServer({
 	name: 'poimoe'
 });
 
-//开启cors
-server.use(restify.CORS({
-	origins: ['*'],
-	credentials: true,
-	headers: ['x-poimoe']
-}));
-
 server.use(restify.authorizationParser());
 server.use(restify.bodyParser());
 server.use(restify.queryParser());

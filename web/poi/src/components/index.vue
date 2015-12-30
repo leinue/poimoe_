@@ -1,68 +1,91 @@
 <template>
     
     <div>
-        <div class="row" style="border-bottom: 1px solid rgb(220, 220, 220);background-color: #eee;">
-            <div class="col-md-6 col-md-offset-3" style="padding:10px;">
-                <div class="search-area">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="请输入搜索内容">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">搜索</button>
-                        </span>
-                    </div>
-
-                    <div class="tag-list">
-                        <span class="glyphicon glyphicon-tags" style="color: rgb(175, 175, 175);cursor:auto"> 标签：</span>
-                        <span @click="show" class="label label-default">Default</span>
-                        <span class="label label-primary">Primary</span>
-                        <span class="label label-success">Success</span>
-                        <span class="label label-info">Info</span>
-                        <span class="label label-warning">Warning</span>
-                        <span class="label label-danger">Danger</span>
-                        <span class="label label-default">Default</span>
-                        <span class="label label-primary">Primary</span>
-                        <span class="label label-success">Success</span>
-                        <span class="label label-info">Info</span> 
-                    </div>
-                </div>
-            </div>
-        </div>
+        <search></search>
 
         <div class="row" style="border-bottom: 1px solid rgb(220, 220, 220)">
-            <div class="col-xs-12" style="padding-left:0px;padding-right:0px">
-                
-                <div class="row">
-                    <div class="col-md-3 col-sm-3" style="padding-left:0px;padding-right:0px;text-align:center">
-                        <div class="profile">
-                            <div class="panel-header" style="border-right:1px solid rgb(220, 220, 220)">
-                                我的信息
-                            </div>
-                            <div class="profile-img"></div>
-                            <div class="profile-photo"></div>
-                            <div class="profile-detail">
 
-                                <div class=" col-md-4 outer-column">
-                                    <div class="column">
-                                        <p>124</p>
-                                        <span>关注</span>
-                                    </div>
-                                </div>
-                                <div class=" col-md-4 outer-column">
-                                    <div class="column">
-                                        <p>123</p>
-                                        <span>粉丝</span>
-                                    </div>                                    
-                                </div>
-                                <div class="clearfix visible-xs-block"></div>
-                                <div class=" col-md-4 outer-column">
-                                    <div class="column none">
-                                        <p>1234</p>
-                                        <span>投稿</span>
-                                    </div>
-                                </div>
+            <div class="col-md-10 col-md-offset-1" style="padding-top:15px;padding-bottom:15px;">
 
+                <div class="col-md-6" id="slider">
+                    <carousel>
+                      <slider>
+                        <img width="100%" src="http://i2.hdslb.com/u_user/f228d91bec1cce6cb2d0f08c71a7b32f.jpg">
+                          <div class="carousel-caption">
+                         </div>
+                      </slider>
+                      <slider>
+                        <img src="http://i0.hdslb.com/u_user/b27b4638b156b62f3a3679fa40d7194d.jpg">
+                      </slider>
+                      <slider>
+                        <img src="http://i1.hdslb.com/u_user/2f3fe2a65f5188b02e3fcd1fbd9bad14.png">
+                      </slider>
+                    </carousel>
+                </div>
+
+                <div class="col-md-6 hot-cg-imgs">
+                    <div @click="viewThisCG('1')" class="col-md-4">
+                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                            <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                <div class="span">1</div>
+                                <h4>蛤蛤</h4>
+                                <p>xieyang</p>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                            <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                <div class="span">2</div>
+                                <h4>蛤蛤</h4>
+                                <p>xieyang</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                            <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                <div class="span">2</div>
+                                <h4>蛤蛤</h4>
+                                <p>xieyang</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                            <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                <div class="span">2</div>
+                                <h4>蛤蛤</h4>
+                                <p>xieyang</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                            <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                <div class="span">2</div>
+                                <h4>蛤蛤</h4>
+                                <p>xieyang</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                            <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
+                                <div class="span">2</div>
+                                <h4>蛤蛤</h4>
+                                <p>xieyang</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="col-md-10 col-md-offset-1" style="padding-left:0px;padding-right:0px">
+                
+                <div class="row">
+                    <div class="col-md-12" style="text-align:center">
                         <div class="recommend-user">
                             <div class="panel-header">
                                 推荐用户
@@ -71,7 +94,7 @@
                                     
                                 <div class="photo-group">
                                      <ul>
-                                         <li></li>
+                                         <li style="background-image:url(http://www.people.com.cn/mediafile/pic/20140709/49/4202888730341368797.jpg)" @click="toProfile()"></li>
                                          <li></li>
                                          <li></li>
                                          <li></li>
@@ -88,262 +111,8 @@
 
                             </div>
                         </div>
-                        <div class="recommend-user" style="margin-top:0px">
-                            <div class="panel-header">
-                                今日插画推荐
-                            </div>
-                            <div class="panel-section">
-
-                                <div class="cg-group">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                                    <div class="span">1</div>
-                                                    <h4>蛤蛤</h4>
-                                                    <p>xieyang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                                    <div class="span">2</div>
-                                                    <h4>蛤蛤</h4>
-                                                    <p>xieyang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                                    <div class="span">3</div>
-                                                    <h4>蛤蛤</h4>
-                                                    <p>xieyang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                                    <div class="span">4</div>
-                                                    <h4>蛤蛤</h4>
-                                                    <p>xieyang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                                    <div class="span">5</div>
-                                                    <h4>蛤蛤</h4>
-                                                    <p>xieyang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                                    <div class="span">6</div>
-                                                    <h4>蛤蛤</h4>
-                                                    <p>xieyang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                                    <div class="span">7</div>
-                                                    <h4>蛤蛤</h4>
-                                                    <p>xieyang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                                    <div class="span">8</div>
-                                                    <h4>蛤蛤</h4>
-                                                    <p>xieyang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                                    <div class="span">9</div>
-                                                    <h4>蛤蛤</h4>
-                                                    <p>xieyang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                                                <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                                    <div class="span">10</div>
-                                                    <h4>蛤蛤</h4>
-                                                    <p>xieyang</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
                     </div>
-                    <div class="col-md-9 col-sm-9" style="padding-left:0px;padding-right:0px;">
-
-                        <div class="newest-cg">
-                            <div class="panel-header">
-                                最新作品
-                            </div>
-                        </div>
-
-                        <div class="img-box">
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-item2">
-                                
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item item3">
-                                
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-img-item2">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-item2">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="img-box">
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-item2">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item item3">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="img-box">
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-item2">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item item3">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="img-box">
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-item2">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item img-item2">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                            <div v-on:mouseenter="showIndexCover" v-on:mouseleave="hideIndexCover" class="img-item item3">
-                                <div v-show="cgIndex.showCover" transition="cgrecocover" class="cg-img-cover index">
-                                    <h4>蛤蛤</h4>
-                                    <p>xieyang</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-12">
 
                         <div class="hot-cg">
                             <div class="panel-header">
@@ -441,6 +210,10 @@
 
 <script>
 
+    import util from '../commons/scripts/commons.js';
+    import search from './search/search.vue';
+    import us from '../services/UserService.js';
+
     export default {
         data() {
             return {
@@ -449,12 +222,14 @@
                 },
                 cgIndex: {
                     showCover: false
-                }
+                },
+                displayNavSearch: false,
+                keywordSearched: ''
             }
         },
 
         components: {
-
+            'search': search
         },
 
         methods: {
@@ -472,7 +247,59 @@
 
             hideIndexCover: function(obj) {
                 obj.target.getElementsByTagName('div')[0].setAttribute('style','opacity:0;padding-top:60px;');
+            },
+
+            viewThisCG: function(id) {
+                util.cancelActiveMenu();
+                router.go('/view/' + id);
+            },
+
+            toProfile: function() {
+                util.cancelActiveMenu();
+                router.go('/profile');
+            },
+
+            loadThisSearchNav: function() {
+                util.resetNavSearchSize();
+                this.displayNavSearch = true;
+            },
+
+            hideThisSearchNav: function() {
+                this.displayNavSearch = false;
+            },
+
+            pipeToSearchInput: function(key) {
+                this.keywordSearched = key;
+            },
+
+            toSearchPage: function() {
+                util.cancelActiveMenu();
+                var key = this.keywordSearched;
+                var route = {
+                    name: 'search-key',
+                    params: {
+                        keywords: key
+                    }
+                };
+                router.replace(route);
             }
+        },
+
+        created() {
+
+            setTimeout(function() {
+    
+                var slider = document.getElementById('slider');
+
+                if(slider != null) {
+                    var sliderInner = slider.childNodes.item(1).getElementsByTagName('div');
+                    var sliderItem = sliderInner[0].getElementsByTagName('div');
+                    sliderItem[0].setAttribute('class', sliderItem[0].getAttribute('class') + ' active');
+                }
+
+                util.resetNavSearchSize();
+
+            }, 100);
         }
     };
 
@@ -539,16 +366,15 @@
     }
 
     .recommend-user {
-        border-top: 1px solid rgb(220, 220, 220);
-        margin-top: 60px;
+        /*border-top: 1px solid rgb(220, 220, 220);*/
     }
 
     .panel-header{
-        background: rgb(245, 245, 245);
-        padding: 10px 15px;
-        font-size: 14px;
+        padding: 2px 15px;
+        font-size: 16px;
         font-weight: 400;
-        border-bottom: 1px solid rgb(220, 220, 220);
+        text-align: left;
+        border-left: 2px solid rgb(0, 124, 246);
     }
 
     .panel-footer {
@@ -556,7 +382,8 @@
     }
 
     .panel-section {
-        padding: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 
     .media-body {
@@ -573,27 +400,32 @@
         list-style: none;
         margin-left: -40px;
         display: table-row;
-        margin-bottom: 5px;
     }
 
     .photo-group ul li {
-        display: table-cell;
-        margin-right: 10px;
+        float: left;
         cursor: pointer;
-        border-radius:50%;
-        width:60px;
-        height:60px;
-        background-image: url(http://tp2.sinaimg.cn/2354504421/180/40057719478/0);
-        background-size:60px;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        background-image: url(http://i0.hdslb.com/320_200/video/f2/f2b119b4270f1a7c5bf03716065d35be.jpg);
+        transition: all .3s ease;
+        background-position: center;
+        margin: 10px;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .photo-group ul li:hover {
+        transform: scale(1.04);
     }
 
     .cg-img {
         width: 100%;
         height: 120px;
-        /*background-size: 100% 120px;*/
         background-repeat: no-repeat;
-        margin-top: 15px;
-        border-radius: 3px;
+        border-radius: 4px;
+        margin-bottom: 10px;
         cursor: pointer;
         background-position: center;
     }
@@ -619,6 +451,7 @@
         text-align: left;
         padding-left: 10px;
         font-weight: 200;
+        border-radius: 4px;
     }
 
     .cg-img-cover .span {
@@ -763,7 +596,7 @@
     }
 
     .hot-cg {
-        border-left: 1px solid rgb(220, 220, 220);
+        /*border-left: 1px solid rgb(220, 220, 220);*/
     }
 
     .col-md-6 {
@@ -772,8 +605,13 @@
     }
 
     .hot-tags-content .col-md-6 {
-        padding-left: 10px;
-        padding-right: 10px;
+        /*padding-left: 10px;*/
+        padding-right: 15px;
+    }
+
+    .hot-cg-imgs .col-md-4 {
+        padding-right: 0px!important;
+        /*padding-left: 10px;*/
     }
 
 </style>

@@ -15,8 +15,10 @@
 
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><a>投稿</a></li>
+	        <li @click="pathToNewCGPage()"><a>投稿</a></li>
 	        <li><a @click="showRight = true">个人中心</a></li>
+	       	<li @click="toLogin()"><a>登录</a></li>
+	       	<li @click="toRegister()"><a>注册</a></li>
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
@@ -29,22 +31,22 @@
 		    	<p style="margin-bottom:10px">ivy</p>
 		    	<span class="description">注册膜法师</span>
 		    	<p class="relations">
-			    	<span>0 关注</span>
-			    	<span>0 粉丝</span>
+			    	<span @click="toFollowing()">0 关注</span>
+			    	<span @click="toFollower()">0 粉丝</span>
 		    	</p>
 		    </div>
 		    <div class="side-profile-footer">
 			    <div class="col-md-6 col-md-offset-3">
 					<div class="side-profile-footer-content">
-						<div class="col-xs-4 block">
+						<div @click="pathToAndCloseThis('/works')" class="col-xs-4 block">
 							<p>0</p>
 							<span>投稿</span>
 						</div>
-						<div class="col-xs-4 block">
+						<div @click="pathToAndCloseThis('/favourites')" class="col-xs-4 block">
 							<p>0</p>
 							<span>收藏</span>
 						</div>
-						<div class="col-xs-4 block">
+						<div @click="pathToAndCloseThis('')" class="col-xs-4 block">
 							<p>0</p>
 							<span>删除</span>
 						</div>
@@ -71,6 +73,8 @@
 
 <script>
 
+	var util = require('../commons/scripts/commons.js');
+
 	export default {
 		data() {
 			return {
@@ -84,19 +88,47 @@
 
 		methods: {
 			pathTo: function(path){
-				var poiHeader = document.getElementById('poi-header');
-				var ul = poiHeader.childNodes;
-				var lis = ul.item(1).getElementsByTagName('li');
-
-				for (var i = 0; i < lis.length; i++) {
-					var li = lis[i];
-					var route = li.getAttribute('route');
-					var span = li.childNodes.item(0);
-
-					span.setAttribute('class', '');
-				};
+				util.cancelActiveMenu();
 				this.menu.currentName = path;
 				router.go(path);
+			},
+
+			pathToAndCloseThis: function(path) {
+				this.pathTo(path);
+				this.showRight = false;
+			},
+
+			pathToNewCGPage: function() {
+				util.cancelActiveMenu();
+				router.go('/cg/new');
+			},
+
+			toLogin: function() {
+				util.cancelActiveMenu();
+				router.go({
+					path: '/login',
+					params: {
+						prev: router.path
+					}
+				});
+			},
+
+			toRegister: function() {
+				util.cancelActiveMenu();
+				router.go({
+					path: '/register',
+					params: {
+						prev: router.path
+					}
+				});
+			},
+
+			toFollowing: function() {
+				this.pathToAndCloseThis('/relations/following');
+			},
+
+			toFollower: function() {
+				this.pathToAndCloseThis('/relations/follower');
 			}
 		},
 
@@ -128,7 +160,7 @@
 
 	};
 
-</script>
+</script>	
 
 <style>
 	
@@ -170,7 +202,7 @@
 		width: 120px;
 		height: 120px;
 		border-radius: 50%;
-		background-size: 100% 100%;
+		background-size: cover;
 		background-image: url(http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg);
 		background-position: center;
 		background-repeat: no-repeat;
@@ -211,7 +243,7 @@
 
 	.side-profile-footer-content {
 		padding-top: 20px;
-		border-top: 1px solid rgb(220, 220, 220);
+		border-top: 1px solid rgb(0, 149, 219);
 		text-align: center;
 		font-size: 1.2em!important;
 		font-weight: 200!important;

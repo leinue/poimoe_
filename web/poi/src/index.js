@@ -5,6 +5,11 @@ var filter = require('./filters/index.js');
 var vueStrap = require('../node_modules/vue-strap/dist/vue-strap.min.js');
 var config = require('./config.js');
 
+//初始化ajax
+vue.use(require('vue-resource'));
+vue.http.options.root = 'http://api.poimoe.com/';
+vue.http.headers['x-poimoe'] = 'moha';
+
 //初始化全局css
 require('../node_modules/bootstrap/dist/css/bootstrap.min.css');
 require('./commons/styles/app.css');//公用定制css
@@ -33,7 +38,7 @@ for(var key in vueStrap){
 		key = key.replace(/(\w)/,function(v){return v.toUpperCase()});
 		key = 'v' + key;
 	}
-	key = key === 'tabset' ? 'tabs' : key;//如果是tabset，则我们给它的标签迷宫是tabs
+	key = key === 'tabset' ? 'tabs' : key;//如果是tabset，则我们给它的标签名是tabs
 	key = key === 'aside' ? 'sidebar' : key; //如果是aisde，则我们给它的标签名是sidebar
 	vue.component(key, current);
 }
@@ -53,10 +58,21 @@ router.start(app, config.entry);
 
 new vue({
 	el: '#app-title',
+
 	data: {
 		title: config.title
+	},
+
+	ready: function() {
+		this.$http.get('http://api.poimoe.com/log').then(function (response) {
+			console.log(response);
+		}, function(err) {
+			console.log(err);
+		});
 	}
 });
+
+window.Vue = vue;
 
 //每次路由之前请求该方法
 router.beforeEach(function () {

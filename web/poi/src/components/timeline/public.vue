@@ -9,8 +9,8 @@
 		</div>
 		<div class="col-xs-10" style="padding-bottom:18px;">
 			<div class="timeline-new">
-				<div class="new-timeline">
-					<span class="glyphicon glyphicon-pencil"></span><span> 描绘你的世界</span>	
+				<div @click="toNewCGPage()" class="new-timeline">
+					<span class="glyphicon glyphicon-pencil"></span><span> 描绘你的世界</span>
 				</div>
 				<span class="normal">或</span>
 				<div class="new-timeline">
@@ -172,7 +172,25 @@
 </template>
 
 <script>
-	
+
+	var util = require('../../commons/scripts/commons.js');
+
+	export default {
+		data() {
+			return {
+
+			}
+		},
+		components: {
+
+		},
+		methods: {
+			toNewCGPage: function() {
+				util.cancelActiveMenu();
+				router.go('/cg/new');
+			}
+		}
+	};
 
 
 </script>
