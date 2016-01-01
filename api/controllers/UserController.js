@@ -98,7 +98,7 @@ var index = {
     var User = ctrlInitial.models.User();
 
     User.findByEmail(thisEmail, function(err, u) {
-
+      
       if(err) {
         res.send(util.retMsg(400, err.toString()));
       }
@@ -107,25 +107,25 @@ var index = {
         res.send(util.retMsg(400, "该邮箱已被注册过"));
       }
 
-    });
+      var thisPwd = util.sha1Pwd(thisPwd);
 
-    var thisPwd = util.sha1Pwd(thisPwd);
+      var randomNumer = Math.random(0,100).toString();
 
-    var randomNumer = Math.random(0,100).toString();
+      var user = new User({
+        email: thisEmail,
+        username: thisEmail + randomNumer,
+        password: thisPwd
+      });
 
-    var user = new User({
-      email: thisEmail,
-      username: thisEmail + randomNumer,
-      password: thisPwd
-    });
+      user.save(function(err, u) {
 
-    user.save(function(err, u) {
+        if(err) {
+          res.send(util.retMsg(401, err.toString()));
+        }
 
-      if(err) {
-        res.send(util.retMsg(401, err.toString()));
-      }
+        res.send(util.retMsg(200, '注册成功'));
 
-      res.send(util.retMsg(200, '注册成功'));
+      });
 
     });
   

@@ -55,7 +55,15 @@ module.exports = {
             var isiWidth = indexSearchInput.clientWidth + 1;
             indexSearchNav.setAttribute('style', 'width: ' + isiWidth + 'px');
         }
-    }
+    },
+
+	emailCheck: function(val) {
+		var pattern = /^([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+		if (!pattern.test(val)) {
+			return false;
+		}
+		return true;
+	}
 
 
 };

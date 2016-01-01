@@ -298,7 +298,7 @@
                 }
 
                 util.resetNavSearchSize();
-
+                
             }, 100);
         }
     };

@@ -4,6 +4,7 @@ var configRouter = require('./routes.js');
 var filter = require('./filters/index.js');
 var vueStrap = require('../node_modules/vue-strap/dist/vue-strap.min.js');
 var config = require('./config.js');
+var services = require('./services/index.js');
 
 //初始化ajax
 vue.use(require('vue-resource'));
@@ -64,11 +65,8 @@ new vue({
 	},
 
 	ready: function() {
-		this.$http.get('http://api.poimoe.com/log').then(function (response) {
-			console.log(response);
-		}, function(err) {
-			console.log(err);
-		});
+		var store = services.init(this);
+	 	window.services = store;
 	}
 });
 
