@@ -53,8 +53,10 @@ var util = {
 
         var raw = str + current;
 
-        var sha1 = crypto.createHash('sha1');
-        return sha1.digest(raw);
+        var rawBuffer = new Buffer(raw);
+        var result = rawBuffer.toString('base64');
+
+        return result;
 
       }
 
