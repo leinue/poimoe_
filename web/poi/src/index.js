@@ -6,10 +6,17 @@ var vueStrap = require('../node_modules/vue-strap/dist/vue-strap.min.js');
 var config = require('./config.js');
 var services = require('./services/index.js');
 
+//初始化用户登录状态
+localStorage.login = typeof localStorage.login == 'undefined' ? 'false' : localStorage.login;
+localStorage.userData = typeof localStorage.userData == 'undefined' ? '' : localStorage.userData;
+localStorage.accessToken = typeof localStorage.accessToken == 'undefined' ? '' : localStorage.accessToken;
+
 //初始化ajax
 vue.use(require('vue-resource'));
 vue.http.options.root = 'http://api.poimoe.com/';
 vue.http.headers['x-poimoe'] = 'moha';
+vue.http.headers.common['Authorization'] = 'Basic YXBpOnBhc3N3b3Jk';
+console.log(vue.http.headers);
 
 //初始化全局css
 require('../node_modules/bootstrap/dist/css/bootstrap.min.css');
@@ -31,7 +38,6 @@ var entryId = entryId.replace('.', '');
 entry.setAttribute('id', entryId);
 
 //注册bootstrap部件到vue中
-
 for(var key in vueStrap){
 	var current = vueStrap[key];
 	if(key === 'select' || key === 'option') {

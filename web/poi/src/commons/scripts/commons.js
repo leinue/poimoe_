@@ -63,7 +63,25 @@ module.exports = {
 			return false;
 		}
 		return true;
-	}
+	},
 
+	messageBox: function(message) {
+		alert(message);
+	},
+
+	handleError: function(err) {
+		this.messageBox('Error status: ' + err.status + ';Error text: ' + err.statusText);
+	},
+
+	session: function(key, val) {
+
+		if(key == null) {
+			return false;
+		}
+
+		localStorage[key] = val;
+		return localStorage[key];
+
+	}
 
 };

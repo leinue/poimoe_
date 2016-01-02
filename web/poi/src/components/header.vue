@@ -1,5 +1,7 @@
 <template>
 
+	{{init()}}
+
 	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <!-- Brand and toggle get grouped for better mobile display -->
@@ -16,9 +18,10 @@
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav navbar-right">
 	        <li @click="pathToNewCGPage()"><a>投稿</a></li>
-	        <li><a @click="showRight = true">个人中心</a></li>
-	       	<li @click="toLogin()"><a>登录</a></li>
-	       	<li @click="toRegister()"><a>注册</a></li>
+	        <li v-show="isLogin == 'true'"><a @click="showRight = true">个人中心</a></li>
+	       	<li v-show="isLogin == 'false'" @click="toLogin()"><a>登录</a></li>
+	       	<li v-show="isLogin == 'false'" @click="toRegister()"><a>注册</a></li>
+	       	<li v-show="isLogin == 'true'" @click="logout()"><a>退出</a></li>
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
@@ -82,11 +85,16 @@
 				showRight: false,
 				menu: {
 					currentName: 'index'
-				}
+				},
+				isLogin: false
 			};
 		},
 
 		methods: {
+			init: function() {
+				this.isLogin = localStorage.login;
+			},
+
 			pathTo: function(path){
 				util.cancelActiveMenu();
 				this.menu.currentName = path;
@@ -129,6 +137,30 @@
 
 			toFollower: function() {
 				this.pathToAndCloseThis('/relations/follower');
+			},
+
+			logout: function() {
+
+				services.UserService.logout().then(function(res) {
+
+					var data = res.data;
+
+					util.messageBox(data.message);
+
+					if(data.code == 200) {
+						localStorage.login = 'false';
+						localStorage.email = '';
+						localStorage._id = '';
+						localStorage.accessToken = '';
+						localStorage.userData = '';
+						this.init();
+						this.pathToAndCloseThis('/index');
+					}
+
+				}, function(err) {
+					util.handleError(err);
+				});
+				
 			}
 		},
 

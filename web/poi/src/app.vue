@@ -4,10 +4,6 @@
 		<poi-header></poi-header>
 	</header>
 
-	<div id="mymodal">
-	
-	</div>
-
 	<section>
 	    <div class="page">
     	    <router-view transition="expand"></router-view>
@@ -27,8 +23,7 @@
 	export default {
 		data() {
 			return {
-				haha: 'fuck',
-				showModal: false
+				haha: 'fuck'
 			}
 		},
 		components: {
@@ -36,9 +31,7 @@
 			poiFooter
 		},
 		methods: {
-			showRight: function() {
-
-			}
+			
 		}
 	};
 </script>
