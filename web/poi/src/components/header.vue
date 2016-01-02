@@ -86,7 +86,7 @@
 				menu: {
 					currentName: 'index'
 				},
-				isLogin: false
+				isLogin: 'false'
 			};
 		},
 
@@ -141,6 +141,8 @@
 
 			logout: function() {
 
+				var _this = this;
+
 				services.UserService.logout().then(function(res) {
 
 					var data = res.data;
@@ -154,8 +156,10 @@
 						localStorage.accessToken = '';
 						localStorage.userData = '';
 						localStorage.username = '';
-						this.init();
-						this.pathToAndCloseThis('/index');
+						_this.isLogin = 'false';
+						//将http header Authorization头重新设置为匿名者
+						Vue.http.headers.common['Authorization'] = 'Basic YW5vbnltb3Vz==';
+						_this.pathToAndCloseThis('/index');
 					}
 
 				}, function(err) {
