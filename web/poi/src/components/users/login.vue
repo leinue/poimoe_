@@ -118,12 +118,7 @@
 
 						var real = data.data;
 
-						localStorage.email = real.email;
-						localStorage._id = real._id;
-						localStorage.accessToken = real.accessToken;
-						localStorage.userData = JSON.stringify(real);
-						localStorage.username = real.username;
-						localStorage.login = 'true';
+						util.login(real);
 
 						router.go('/index');
 						

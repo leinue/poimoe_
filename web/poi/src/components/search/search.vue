@@ -79,7 +79,6 @@
                 router.replace(route);
             }
 
-
 		},
 
         props: {

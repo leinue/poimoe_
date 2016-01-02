@@ -32,6 +32,9 @@
 		},
 		methods: {
 			
+		},
+		created() {
+
 		}
 	};
 </script>

@@ -204,9 +204,7 @@
 		},
 
 		created() {
-
 			search.props.keywords.default = router._currentRoute.params.keywords;
-
 		}
 	}
 

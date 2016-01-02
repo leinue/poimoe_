@@ -82,6 +82,26 @@ module.exports = {
 		localStorage[key] = val;
 		return localStorage[key];
 
+	},
+
+	logout: function() {
+		localStorage.login = 'false';
+		localStorage.email = '';
+		localStorage._id = '';
+		localStorage.accessToken = '';
+		localStorage.userData = '';
+		localStorage.username = '';
+		//将http header Authorization头重新设置为匿名者
+		Vue.http.headers.common['Authorization'] = 'Basic YW5vbnltb3Vz==';
+	},
+
+	login: function(real) {
+		localStorage.email = real.email;
+		localStorage._id = real._id;
+		localStorage.accessToken = real.accessToken;
+		localStorage.userData = JSON.stringify(real);
+		localStorage.username = real.username;
+		localStorage.login = 'true';
 	}
 
 };

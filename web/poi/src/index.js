@@ -86,6 +86,17 @@ router.beforeEach(function () {
 
 router.afterEach(function() {
 	var currentPath = router._currentRoute.path;
+
+	var accessDenied = ['/cg/new', '/timeline/personal', '/works', '/favourites'];
+
+	for (var i = 0; i < accessDenied.length; i++) {
+		var curr = accessDenied[i];
+		if(curr == currentPath) {
+			require('./commons/scripts/commons.js').cancelActiveMenu();
+			router.go('/login');
+		}
+	};
+
 	// console.log(appEntry.components.poiHeader.options.methods.pathTo);
 });
 

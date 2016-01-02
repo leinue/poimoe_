@@ -16,7 +16,7 @@
 	    </div>
 
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      <ul class="nav navbar-nav navbar-right">
+	      <ul class="nav navbar-nav navbar-right" id="profile-menu">
 	        <li @click="pathToNewCGPage()"><a>投稿</a></li>
 	        <li v-show="isLogin == 'true'"><a @click="showRight = true">个人中心</a></li>
 	       	<li v-show="isLogin == 'false'" @click="toLogin()"><a>登录</a></li>
@@ -85,8 +85,7 @@
 				showRight: false,
 				menu: {
 					currentName: 'index'
-				},
-				isLogin: 'false'
+				}
 			};
 		},
 
@@ -150,15 +149,8 @@
 					util.messageBox(data.message);
 
 					if(data.code == 200) {
-						localStorage.login = 'false';
-						localStorage.email = '';
-						localStorage._id = '';
-						localStorage.accessToken = '';
-						localStorage.userData = '';
-						localStorage.username = '';
+						util.logout();
 						_this.isLogin = 'false';
-						//将http header Authorization头重新设置为匿名者
-						Vue.http.headers.common['Authorization'] = 'Basic YW5vbnltb3Vz==';
 						_this.pathToAndCloseThis('/index');
 					}
 
@@ -168,6 +160,13 @@
 				
 			}
 		},
+
+        props: {
+            isLogin: {
+                type: String,
+                default: localStorage.login
+            }
+        },
 
 		created(obj) {
 			var routerInterval = 0;
@@ -191,8 +190,37 @@
 						}
 					};
 
-				}
+				}					
 			}, 1);
+
+			setInterval(function() {
+
+				// var login = localStorage.login;
+
+				// console.log(login);
+
+				// if(login == 'true') {
+
+				// 	var pm = document.getElementById('profile-menu');
+
+				// 	var pmLi = pm.getElementsByTagName('li');
+
+				// 	for (var i = 0; i < pmLi.length; i++) {
+				// 		var curr = pmLi[i];
+
+				// 		var currStyle = curr.getAttribute('style');
+
+				// 		if(currStyle != null ){
+				// 			if(currStyle.indexOf('none') != -1) {
+				// 				curr.setAttribute('style', '');
+				// 			}
+				// 		}
+
+				// 	};
+
+				// }
+
+			}, 1000);
 		}
 
 	};
