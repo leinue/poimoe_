@@ -15,8 +15,9 @@ localStorage.accessToken = typeof localStorage.accessToken == 'undefined' ? '' :
 vue.use(require('vue-resource'));
 vue.http.options.root = 'http://api.poimoe.com/';
 vue.http.headers['x-poimoe'] = 'moha';
-vue.http.headers.common['Authorization'] = localStorage.accessToken;
-console.log(vue.http.headers);
+if(localStorage.login == 'true') {
+	vue.http.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;	
+}
 
 //初始化全局css
 require('../node_modules/bootstrap/dist/css/bootstrap.min.css');

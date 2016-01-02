@@ -153,6 +153,7 @@
 						localStorage._id = '';
 						localStorage.accessToken = '';
 						localStorage.userData = '';
+						localStorage.username = '';
 						this.init();
 						this.pathToAndCloseThis('/index');
 					}
