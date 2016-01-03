@@ -30,10 +30,6 @@ module.exports = {
   cacheModel: function(schema, v, poplulation) {
   	if(util.checkIsUndefined(v)) {
       if(typeof schema == 'string') {
-        console.log('======================');
-        console.log(schema);
-        console.log(typeof v);
-        console.log('======================');
         v = poplulation.name.init(this.mongoose);
         v = v[schema];
       }else {
@@ -51,9 +47,6 @@ module.exports = {
   	this.userModel = this.cacheModel('users', this.userModel,{
       name: userAndThemes
     });
-    console.log('-----users------');
-    console.log(typeof this.userModel);
-    console.log('-----users------');
   	return this.userModel;
   },
 
@@ -86,9 +79,6 @@ module.exports = {
     this.themesModel = this.cacheModel('themes', this.themesModel, {
       name: userAndThemes
     });
-    console.log('-----themes------');
-    console.log(typeof this.themesModel);
-    console.log('-----themes------');
     return this.themesModel;
   }
 
