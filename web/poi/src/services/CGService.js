@@ -27,8 +27,8 @@ module.exports = {
 				return _this.$http.get(baseUrl + 'themes/remove/' + id);
 			},
 
-			getByUid: function(uid) {
-				return _this.$http.get(baseUrl + 'themes/get/' + uid);
+			getByUid: function(uid, page, count) {
+				return _this.$http.get(baseUrl + 'themes/get/' + uid + '/' + page + '/' + count);
 			}
 
 		}

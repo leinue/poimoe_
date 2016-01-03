@@ -1,5 +1,11 @@
 
+var util = require('../util/index.js');
+
 module.exports = {
+
+  userModel: undefined,
+  themesModel: undefined,
+
   init: function(mongoose) {
 
   	var Schema = mongoose.Schema;
@@ -150,9 +156,126 @@ module.exports = {
 
     };
 
-    var user = mongoose.model('users', userSchema);
+    var themesSchema = Schema({
+      user_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+      },
+      title: String,
+      content: {
+        type: String,
+        default: ''
+      },
+      tag_list: {
+        type: Schema.Types.ObjectId,
+        default: []
+      },
+      image: {
+        type: String,
+        default: ''
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now
+      },
+      updatedAt: {
+        type: Date,
+        default: Date.now
+      },
+      isDeleted: {
+        type: Boolean,
+        default: false
+      },
+      deletedAt: {
+        type: Date,
+        default: Date.now
+      }
+    });
 
-    return user;
+    themesSchema.statics.findById = function(id, cb) {
+      return this.find({
+        _id: id,
+        isDeleted: false
+      }, cb);
+    };
+
+    themesSchema.statics.findByUid = function(uid, page, count, cb) {
+      page = page || 1;
+      count = count || 20;
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+        user_id: uid,
+        isDeleted: false
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
+    };
+
+    themesSchema.statics.findAll = function(page, count, cb) {
+      page = page || 1;
+      count = count || 20;
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+       isDeleted: false 
+      }).populate('user_id').sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
+    };
+
+    themesSchema.statics.findAllRemoved = function(page, count, cb) {
+      page = page || 1;
+      count = count || 20;
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+       isDeleted: false 
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
+    };
+
+    themesSchema.statics._remove = function(id, cb) {
+      var query = {
+        _id: id
+      };
+
+      var options = {
+        new: true
+      };
+
+      var update = {
+        isDeleted: true,
+        deletedAt: Date.now()
+      };
+
+      return this.findOneAndUpdate(query, update, options, cb);
+    };
+
+    themesSchema.statics.update = function(id, obj, cb) {
+      var query = {
+        _id: id
+      };
+
+      var options = {
+        new: true
+      };
+
+      var update = obj;
+
+      return this.findOneAndUpdate(query, update, options, cb);
+    }
+
+    this.userModel = util.cacheMongooseModel(mongoose, userSchema, 'users', this.userModel);
+    this.themesModel = util.cacheMongooseModel(mongoose, themesSchema, 'themes', this.themesModel);
+
+    var _this = this;
+
+    return {
+      user: _this.userModel,
+      themes: _this.themesModel
+    };
 
   }
 };

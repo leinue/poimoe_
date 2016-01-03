@@ -227,3 +227,7 @@ div.container-fluid {
 	background-color: #2e97d8;
 	text-decoration: none
 }
+
+.timeline-real-footer ul li span {
+	top: 4px;
+}

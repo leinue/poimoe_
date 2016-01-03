@@ -1,11 +1,14 @@
 
 module.exports = {
-  init: function(mongoose) {
+  init: function(mongoose, users) {
 
   	var Schema = mongoose.Schema;
 
     var themesSchema = Schema({
-      user_id: Schema.Types.ObjectId,
+      user_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+      },
       title: String,
       content: {
         type: String,
@@ -44,11 +47,17 @@ module.exports = {
       }, cb);
     };
 
-    themesSchema.statics.findByUid = function(uid, cb) {
+    themesSchema.statics.findByUid = function(uid, page, count, cb) {
+      page = page || 1;
+      count = count || 20;
+      var skipFrom = (page * count) - count;
+
       return this.find({
         user_id: uid,
         isDeleted: false
-      }, cb);
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
     };
 
     themesSchema.statics.findAll = function(page, count, cb) {
@@ -58,7 +67,9 @@ module.exports = {
 
       return this.find({
        isDeleted: false 
-      }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
+      }).populate('user_id').sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
     };
 
     themesSchema.statics.findAllRemoved = function(page, count, cb) {
@@ -68,7 +79,9 @@ module.exports = {
 
       return this.find({
        isDeleted: false 
-      }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
     };
 
     themesSchema.statics._remove = function(id, cb) {

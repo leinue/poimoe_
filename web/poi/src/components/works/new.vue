@@ -9,7 +9,7 @@
 
 					<div class="timeline-content-header">
 						<div class="header-left">
-							xieyang
+							{{username | nullToVisual}}
 						</div>
 					</div>
 
@@ -58,7 +58,8 @@
 					uid: localStorage._id,
 					tag_list: {},
 					image: 'http://www.html5tricks.com/demo/css3-image-hover-effect/iceberg_1x.jpg'
-				}
+				},
+				username: localStorage.username
 
 			}
 		},

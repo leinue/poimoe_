@@ -93,6 +93,13 @@ var util = {
  
     var uuid = s.join("");
     return uuid;
+  },
+
+  cacheMongooseModel: function(mongoose, schema, modelName, v) {
+    if(this.checkIsUndefined(v)) {
+      v = mongoose.model(modelName, schema);
+    }
+    return v;
   }
 
 };

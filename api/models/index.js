@@ -1,10 +1,9 @@
 
-var user = require('./users');
+var userAndThemes = require('./users');
 var userGroups = require('./userGroups');
 var relations = require('./relations');
 var replys = require('./replys');
 var tags = require('./tags');
-var themes = require('./themes');
 var settings = require('./settings');
 
 var util = require('../util/index.js');
@@ -28,9 +27,18 @@ module.exports = {
   	return this.mongoose;
   },
   
-  cacheModel: function(schema, v) {
+  cacheModel: function(schema, v, poplulation) {
   	if(util.checkIsUndefined(v)) {
-  		v = schema.init(this.mongoose);
+      if(typeof schema == 'string') {
+        console.log('======================');
+        console.log(schema);
+        console.log(typeof v);
+        console.log('======================');
+        v = poplulation.name.init(this.mongoose);
+        v = v[schema];
+      }else {
+        v = schema.init(this.mongoose);        
+      }
   	}
   	return v;
   },
@@ -40,7 +48,12 @@ module.exports = {
   },
   
   User: function() {
-  	this.userModel = this.cacheModel(user, this.userModel);
+  	this.userModel = this.cacheModel('users', this.userModel,{
+      name: userAndThemes
+    });
+    console.log('-----users------');
+    console.log(typeof this.userModel);
+    console.log('-----users------');
   	return this.userModel;
   },
 
@@ -70,7 +83,12 @@ module.exports = {
   },
 
   Themes: function() {
-    this.themesModel = this.cacheModel(themes, this.themesModel);
+    this.themesModel = this.cacheModel('themes', this.themesModel, {
+      name: userAndThemes
+    });
+    console.log('-----themes------');
+    console.log(typeof this.themesModel);
+    console.log('-----themes------');
     return this.themesModel;
   }
 

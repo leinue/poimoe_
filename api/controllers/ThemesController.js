@@ -220,6 +220,31 @@ var index = {
 	        	res.send(util.retMsg(401, err.toString()));
 	      	}
 
+	      	var User = ctrlInitial.models.User();
+	      	var themesCnt = themes.length;
+
+	      	var tmp = [];
+	      	var i = 0;
+
+	      	// themes.forEach(function(curr, index) {
+	      	// 	User.findById(curr.user_id, function(err, u) {
+
+		      // 		if(u.length > 0) {
+			     //  		curr.userinfo = u[0];
+		      // 		}
+
+		      // 		tmp.push(curr);
+
+		      // 		i++;
+
+		      // 		if(i === themesCnt) {
+	  			  //     	res.send(util.retMsg(200, tmp));
+		      // 		}
+
+		      // 	});
+
+	      	// });
+
 	      	res.send(util.retMsg(200, themes));
 
 		});
@@ -229,6 +254,8 @@ var index = {
 	getByUid: function(req, res, next) {
 
 		var uid = req.params.uid;
+		var page = req.params.page;
+		var count = req.params.count;
 
 		if(uid == 'undefined' || uid == '') {
 			res.send(util.retMsg(401, '缺少参数：用户id'));
@@ -248,7 +275,7 @@ var index = {
 
 			var Themes = ctrlInitial.models.Themes();
 
-			Themes.findByUid(uid, function(err, themes) {
+			Themes.findByUid(uid, page, count, function(err, themes) {
 
 	   	 		if(err) {
    		 			res.send(util.retMsg(401, err.toString()));

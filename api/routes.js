@@ -64,7 +64,7 @@ module.exports = {
     server.post('/themes/add', ctrl.themesCtrl.add);
     server.post('/themes/update', ctrl.themesCtrl.update);
     server.get('/themes/remove/:id', ctrl.themesCtrl.remove);
-    server.get('/themes/get/:uid', ctrl.themesCtrl.getByUid)
+    server.get('/themes/get/:uid/:page/:count', ctrl.themesCtrl.getByUid)
 
     server.get('/replys/select/all/:page/:count', ctrl.replysCtrl.getAll);
     server.get('/replys/select/removed/:page/:count', ctrl.replysCtrl.getAllRemoved);

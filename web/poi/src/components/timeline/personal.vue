@@ -108,7 +108,7 @@
 
 				var _this = this;
 
-				services.CGService.getByUid(localStorage._id).then(function(res) {
+				services.CGService.getByUid(localStorage._id, 1, 10).then(function(res) {
 				
 					var data = res.data.message;
 
@@ -119,8 +119,6 @@
 				}, function(err) {
 					util.handleError(err);
 				});
-
-				// this.$set('publishTime', 'sadfgh');
 			},
 
 			likeThis: function(id) {
