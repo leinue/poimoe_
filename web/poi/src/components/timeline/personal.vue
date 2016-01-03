@@ -30,7 +30,7 @@
 
 	{{loadMyTimeline()}}
 
-	<div class="timeline">
+	<div class="timeline" v-for="item in myTimeline">
 		<div class="col-xs-2" style="padding-right:0px">
 			<div class="timeline-author">
 				<div style="{{myPhoto}}" class="imgdiv"></div>
@@ -45,29 +45,28 @@
 						{{username}}
 					</div>
 					<div class="header-right">
-						{{publishTime}}
+						{{item.updatedAt}}
 					</div>
 				</div>
 
-				<div class="timeline-new-section" style="background-image:url(http://www.html5tricks.com/demo/css3-image-hover-effect/iceberg_1x.jpg)"></div>
+				<div class="timeline-new-section" style="background-image:url({{item.image}})"></div>
 
 				<div class="timeline-content-footer">
 					<div class="timeline-content">
-						<span>习习蛤蛤胡搞毛搞</span>
+						<span>{{item.content}}</span>
 						<div class="timeline-tags">
-							<span>#长门有希</span>
-							<span>#凉宫春日</span>
+							<span v-for="tag in item.tag_list">#{{tag.name}}</span>
 						</div>
 					</div>
 					<div class="timeline-real-footer">
 						<ul>
-							<li>
-								3个收藏
+							<li @click="viewPeopleWhoLikeThis(item._id)">
+								{{item.likeCnt | numberToZero}}个收藏
 							</li>
-							<li>
+							<li @click="likeThis(item._id)">
 								<span class="glyphicon glyphicon-heart-empty"></span>
 							</li>
-							<li>
+							<li @click="transferThis(item._id)">
 								<span class="glyphicon glyphicon-transfer"></span>
 							</li>
 						</ul>
@@ -98,9 +97,7 @@
 				myTimeline: {}
 			}
 		},
-		components: {
 
-		},
 		methods: {
 			toNewCGPage: function() {
 				util.cancelActiveMenu();
@@ -109,16 +106,35 @@
 
 			loadMyTimeline: function() {
 
-				console.log(localStorage._id);
+				var _this = this;
+
 				services.CGService.getByUid(localStorage._id).then(function(res) {
 				
-					console.log(res);
+					var data = res.data.message;
+
+					_this.myTimeline = data;
+
+					console.log(data);
 
 				}, function(err) {
 					util.handleError(err);
 				});
 
 				// this.$set('publishTime', 'sadfgh');
+			},
+
+			likeThis: function(id) {
+
+				console.log(id);
+
+			},
+
+			transferThis: function(id) {
+
+			},
+
+			viewPeopleWhoLikeThis: function(id) {
+
 			}
 		},
 

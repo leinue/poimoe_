@@ -13,6 +13,14 @@ module.exports = {
 			}
 		});
 
+		this.vue.filter('numberToZero', function(value) {
+			if(value == null) {
+				return 0;
+			}else {
+				return value;
+			}
+		});
+
 	},
 
 	get: function(filter) {
