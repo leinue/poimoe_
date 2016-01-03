@@ -33,16 +33,16 @@
 	<div class="timeline" v-for="item in publicTimeline">
 		<div class="col-xs-2" style="padding-right:0px">
 			<div class="timeline-author">
-				<div style="background-image: url({{item.photo | photoNullToVision}})" class="imgdiv"></div>
+				<div style="background-image: url({{item.user_id.photo | photoNullToVision}})" class="imgdiv"></div>
 			</div>
 		</div>
-		<div class="col-xs-10" style="padding-bottom:12px;margin-top: 40px;">
+		<div class="col-xs-10" style="padding-bottom:12px;">
 			
 			<div class="timeline-new content">
 
 				<div class="timeline-content-header">
 					<div class="header-left">
-						{{itme.username}}
+						{{item.user_id.username}}
 					</div>
 					<div class="header-right">
 						{{item.updatedAt}}

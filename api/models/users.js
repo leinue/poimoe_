@@ -82,7 +82,7 @@ module.exports = {
       return this.find({
         isDeleted: false
       }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
-    }
+    };
 
     userSchema.statics.findById = function(id, cb) {
       return this.find({
@@ -265,7 +265,7 @@ module.exports = {
       var update = obj;
 
       return this.findOneAndUpdate(query, update, options, cb);
-    }
+    };
 
     this.userModel = util.cacheMongooseModel(mongoose, userSchema, 'users', this.userModel);
     this.themesModel = util.cacheMongooseModel(mongoose, themesSchema, 'themes', this.themesModel);
@@ -273,7 +273,7 @@ module.exports = {
     var _this = this;
 
     return {
-      user: _this.userModel,
+      users: _this.userModel,
       themes: _this.themesModel
     };
 
