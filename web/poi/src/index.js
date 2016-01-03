@@ -91,7 +91,7 @@ router.afterEach(function() {
 
 	for (var i = 0; i < accessDenied.length; i++) {
 		var curr = accessDenied[i];
-		if(curr == currentPath) {
+		if(curr == currentPath && localStorage.login != 'true') {
 			require('./commons/scripts/commons.js').cancelActiveMenu();
 			router.go('/login');
 		}
