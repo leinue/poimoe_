@@ -91,6 +91,8 @@ module.exports = {
 		localStorage.accessToken = '';
 		localStorage.userData = '';
 		localStorage.username = '';
+		localStorage.photo = '';
+		localStorage.introduction = '';
 		//将http header Authorization头重新设置为匿名者
 		Vue.http.headers.common['Authorization'] = 'Basic YW5vbnltb3Vz==';
 	},
@@ -101,6 +103,14 @@ module.exports = {
 		localStorage.accessToken = real.accessToken;
 		localStorage.userData = JSON.stringify(real);
 		localStorage.username = real.username;
+		localStorage.photo = real.photo;
+		if(localStorage.photo == '') {
+			localStorage.photo = 'https://pic1.zhimg.com/da8e974dc_l.jpg';
+		}
+		localStorage.introduction = real.intro;
+		if(localStorage.introduction == '') {
+			localStorage.introduction = '暂无介绍信息';
+		}
 		localStorage.login = 'true';
 	}
 

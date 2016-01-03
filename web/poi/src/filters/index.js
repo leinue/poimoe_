@@ -5,8 +5,12 @@ module.exports = {
 	init: function(v) {
 		this.vue = v;
 
-		this.vue.filter('fuck', function(value) {
-			return value;
+		this.vue.filter('nullToVisual', function(value) {
+			if(value == null ){
+				return '暂无数据';
+			}else {
+				return value;
+			}
 		});
 
 	},

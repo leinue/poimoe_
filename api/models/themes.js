@@ -44,6 +44,13 @@ module.exports = {
       }, cb);
     };
 
+    themesSchema.statics.findByUid = function(uid, cb) {
+      return this.find({
+        user_id: uid,
+        isDeleted: false
+      }, cb);
+    };
+
     themesSchema.statics.findAll = function(page, count, cb) {
       page = page || 1;
       count = count || 20;

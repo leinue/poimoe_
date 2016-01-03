@@ -29,10 +29,10 @@
 
   	<sidebar :show.sync="showRight" placement="right" header="Poimoe" :width="600">
   		<div class="side-profile">
-		    <div class="side-profile-photo"></div>
+		    <div class="side-profile-photo" style="{{photo}}"></div>
 		    <div class="side-profile-detail">
-		    	<p style="margin-bottom:10px">ivy</p>
-		    	<span class="description">注册膜法师</span>
+		    	<p style="margin-bottom:10px">{{username | nullToVisual}}</p>
+		    	<span class="description">{{introduction | nullToVisual}}</span>
 		    	<p class="relations">
 			    	<span @click="toFollowing()">0 关注</span>
 			    	<span @click="toFollower()">0 粉丝</span>
@@ -85,7 +85,10 @@
 				showRight: false,
 				menu: {
 					currentName: 'index'
-				}
+				},
+				username: localStorage.username,
+				introduction: localStorage.introduction,
+				photo: 'background-image: url(' + localStorage.photo + ');'
 			};
 		},
 
@@ -268,7 +271,6 @@
 		height: 120px;
 		border-radius: 50%;
 		background-size: cover;
-		background-image: url(http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg);
 		background-position: center;
 		background-repeat: no-repeat;
 		margin: 0 auto;

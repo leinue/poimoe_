@@ -104,15 +104,16 @@
 		padding-bottom: 12px;
 	}
 
-	.timeline-author img {
+	.timeline-author .imgdiv {
 		width: 60px;
 		height: 60px;
 		border-radius: 50%;
 		transition: all .3s ease;
 		cursor: pointer;
+		background-size:cover;
 	}
 
-	.timeline-author img:hover {
+	.timeline-author .imgdiv:hover {
 		transform: scale(1.1, 1.1);
 	}
 

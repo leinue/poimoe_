@@ -4,16 +4,26 @@ var _util = {
 
 	generatorTagList: function(_tag_list) {
 
+		console.log(typeof _tag_list);
+
 		if(_tag_list != undefined) {
-	   	 	_tag_list = JSON.parse(_tag_list);
 
-	   	 	if(typeof _tag_list.list == undefined) {
-				return false;   		 		
-   	 		}
+			if(_tag_list.length > 0) {
 
-   	 		_tag_list = _tag_list.list;
+		   	 	_tag_list = JSON.parse(_tag_list);
 
-   	 		return _tag_list;
+		   	 	if(typeof _tag_list.list == undefined) {
+					return false;   		 		
+	   	 		}
+
+	   	 		_tag_list = _tag_list.list;
+
+	   	 		return _tag_list;
+
+			}else {
+				return true;
+			}
+
    	 	}
 
 	}
@@ -31,40 +41,50 @@ var index = {
    	 	var _image = req.params.image;
 
    	 	if(_title == undefined || _title == '') {
-	      res.send(util.retMsg(401, "文章标题不能为空"));
+	      // res.send(util.retMsg(401, "文章标题不能为空"));
+	      _title = 'poimoe';
    	 	}
 
    	 	if(_uid == undefined || _uid == '') {
    	 		res.send(util.retMsg(401, "缺少参数：用户id"));
    	 	}
 
-   	 	_tag_list = _util.generatorTagList(_tag_list);
-
-   	 	if(!_tag_list) {
-   	 		res.send(util.retMsg(401, "标签参数列表非法"));
-   	 	}
+   	 	// if(!_tag_list) {
+   	 	// 	res.send(util.retMsg(401, "标签参数列表非法"));
+   	 	// }
 
    	 	var User = ctrlInitial.models.User();
 
-   	 	User.findById(_uid, function(err, u) {
+   	 	User.findById(_uid, function(err, ur) {
 
    	 		if(err) {
    	 			res.send(util.retMsg(401, err.toString()));
    	 		}
 
-   	 		if(u.length === 0) {
+   	 		if(ur.length === 0) {
    	 			res.send(util.retMsg(401, "无此用户"));
    	 		}
 
    	 		var Themes = ctrlInitial.models.Themes();
 
-		    var theme = new Themes({
-		    	user_id: _uid,
-		    	title: _title,
-		    	content: _content,
-		    	tag_list: _tag_list,
-		    	image: _image
-		    });
+   	 		var TagLength = util.count(_tag_list);
+
+   	 		if(TagLength === 0) {
+			    var theme = new Themes({
+			    	user_id: _uid,
+			    	title: _title,
+			    	content: _content,
+			    	image: _image
+			    });
+   	 		}else {
+   	 			var theme = new Themes({
+			    	user_id: _uid,
+			    	title: _title,
+			    	content: _content,
+			    	tag_list: _tag_list,
+			    	image: _image
+			    });
+   	 		}
 
 		    theme.save(function(err, t) {
 
@@ -204,6 +224,41 @@ var index = {
 
 		});
 
+	},
+
+	getByUid: function(req, res, next) {
+
+		var uid = req.params.uid;
+
+		if(uid == 'undefined' || uid == '') {
+			res.send(util.retMsg(401, '缺少参数：用户id'));
+		}
+
+		var User = ctrlInitial.models.User();
+
+   	 	User.findById(uid, function(err, u) {
+
+   	 		if(err) {
+   	 			res.send(util.retMsg(401, err.toString()));
+   	 		}
+
+   	 		if(u.length === 0) {
+   	 			res.send(util.retMsg(401, "无此用户"));
+   	 		}
+
+			var Themes = ctrlInitial.models.Themes();
+
+			Themes.findByUid(uid, function(err, themes) {
+
+	   	 		if(err) {
+   		 			res.send(util.retMsg(401, err.toString()));
+	   	 		}
+
+	   	 		res.send(util.retMsg(200, themes));
+
+			});
+
+   	 	});
 	},
 
 	getAllRemoved: function(req, res, next) {

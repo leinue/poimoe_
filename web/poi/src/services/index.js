@@ -1,4 +1,5 @@
 var UserService = require('./UserService.js');
+var CGService = require('./CGService.js');
 
 var model = {
 	instance: undefined,
@@ -11,7 +12,9 @@ module.exports = {
 		model.instance = obj;
 		
 		return {
-			UserService: UserService.init(model.instance, model.baseUrl)
+			UserService: UserService.init(model.instance, model.baseUrl),
+
+			CGService: CGService.init(model.instance, model.baseUrl)
 		}
 	}
 

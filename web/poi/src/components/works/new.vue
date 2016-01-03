@@ -21,11 +21,11 @@
 
 					<div class="timeline-content-footer">
 						<div class="timeline-content upload">
-							<textarea></textarea>
+							<textarea v-model="cg.content"></textarea>
 						</div>
 						<div class="new-cg-confirm">
 							<button class="btn btn-default" @click="back()" style="margin-right:10px;">返回</button>
-							<button class="btn btn-primary">投稿</button>
+							<button class="btn btn-primary" @click="publishNewCG()">投稿</button>
 						</div>
 					</div>
 
@@ -40,6 +40,8 @@
 
 <script>
 
+	var util = require('../../commons/scripts/commons.js');
+
 	export default {
 		created() {
 			setTimeout(function() {
@@ -48,9 +50,32 @@
 			},1);
 		},
 
+		data() {
+			return {
+
+				cg: {
+					content: '',
+					uid: localStorage._id,
+					tag_list: {},
+					image: 'http://www.html5tricks.com/demo/css3-image-hover-effect/iceberg_1x.jpg'
+				}
+
+			}
+		},
+
 		methods: {
 			back: function() {
 				window.history.go(-1);
+			},
+
+			publishNewCG: function() {
+				services.CGService.publish(this.cg).then(function(res) {
+
+					console.log(res);
+
+				}, function(err) {
+					util.handleError(err);
+				});
 			}
 		}
 	}

@@ -38,6 +38,14 @@ var util = {
     return equal == true ? str.length >= len : str.length > len;
   },
 
+  count: function(obj) {
+    var cnt = 0;
+    for(var key in obj) {
+      cnt ++;
+    }
+    return cnt;
+  },
+
   sha1Pwd: function(pw) {
     var sha1 = crypto.createHash('sha1');
     return sha1.digest(pw);

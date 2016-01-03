@@ -27,7 +27,7 @@ module.exports = {
     	return next();
     });
 
-    server.use(ctrl.userCtrl.auth);
+    // server.use(ctrl.userCtrl.auth);
   
     server.get('/log/', function(req, res, next) {
         ret = util.retMsg(200, '膜蛤');
@@ -64,6 +64,7 @@ module.exports = {
     server.post('/themes/add', ctrl.themesCtrl.add);
     server.post('/themes/update', ctrl.themesCtrl.update);
     server.get('/themes/remove/:id', ctrl.themesCtrl.remove);
+    server.get('/themes/get/:uid', ctrl.themesCtrl.getByUid)
 
     server.get('/replys/select/all/:page/:count', ctrl.replysCtrl.getAll);
     server.get('/replys/select/removed/:page/:count', ctrl.replysCtrl.getAllRemoved);

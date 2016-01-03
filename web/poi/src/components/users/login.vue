@@ -141,8 +141,6 @@
 		},
 
 		created() {
-			setTimeout(function() {
-			}, 1000);
 		}
 		
 	}
