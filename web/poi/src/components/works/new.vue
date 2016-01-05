@@ -28,7 +28,7 @@
 							<div class="nav-search new-cg-tag" v-bind:class="{'nav-search-display': displayTagsSearch == true, 'nav-search-hide': displayTagsSearch == false}">
 		                        <ul>
 		                            <li v-for="tag in tagsSearched" @click="pipeToSearchInput(tag.name, tag._id)">{{tag.name}}</li>
-		                            <li v-show="tagsSearchedIsNull">创建 {{tags}} 标签</li>
+		                            <li @click="addNewTag()" v-show="tagsSearchedIsNull">创建 {{tags}} 标签</li>
 		                        </ul>
 							</div>
 	                        <div class="tag-visual" v-for="tag in tagsConfrimed">
@@ -111,6 +111,11 @@
 
 						_this.tagsSearched = res.data.message;
 
+						if(res.data.code !== 200) {
+							util.messageBox(_this.tagsSearched);
+							return false;
+						}
+
 						if(_this.tagsSearched.length === 0) {
 							_this.tagsSearchedIsNull = true;
 						}else {
@@ -129,15 +134,68 @@
 
 			pipeToSearchInput: function(content, _id) {
 				this.tags = '';
-				this.cg.tag_list.push(_id);
-				this.tagsConfrimed.push({
-					name: content,
-					_id: _id
-				});
+
+				var isRepeat = false;
+
+				var tagLength = this.cg.tag_list.length;
+
+				if(tagLength == 5) {
+					util.messageBox('最多添加5个标签');
+				}
+
+				for (var i = 0; i < tagLength; i++) {
+					var curr = this.cg.tag_list[i];
+					if(curr == _id) {
+						isRepeat = true;
+						break;
+					}
+				};
+
+				if(!isRepeat) {
+					this.cg.tag_list.push(_id);					
+					this.tagsConfrimed.push({
+						name: content,
+						_id: _id
+					});
+				}
+
 			},
 
 			removeThisTag: function(_id) {
+
+				for (var i = 0; i < this.cg.tag_list.length; i++) {
+					var curr = this.cg.tag_list[i];
+
+					if(curr == _id) {
+						this.cg.tag_list.splice(i, 1);
+					}
+
+					var tagConfirmed = this.tagsConfrimed[i];
+
+					if(tagConfirmed._id == _id) {
+						this.tagsConfrimed.splice(i, 1);
+					}
+				};
 				
+			},
+
+			addNewTag: function() {
+
+				var _this = this;
+
+				services.TagsService.add(this.tags).then(function(res) {
+
+					var data = res.data.message;
+
+					if(res.data.code != 200) {
+						util.messageBox(data);
+					}
+
+					_this.pipeToSearchInput(data.name, data._id);
+
+				}, function(err) {
+					util.handleError(err);
+				});
 			}
 		}
 	}
