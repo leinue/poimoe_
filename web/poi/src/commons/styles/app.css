@@ -111,7 +111,7 @@ div.container-fluid {
 
 .expand-enter, .expand-leave {
   	height: 0;
-  	padding: 0px 10px;
+  	/*padding: 0px 10px;*/
   	opacity: 0;
 }
 
@@ -230,4 +230,44 @@ div.container-fluid {
 
 .timeline-real-footer ul li span {
 	top: 4px;
+}
+
+.form-control:hover {
+	box-shadow: none;
+}
+
+.form-control:focus {
+	box-shadow: none;
+}
+
+.tags-selector .form-control {
+	border-left: 0px;
+	border-right: 0px;
+}
+
+.tags-tips {
+	
+}
+
+.new-cg-tag ul li{
+	line-height: 20px;
+}
+
+.tag-visual {
+	background: rgb(238, 246, 250);
+	border-radius: 30px;
+	line-height: 30px;
+	color: #259;
+	float: left;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin-top: 20px;
+}
+
+.tag-visual{
+	margin-left: 10px;
+}
+
+.tag-visual span {
+	font-size: 1em!important;
 }

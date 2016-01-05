@@ -48,6 +48,7 @@ module.exports = {
     server.get('/tags/select/removed', ctrl.tagsCtrl.getAllRemoved);
     server.get('/tags/remove/:id', ctrl.tagsCtrl.remove);
     server.get('/tags/update/:id/:name/:description', ctrl.tagsCtrl.update);
+    server.get('/tags/search/:name/:page/:count', ctrl.tagsCtrl.search);
 
     server.get('/settings/select', ctrl.settingsCtrl.getAll);
     server.get('/settings/add/:title/:logo/:footer', ctrl.settingsCtrl.add);

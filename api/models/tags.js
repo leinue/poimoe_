@@ -38,7 +38,9 @@ module.exports = {
 
       return this.find({
         isDeleted: deleted
-      }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
 
     };
 
@@ -48,6 +50,22 @@ module.exports = {
 
     tagsSchema.statics.findAllRemoved = function(page, count, cb) {
       return this._find(page, count, true, cb);
+    };
+
+    tagsSchema.statics.search = function(name, page, count, cb) {
+
+      page = page || 1;
+      count = count || 10;
+
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+        name: new RegExp(name),
+        isDeleted: false
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
+
     };
 
     tagsSchema.statics.findById = function(id, cb) {

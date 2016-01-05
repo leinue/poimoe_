@@ -21,10 +21,23 @@
 
 					<div class="timeline-content-footer">
 						<div class="timeline-content upload">
-							<textarea v-model="cg.content"></textarea>
+							<textarea placeholder="写下你的图片描述" v-model="cg.content" row="3"></textarea>
+						</div>
+						<div class="tags-selector">
+							<input type="text" placeholder="搜索你喜欢的标签" v-model="tags" v-bind:onchange="searchTags(tags)" v-on:blur="hideTagsNav(this)" class="form-control">
+							<div class="nav-search new-cg-tag" v-bind:class="{'nav-search-display': displayTagsSearch == true, 'nav-search-hide': displayTagsSearch == false}">
+		                        <ul>
+		                            <li v-for="tag in tagsSearched" @click="pipeToSearchInput(tag.name, tag._id)">{{tag.name}}</li>
+		                            <li v-show="tagsSearchedIsNull">创建 {{tags}} 标签</li>
+		                        </ul>
+							</div>
+	                        <div class="tag-visual" v-for="tag in tagsConfrimed">
+	                        	<span>{{tag.name}}</span>
+	                        	<span @click="removeThisTag(tag._id)" class="glyphicon glyphicon-remove"></span>
+	                        </div>
 						</div>
 						<div class="new-cg-confirm">
-							<button class="btn btn-default" @click="back()" style="margin-right:10px;">返回</button>
+							<button class="btn btn-default" @click="back()" style="margin-right:10px;">取消</button>
 							<button class="btn btn-primary" @click="publishNewCG()">投稿</button>
 						</div>
 					</div>
@@ -56,10 +69,21 @@
 				cg: {
 					content: '',
 					uid: localStorage._id,
-					tag_list: {},
+					tag_list: [],
 					image: 'http://www.html5tricks.com/demo/css3-image-hover-effect/iceberg_1x.jpg'
 				},
-				username: localStorage.username
+
+				username: localStorage.username,
+
+				tags: '',
+
+				displayTagsSearch: false,
+
+				tagsSearched: {},
+
+				tagsSearchedIsNull: true,
+
+				tagsConfrimed: []
 
 			}
 		},
@@ -77,6 +101,43 @@
 				}, function(err) {
 					util.handleError(err);
 				});
+			},
+
+			searchTags: function() {
+				if(this.tags != ''){
+					this.displayTagsSearch = true;
+					var _this = this;
+					services.TagsService.search(this.tags, 1, 10).then(function(res) {
+
+						_this.tagsSearched = res.data.message;
+
+						if(_this.tagsSearched.length === 0) {
+							_this.tagsSearchedIsNull = true;
+						}else {
+							_this.tagsSearchedIsNull = false;
+						}
+
+					}, function(err) {
+						util.handleError(err);
+					});
+				}
+			},
+
+			hideTagsNav: function(obj) {
+				this.displayTagsSearch = false;
+			},
+
+			pipeToSearchInput: function(content, _id) {
+				this.tags = '';
+				this.cg.tag_list.push(_id);
+				this.tagsConfrimed.push({
+					name: content,
+					_id: _id
+				});
+			},
+
+			removeThisTag: function(_id) {
+				
 			}
 		}
 	}
@@ -104,6 +165,7 @@
 		text-align: right;
 		padding-right: 15px;
 		margin-top: -25px;
+		margin-top: 4px;
 	}
 
 	.timeline-new-section-outer {
@@ -112,6 +174,10 @@
 
 	.timeline-new-section-outer h1 {
 		font-weight: 200!important;
+	}
+
+	.timeline-new.cotent input {
+		height: 34px;
 	}
 
 </style>
