@@ -33,6 +33,10 @@ module.exports = {
 
 			removeFavourite: function(uid, tid) {
 				return _this.$http.get(baseUrl + 'user/favourites/remove/' + uid + '/' + tid);
+			},
+
+			modifyProfile: function(data) {
+				return _this.$http.post(baseUrl + 'user/profile/modify', data);
 			}
 
 		}

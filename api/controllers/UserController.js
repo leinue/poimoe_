@@ -364,6 +364,41 @@ var index = {
     });
 
 
+  },
+
+  modifyProfile: function(req, res, next) {
+
+    var uid = req.params.uid;
+    var sex = req.params.sex;
+    var photo = req.params.photo;
+    var intro = req.params.intro;
+    var region = req.params.region;
+
+    if (uid == '' || uid == undefined) {
+      res.send(util.retMsg(401, '却少用户id'));
+    }
+
+    User = ctrlInitial.models.User();
+
+    User.findOneAndUpdate({
+      _id, uid
+    }, {
+      sex: sex,
+      photo: photo,
+      intro: intro,
+      region: region
+    }, {
+      new: true
+    }, function(err, user) {
+
+      if(err) {
+        res.send(util.retMsg(400, err.toString()));
+      }
+
+      res.send(util.retMsg(200, '修改成功'));
+
+    });
+
   }
 
 };

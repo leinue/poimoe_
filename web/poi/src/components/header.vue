@@ -32,6 +32,7 @@
 		    <div class="side-profile-photo" style="{{photo}}"></div>
 		    <div class="side-profile-detail">
 		    	<p style="margin-bottom:10px">{{username | nullToVisual}}</p>
+		    	<input value="dd" type="text" />
 		    	<span class="description">{{introduction | nullToVisual}}</span>
 		    	<p class="relations">
 			    	<span @click="toFollowing()">0 关注</span>

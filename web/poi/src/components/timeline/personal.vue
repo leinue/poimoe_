@@ -114,8 +114,6 @@
 
 					_this.myTimeline = data;
 
-					console.log(data);
-
 				}, function(err) {
 					util.handleError(err);
 				});
