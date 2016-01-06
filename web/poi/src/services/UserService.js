@@ -21,6 +21,18 @@ module.exports = {
 
 			selectAll: function(page, count) {
 				return _this.$http.get(baseUrl + 'user/select/all/' + page + '/' + count);
+			},
+
+			getFavouritesList: function(uid, page, count) {
+				return _this.$http.get(baseUrl + 'user/favourites/select/' + uid + '/' + page + '/' + 'count');
+			},
+
+			addFavourite: function(uid, tid) {
+				return _this.$http.get(baseUrl + 'user/favourites/add/' + uid + '/' + tid);
+			},
+
+			removeFavourite: function(uid, tid) {
+				return _this.$http.get(baseUrl + 'user/favourites/remove/' + uid + '/' + tid);
 			}
 
 		}
