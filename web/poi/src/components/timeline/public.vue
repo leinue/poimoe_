@@ -109,10 +109,14 @@
 				services.CGService.getAll(1, 10).then(function(res) {
 				
 					var data = res.data.message;
+					var code = res.data.code;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
 
 					_this.publicTimeline = data;
-
-					console.log(data);
 
 				}, function(err) {
 					util.handleError(err);

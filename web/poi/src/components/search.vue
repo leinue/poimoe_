@@ -3,7 +3,7 @@
 	<div style="background: rgb(249, 245, 239);">
         <search></search>
 
-    	<div class="col-md-6 col-md-offset-3">
+    	<div class="col-md-6 col-md-offset-3" style="padding-top:15px;">
 
     		<div class="timeline" v-for="item in CGList">
 				<div class="col-xs-2" style="padding-right:0px">
@@ -17,7 +17,7 @@
 
 						<div class="timeline-content-header">
 							<div class="header-left">
-								{{item.username | nullToVisual}}
+								{{item.user_id.username | nullToVisual}}
 							</div>
 							<div class="header-right">
 								{{item.updatedAt}}
@@ -30,7 +30,7 @@
 							<div class="timeline-content">
 								<span>{{item.content}}</span>
 								<div class="timeline-tags">
-									<span v-for="tag in item.tag_list">#{{tag.name}}</span>
+									<span @click="toSearchPage(tag.name)" v-for="tag in item.tag_list">#{{tag.name}}</span>
 								</div>
 							</div>
 							<div class="timeline-real-footer">
@@ -82,7 +82,7 @@
 		methods: {
 
 			init: function() {
-				// console.log(keywords);
+
 			},
 
 			loadThisSearchNav: function() {
@@ -98,16 +98,10 @@
                 this.keywordSearched = key;
             },
 
-            toSearchPage: function() {
-                util.cancelActiveMenu();
-                var key = this.keywordSearched;
-                var route = {
-                    name: 'search-key',
-                    params: {
-                        keywords: key
-                    }
-                };
-                router.replace(route);
+            toSearchPage: function(name) {
+				util.pathToSearch(name);
+				search.props.keywords.default = name;
+				
             }
 
 		},

@@ -225,12 +225,144 @@ var index = {
     User.findAll(page, count, function(err, u) {
 
       if(err) {
-        res.send(400, err.toString());
+        res.send(util.retMsg(400, err.toString()));
       }
 
       res.send(util.retMsg(200, u));
 
     });
+
+  },
+
+  getFavourites: function(req, res, next) {
+
+    var page = req.params.page;
+    var count = req.params.count;
+    var id = req.params.id;
+
+    if(id == '' || id == undefined) {
+      res.send(util.retMsg(400, "用户id不能为空"));
+    }
+
+    var User = ctrlInitial.models.User();
+
+    User.findFavouritesByUid(id, page, count, function(err, f) {
+
+      if(err) {
+        res.send(util.retMsg(400, err.toString()));
+      }
+
+      res.send(util.retMsg(200, f));
+
+    });
+
+  },
+
+  removeFavourites: function(req, res, next) {
+
+    var uid = req.params.uid;
+    var tid = req.params.tid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(400, "用户id不能为空"));
+    }
+
+    if(tid == '' || tid == undefined) {
+      res.send(util.retMsg(400, '主题id不能为空'));
+    }
+
+    var User = ctrlInitial.models.User();
+
+    User.find({_id: uid}, function(err, user) {
+
+      if(err) {
+        res.send(util.retMsg(400, err.toString()));
+      }
+
+      if(user.length === 0) {
+        res.send(util.retMsg(400, "无此用户"));
+      }
+
+      user = user[0];
+
+      for (var i = 0; i < user.favourites.length; i++) {
+        var curr = user.favourites[i];
+        if(curr == tid) {
+          user.favourites.splice(i, 1);
+        }
+      };
+
+      User.removeFavouritesByUid(uid, user.favourites, function(err, f) {
+
+        if(err) {
+          res.send(util.retMsg(400, err.toString()));
+        }
+
+        res.send(util.retMsg(200, '取消收藏成功'));
+
+      });
+
+
+    });
+
+  },
+
+  addFavourite: function(req, res, next) {
+
+    var uid = req.params.uid;
+    var tid = req.params.tid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(400, "用户id不能为空"));
+    }
+
+    if(tid == '' || tid == undefined) {
+      res.send(util.retMsg(400, '主题id不能为空'));
+    }
+
+    var User = ctrlInitial.models.User();
+
+
+    User.find({_id: uid}, function(err, user) {
+
+      if(err) {
+        res.send(util.retMsg(400, err.toString()));
+      }
+
+      if(user.length === 0) {
+        res.send(util.retMsg(400, "无此用户"));
+      }
+
+      var Themes = ctrlInitial.models.Themes();
+
+      Themes.find(tid, function(err, theme) {
+
+        if(err) {
+          res.send(util.retMsg(400, err.toString()));
+        }
+
+        if(theme.length == 0) {
+          res.send(util.retMsg(400, '无此主题'));
+        }
+
+        user = user[0];
+
+        user.favourites.push(tid);
+
+        User.removeFavouritesByUid(uid, user.favourites, function(err, f) {
+
+          if(err) {
+            res.send(util.retMsg(400, err.toString()));
+          }
+
+          res.send(util.retMsg(200, '收藏成功'));
+
+        });
+
+      })
+
+    });
+
 
   }
 

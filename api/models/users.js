@@ -33,6 +33,10 @@ module.exports = {
       	default: '天朝'
       },
       group: Schema.Types.ObjectId,
+      favourites: [{
+        type: Schema.Types.ObjectId,
+        ref: 'themes'
+      }],
       accessToken: {
         type: String,
         default: 'undefined'
@@ -83,7 +87,9 @@ module.exports = {
 
       return this.find({
         isDeleted: false
-      }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
     };
 
     userSchema.statics.findById = function(id, cb) {
@@ -111,6 +117,36 @@ module.exports = {
       return this.find({
         accessToken: at
       },cb);
+    };
+
+    userSchema.statics.findFavouritesByUid = function(uid, page, count, cb) {
+
+      page = page || 1;
+      count = count || 10;
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+        isDeleted: false,
+        _id: uid
+      }).select({
+        favourites: 1
+      }).populate('favourites').sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
+    };
+
+    userSchema.statics.removeFavouritesByUid = function(uid, fa, cb) {
+      return this.findOneAndUpdate({
+        _id: uid
+      }, {
+        favourites: fa
+      }, {
+        new: true
+      }, cb);
+    };
+
+    userSchema.statics.addFavouriteByUid = function(uid, tid, cb) {
+
     };
 
     userSchema.statics.updateAccessToken = function(e, at, cAt, cb) {

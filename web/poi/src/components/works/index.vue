@@ -140,15 +140,7 @@
 			},
 
 			pathToSearch: function(name) {
-				util.cancelActiveMenu();
-                var route = {
-                    name: 'search-key',
-                    params: {
-                        keywords: name
-                    }
-                };
-                router.replace(route);
-
+				util.pathToSearch(name);
 			}
 		},
 

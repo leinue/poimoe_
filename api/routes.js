@@ -38,6 +38,8 @@ module.exports = {
     server.get('/user/login/:email/:password', ctrl.userCtrl.login);
     server.get('/user/logout', ctrl.userCtrl.logout);
     server.get('/user/select/all/:page/:count', ctrl.userCtrl.findAll);
+    server.get('/user/favourites/select/:id/:page/:count', ctrl.userCtrl.getFavourites);
+    server.get('/user/favourites/remove/:uid/:tid', ctrl.userCtrl.removeFavourites);
 
     server.get('/session/:name', function(req, res, next) {
       res.send(util.retMsg(200, "您通过了验证"));

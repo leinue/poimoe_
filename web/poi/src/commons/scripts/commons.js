@@ -84,6 +84,21 @@ module.exports = {
 
 	},
 
+	pathToSearch: function(name) {
+		this.cancelActiveMenu();
+        var route = {
+            name: 'search-key',
+            params: {
+                keywords: name
+            }
+        };
+        router.replace(route);
+	},
+
+	toPageTop: function() {
+		document.documentElement.scrollTop = 0;
+	},
+
 	logout: function() {
 		localStorage.login = 'false';
 		localStorage.email = '';
