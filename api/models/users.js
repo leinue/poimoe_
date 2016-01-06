@@ -215,7 +215,7 @@ module.exports = {
         select: '_id name description'
       }).populate({
         path: 'user_id',
-        select: '_id username email'
+        select: '_id username email photo'
       }).sort({
         createdAt: -1
       }).skip(skipFrom).limit(count).exec(cb);

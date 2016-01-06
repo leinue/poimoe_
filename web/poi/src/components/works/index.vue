@@ -148,6 +148,7 @@
                     }
                 };
                 router.replace(route);
+
 			}
 		},
 
