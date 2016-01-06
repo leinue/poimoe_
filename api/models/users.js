@@ -223,6 +223,10 @@ module.exports = {
         type: Schema.Types.ObjectId,
         ref: 'tags'
       }],
+      favourited: {
+        type: Schema.Types.Boolean,
+        default: false
+      },
       image: {
         type: String,
         default: ''

@@ -28,41 +28,27 @@ var _util = {
 
 	},
 
-	getIsFavourited: function(themes, favourites) {
+	getIsFavourited: function(req, res, themes) {
   		for (var i = 0; i < themes.length; i++) {
 			var currentTheme = themes[i];
 			var currentThemeId = currentTheme._id;
-
+			var favourites = currentTheme.user_id.favourites;
+	      
 			for (var j = 0; j < favourites.length; j++) {
-				var currentLike = favourites[i];
+				var currentLike = favourites[j];
 
-				if(currentThemeId == currentLike){
+				if(currentThemeId.toString() == currentLike.toString()){
 					themes[i].favourited = true;
-					break;
+					continue;
 				}
-
-				themes[i].favourited = false;
 			};
-
 		};
+		return themes;
 	},
 
 	seekFavourited: function(req, res, themes) {
-
-		var User = ctrlInitial.models.User();
-
-      	User.findFavouritesByAccessToken(req.authorization.credentials, function(err, favourites) {
-
-      		if(err) {
-	        	res.send(util.retMsg(401, err.toString()));
-      		}
-
-      		_util.getIsFavourited(themes, favourites);
-
-	      	res.send(util.retMsg(200, themes));
-
-      	});
-
+  		themes = _util.getIsFavourited(req, res, themes);
+      	res.send(util.retMsg(200, themes));
 	}
 
 };

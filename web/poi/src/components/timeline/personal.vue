@@ -30,7 +30,7 @@
 
 	{{loadMyTimeline()}}
 
-	<div class="timeline" v-for="item in myTimeline">
+	<div class="timeline" v-for="(key, item) in myTimeline">
 		<div class="col-xs-2" style="padding-right:0px">
 			<div class="timeline-author">
 				<div style="{{myPhoto}}" class="imgdiv"></div>
@@ -63,8 +63,8 @@
 							<li @click="viewPeopleWhoLikeThis(item._id)">
 								{{item.likeCnt | numberToZero}}个收藏
 							</li>
-							<li @click="likeThis(item._id, item.favourited)">
-								<span class="glyphicon glyphicon-heart-empty"></span>
+							<li @click="likeThis(item._id, item.favourited, key)">
+								<span class="glyphicon glyphicon-heart-empty" v-bind:class="item.favourited == true ? 'like-active' : ''"></span>
 							</li>
 							<li @click="transferThis(item._id)">
 								<span class="glyphicon glyphicon-transfer"></span>
@@ -121,7 +121,7 @@
 				});
 			},
 
-			likeThis: function(tid, favourited) {
+			likeThis: function(tid, favourited, key) {
 				if(!favourited) {
 					services.UserService.addFavourite(localStorage._id, tid).then(function(res) {
 
@@ -133,8 +133,8 @@
 							return false;
 						}
 
-
 						util.messageBox(data);
+						this.loadMyTimeline();
 
 					}, function(err) {
 						util.handleError(err);
@@ -151,6 +151,7 @@
 						}
 
 						util.messageBox(data);
+						this.loadMyTimeline();
 
 					}, function(err) {
 						util.handleError(err);
