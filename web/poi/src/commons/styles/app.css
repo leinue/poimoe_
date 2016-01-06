@@ -232,6 +232,10 @@ div.container-fluid {
 	top: 4px;
 }
 
+.timeline-tags span {
+	margin-right: 10px;
+}
+
 .form-control:hover {
 	box-shadow: none;
 }

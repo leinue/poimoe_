@@ -185,15 +185,45 @@ var index = {
 
 		var Tags = ctrlInitial.models.Tags();
 
-		Tags.searchSite(val, page, count, function(err, content) {
+		var Themes = ctrlInitial.models.Themes();
+
+		Themes.search(val, page, count, function(err, theme) {
 
 			if(err) {
-				res.send(util.retMsg(401, err.toString()));
+				res.send(util.retMsg(400, err.toString()));
 			}
 
-			res.send(util.retMsg(200, content));
+			res.send(util.retMsg(200, theme));	
 
-		})
+		});
+
+		// Tags.searchSite(val, page, count, function(err, content) {
+
+		// 	if(err) {
+		// 		res.send(util.retMsg(401, err.toString()));
+		// 	}
+
+		// 	var Themes = ctrlInitial.models.Themes();
+
+		// 	var themesAvailable = [];
+
+		// 	content.forEach(function(tag, key) {
+
+		// 		var _id = tag._id;
+
+		// 		Themes.findAll(page, count, function(err, theme) {
+
+		// 			if(err) {
+		// 				util.send(util.retMsg(400, err.toString()));
+		// 			}
+
+
+
+		// 		});
+
+		// 	});
+
+		// })
 
 
 	}

@@ -168,11 +168,10 @@ module.exports = {
         type: String,
         default: ''
       },
-      tag_list: {
+      tag_list: [{
         type: Schema.Types.ObjectId,
-        default: [],
         ref: 'tags'
-      },
+      }],
       image: {
         type: String,
         default: ''
@@ -199,7 +198,28 @@ module.exports = {
       return this.find({
         _id: id,
         isDeleted: false
-      }, cb);
+      }).populate('user_id').populate('tag_list').exec(cb);
+    };
+
+    themesSchema.statics.search = function(name, page, count, cb) {
+
+      page = page || 1;
+      count = count || 20;
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+        content: new RegExp(name),
+        isDeleted: false
+      }).populate({
+        path: 'tag_list',
+        select: '_id name description'
+      }).populate({
+        path: 'user_id',
+        select: '_id username email'
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
+
     };
 
     themesSchema.statics.findByUid = function(uid, page, count, cb) {
@@ -210,7 +230,7 @@ module.exports = {
       return this.find({
         user_id: uid,
         isDeleted: false
-      }).sort({
+      }).populate('user_id').populate('tag_list').sort({
         createdAt: -1
       }).skip(skipFrom).limit(count).exec(cb);
     };
@@ -222,7 +242,7 @@ module.exports = {
 
       return this.find({
        isDeleted: false 
-      }).populate('user_id').sort({
+      }).populate('user_id').populate('tag_list').sort({
         createdAt: -1
       }).skip(skipFrom).limit(count).exec(cb);
     };
@@ -233,8 +253,8 @@ module.exports = {
       var skipFrom = (page * count) - count;
 
       return this.find({
-       isDeleted: false 
-      }).sort({
+       isDeleted: true 
+      }).populate('user_id').populate('tag_list').sort({
         createdAt: -1
       }).skip(skipFrom).limit(count).exec(cb);
     };

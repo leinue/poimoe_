@@ -57,7 +57,7 @@
 						<div class="timeline-content">
 							<span>{{item.content}}</span>
 							<div class="timeline-tags">
-								<span v-for="tag in item.tag_list">#{{tag.name}}</span>
+								<span @click="pathToSearch(tag.name)" v-for="tag in item.tag_list">#{{tag.name}}</span>
 							</div>
 						</div>
 						<div class="timeline-real-footer">
@@ -137,6 +137,17 @@
 
 			viewPeopleWhoLikeThis: function(id) {
 
+			},
+
+			pathToSearch: function(name) {
+				util.cancelActiveMenu();
+                var route = {
+                    name: 'search-key',
+                    params: {
+                        keywords: name
+                    }
+                };
+                router.replace(route);
 			}
 		},
 
