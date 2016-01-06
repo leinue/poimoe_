@@ -63,7 +63,7 @@
 							<li @click="viewPeopleWhoLikeThis(item._id)">
 								{{item.likeCnt | numberToZero}}个收藏
 							</li>
-							<li @click="likeThis(item._id)">
+							<li @click="likeThis(item._id, item.favourited)">
 								<span class="glyphicon glyphicon-heart-empty"></span>
 							</li>
 							<li @click="transferThis(item._id)">
@@ -121,10 +121,41 @@
 				});
 			},
 
-			likeThis: function(id) {
+			likeThis: function(tid, favourited) {
+				if(!favourited) {
+					services.UserService.addFavourite(localStorage._id, tid).then(function(res) {
 
-				console.log(id);
+						var code = res.data.code;
+						var data = res.data.message;
 
+						if(code != 200) {
+							util.messageBox(data);
+							return false;
+						}
+
+
+						util.messageBox(data);
+
+					}, function(err) {
+						util.handleError(err);
+					});
+				}else {
+					services.UserService.removeFavourite(localStorage._id, tid).then(function(res) {
+
+						var code = res.data.code;
+						var data = res.data.message;
+
+						if(code != 200) {
+							util.messageBox(data);
+							return false;
+						}
+
+						util.messageBox(data);
+
+					}, function(err) {
+						util.handleError(err);
+					});
+				}
 			},
 
 			transferThis: function(id) {
@@ -138,6 +169,11 @@
 
 		created() {
 
+			// var _this = this;
+
+			// loadEnd(function() {
+			// 	_this.$get('loadMyTimeline')();
+			// });
 
 		}
 	};

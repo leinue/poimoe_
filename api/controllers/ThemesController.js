@@ -26,6 +26,43 @@ var _util = {
 
    	 	}
 
+	},
+
+	getIsFavourited: function(themes, favourites) {
+  		for (var i = 0; i < themes.length; i++) {
+			var currentTheme = themes[i];
+			var currentThemeId = currentTheme._id;
+
+			for (var j = 0; j < favourites.length; j++) {
+				var currentLike = favourites[i];
+
+				if(currentThemeId == currentLike){
+					themes[i].favourited = true;
+					break;
+				}
+
+				themes[i].favourited = false;
+			};
+
+		};
+	},
+
+	seekFavourited: function(req, res, themes) {
+
+		var User = ctrlInitial.models.User();
+
+      	User.findFavouritesByAccessToken(req.authorization.credentials, function(err, favourites) {
+
+      		if(err) {
+	        	res.send(util.retMsg(401, err.toString()));
+      		}
+
+      		_util.getIsFavourited(themes, favourites);
+
+	      	res.send(util.retMsg(200, themes));
+
+      	});
+
 	}
 
 };
@@ -220,7 +257,7 @@ var index = {
 	        	res.send(util.retMsg(401, err.toString()));
 	      	}
 
-	      	res.send(util.retMsg(200, themes));
+	      	_util.seekFavourited(req, res, themes);
 
 		});
 
@@ -256,7 +293,7 @@ var index = {
    		 			res.send(util.retMsg(401, err.toString()));
 	   	 		}
 
-	   	 		res.send(util.retMsg(200, themes));
+		      	_util.seekFavourited(req, res, themes);
 
 			});
 
@@ -276,7 +313,7 @@ var index = {
 	        	res.send(util.retMsg(401, err.toString()));
 	      	}
 
-	      	res.send(util.retMsg(200, themes));
+	      	_util.seekFavourited(req, res, themes);
 
 		});
 

@@ -24,7 +24,7 @@ module.exports = {
 			},
 
 			getFavouritesList: function(uid, page, count) {
-				return _this.$http.get(baseUrl + 'user/favourites/select/' + uid + '/' + page + '/' + 'count');
+				return _this.$http.get(baseUrl + 'user/favourites/select/' + uid + '/' + page + '/' + count);
 			},
 
 			addFavourite: function(uid, tid) {

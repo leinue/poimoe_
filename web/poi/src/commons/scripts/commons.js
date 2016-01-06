@@ -1,5 +1,18 @@
 var vue = require('vue');
 
+window.loadEnd = function(cb) {
+
+	var loadInterval = setInterval(function() {
+
+		if(typeof window.router != 'undefined') {
+			clearInterval(loadInterval);
+			cb;
+		}
+
+	}, 1);
+
+};
+
 module.exports = {
 
 	registerComponent: function(obj) {

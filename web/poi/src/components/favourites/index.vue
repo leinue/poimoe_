@@ -7,7 +7,7 @@
 			
 		</div>
 
-	    <div class="timeline" v-for="item in favouritesList">
+	    <div class="timeline" v-for="(index, item) in favouritesList">
 			<div class="col-xs-2" style="padding-right:0px">
 				<div class="timeline-author">
 					<div style="background-image:url({{item.photo | photoNullToVision}})" class="imgdiv"></div>
@@ -40,8 +40,8 @@
 								<li @click="viewPeopleWhoLikeThis(item._id)">
 									{{item.likeCnt | numberToZero}}个收藏
 								</li>
-								<li @click="likeThis(item._id)">
-									<span class="glyphicon glyphicon-heart-empty"></span>
+								<li @click="unlikeThis(item._id, index)">
+									<span class="glyphicon glyphicon-heart-empty like-active"></span>
 								</li>
 								<li @click="transferThis(item._id)">
 									<span class="glyphicon glyphicon-transfer"></span>
@@ -62,6 +62,86 @@
 </template>
 
 <script>
+
+	import util from '../../commons/scripts/commons.js';
+
+	export default {
+		data() {
+
+			return {
+				favouritesList: {}
+			}
+
+		},
+
+		components: {
+
+		},
+
+		methods: {
+
+            toSearchPage: function(name) {
+				util.pathToSearch(name);				
+            },
+
+            unlikeThis: function(id) {
+
+            	services.UserService.removeFavourite(localStorage._id, id).then(function(res) {
+
+            		var code = res.data.code;
+            		var data = res.data.message;
+
+            		if(code != 200) {
+            			util.messageBox(data);
+            			return false;
+            		}
+
+            		util.messageBox(data);
+
+    				this.favouritesList.splice(index, 1);
+
+            	}, function(err) {
+            		util.handleError(err);
+            	});
+
+            }
+
+		},
+
+		created() {
+
+			var _this = this;
+
+			var servicesInterval = setInterval(function() {
+
+				if(typeof window.services != 'undefined') {
+
+					clearInterval(servicesInterval);
+
+					window.services.UserService.getFavouritesList(localStorage._id, 1, 10).then(function(res) {
+
+						var code = res.data.code;
+						var data = res.data.message;
+
+						if(code != 200) {
+							util.messageBox(data);
+							return false;
+						}
+
+						console.log(data[0].favourites);
+
+						_this.$set('favouritesList', data[0].favourites);
+
+					}, function(err) {
+						util.handleError(err);
+					});
+
+				}
+
+			}, 1);
+
+		}
+	}
 	
 </script>
 

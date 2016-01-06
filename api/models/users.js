@@ -115,12 +115,21 @@ module.exports = {
 
     userSchema.statics.findByAccessToken = function(at, cb) {
       return this.find({
-        accessToken: at
+        accessToken: at,
+        isDeleted: false
       },cb);
     };
 
-    userSchema.statics.findFavouritesByUid = function(uid, page, count, cb) {
+    userSchema.statics.findFavouritesByAccessToken = function(at, cb) {
+      return this.find({
+        accessToken: at,
+        isDeleted:false
+      }).select({
+        favourites: 1
+      }).exec(cb);
+    }
 
+    userSchema.statics.findFavouritesByUid = function(uid, page, count, cb) {
       page = page || 1;
       count = count || 10;
       var skipFrom = (page * count) - count;
@@ -130,7 +139,13 @@ module.exports = {
         _id: uid
       }).select({
         favourites: 1
-      }).populate('favourites').sort({
+      }).populate({
+        path: 'favourites',
+        populate: {
+          path: 'tag_list user_id',
+          select: '_id email username photo'
+        }
+      }).sort({
         createdAt: -1
       }).skip(skipFrom).limit(count).exec(cb);
     };

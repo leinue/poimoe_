@@ -268,6 +268,10 @@
 		color: rgb(247, 81, 156);
 	}
 
+	span.glyphicon.glyphicon-heart-empty.like-active {
+		color: rgb(247, 81, 156);
+	}
+
 	.timeline-real-footer ul li:nth-child(3) span:hover {
 		color: rgb(241, 130, 39);
 	}
