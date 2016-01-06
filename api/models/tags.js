@@ -68,6 +68,21 @@ module.exports = {
 
     };
 
+    tagsSchema.statics.searchSite = function(name, page, count, cb) {
+
+      page = page || 1;
+      count = count || 10;
+
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
+
+    }
+
     tagsSchema.statics.findById = function(id, cb) {
       return this.find({
         _id: id,

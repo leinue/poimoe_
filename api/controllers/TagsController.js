@@ -171,6 +171,31 @@ var index = {
 
 		});
 
+	},
+
+	searchSite: function(req, res, next) {
+
+		var val = req.params.val;
+		var page = req.params.page;
+		var count = req.params.count;
+
+		if(val == '' || val == undefined) {
+			res.send(util.retMsg(401, '搜索内容不能为空'));
+		}
+
+		var Tags = ctrlInitial.models.Tags();
+
+		Tags.searchSite(val, page, count, function(err, content) {
+
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+			res.send(util.retMsg(200, content));
+
+		})
+
+
 	}
 
 };
