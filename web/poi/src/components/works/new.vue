@@ -141,6 +141,7 @@
 
 				if(tagLength == 5) {
 					util.messageBox('最多添加5个标签');
+					return false;
 				}
 
 				for (var i = 0; i < tagLength; i++) {

@@ -2,11 +2,11 @@
 
 	<div class="timeline-master">
 		
-		<div @click="pathTo('public')" id="public-timeline" class="type-circle">
+		<div @click="pathTo('public')" id="public-timeline" class="type-circle" v-bind:class="currentPage == 'public' ? 'active' : ''">
 			公共
 		</div>
 
-		<div @click="pathTo('personal')" id="personal-timeline" class="type-circle right">
+		<div @click="pathTo('personal')" id="personal-timeline" class="type-circle right" v-bind:class="currentPage != 'public' ? 'active' :  ''">
 			我的	
 		</div>
 
@@ -24,13 +24,14 @@
 
 		data() {
 			return {
-
+				currentPage: 'personal'
 			};
 		},
 
 		methods: {
 			pathTo: function(url) {
 				router.go('/timeline/' + url);
+				this.currentPage = url;
 			}
 		}
 
@@ -90,6 +91,11 @@
 		background: rgb(0, 149, 219);
 		transform: scale(1.2, 1.2);
 		cursor: pointer;
+		color: rgb(255, 255, 255);
+	}
+
+	.type-circle.active {
+		background: rgb(0, 149, 219);
 		color: rgb(255, 255, 255);
 	}
 
