@@ -117,21 +117,33 @@
 			var key = _this.$get('keywordSearched');
 
 			if(key != '') {
-				service.SiteService.search(key, 1, 10).then(function(res) {
 
-					var code = res.data.code;
-					var data = res.data.message;
+				var servicesInterval = setInterval(function() {
 
-					if(code != 200) {
-						util.messageBox(data);
-						return false;
+					if(typeof window.services != 'undefined') {
+
+						clearInterval(servicesInterval);
+
+						window.services.SiteService.search(key, 1, 10).then(function(res) {
+
+							var code = res.data.code;
+							var data = res.data.message;
+
+							if(code != 200) {
+								util.messageBox(data);
+								return false;
+							}
+
+							_this.$set('CGList', data);
+
+						}, function(err) {
+							util.handleError(err);
+						});
+
 					}
 
-					_this.$set('CGList', data);
+				}, 1);
 
-				}, function(err) {
-					util.handleError(err);
-				});
 			}
 		}
 	}
