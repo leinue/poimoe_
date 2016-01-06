@@ -1,10 +1,12 @@
 
 var util = require('../util/index.js');
+var tagsModel = require('./tags.js');
 
 module.exports = {
 
   userModel: undefined,
   themesModel: undefined,
+  tagsModel: undefined,
 
   init: function(mongoose) {
 
@@ -168,7 +170,8 @@ module.exports = {
       },
       tag_list: {
         type: Schema.Types.ObjectId,
-        default: []
+        default: [],
+        ref: 'tags'
       },
       image: {
         type: String,
@@ -267,14 +270,18 @@ module.exports = {
       return this.findOneAndUpdate(query, update, options, cb);
     };
 
+    tagsSchema = tagsModel.init(mongoose);
+
     this.userModel = util.cacheMongooseModel(mongoose, userSchema, 'users', this.userModel);
     this.themesModel = util.cacheMongooseModel(mongoose, themesSchema, 'themes', this.themesModel);
+    this.tagsModel = util.cacheMongooseModel(mongoose, tagsSchema, 'tags', this.tagsModel);
 
     var _this = this;
 
     return {
       users: _this.userModel,
-      themes: _this.themesModel
+      themes: _this.themesModel,
+      tags: _this.tagsModel
     };
 
   }

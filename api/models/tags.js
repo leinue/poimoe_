@@ -123,9 +123,9 @@ module.exports = {
       return this.findOneAndUpdate(query, update, options, cb);
     };
 
-    var tags = mongoose.model('tags', tagsSchema);
+    // var tags = mongoose.model('tags', tagsSchema);
 
-    return tags;
+    return tagsSchema;
 
   }
 };

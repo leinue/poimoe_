@@ -56,7 +56,9 @@ module.exports = {
   },
 
   Tags: function() {
-    this.tagsModel = this.cacheModel(tags, this.tagsModel);
+    this.tagsModel = this.cacheModel('tags', this.tagsModel, {
+      name: userAndThemes
+    });
     return this.tagsModel;
   },
 
