@@ -28,7 +28,7 @@
 							<div class="nav-search new-cg-tag" v-bind:class="{'nav-search-display': displayTagsSearch == true, 'nav-search-hide': displayTagsSearch == false}">
 		                        <ul>
 		                            <li v-for="tag in tagsSearched" @click="pipeToSearchInput(tag.name, tag._id)">{{tag.name}}</li>
-		                            <li @click="addNewTag()" v-show="tagsSearchedIsNull">创建 {{tags}} 标签</li>
+		                            <li @click="addNewTag()" v-show="!keyExistsInTagsSearched">创建 {{tags}} 标签</li>
 		                        </ul>
 							</div>
 	                        <div class="tag-visual" v-for="tag in tagsConfrimed">
@@ -81,9 +81,9 @@
 
 				tagsSearched: {},
 
-				tagsSearchedIsNull: true,
+				tagsConfrimed: [],
 
-				tagsConfrimed: []
+				keyExistsInTagsSearched: true
 
 			}
 		},
@@ -117,9 +117,19 @@
 						}
 
 						if(_this.tagsSearched.length === 0) {
-							_this.tagsSearchedIsNull = true;
+							_this.keyExistsInTagsSearched = false;
 						}else {
-							_this.tagsSearchedIsNull = false;
+
+							for (var i = 0; i < _this.tagsSearched.length; i++) {
+								var curr = _this.tagsSearched[i];
+								if(curr.name == _this.tags) {
+									_this.keyExistsInTagsSearched = true;
+									return false;
+									break;
+								}
+							};
+
+							_this.keyExistsInTagsSearched = false;
 						}
 
 					}, function(err) {

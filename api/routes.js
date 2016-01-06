@@ -50,7 +50,7 @@ module.exports = {
     server.get('/tags/update/:id/:name/:description', ctrl.tagsCtrl.update);
     server.get('/tags/search/:name/:page/:count', ctrl.tagsCtrl.search);
 
-    server.get('/site/search/:key/:page/:count', ctrl.tagsCtrl.searchSite);
+    server.get('/site/search/:val/:page/:count', ctrl.tagsCtrl.searchSite);
 
     server.get('/settings/select', ctrl.settingsCtrl.getAll);
     server.get('/settings/add/:title/:logo/:footer', ctrl.settingsCtrl.add);

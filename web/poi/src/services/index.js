@@ -1,6 +1,7 @@
 var UserService = require('./UserService.js');
 var CGService = require('./CGService.js');
-var TagsService = require('./TagsService');
+var TagsService = require('./TagsService.js');
+var SiteService = require('./SiteService.js');
 
 var model = {
 	instance: undefined,
@@ -17,7 +18,9 @@ module.exports = {
 
 			CGService: CGService.init(model.instance, model.baseUrl),
 
-			TagsService: TagsService.init(model.instance, model.baseUrl)
+			TagsService: TagsService.init(model.instance, model.baseUrl),
+
+			SiteService: SiteService.init(model.instance, model.baseUrl)
 		}
 	}
 
