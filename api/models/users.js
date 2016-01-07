@@ -1,12 +1,14 @@
 
 var util = require('../util/index.js');
 var tagsModel = require('./tags.js');
+var relationsModel = require('./relations.js');
 
 module.exports = {
 
   userModel: undefined,
   themesModel: undefined,
   tagsModel: undefined,
+  relationsModel: undefined,
 
   init: function(mongoose) {
 
@@ -231,6 +233,10 @@ module.exports = {
         type: String,
         default: ''
       },
+      favouritesCount: {
+        type: Number,
+        default: 0
+      },
       createdAt: {
         type: Date,
         default: Date.now
@@ -345,18 +351,21 @@ module.exports = {
       return this.findOneAndUpdate(query, update, options, cb);
     };
 
-    tagsSchema = tagsModel.init(mongoose);
+    var tagsSchema = tagsModel.init(mongoose);
+    var relationsSchema = relationsModel.init(mongoose);
 
     this.userModel = util.cacheMongooseModel(mongoose, userSchema, 'users', this.userModel);
     this.themesModel = util.cacheMongooseModel(mongoose, themesSchema, 'themes', this.themesModel);
     this.tagsModel = util.cacheMongooseModel(mongoose, tagsSchema, 'tags', this.tagsModel);
+    this.relationsModel = util.cacheMongooseModel(mongoose, relationsSchema, 'relations', this.relationsModel);
 
     var _this = this;
 
     return {
       users: _this.userModel,
       themes: _this.themesModel,
-      tags: _this.tagsModel
+      tags: _this.tagsModel,
+      relations: _this.relationsModel
     };
 
   }

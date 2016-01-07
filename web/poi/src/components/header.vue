@@ -48,8 +48,8 @@
 		    	</div>
 		    	<div style="margin-bottom:25px;" class="col-md-6 col-md-offset-3">
 			    	<p class="relations">
-				    	<span @click="toFollowing()">0 关注</span>
-				    	<span @click="toFollower()">0 粉丝</span>
+				    	<span @click="toFollowing()">{{followingCount}} 关注</span>
+				    	<span @click="toFollower()">{{followerCount}} 粉丝</span>
 			    	</p>		    		
 		    	</div>
 		    </div>
@@ -101,14 +101,20 @@
 				menu: {
 					currentName: 'index'
 				},
+
 				username: localStorage.username,
 				introduction: localStorage.introduction,
 				photo: 'background-image: url(' + localStorage.photo + ');',
-				editable: false,
 				photoSrc: localStorage.photo,
+
+				editable: false,
+
 				draftsCount: localStorage.draftsCount,
 				favouritesCount: localStorage.favouritesCount,
-				deletedCount: localStorage.deletedCount
+				deletedCount: localStorage.deletedCount,
+
+				followerCount: localStorage.followerCount,
+				followingCount: localStorage.followingCount
 			};
 		},
 
@@ -227,7 +233,7 @@
 				var _this = this;
 				_this.showRight = true;
 
-				if(typeof localStorage.draftsCount == 'undefined') {
+				if(typeof localStorage.draftsCount == 'undefined' || typeof localStorage.followingCount == 'undefined') {
 					services.UserService.countDraft(localStorage._id).then(function(res) {
 
 						var code = res.data.code;
@@ -279,12 +285,34 @@
 						util.handleError(err);
 					});
 
+					services.UserService.countFo(localStorage._id).then(function(res) {
+
+						var code = res.data.code;
+						var data = res.data.message;
+
+						if(code != 200) {
+							util.messageBox(data);
+							return false;
+						}
+
+						localStorage.followingCount = data.following;
+						localStorage.followerCount = data.follower;
+
+						_this.followingCount = data.following;
+						_this.followerCount = data.follower;
+
+					}, function(err) {
+						util.handleError(err);
+					});
+
 				}else {
 
 					_this.deletedCount = localStorage.deletedCount;
 					_this.favouritesCount = localStorage.favouritesCount;
 					_this.draftsCount = localStorage.draftsCount;
 
+					_this.followingCount = localStorage.followingCount;
+					_this.followerCount = localStorage.followerCount;
 				}
 
 			}
@@ -297,7 +325,7 @@
             }
         },
 
-		created(obj) {
+		created() {
 			var routerInterval = 0;
 			routerInterval = setInterval(function() {
 				if(router != null) {

@@ -486,6 +486,150 @@ var index = {
 
     });
 
+  },
+
+  countFollower: function(req, res, next) {
+
+    var uid = req.params.uid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(400, '用户id不能为空'));
+    }
+  
+    var Relations = ctrlInitial.models.Relations();
+
+    Relations.find({
+      user_id: uid
+    }).select('follower').exec(function(err, follower) {
+
+      if(err) {
+        res.send(util.retMsg(400, err.toString()));
+      }
+
+      res.send(util.retMsg(200, follower.length));
+
+    });
+
+  },
+
+  countFollowing: function(req, res, next) {
+
+    var uid = req.params.uid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(401, '用户id不能为空'));
+    }
+
+    var Relations = ctrlInitial.models.Relations();
+
+    Relations.find({
+      user_id: uid
+    }).select('follow').exec(function(err, follow) {
+
+      if(err) {
+        res.send(util.retMsg(400, err.toString()));
+      }
+
+      res.send(util.retMsg(200, follow.length));
+
+    });
+
+  },
+
+  countFo: function(req, res, next) {
+
+    var uid = req.params.uid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(401, '用户id不能为空'));
+    }
+
+    var Relations = ctrlInitial.models.Relations();
+
+    Relations.find({
+      user_id: uid
+    }).select('follow follower').exec(function(err, fo) {
+
+      if(err) {
+        res.send(util.retMsg(400, err.toString()));
+      }
+
+      if(fo.length == 0) {
+        res.send(util.retMsg(200, {
+          following: 0,
+          follower: 0
+        }));
+      }
+
+      fo = fo[0];
+
+      res.send(util.retMsg(200, {
+        following: fo.follow.length,
+        follower: fo.follower.length
+      }));
+
+    });
+
+  },
+
+  getProfileByUid: function(req, res, next) {
+
+    var uid = req.params.uid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(401, '用户id不能为空'));
+    }
+
+    var User = ctrlInitial.models.User();
+
+    User.find({
+      _id: uid,
+      isDeleted: false
+    }).select('_id photo intro usename sex region email favourites').exec(function(err, user) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
+
+      if(user.length === 0) {
+        res.send(util.retMsg(401, '该用户不存在'));
+      }
+
+      user = user[0];
+
+      var result = {};
+
+      result.user = user;
+
+      result.favouritesCount = user.favourites.length;
+
+      var Themes = ctrlInitial.models.Themes();
+
+      Themes.count({
+        user_id: uid,
+        isDeleted: false
+      }, function(err, draftCount) {
+
+        if(err) {
+          res.send(util.retMsg(401, err.toString()));
+        }
+
+        result.draftCount = draftCount;
+
+        Themes.count({
+          user_id: uid,
+          isDeleted: true
+        }, function(err, deletedCount) {
+
+          result.deletedCount = deletedCount;
+          res.send(util.retMsg(200, result));
+
+        });
+
+      });
+
+    });
+
   }
 
 };

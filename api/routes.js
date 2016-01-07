@@ -45,6 +45,10 @@ module.exports = {
     server.get('/user/count/draft/:uid', ctrl.userCtrl.countDraft);
     server.get('/user/count/favourites/:uid', ctrl.userCtrl.countFavourites);
     server.get('/user/count/deleted/:uid', ctrl.userCtrl.countDeleted);
+    server.get('/user/count/follower/:uid', ctrl.userCtrl.countFollower);
+    server.get('/user/count/following/:uid', ctrl.userCtrl.countFollowing);
+    server.get('/user/count/fo/:uid', ctrl.userCtrl.countFo);
+    server.get('/user/profile/get/:uid', ctrl.userCtrl.getProfileByUid);
 
     server.get('/session/:name', function(req, res, next) {
       res.send(util.retMsg(200, "您通过了验证"));

@@ -73,7 +73,9 @@ module.exports = {
   },
 
   Relations: function() {
-    this.relationsModel = this.cacheModel(relations, this.relationsModel);
+    this.relationsModel = this.cacheModel('relations', this.relationsModel, {
+      name: userAndThemes
+    });
     return this.relationsModel;
   },
 

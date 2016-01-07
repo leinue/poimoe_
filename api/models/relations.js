@@ -5,21 +5,26 @@ module.exports = {
   	var Schema = mongoose.Schema;
 
     var relationsSchema = Schema({
-      user_id: Schema.Types.ObjectId,
-      follow: {
-        type: [Schema.Types.ObjectId],
-        default: []
+      user_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
       },
-      follower: {
-        type: [Schema.Types.ObjectId],
-        default: []
-      }
+      follow: [{
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+      }],
+      follower: [{
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+      }]
     });
 
     relationsSchema.statics.findByUid = function(uid, cb) {
       return this.find({
         user_id: uid
-      },cb);
+      }).populate({
+        path: 'user_id follow follower'
+      }).exec(cb);
     };
 
     relationsSchema.statics.hasId = function(uid, id_find, cb) {
@@ -46,9 +51,9 @@ module.exports = {
       });
     };
 
-    var relations = mongoose.model('relations', relationsSchema);
+    // var relations = mongoose.model('relations', relationsSchema);
 
-    return relations;
+    return relationsSchema  ;
 
   }
 };

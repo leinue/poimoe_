@@ -49,6 +49,10 @@ module.exports = {
 
     		countDeleted: function(uid) {
     			return _this.$http.get('user/count/deleted/' + uid);
+    		},
+
+    		countFo: function(uid) {
+    			return _this.$http.get('user/count/fo/' + uid);
     		}
 
 		}
