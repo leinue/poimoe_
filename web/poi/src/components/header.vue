@@ -29,15 +29,29 @@
 
   	<sidebar :show.sync="showRight" placement="right" header="Poimoe" :width="600">
   		<div class="side-profile">
+  			<span title="修改资料" v-show="!editable" class="glyphicon glyphicon-pencil" @click="modifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
+  		  	<span title="确认修改" v-show="editable" class="glyphicon glyphicon-ok" @click="confirmToModifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
+		  	<span title="取消修改" v-show="editable" class="glyphicon glyphicon-remove" @click="cancelModifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
 		    <div class="side-profile-photo" style="{{photo}}"></div>
 		    <div class="side-profile-detail">
-		    	<p style="margin-bottom:10px">{{username | nullToVisual}}</p>
-		    	<input value="dd" type="text" />
-		    	<span class="description">{{introduction | nullToVisual}}</span>
-		    	<p class="relations">
-			    	<span @click="toFollowing()">0 关注</span>
-			    	<span @click="toFollower()">0 粉丝</span>
-		    	</p>
+		    	<div>
+   			    	<p style="margin-bottom:10px" v-on:DblClick="modifyProfile()">{{username | nullToVisual}}</p>
+			    	<div class="col-md-6 col-md-offset-3">
+				    	<input class="form-control" v-modle="username" placeholder="想叫个什么呢？" v-show="editable" type="text"/>
+			    	</div>
+		    	</div>
+		    	<div>
+			    	<div class="col-md-6 col-md-offset-3">
+					    <span class="description" v-on:DblClick="modifyProfile()" placeholder="一句话描述自己">{{introduction | nullToVisual}}</span>
+				    	<textarea v-model="introduction" class="form-control" v-show="editable"></textarea>
+			    	</div>
+		    	</div>
+		    	<div style="margin-bottom:25px;" class="col-md-6 col-md-offset-3">
+			    	<p class="relations">
+				    	<span @click="toFollowing()">0 关注</span>
+				    	<span @click="toFollower()">0 粉丝</span>
+			    	</p>		    		
+		    	</div>
 		    </div>
 		    <div class="side-profile-footer">
 			    <div class="col-md-6 col-md-offset-3">
@@ -89,7 +103,8 @@
 				},
 				username: localStorage.username,
 				introduction: localStorage.introduction,
-				photo: 'background-image: url(' + localStorage.photo + ');'
+				photo: 'background-image: url(' + localStorage.photo + ');',
+				editable: false
 			};
 		},
 
@@ -162,6 +177,43 @@
 					util.handleError(err);
 				});
 				
+			},
+
+			modifyProfile: function() {
+				this.editable = !this.editable;
+			},
+
+			cancelModifyProfile: function() {
+				this.editable = false;
+			},
+
+			confirmToModifyProfile: function() {
+
+				var _this = this;
+
+				services.UserService.modifyProfile({
+					uid: localStorage._id,
+					sex: localStorage.sex,
+					photo: localStorage.photo,
+					intro: _this.introduction,
+					region: localStorage.region,
+					username: _this.username
+				}).then(function(res) {
+
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					util.messageBox(data);
+					this.editable = true;
+
+				}, function(err) {
+					util.handleError(err);
+				});
 			}
 		},
 
@@ -332,6 +384,11 @@
 		color: rgb(0, 149, 219)!important;
 		cursor: pointer;
 		transform: scale(1.1);
+	}
+
+	#modify-pencil:hover {
+		cursor: pointer;
+		color: rgb(35, 119, 186);
 	}
 
 </style>

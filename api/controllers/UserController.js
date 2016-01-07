@@ -373,6 +373,7 @@ var index = {
     var photo = req.params.photo;
     var intro = req.params.intro;
     var region = req.params.region;
+    var username = req.params.username;
 
     if (uid == '' || uid == undefined) {
       res.send(util.retMsg(401, '却少用户id'));
@@ -381,12 +382,13 @@ var index = {
     User = ctrlInitial.models.User();
 
     User.findOneAndUpdate({
-      _id, uid
+      _id: uid
     }, {
       sex: sex,
       photo: photo,
       intro: intro,
-      region: region
+      region: region,
+      username: username
     }, {
       new: true
     }, function(err, user) {

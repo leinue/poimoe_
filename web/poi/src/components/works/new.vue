@@ -21,7 +21,7 @@
 
 					<div class="timeline-content-footer">
 						<div class="timeline-content upload">
-							<textarea placeholder="写下你的图片描述" v-model="cg.content" row="3"></textarea>
+							<textarea class="form-control" placeholder="写下你的图片描述" v-model="cg.content" rows="6"></textarea>
 						</div>
 						<div class="tags-selector">
 							<input type="text" placeholder="搜索你喜欢的标签" v-model="tags" v-bind:onchange="searchTags(tags)" v-on:blur="hideTagsNav(this)" class="form-control">
