@@ -585,7 +585,7 @@ var index = {
     User.find({
       _id: uid,
       isDeleted: false
-    }).select('_id photo intro usename sex region email favourites').exec(function(err, user) {
+    }).select('_id photo intro username sex region email favourites').exec(function(err, user) {
 
       if(err) {
         res.send(util.retMsg(401, err.toString()));

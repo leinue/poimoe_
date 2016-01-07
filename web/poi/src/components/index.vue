@@ -94,7 +94,7 @@
                                     
                                 <div class="photo-group">
                                      <ul>
-                                         <li style="background-image:url(http://www.people.com.cn/mediafile/pic/20140709/49/4202888730341368797.jpg)" @click="toProfile()"></li>
+                                         <li style="background-image:url(http://www.people.com.cn/mediafile/pic/20140709/49/4202888730341368797.jpg)" @click="toProfile('568697681608724965bf9b83')"></li>
                                          <li></li>
                                          <li></li>
                                          <li></li>
@@ -254,9 +254,9 @@
                 router.go('/view/' + id);
             },
 
-            toProfile: function() {
+            toProfile: function(uid) {
                 util.cancelActiveMenu();
-                router.go('/profile');
+                router.go('/profile/' + uid);
             },
 
             loadThisSearchNav: function() {

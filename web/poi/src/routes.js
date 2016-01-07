@@ -40,7 +40,7 @@ module.exports = function(router){
 			name: 'register',
 			component: require('./components/users/signin.vue')
 		},
-		'/profile': {
+		'/profile/:uid': {
 			component: require('./components/users/profile.vue')
 		},
 		'/view/:id': {

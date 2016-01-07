@@ -53,6 +53,10 @@ module.exports = {
 
     		countFo: function(uid) {
     			return _this.$http.get('user/count/fo/' + uid);
+    		},
+
+    		getProfile: function(uid) {
+    			return _this.$http.get('user/profile/get/' + uid);
     		}
 
 		}

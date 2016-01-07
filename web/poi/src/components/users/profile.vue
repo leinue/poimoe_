@@ -2,28 +2,28 @@
 
 	<div>
 		<div class="side-profile" style="margin-top:15px;">
-		    <div class="side-profile-photo" style="background-image:url(http://www.people.com.cn/mediafile/pic/20140709/49/4202888730341368797.jpg)"></div>
+		    <div class="side-profile-photo" style="{{photo}}"></div>
 		    <div class="side-profile-detail">
-		    	<p style="margin-bottom:10px">江泽民</p>
-		    	<span class="description">闷声发大财</span>
+		    	<p style="margin-bottom:10px">{{username}}</p>
+		    	<span class="description">{{introduction}}</span>
 		    	<p class="relations">
-			    	<span @click="toFollowing()">0 关注</span>
-			    	<span @click="toFollower()">0 粉丝</span>
+			    	<span @click="toFollowing()">{{followingCount}} 关注</span>
+			    	<span @click="toFollower()">{{followerCount}} 粉丝</span>
 		    	</p>
 		    </div>
 		    <div class="side-profile-footer">
 			    <div class="col-md-6 col-md-offset-3">
 					<div class="side-profile-footer-content">
 						<div @click="pathTo('/works')" class="col-xs-4 block">
-							<p>0</p>
+							<p>{{draftsCount}}</p>
 							<span>投稿</span>
 						</div>
 						<div @click="pathTo('/favourites')" class="col-xs-4 block">
-							<p>0</p>
+							<p>{{favouritesCount}}</p>
 							<span>收藏</span>
 						</div>
 						<div @click="pathTo('')" class="col-xs-4 block">
-							<p>0</p>
+							<p>{{deletedCount}}</p>
 							<span>删除</span>
 						</div>
 					</div>			    	
@@ -42,11 +42,69 @@
 
 	var util = require('../../commons/scripts/commons.js');
 
-	//a
-
 	export default {
+
+		data() {
+
+			return {
+
+				draftsCount: 0,
+				favouritesCount: 0,
+				deletedCount: 0,
+
+				followingCount: 0,
+				followerCount: 0,
+
+				username: '',
+				introduction: '',
+				photo: ''
+
+			};
+
+		},
+
 		created() {
 			
+			var uid = router._currentRoute.params.uid;
+
+			var _this = this;
+
+			if(uid != '') {
+
+				var servicesInterval = setInterval(function() {
+
+					if(typeof window.services != 'undefined') {
+
+						clearInterval(servicesInterval);
+
+						window.services.UserService.getProfile(uid).then(function(res) {
+
+							var code = res.data.code;
+							var data = res.data.message;
+
+							if(code != 200) {
+								util.messageBox(data);
+								return false;
+							}
+
+							var profile = data.user;
+
+							_this.$set('draftsCount', data.draftCount);
+							_this.$set('favouritesCount', data.favouritesCount);
+							_this.$set('deletedCount', data.deletedCount);
+							_this.$set('username', profile.username);
+							_this.$set('introduction', profile.intro);
+							_this.$set('photo', 'background-image:url(' + profile.photo + ')');
+
+						}, function(err) {
+							util.handleError(err);
+						});
+					}
+
+				}, 1);
+
+			}
+
 		},
 
 		methods: {
