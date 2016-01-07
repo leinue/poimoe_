@@ -10,6 +10,10 @@ module.exports = {
         type: String,
         default: ''
       },
+      citeCount:{
+        type: Number,
+        default: 0
+      }
       createdAt: {
   		  type: Date,
   		  default: Date.now

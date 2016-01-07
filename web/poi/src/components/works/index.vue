@@ -22,14 +22,6 @@
 			</div>
 		</div>
 
-		<div class="timeline">
-			<div class="col-xs-10 col-xs-offset-2">
-				 <div class="timeline-new content newtime" @click="loadMyTimeline()">
-				 	有15条新消息
-				 </div>
-			</div>
-		</div>
-
 		{{loadMyTimeline()}}
 
 		<div class="timeline" v-for="item in myTimeline">

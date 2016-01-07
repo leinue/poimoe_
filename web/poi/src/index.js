@@ -11,7 +11,7 @@ localStorage.login = typeof localStorage.login == 'undefined' ? 'false' : localS
 localStorage.userData = typeof localStorage.userData == 'undefined' ? '' : localStorage.userData;
 localStorage.accessToken = typeof localStorage.accessToken == 'undefined' ? '' : localStorage.accessToken;
 
-//初始化ajax
+//初始化XMLHttpRequest RestfulAPI
 vue.use(require('vue-resource'));
 vue.http.options.root = 'http://api.poimoe.com/';
 vue.http.headers['x-poimoe'] = 'moha';
@@ -86,6 +86,8 @@ router.beforeEach(function () {
 
 router.afterEach(function() {
 	var currentPath = router._currentRoute.path;
+
+	//路由权限控制
 
 	var accessDenied = ['/cg/new', '/timeline/personal', '/works', '/favourites'];
 
