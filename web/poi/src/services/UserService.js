@@ -37,7 +37,19 @@ module.exports = {
 
 			modifyProfile: function(data) {
 				return _this.$http.post(baseUrl + 'user/profile/modify', data);
-			}
+			},
+
+    		countDraft: function(uid) {
+    			return _this.$http.get('user/count/draft/' + uid);
+    		},
+
+    		countFavourites: function(uid) {
+    			return _this.$http.get('user/count/favourites/' + uid);
+    		},
+
+    		countDeleted: function(uid) {
+    			return _this.$http.get('user/count/deleted/' + uid);
+    		}
 
 		}
 

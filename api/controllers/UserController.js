@@ -204,6 +204,10 @@ var index = {
 
       var realUser = u;
 
+      if(realUser == null) {
+        res.send(util.retMsg(200, '注销成功'));
+      }
+
       if(realUser.tokenDestoriedAt == undefined || realUser.tokenCreatedAt == undefined) {
         res.send(util.retMsg(200, "注销成功"));
       }
@@ -379,6 +383,10 @@ var index = {
       res.send(util.retMsg(401, '却少用户id'));
     }
 
+    if (username == '' || username == undefined) {
+      res.send(util.retMsg(401, '用户名不能为空'));
+    }
+
     User = ctrlInitial.models.User();
 
     User.findOneAndUpdate({
@@ -398,6 +406,83 @@ var index = {
       }
 
       res.send(util.retMsg(200, '修改成功'));
+
+    });
+
+  },
+
+  countDraft: function(req, res, next) {
+
+    var uid = req.params.uid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(400, '用户id不能为空'));
+    }
+
+    var Themes = ctrlInitial.models.Themes();
+
+    Themes.count({
+      user_id: uid,
+      isDeleted: false
+    }, function(err, count) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
+
+      res.send(util.retMsg(200, count));
+
+    });
+
+  },
+
+  countFavourites: function(req, res, next) {
+
+    var uid = req.params.uid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(400, '用户id不能为空'));
+    }
+
+    var User = ctrlInitial.models.User();
+
+    User.find({
+      _id: uid,
+      isDeleted: false
+    }).select('favourites').exec(function(err, favourites) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
+
+      var count = favourites.length;
+
+      res.send(util.retMsg(200, count));
+
+    });
+
+  },
+
+  countDeleted: function(req, res, next) {
+
+    var uid = req.params.uid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(400, '用户id不能为空'));
+    }
+
+    var Themes = ctrlInitial.models.Themes();
+
+    Themes.count({
+      user_id: uid,
+      isDeleted: true
+    }, function(err, count) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
+
+      res.send(util.retMsg(200, count));
 
     });
 

@@ -18,7 +18,7 @@
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav navbar-right" id="profile-menu">
 	        <li @click="pathToNewCGPage()"><a>投稿</a></li>
-	        <li v-show="isLogin == 'true'"><a @click="showRight = true">个人中心</a></li>
+	        <li v-show="isLogin == 'true'"><a @click="showMyProfile()">个人中心</a></li>
 	       	<li v-show="isLogin == 'false'" @click="toLogin()"><a>登录</a></li>
 	       	<li v-show="isLogin == 'false'" @click="toRegister()"><a>注册</a></li>
 	       	<li v-show="isLogin == 'true'" @click="logout()"><a>退出</a></li>
@@ -37,13 +37,13 @@
 		    	<div>
    			    	<p style="margin-bottom:10px" v-on:DblClick="modifyProfile()">{{username | nullToVisual}}</p>
 			    	<div class="col-md-6 col-md-offset-3">
-				    	<input class="form-control" v-modle="username" placeholder="想叫个什么呢？" v-show="editable" type="text"/>
+				    	<input class="form-control" v-model="username" placeholder="想叫个什么呢？" v-show="editable" type="text"/>
 			    	</div>
 		    	</div>
 		    	<div>
 			    	<div class="col-md-6 col-md-offset-3">
 					    <span class="description" v-on:DblClick="modifyProfile()" placeholder="一句话描述自己">{{introduction | nullToVisual}}</span>
-				    	<textarea v-model="introduction" class="form-control" v-show="editable"></textarea>
+				    	<textarea v-model="introduction" class="form-control" v-show="editable">{{introduction}}</textarea>
 			    	</div>
 		    	</div>
 		    	<div style="margin-bottom:25px;" class="col-md-6 col-md-offset-3">
@@ -57,15 +57,15 @@
 			    <div class="col-md-6 col-md-offset-3">
 					<div class="side-profile-footer-content">
 						<div @click="pathToAndCloseThis('/works')" class="col-xs-4 block">
-							<p>0</p>
+							<p>{{draftsCount}}</p>
 							<span>投稿</span>
 						</div>
 						<div @click="pathToAndCloseThis('/favourites')" class="col-xs-4 block">
-							<p>0</p>
+							<p>{{favouritesCount}}</p>
 							<span>收藏</span>
 						</div>
 						<div @click="pathToAndCloseThis('')" class="col-xs-4 block">
-							<p>0</p>
+							<p>{{deletedCount}}</p>
 							<span>删除</span>
 						</div>
 					</div>			    	
@@ -104,7 +104,11 @@
 				username: localStorage.username,
 				introduction: localStorage.introduction,
 				photo: 'background-image: url(' + localStorage.photo + ');',
-				editable: false
+				editable: false,
+				photoSrc: localStorage.photo,
+				draftsCount: localStorage.draftsCount,
+				favouritesCount: localStorage.favouritesCount,
+				deletedCount: localStorage.deletedCount
 			};
 		},
 
@@ -209,11 +213,80 @@
 					}
 
 					util.messageBox(data);
-					this.editable = true;
+					_this.editable = false;
+					localStorage.username = _this.username;
+					localStorage.introduction = _this.introduction;
+					localStorage.photo = _this.photoSrc;
 
 				}, function(err) {
 					util.handleError(err);
 				});
+			},
+
+			showMyProfile: function() {
+				var _this = this;
+				_this.showRight = true;
+
+				if(typeof localStorage.draftsCount == 'undefined') {
+					services.UserService.countDraft(localStorage._id).then(function(res) {
+
+						var code = res.data.code;
+						var data = res.data.message;
+
+						if(code != 200) {
+							util.messageBox(data);
+							return false;
+						}
+
+						localStorage.draftsCount = data;
+						_this.draftsCount = localStorage.draftsCount;
+
+					}, function(err) {
+						util.handleError(err);
+					});
+
+					services.UserService.countFavourites(localStorage._id).then(function(res) {
+
+						var code = res.data.code;
+						var data = res.data.message;
+
+						if(code != 200) {
+							util.messageBox(data);
+							return false;
+						}
+
+						localStorage.favouritesCount = data;
+						_this.favouritesCount = localStorage.favouritesCount;
+
+					}, function(err) {
+						util.handleError(err);
+					});
+
+					services.UserService.countDeleted(localStorage._id).then(function(res) {
+
+						var code = res.data.code;
+						var data = res.data.message;
+
+						if(code != 200) {
+							util.messageBox(data);
+							return false;
+						}
+
+						localStorage.deletedCount = data;
+						_this.deletedCount = localStorage.deletedCount;
+
+					}, function(err) {
+						util.handleError(err);
+					});
+
+				}else {
+
+					_this.deletedCount = localStorage.deletedCount;
+					_this.favouritesCount = localStorage.favouritesCount;
+					_this.draftsCount = localStorage.draftsCount;
+
+				}
+
 			}
 		},
 
