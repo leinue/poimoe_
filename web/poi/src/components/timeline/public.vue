@@ -122,7 +122,19 @@
 					util.handleError(err);
 				});
 
-			}
+			},
+
+			likeThis: function(tid, favourited, key) {
+				if(!favourited) {
+					util.likeThisTheme(tid, function(data) {
+
+					});
+				}else {
+					util.unlikeThisTheme(tid, function(data) {
+
+					})
+				}
+			},
 		}
 	};
 

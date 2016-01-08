@@ -142,11 +142,11 @@ module.exports = {
 		localStorage.login = 'true';
 	},
 
-	unlike: function(id, obj) {
+	unlikeThisTheme: function(tid, cb) {
 
 		var _this = this;
 
-    	services.UserService.removeFavourite(localStorage._id, id).then(function(res) {
+    	services.UserService.removeFavourite(localStorage._id, tid).then(function(res) {
 
     		var code = res.data.code;
     		var data = res.data.message;
@@ -158,18 +158,40 @@ module.exports = {
 
     		_this.messageBox(data);
 
-			localStorage.favouritesCount = parseInt(localStorage.favouritesCount) - 1;
+    		if(localStorage.favouritesCount != '0') {
+				localStorage.favouritesCount = parseInt(localStorage.favouritesCount) - 1;
+    		}
 
-			obj.splice(index, 1);
-
+			cb(data);
 
     	}, function(err) {
-    		util.handleError(err);
+    		_this.handleError(err);
     	});
 	},
 
-	likeThis: function(id, obj) {
-		
+	likeThisTheme: function(tid, cb) {
+
+		var _this = this;
+
+		services.UserService.addFavourite(localStorage._id, tid).then(function(res) {
+
+			var code = res.data.code;
+			var data = res.data.message;
+
+			if(code != 200) {
+				_this.messageBox(data);
+				return false;
+			}
+
+			_this.messageBox(data);
+
+			localStorage.favouritesCount = parseInt(localStorage.favouritesCount) + 1;
+
+			cb(data);
+
+		}, function(err) {
+			_this.handleError(err);
+		});
 	}
 
 };

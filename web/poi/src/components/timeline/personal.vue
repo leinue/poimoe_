@@ -121,39 +121,13 @@
 
 			likeThis: function(tid, favourited, key) {
 				if(!favourited) {
-					services.UserService.addFavourite(localStorage._id, tid).then(function(res) {
+					util.likeThisTheme(tid, function(data) {
 
-						var code = res.data.code;
-						var data = res.data.message;
-
-						if(code != 200) {
-							util.messageBox(data);
-							return false;
-						}
-
-						util.messageBox(data);
-						this.loadMyTimeline();
-
-					}, function(err) {
-						util.handleError(err);
 					});
 				}else {
-					services.UserService.removeFavourite(localStorage._id, tid).then(function(res) {
+					util.unlikeThisTheme(tid, function(data) {
 
-						var code = res.data.code;
-						var data = res.data.message;
-
-						if(code != 200) {
-							util.messageBox(data);
-							return false;
-						}
-
-						util.messageBox(data);
-						this.loadMyTimeline();
-
-					}, function(err) {
-						util.handleError(err);
-					});
+					})
 				}
 			},
 

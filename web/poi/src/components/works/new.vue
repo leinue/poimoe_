@@ -106,6 +106,8 @@
 
 					util.messageBox('发布成功');
 
+					localStorage.draftsCount = parseInt(localStorage.draftsCount) + 1;
+
 				}, function(err) {
 					util.handleError(err);
 				});

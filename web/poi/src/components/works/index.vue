@@ -58,7 +58,7 @@
 									{{item.likeCnt | numberToZero}}个收藏
 								</li>
 								<li @click="likeThis(item._id)">
-									<span class="glyphicon glyphicon-heart-empty"></span>
+									<span class="glyphicon glyphicon-heart-empty" v-bind:class="item.favourited == true ? 'like-active' : ''"></span>
 								</li>
 								<li @click="transferThis(item._id)">
 									<span class="glyphicon glyphicon-transfer"></span>
@@ -117,12 +117,18 @@
 				});
 			},
 
-			likeThis: function(id) {
+			likeThis: function(tid, favourited, key) {
+				if(!favourited) {
+					util.likeThisTheme(tid, function(data) {
 
-				console.log(id);
+					});
+				}else {
+					util.unlikeThisTheme(tid, function(data) {
 
+					})
+				}
 			},
-
+			
 			transferThis: function(id) {
 
 			},

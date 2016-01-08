@@ -89,7 +89,9 @@
 
             unlikeThis: function(id) {
 
-            	util.unlike(id, this.favouritesList);
+            	util.unlikeThisTheme(id, function(data) {
+            		
+            	});
 
             }
 

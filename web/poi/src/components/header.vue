@@ -30,6 +30,7 @@
   	<sidebar :show.sync="showRight" placement="right" header="Poimoe" :width="600">
   		<div class="side-profile">
   			<span title="修改资料" v-show="!editable" class="glyphicon glyphicon-pencil" @click="modifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
+  			<span title="同步资料" class="glyphicon glyphicon-refresh" @click="syncProfile()" style="padding-left:15px;" id="modify-pencil"></span>
   		  	<span title="确认修改" v-show="editable" class="glyphicon glyphicon-ok" @click="confirmToModifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
 		  	<span title="取消修改" v-show="editable" class="glyphicon glyphicon-remove" @click="cancelModifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
 		    <div class="side-profile-photo" style="{{photo}}"></div>
@@ -229,81 +230,87 @@
 				});
 			},
 
+			syncProfile: function() {
+
+				services.UserService.countDraft(localStorage._id).then(function(res) {
+
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					localStorage.draftsCount = data;
+					_this.draftsCount = localStorage.draftsCount;
+
+				}, function(err) {
+					util.handleError(err);
+				});
+
+				services.UserService.countFavourites(localStorage._id).then(function(res) {
+
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					localStorage.favouritesCount = data;
+					_this.favouritesCount = localStorage.favouritesCount;
+
+				}, function(err) {
+					util.handleError(err);
+				});
+
+				services.UserService.countDeleted(localStorage._id).then(function(res) {
+
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					localStorage.deletedCount = data;
+					_this.deletedCount = localStorage.deletedCount;
+
+				}, function(err) {
+					util.handleError(err);
+				});
+
+				services.UserService.countFo(localStorage._id).then(function(res) {
+
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					localStorage.followingCount = data.following;
+					localStorage.followerCount = data.follower;
+
+					_this.followingCount = data.following;
+					_this.followerCount = data.follower;
+
+				}, function(err) {
+					util.handleError(err);
+				});
+			},
+
 			showMyProfile: function() {
 				var _this = this;
 				_this.showRight = true;
 
 				if(typeof localStorage.draftsCount == 'undefined' || typeof localStorage.followingCount == 'undefined') {
-					services.UserService.countDraft(localStorage._id).then(function(res) {
 
-						var code = res.data.code;
-						var data = res.data.message;
-
-						if(code != 200) {
-							util.messageBox(data);
-							return false;
-						}
-
-						localStorage.draftsCount = data;
-						_this.draftsCount = localStorage.draftsCount;
-
-					}, function(err) {
-						util.handleError(err);
-					});
-
-					services.UserService.countFavourites(localStorage._id).then(function(res) {
-
-						var code = res.data.code;
-						var data = res.data.message;
-
-						if(code != 200) {
-							util.messageBox(data);
-							return false;
-						}
-
-						localStorage.favouritesCount = data;
-						_this.favouritesCount = localStorage.favouritesCount;
-
-					}, function(err) {
-						util.handleError(err);
-					});
-
-					services.UserService.countDeleted(localStorage._id).then(function(res) {
-
-						var code = res.data.code;
-						var data = res.data.message;
-
-						if(code != 200) {
-							util.messageBox(data);
-							return false;
-						}
-
-						localStorage.deletedCount = data;
-						_this.deletedCount = localStorage.deletedCount;
-
-					}, function(err) {
-						util.handleError(err);
-					});
-
-					services.UserService.countFo(localStorage._id).then(function(res) {
-
-						var code = res.data.code;
-						var data = res.data.message;
-
-						if(code != 200) {
-							util.messageBox(data);
-							return false;
-						}
-
-						localStorage.followingCount = data.following;
-						localStorage.followerCount = data.follower;
-
-						_this.followingCount = data.following;
-						_this.followerCount = data.follower;
-
-					}, function(err) {
-						util.handleError(err);
-					});
+					_this.syncProfile();
 
 				}else {
 
