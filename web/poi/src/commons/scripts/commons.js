@@ -140,6 +140,36 @@ module.exports = {
 			localStorage.introduction = '暂无介绍信息';
 		}
 		localStorage.login = 'true';
+	},
+
+	unlike: function(id, obj) {
+
+		var _this = this;
+
+    	services.UserService.removeFavourite(localStorage._id, id).then(function(res) {
+
+    		var code = res.data.code;
+    		var data = res.data.message;
+
+    		if(code != 200) {
+    			_this.messageBox(data);
+    			return false;
+    		}
+
+    		_this.messageBox(data);
+
+			localStorage.favouritesCount = parseInt(localStorage.favouritesCount) - 1;
+
+			obj.splice(index, 1);
+
+
+    	}, function(err) {
+    		util.handleError(err);
+    	});
+	},
+
+	likeThis: function(id, obj) {
+		
 	}
 
 };

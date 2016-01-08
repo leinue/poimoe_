@@ -89,23 +89,7 @@
 
             unlikeThis: function(id) {
 
-            	services.UserService.removeFavourite(localStorage._id, id).then(function(res) {
-
-            		var code = res.data.code;
-            		var data = res.data.message;
-
-            		if(code != 200) {
-            			util.messageBox(data);
-            			return false;
-            		}
-
-            		util.messageBox(data);
-
-    				this.favouritesList.splice(index, 1);
-
-            	}, function(err) {
-            		util.handleError(err);
-            	});
+            	util.unlike(id, this.favouritesList);
 
             }
 
