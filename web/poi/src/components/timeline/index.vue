@@ -1,6 +1,6 @@
 <template>
 
-	<div class="timeline-master">
+	<div class="timeline-master bg">
 		
 		<div @click="pathTo('public')" id="public-timeline" class="type-circle" v-bind:class="currentPage == 'public' ? 'active' : ''">
 			公共

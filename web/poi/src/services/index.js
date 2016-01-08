@@ -23,7 +23,7 @@ module.exports = {
 
 			SiteService: SiteService.init(model.instance, model.baseUrl),
 
-			RelationsService: SiteService.init(model.instance, model.baseUrl)
+			RelationsService: RelationsService.init(model.instance, model.baseUrl)
 		}
 	}
 

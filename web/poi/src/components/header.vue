@@ -160,11 +160,11 @@
 			},
 
 			toFollowing: function() {
-				this.pathToAndCloseThis('/relations/following');
+				this.pathToAndCloseThis('/relations/following/' + localStorage._id);
 			},
 
 			toFollower: function() {
-				this.pathToAndCloseThis('/relations/follower');
+				this.pathToAndCloseThis('/relations/follower/' + localStorage._id);
 			},
 
 			logout: function() {

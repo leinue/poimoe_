@@ -1,6 +1,6 @@
 <template>
 
-	<div>
+	<div class="bg">
 
 		<div class="shadow-page">
 		</div>

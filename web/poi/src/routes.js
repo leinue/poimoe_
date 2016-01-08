@@ -49,10 +49,10 @@ module.exports = function(router){
 		'/relations': {
 			component: require('./components/users/relations/following.vue')
 		},
-		'/relations/following': {
+		'/relations/following/:uid': {
 			component: require('./components/users/relations/following.vue')
 		},
-		'/relations/follower': {
+		'/relations/follower/:uid': {
 			component: require('./components/users/relations/follower.vue')
 		},
 		'/search': {

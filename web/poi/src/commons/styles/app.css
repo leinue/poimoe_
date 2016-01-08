@@ -275,3 +275,12 @@ div.container-fluid {
 .tag-visual span {
 	font-size: 1em!important;
 }
+
+#relations-container {
+	height: 100vh;
+}
+
+.bg {
+	background: rgb(249, 245, 239);
+	height: 100%;
+}

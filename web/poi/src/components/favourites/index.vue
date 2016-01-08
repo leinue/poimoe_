@@ -1,11 +1,13 @@
 <template>
 
-<div style="background: rgb(249, 245, 239);">
+<div class="bg">
 		
 	<div class="col-md-6 col-md-offset-3">
 		<div class="timeline" style="padding-top:12px;">
 			
 		</div>
+
+		<no-favourites v-show="favouritesList.length === 0"></no-favourites>
 
 	    <div class="timeline" v-for="(index, item) in favouritesList">
 			<div class="col-xs-2" style="padding-right:0px">
@@ -64,6 +66,7 @@
 <script>
 
 	import util from '../../commons/scripts/commons.js';
+	import noFavourites from '../error/nodata.vue';
 
 	export default {
 		data() {
@@ -75,7 +78,7 @@
 		},
 
 		components: {
-
+			'noFavourites': noFavourites
 		},
 
 		methods: {
@@ -111,6 +114,8 @@
 		created() {
 
 			var _this = this;
+
+			noFavourites.props.content.default = "您暂时没有收藏CG";
 
 			var servicesInterval = setInterval(function() {
 
