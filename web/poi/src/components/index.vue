@@ -24,62 +24,16 @@
                 </div>
 
                 <div class="col-md-6 hot-cg-imgs">
-                    <div @click="viewThisCG('1')" class="col-md-4">
-                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
+                    <div @click="viewThisCG(item._id)" class="col-md-4" v-for="(key, item) in hotThemes">
+                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('{{item.image}}')">
                             <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                <div class="span">1</div>
-                                <h4>蛤蛤</h4>
-                                <p>xieyang</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                            <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                <div class="span">2</div>
-                                <h4>蛤蛤</h4>
-                                <p>xieyang</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                            <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                <div class="span">2</div>
-                                <h4>蛤蛤</h4>
-                                <p>xieyang</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                            <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                <div class="span">2</div>
-                                <h4>蛤蛤</h4>
-                                <p>xieyang</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                            <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                <div class="span">2</div>
-                                <h4>蛤蛤</h4>
-                                <p>xieyang</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('http://i2.hdslb.com/u_user/c143946c2acf6e34e836bd9e24871ad7.jpg')">
-                            <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
-                                <div class="span">2</div>
-                                <h4>蛤蛤</h4>
-                                <p>xieyang</p>
+                                <div class="span">{{key + 1}}</div>
+                                <h4 style="line-height:4">{{item.user_id.username}}</h4>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
             </div>
 
             <div class="col-md-10 col-md-offset-1" style="padding-left:0px;padding-right:0px">
@@ -224,7 +178,9 @@
                     showCover: false
                 },
                 displayNavSearch: false,
-                keywordSearched: ''
+                keywordSearched: '',
+
+                hotThemes: []
             }
         },
 
@@ -282,10 +238,34 @@
                     }
                 };
                 router.replace(route);
+            },
+
+            getHotThemes: function() {
+
+                var _this = this;
+
+                services.CGService.getHotThemes().then(function(res) {
+
+                    var code = res.data.code;
+                    var data = res.data.message;
+
+                    if(code != 200) {
+                        util.messageBox(data);
+                        return false;
+                    }
+
+                    _this.hotThemes = data;
+
+                    console.log(_this.hotThemes);
+
+                }, function(err) {
+                    util.handleError(err);
+                });
             }
         },
 
         created() {
+            var _this = this;
 
             setTimeout(function() {
     
@@ -298,6 +278,8 @@
                 }
 
                 util.resetNavSearchSize();
+
+                _this.getHotThemes();
                 
             }, 100);
         }

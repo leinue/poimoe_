@@ -630,6 +630,28 @@ var index = {
 
     });
 
+  },
+
+  getRecommended: function(req, res, next) {
+
+    var User = ctrlInitial.models.User();
+
+    var Themes = ctrlInitial.models.Themes();
+
+    Themes.find({
+      isDeleted: false
+    }).sort({
+      favouritesCount: -1
+    }).limit(10).populate('user_id').exec(function(err, theme) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
+
+      res.send(util.retMsg(200, theme));
+
+    });
+
   }
 
 };

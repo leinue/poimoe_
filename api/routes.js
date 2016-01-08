@@ -49,6 +49,7 @@ module.exports = {
     server.get('/user/count/following/:uid', ctrl.userCtrl.countFollowing);
     server.get('/user/count/fo/:uid', ctrl.userCtrl.countFo);
     server.get('/user/profile/get/:uid', ctrl.userCtrl.getProfileByUid);
+    server.get('/user/recommended', ctrl.userCtrl.getRecommended);
 
     server.get('/session/:name', function(req, res, next) {
       res.send(util.retMsg(200, "您通过了验证"));
@@ -69,9 +70,9 @@ module.exports = {
     server.get('/settings/other/update/:value', ctrl.settingsCtrl.updateOther);
 
     server.get('/relations/follow/:followerId/:followingId', ctrl.relationsCtrl.follow);
-    server.get('/relations/unfollow/:unfollowerId／:unfollowingid', ctrl.relationsCtrl.unfollow);
-    server.get('/relations/select/follow/:id', ctrl.relationsCtrl.getFollow);
+    server.get('/relations/unfollow/:unfollowerId/:unfollowingid', ctrl.relationsCtrl.unfollow);
     server.get('/relations/twoway/:id1/:id2', ctrl.relationsCtrl.isTwoWay);
+    server.get('/relations/select/:uid/:page/:count', ctrl.relationsCtrl.getFollow);
 
     server.get('/themes/select/all/:page/:count', ctrl.themesCtrl.getAll);
     server.get('/themes/select/removed/:page/:count', ctrl.themesCtrl.getAllRemoved);
@@ -79,6 +80,8 @@ module.exports = {
     server.post('/themes/update', ctrl.themesCtrl.update);
     server.get('/themes/remove/:id', ctrl.themesCtrl.remove);
     server.get('/themes/get/:uid/:page/:count', ctrl.themesCtrl.getByUid);
+    server.get('/themes/hot', ctrl.themesCtrl.getHotThemes);
+    server.get('/themes/select/:tid', ctrl.themesCtrl.selectOneTheme);
 
     server.get('/replys/select/all/:page/:count', ctrl.replysCtrl.getAll);
     server.get('/replys/select/removed/:page/:count', ctrl.replysCtrl.getAllRemoved);

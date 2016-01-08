@@ -39,6 +39,10 @@ module.exports = {
         type: Schema.Types.ObjectId,
         ref: 'themes'
       }],
+      posts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'themes'
+      }],
       accessToken: {
         type: String,
         default: 'undefined'
@@ -189,6 +193,24 @@ module.exports = {
 
     };
 
+    userSchema.statics.updatePosts = function(uid, posts, cb) {
+
+      var query = {
+        _id: uid
+      };
+
+      var options = {
+        new: true
+      };
+
+      var update = {
+        posts: posts
+      };
+
+      return this.findOneAndUpdate(query, update, options, cb);
+
+    };
+
     userSchema.statics.rollbackAccessToken = function(e, cb) {
 
       var createdAt = undefined;
@@ -306,6 +328,17 @@ module.exports = {
       }).populate('user_id').populate('tag_list').sort({
         createdAt: -1
       }).skip(skipFrom).limit(count).exec(cb);
+    };
+
+    themesSchema.statics.getHotThemes = function(cb) {
+
+      var count = 6;
+      return this.find({
+        isDeleted: false
+      }).sort({
+        favouritesCount: -1
+      }).populate('user_id').limit(count).exec(cb);
+
     };
 
     themesSchema.statics.findAllRemoved = function(page, count, cb) {

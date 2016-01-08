@@ -232,6 +232,8 @@ var index = {
 	getFollow:  function(req, res, next) {
 
 		var uid = req.params.uid;
+		var page = req.params.page;
+		var count = req.params.count;
 
 		if(uid == undefined || uid == '') {
 			res.send(util.retMsg(401, "缺少参数：用户id"));
@@ -251,13 +253,13 @@ var index = {
 
 			var relations = ctrlInitial.models.Relations();
 
-			relations.findById(uid, function(err, r) {
+			relations.findByUid(uid, page, count, function(err, r) {
 
 				if(err) {
 					res.send(util.retMsg(401, err.toString()));
 				}
 
-				res.send(200, r);
+				res.send(util.retMsg(200, r));
 
 			});
 

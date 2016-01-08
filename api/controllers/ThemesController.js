@@ -88,6 +88,8 @@ var index = {
    	 			res.send(util.retMsg(401, "无此用户"));
    	 		}
 
+   	 		var posts = ur[0].posts;
+
    	 		var Themes = ctrlInitial.models.Themes();
 
    	 		var TagLength = util.count(_tag_list);
@@ -115,7 +117,17 @@ var index = {
 		        res.send(util.retMsg(401, err.toString()));
 		      }
 
-		      res.send(util.retMsg(200, t));
+		      posts.push(t._id);
+
+		      User.updatePosts(ur[0]._id, posts, function(err, u) {
+
+		      	if(err) {
+		      		res.send(util.retMsg(401, err.toString()));
+		      	}
+
+		      	res.send(util.retMsg(200, t));
+
+		      });
 
 		    });
 
@@ -300,6 +312,47 @@ var index = {
 	      	}
 
 	      	_util.seekFavourited(req, res, themes);
+
+		});
+
+	},
+
+	getHotThemes: function(req, res, next) {
+
+		var Themes = ctrlInitial.models.Themes();
+
+		Themes.getHotThemes(function(err, themes) {
+
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+			res.send(util.retMsg(200, themes));
+
+		});
+
+	},
+
+	selectOneTheme: function(req, res, next) {
+
+		var tid = req.params.tid;
+
+		if(tid =='' || tid == undefined) {
+			res.send(util.retMsg(401, '主题id不能为空'));
+		}
+
+		var Themes = ctrlInitial.models.Themes();
+
+		Themes.find({
+			isDeleted: false,
+			_id: tid
+		}).populate('user_id').populate('tag_list').exec(function(err, theme) {
+
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+			res.send(util.retMsg(200, theme));
 
 		});
 

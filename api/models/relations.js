@@ -19,12 +19,28 @@ module.exports = {
       }]
     });
 
-    relationsSchema.statics.findByUid = function(uid, cb) {
+    relationsSchema.statics.findByUid = function(uid, page, count, cb) {
+
+      page = page || 1;
+      count = count || 10;
+      var skipFrom = (page * count) - count;
+
       return this.find({
         user_id: uid
       }).populate({
-        path: 'user_id follow follower'
+        path: 'user_id follow follower',
+        populate: {
+          path: 'posts',
+          sort: {
+            createdAt: -1
+          },
+          options: {
+            limit: 5,
+            skip: skipFrom
+          }
+        }
       }).exec(cb);
+
     };
 
     relationsSchema.statics.hasId = function(uid, id_find, cb) {
@@ -51,9 +67,7 @@ module.exports = {
       });
     };
 
-    // var relations = mongoose.model('relations', relationsSchema);
-
-    return relationsSchema  ;
+    return relationsSchema;
 
   }
 };

@@ -29,6 +29,14 @@ module.exports = {
 
 			getByUid: function(uid, page, count) {
 				return _this.$http.get(baseUrl + 'themes/get/' + uid + '/' + page + '/' + count);
+			},
+
+			getHotThemes: function() {
+				return _this.$http.get(baseUrl + 'themes/hot');
+			},
+
+			viewOne: function(tid) {
+				return _this.$http.get(baseUrl + 'themes/select/' + tid);
 			}
 
 		}

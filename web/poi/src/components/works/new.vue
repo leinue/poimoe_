@@ -96,7 +96,15 @@
 			publishNewCG: function() {
 				services.CGService.publish(this.cg).then(function(res) {
 
-					console.log(res);
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					util.messageBox('发布成功');
 
 				}, function(err) {
 					util.handleError(err);

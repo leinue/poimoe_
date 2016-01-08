@@ -22,7 +22,7 @@
 								xieyang
 							</div>
 							<div class="header-right">
-								<button style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-plus"></span> 关注</button>
+								<button style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-plus"></span> 取消关注</button>
 							</div>
 						</div>
 
@@ -58,7 +58,7 @@
 								xieyang
 							</div>
 							<div class="header-right">
-								<button style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-plus"></span> 关注</button>
+								<button style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-plus"></span> 取消关注</button>
 							</div>
 						</div>
 
