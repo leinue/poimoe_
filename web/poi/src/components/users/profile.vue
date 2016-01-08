@@ -6,6 +6,9 @@
 		    <div class="side-profile-detail">
 		    	<p style="margin-bottom:10px">{{username}}</p>
 		    	<span class="description">{{introduction}}</span>
+		    	<div style="padding-top:15px;">
+					<button v-show="uid != myUid" style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-plus"></span> 关注</button>
+		    	</div>
 		    	<p class="relations">
 			    	<span @click="toFollowing()">{{followingCount}} 关注</span>
 			    	<span @click="toFollower()">{{followerCount}} 粉丝</span>
@@ -57,7 +60,9 @@
 
 				username: '',
 				introduction: '',
-				photo: ''
+				photo: '',
+				uid: '',
+				myUid: localStorage._id
 
 			};
 
@@ -95,6 +100,7 @@
 							_this.$set('username', profile.username);
 							_this.$set('introduction', profile.intro);
 							_this.$set('photo', 'background-image:url(' + profile.photo + ')');
+							_this.$set('uid', profile._id)
 
 						}, function(err) {
 							util.handleError(err);

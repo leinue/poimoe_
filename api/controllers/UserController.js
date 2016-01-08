@@ -302,10 +302,47 @@ var index = {
           res.send(util.retMsg(400, err.toString()));
         }
 
-        res.send(util.retMsg(200, '取消收藏成功'));
+        var Themes = ctrlInitial.models.Themes();
+
+        Themes.find(tid, function(err, theme) {
+
+          if(err) {
+            res.send(util.retMsg(400, err.toString()));
+          }
+
+          if(theme.length == 0) {
+            res.send(util.retMsg(400, '无此主题'));
+          }
+
+          theme = theme[0];
+
+          var tid = theme._id;
+          var cnt = theme.favouritesCount - 1;
+
+          if(cnt < 0) {
+            cnt = 0;
+          }
+
+          Themes.findOneAndUpdate({
+            _id: tid,
+            isDeleted: false
+          }, {
+            favouritesCount: cnt
+          }, {
+            new: true
+          }, function(err, t) {
+
+            if(err) {
+              res.send(util.retMsg(400, err.toString()));
+            }
+
+            res.send(util.retMsg(200, '取消收藏成功'));
+
+          });
+
+        });
 
       });
-
 
     });
 
@@ -351,15 +388,53 @@ var index = {
 
         user = user[0];
 
-        user.favourites.push(tid);
+        var currentTheme = theme;
 
-        User.removeFavouritesByUid(uid, user.favourites, function(err, f) {
+        var origin = user.favourites;
+
+        User.isFavouritesExist(origin, tid, function(flag) {
 
           if(err) {
             res.send(util.retMsg(400, err.toString()));
           }
 
-          res.send(util.retMsg(200, '收藏成功'));
+          if(flag) {
+            res.send(util.retMsg(400, '请不要重复收藏'));
+          }else {
+
+            user.favourites.push(tid);
+
+            User.removeFavouritesByUid(uid, user.favourites, function(err, f) {
+
+              if(err) {
+                res.send(util.retMsg(400, err.toString()));
+              }
+
+              var theme = currentTheme[0];
+
+              var tid = theme._id;
+              var cnt = theme.favouritesCount;
+
+              Themes.findOneAndUpdate({
+                _id: tid,
+                isDeleted: false
+              }, {
+                favouritesCount: cnt + 1
+              }, {
+                new: true
+              }, function(err, user) {
+
+                if(err) {
+                  res.send(util.retMsg(400, err.toString()));
+                }
+
+                res.send(util.retMsg(200, '收藏成功'));
+
+              });
+
+            });
+
+          }
 
         });
 

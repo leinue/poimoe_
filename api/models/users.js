@@ -158,12 +158,26 @@ module.exports = {
 
     userSchema.statics.removeFavouritesByUid = function(uid, fa, cb) {
       return this.findOneAndUpdate({
-        _id: uid
+        _id: uid,
+        isDeleted: false
       }, {
         favourites: fa
       }, {
         new: true
       }, cb);
+    };
+
+    userSchema.statics.isFavouritesExist = function(o, fa, cb) {
+      var flag = false;
+      for (var i = 0; i < o.length; i++) {
+        var curr = o[i];
+
+        if(curr == fa) {
+          flag = true;
+          break;
+        }
+      };
+      cb(flag);
     };
 
     userSchema.statics.addFavouriteByUid = function(uid, tid, cb) {

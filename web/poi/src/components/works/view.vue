@@ -77,6 +77,12 @@
 
 			toSearchPage: function(name) {
 				util.pathToSearch(name);
+			},
+
+			unlikeThis: function(id, index) {
+				util.unlikeThisTheme(id, function() {
+					
+				});
 			}
 
 		},
