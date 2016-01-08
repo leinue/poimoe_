@@ -228,6 +228,7 @@
 	.timeline-content span {
 		color: rgb(85, 85, 85);
 		font-weight: 200;
+		font-size: 16px;
 	}
 
 	.time-real-footer {
