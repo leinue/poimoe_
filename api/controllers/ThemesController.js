@@ -72,10 +72,6 @@ var index = {
    	 		res.send(util.retMsg(401, "缺少参数：用户id"));
    	 	}
 
-   	 	// if(!_tag_list) {
-   	 	// 	res.send(util.retMsg(401, "标签参数列表非法"));
-   	 	// }
-
    	 	var User = ctrlInitial.models.User();
 
    	 	User.findById(_uid, function(err, ur) {
@@ -125,7 +121,17 @@ var index = {
 		      		res.send(util.retMsg(401, err.toString()));
 		      	}
 
-		      	res.send(util.retMsg(200, t));
+				var Tags = ctrlInitial.models.Tags();
+
+				Tags.updateCiteCount(_tag_list, function(err, tagNew, result) {
+
+					if(err) {
+						res.send(util.retMsg(401, err.toString()));
+					}
+
+			      	res.send(util.retMsg(200, t));
+
+				});
 
 		      });
 

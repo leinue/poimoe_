@@ -56,6 +56,50 @@ module.exports = {
       return this._find(page, count, true, cb);
     };
 
+    tagsSchema.statics.updateCiteCount = function(tagList, cb) {
+
+      var _this = this;
+      var tagCount = tagList.length - 1;
+
+      if(tagCount === 0) {
+        cb(false, null, true);
+      }else {
+        tagList.forEach(function(tagId, key) {
+
+          _this.findOne({
+            _id: tagId,
+            isDeleted: false
+          }, function(err, tag) {
+
+            if(err) {
+              cb(err, tag, false);
+            }
+
+            var cnt = tag.citeCount + 1;
+
+            _this.findOneAndUpdate({
+              _id: tag._id,
+              isDeleted: false
+            }, {
+              citeCount: cnt
+            }, {
+              new: true
+            }, function(err, tagNew) {
+
+              if(key === tagCount) {
+                cb(err, tagNew, true);                
+              }
+
+            });
+
+          });
+
+
+        });
+      }
+
+    };
+
     tagsSchema.statics.search = function(name, page, count, cb) {
 
       page = page || 1;
