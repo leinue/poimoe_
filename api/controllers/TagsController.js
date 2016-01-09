@@ -173,6 +173,12 @@ var index = {
 
 	},
 
+	getHotTags: function(req, res, next) {
+
+		
+		
+	},
+
 	searchSite: function(req, res, next) {
 
 		var val = req.params.val;

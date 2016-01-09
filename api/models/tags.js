@@ -56,7 +56,9 @@ module.exports = {
       return this._find(page, count, true, cb);
     };
 
-    tagsSchema.statics.updateCiteCount = function(tagList, cb) {
+    tagsSchema.statics.updateCiteCount = function(tagList, add, cb) {
+
+      add = add || true;
 
       var _this = this;
       var tagCount = tagList.length - 1;
@@ -75,7 +77,11 @@ module.exports = {
               cb(err, tag, false);
             }
 
-            var cnt = tag.citeCount + 1;
+            if(add) {
+              var cnt = tag.citeCount + 1;
+            }else {
+              var cnt = tag.citeCount - 1;
+            }
 
             _this.findOneAndUpdate({
               _id: tag._id,

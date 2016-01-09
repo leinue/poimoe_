@@ -123,7 +123,7 @@ var index = {
 
 				var Tags = ctrlInitial.models.Tags();
 
-				Tags.updateCiteCount(_tag_list, function(err, tagNew, result) {
+				Tags.updateCiteCount(_tag_list, true, function(err, tagNew, result) {
 
 					if(err) {
 						res.send(util.retMsg(401, err.toString()));
@@ -171,7 +171,17 @@ var index = {
 		        	res.send(util.retMsg(401, err.toString()));
 		      	}
 
-		      	res.send(util.retMsg(200, "删除主题成功" + theme.toString()));
+				var Tags = ctrlInitial.models.Tags();
+
+				Tags.updateCiteCount(theme.tag_list, true, function(err, tagNew, result) {
+
+					if(err) {
+						res.send(util.retMsg(401, err.toString()));
+					}
+
+			      	res.send(util.retMsg(200, "删除主题成功");
+
+				});
 
 			});
 
