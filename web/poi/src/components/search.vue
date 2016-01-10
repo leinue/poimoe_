@@ -3,6 +3,8 @@
 	<div style="background: rgb(249, 245, 239);">
         <search></search>
 
+        <no-search-result v-show="CGList.length === 0"></no-search-result>
+
     	<div class="col-md-6 col-md-offset-3" style="padding-top:15px;">
 
     		<div class="timeline" v-for="item in CGList">
@@ -62,6 +64,7 @@
 
 	import util from '../commons/scripts/commons.js';
     import search from './search/search.vue';
+    import noSearchResult from './error/nodata.vue';
 
 	export default {
 		data() {
@@ -76,7 +79,8 @@
 		},
 
 		components: {
-			'search': search
+			'search': search,
+			'noSearchResult': noSearchResult
 		},
 
 		methods: {
@@ -101,7 +105,6 @@
             toSearchPage: function(name) {
 				util.pathToSearch(name);
 				search.props.keywords.default = name;
-				
             }
 
 		},
@@ -109,6 +112,8 @@
 		created() {
 
 			var _this = this;
+
+			noSearchResult.props.content.default = "搜索结果为空";
 
 			search.props.keywords.default = router._currentRoute.params.keywords;
 			_this.$set('keywordSearched', router._currentRoute.params.keywords);
@@ -131,8 +136,6 @@
 								util.messageBox(data);
 								return false;
 							}
-
-							console.log(data);
 
 							_this.$set('CGList', data);
 

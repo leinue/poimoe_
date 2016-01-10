@@ -279,10 +279,6 @@ var index = {
 					res.send(util.retMsg(401, err.toString()));
 				}
 
-				console.log(themes);
-
-				r[0].user_id.posts = themes;
-
 				res.send(util.retMsg(200, r));
 
 			});

@@ -232,8 +232,6 @@
                         _this.bottom5Users.push(user);
                     };
 
-                    // _this.top5User 
-
                 }, function(err) {
                     util.handleError(err);
                 });
@@ -255,6 +253,8 @@
                     }
 
                     _this.hotTags = data;
+
+                    search.props.hotTags.default = data;
 
                 }, function(err) {
                     util.handleError(err);

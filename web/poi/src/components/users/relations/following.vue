@@ -12,7 +12,7 @@
 			<div class="timeline" v-for="user in following">
 				<div class="col-xs-2" style="padding-right:0px">
 					<div class="timeline-author">
-						<div style="background-image:url({{user.photo | photoNullToVision}})" class="imgdiv"></div>
+						<div @click="toProfile(user._id)" style="background-image:url({{user.photo | photoNullToVision}})" class="imgdiv"></div>
 					</div>
 				</div>
 				<div class="col-xs-10" style="padding-bottom:12px;">
@@ -24,19 +24,16 @@
 								{{user.username}}
 							</div>
 							<div class="header-right">
-								<button style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-plus"></span> 取消关注</button>
+								<button @click="unfollowThis(user._id)" style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-minus"></span> 取消关注</button>
 							</div>
 						</div>
 
 						<div class="relations-img">
-							<div class="col-md-4">
+							<div class="col-md-4" v-for="cg in posts">
+								<div @click="viewThisCG(cg._id)" class="timeline-new-section relations" style="background-image:url({{cg.image}})"></div>
+							</div>
+							<div v-show="user.posts.length === 0" class="col-md-12" style="padding:0px">
 								<div class="timeline-new-section relations" style="background-image:url(https://img-sketch.secure.pixiv.net/c/c_180/uploads/medium/file/416074/7840959996393829039.png)"></div>
-							</div>
-							<div class="col-md-4">
-								<div class="timeline-new-section relations" style="background-image:url(https://img-sketch.secure.pixiv.net/c/c_180/uploads/medium/file/415186/6437562090413771074.png)"></div>
-							</div>
-							<div class="col-md-4">
-								<div class="timeline-new-section relations" style="background-image:url(https://img-sketch.secure.pixiv.net/c/c_180/uploads/medium/file/415175/3536930356003292631.png)"></div>
 							</div>
 						</div>
 
@@ -67,6 +64,32 @@
 		},
 
 		methods: {
+
+			toProfile: function(uid) {
+                router.go('/profile/' + uid);
+			},
+
+			viewThisCG: function(tid) {
+                router.go('/view/' + tid);
+			},
+
+			unfollowThis: function(uid) {
+				services.RelationsService.unfollow(localStorage._id, uid).then(function(res) {
+
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					util.messageBox(data);
+
+				}, function(err) {
+					util.handleError(err);
+				});
+			}
 
 		},
 

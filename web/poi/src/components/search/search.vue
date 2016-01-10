@@ -13,13 +13,10 @@
 
                     <div class="nav-search" v-bind:class="{'nav-search-display': displayNavSearch == true, 'nav-search-hide': displayNavSearch == false}" id="index-nav-search">
                         <ul>
-                            <li @click="pipeToSearchInput('谈笑风生')">谈笑风生</li>
-                            <li @click="pipeToSearchInput('蛤蛤')">蛤蛤</li>
-                            <li @click="pipeToSearchInput('毕竟还图样')">毕竟还图样</li>
-                            <li @click="pipeToSearchInput('搞个大新闻')">搞个大新闻</li>
+                            <li @click="pipeToSearchInput(tag.names)" v-for="tag in hotTags">{{tag.names}}</li>
                         </ul>
                     </div>
-
+<!-- 
                     <div class="tag-list">
                         <span class="glyphicon glyphicon-tags" style="color: rgb(175, 175, 175);cursor:auto"> 标签：</span>
                         <span @click="show" class="label label-default">谈笑风生</span>
@@ -31,7 +28,7 @@
                         <span class="label label-default">续命</span>
                         <span class="label label-primary">一颗赛艇</span>
                         <span class="label label-success">船能载舟</span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
        	</div>
@@ -85,6 +82,11 @@
             keywords: {
                 type: String,
                 default: ''
+            },
+
+            hotTags: {
+                type: Array,
+                default: []
             }
         },
 
