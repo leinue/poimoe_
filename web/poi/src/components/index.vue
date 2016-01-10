@@ -69,70 +69,17 @@
                                 <div class="hot-tags-content">
                                     
                                     <div class="row">
-                                        <div class="col-md-6 hot-tags-section-padding">
+                                        <div class="col-md-6 hot-tags-section-padding" v-for="item in hotTags">
                                             <div class="hot-tags-section">
                                                 <div class="hot-tags-header">
-                                                    <h4>暗杀教室</h4>
+                                                    <h4>{{item.names}}</h4>
                                                 </div>
                                                 <div class="hot-tags-img">
                                                     <ul>
-                                                        <li></li>
-                                                        <li></li>
+                                                        <li v-bind:class="key < 2 ? '' : 'displaynone'" v-for="(key, cg) in item.themes" style="background-image: url({{cg.image}})">{{key}}</li>
                                                     </ul>
                                                     <ul>
-                                                        <li style="background-image: url(http://tp2.sinaimg.cn/2354504421/180/40057719478/0)"></li>
-                                                        <li></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 hot-tags-section-padding">
-                                            <div class="hot-tags-section">
-                                                <div class="hot-tags-header">
-                                                    <h4>暗杀教室</h4>
-                                                </div>
-                                                <div class="hot-tags-img">
-                                                    <ul>
-                                                        <li></li>
-                                                        <li></li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li style="background-image: url(http://tp2.sinaimg.cn/2354504421/180/40057719478/0)"></li>
-                                                        <li></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 hot-tags-section-padding">
-                                            <div class="hot-tags-section">
-                                                <div class="hot-tags-header">
-                                                    <h4>暗杀教室</h4>
-                                                </div>
-                                                <div class="hot-tags-img">
-                                                    <ul>
-                                                        <li></li>
-                                                        <li></li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li style="background-image: url(http://tp2.sinaimg.cn/2354504421/180/40057719478/0)"></li>
-                                                        <li></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 hot-tags-section-padding">
-                                            <div class="hot-tags-section">
-                                                <div class="hot-tags-header">
-                                                    <h4>暗杀教室</h4>
-                                                </div>
-                                                <div class="hot-tags-img">
-                                                    <ul>
-                                                        <li></li>
-                                                        <li></li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li style="background-image: url(http://tp2.sinaimg.cn/2354504421/180/40057719478/0)"></li>
-                                                        <li></li>
+                                                        <li v-bind:class="key >= 2 ? '' : 'displaynone'" v-for="(key, cg) in item.themes" style="background-image: url({{cg.image}})">{{key}}</li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -142,6 +89,7 @@
                                 </div>
 
                             </div>
+
                         </div>
 
                     </div>
@@ -175,7 +123,9 @@
                 hotThemes: [],
 
                 top5Users: [],
-                bottom5Users: []
+                bottom5Users: [],
+
+                hotTags: []
             }
         },
 
@@ -277,14 +227,34 @@
                         }
                     };
 
-                    console.log(_this.top5Users);
-
                     for (var i = 5; i < data.length; i++) {
                         var user = data[i];
                         _this.bottom5Users.push(user);
                     };
 
                     // _this.top5User 
+
+                }, function(err) {
+                    util.handleError(err);
+                });
+
+            },
+
+            getHotTags: function() {
+
+                var _this = this;
+
+                services.TagsService.getHotTags().then(function(res) {
+
+                    var code = res.data.code;
+                    var data = res.data.message;
+
+                    if(code != 200) {
+                        util.messageBox(data);
+                        return false;
+                    }
+
+                    _this.hotTags = data;
 
                 }, function(err) {
                     util.handleError(err);
@@ -312,8 +282,8 @@
                     util.resetNavSearchSize();
 
                     _this.getHotThemes();
-
                     _this.getRecommendUsers();
+                    _this.getHotTags();
                 }
             }, 1);
 

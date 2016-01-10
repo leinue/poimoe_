@@ -166,6 +166,14 @@ module.exports = {
       return this.findOneAndUpdate(query, update, options, cb);
     };
 
+    tagsSchema.statics.getHotTags = function(cb) {
+      this.find({
+        isDeleted: false
+      }).sort({
+        citeCount: -1
+      }).select('_id name citeCount').limit(4).exec(cb);
+    }
+
     // var tags = mongoose.model('tags', tagsSchema);
 
     return tagsSchema;

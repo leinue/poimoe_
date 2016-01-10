@@ -365,6 +365,49 @@ module.exports = {
 
     };
 
+    themesSchema.statics.getHotThemesByTagId = function(tags, cb) {
+
+      var tagCnt = 3;//counting from zero
+      var _this = this;
+
+      var result = [];
+
+      tags.forEach(function(tag, key) {
+
+        var tagId = tag._id;
+        var citeCnt = tag.citeCount;
+        var name = tag.name;
+
+        var tmp = {};
+
+        _this.find({
+          isDeleted: false,
+          tag_list: {
+            '$in': [tagId]
+          }
+        }).sort({
+          favouritesCount: -1
+        }).limit(4).select('_id image').exec(function(err, themes) {
+
+          if(err) {
+            cb(err, themes);
+          }
+
+          tmp.tagId = tagId;
+          tmp.names = name;
+          tmp.themes = themes;
+          result.push(tmp);
+
+          if(key === tagCnt) {
+            cb(err, result);
+          }
+
+        });
+
+      });
+
+    };
+
     themesSchema.statics.findAllRemoved = function(page, count, cb) {
       page = page || 1;
       count = count || 20;

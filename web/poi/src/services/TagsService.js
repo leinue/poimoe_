@@ -29,6 +29,10 @@ module.exports = {
 
 			search: function(name, page, count) {
 				return _this.$http.get(baseUrl + 'tags/search/' + name + '/' + page + '/' + count);
+			},
+
+			getHotTags: function() {
+				return _this.$http.get(baseUrl + 'tags/select/hotTags');
 			}
 
 		}

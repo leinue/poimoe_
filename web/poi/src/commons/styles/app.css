@@ -284,3 +284,7 @@ div.container-fluid {
 	background: rgb(249, 245, 239);
 	height: 100%;
 }
+
+.displaynone {
+	display: none!important;
+}

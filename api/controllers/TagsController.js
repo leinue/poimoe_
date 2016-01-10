@@ -175,7 +175,27 @@ var index = {
 
 	getHotTags: function(req, res, next) {
 
-		
+		var Tags = ctrlInitial.models.Tags();
+
+		Tags.getHotTags(function(err, tags) {
+
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+			var Themes = ctrlInitial.models.Themes();
+
+			Themes.getHotThemesByTagId(tags, function(err, themes) {
+
+				if(err) {
+					res.send(util.retMsg(401, err.toString()));
+				}
+
+				res.send(util.retMsg(200, themes));
+
+			});
+
+		});
 		
 	},
 
