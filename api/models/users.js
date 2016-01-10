@@ -44,7 +44,7 @@ module.exports = {
         ref: 'themes'
       }],
       favouritedCount: {
-        type: Schema.Types.Number,
+        type: Number,
         default: 0
       },
       accessToken: {
@@ -160,12 +160,18 @@ module.exports = {
       }).skip(skipFrom).limit(count).exec(cb);
     };
 
-    userSchema.statics.removeFavouritesByUid = function(uid, fa, cb) {
+    userSchema.statics.removeFavouritesByUid = function(uid, obj, cb) {
+
+      if(obj.faCnt < 0) {
+        obj.faCnt = 0;
+      }
+
       return this.findOneAndUpdate({
         _id: uid,
         isDeleted: false
       }, {
-        favourites: fa
+        favourites: obj.fa,
+        favouritedCount: obj.faCnt
       }, {
         new: true
       }, cb);

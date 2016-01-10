@@ -296,7 +296,10 @@ var index = {
         }
       };
 
-      User.removeFavouritesByUid(uid, user.favourites, function(err, f) {
+      User.removeFavouritesByUid(uid, {
+        fa: user.favourites,
+        faCnt: user.favouritedCount - 1
+      }, function(err, f) {
 
         if(err) {
           res.send(util.retMsg(400, err.toString()));
@@ -404,7 +407,10 @@ var index = {
 
             user.favourites.push(tid);
 
-            User.removeFavouritesByUid(uid, user.favourites, function(err, f) {
+            User.removeFavouritesByUid(uid, {
+              fa: user.favourites,
+              faCnt: user.favouritedCount + 1
+            }, function(err, f) {
 
               if(err) {
                 res.send(util.retMsg(400, err.toString()));
