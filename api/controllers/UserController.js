@@ -405,7 +405,7 @@ var index = {
             res.send(util.retMsg(400, '请不要重复收藏'));
           }else {
 
-            user.favourites.push(tid);
+            user.favourites.unshift(tid);
 
             User.removeFavouritesByUid(uid, {
               fa: user.favourites,

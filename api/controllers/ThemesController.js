@@ -113,7 +113,7 @@ var index = {
 		        res.send(util.retMsg(401, err.toString()));
 		      }
 
-		      posts.push(t._id);
+		      posts.unshift(t._id);
 
 		      User.updatePosts(ur[0]._id, posts, function(err, u) {
 

@@ -76,9 +76,8 @@ var index = {
 
 					    });
 					}else {
-						//如果有则直接push
+						//如果有则直接unshift
 						//检查是否重复关注
-
 				      	relations.followHasId(follower[0]._id, following[0]._id, function(err, u, exist) {
 
 				      		if(err) {
@@ -87,31 +86,33 @@ var index = {
 
 				      		if(exist) {
 				      			res.send(util.retMsg(401, '请不要重复关注'));
+				      		}else {
+
+					      		var query = {
+						        	user_id: follower[0]._id
+						      	};
+
+						      	var options = {
+						        	new: true
+						      	};
+
+					      		relation_follower[0].follow.unshift(following[0]._id);
+
+						      	var update = {
+						        	follow: relation_follower[0].follow
+						      	};
+
+						      	relations.findOneAndUpdate(query, update, options, function(err, new_follow) {
+
+						      		if(err) {
+					      				res.send(util.retMsg(401, err.toString()));
+					      			}
+
+					      			res.send(util.retMsg(200, new_follow));
+
+						      	});
+
 				      		}
-
-				      		var query = {
-					        	user_id: follower[0]._id
-					      	};
-
-					      	var options = {
-					        	new: true
-					      	};
-
-				      		relation_follower[0].follow.push(following[0]._id);
-
-					      	var update = {
-					        	follow: relation_follower[0].follow
-					      	};
-
-					      	relations.findOneAndUpdate(query, update, options, function(err, new_follow) {
-
-					      		if(err) {
-				      				res.send(util.retMsg(401, err.toString()));
-				      			}
-
-				      			res.send(util.retMsg(200, new_follow));
-
-					      	});
 
 				      	});
 

@@ -30,7 +30,10 @@ module.exports = {
       }).populate({
         path: 'user_id follow follower',
         populate: {
-          path: 'posts'
+          path: 'posts',
+          match: {
+            isDeleted: false
+          }
         },
         select: '_id username photo posts'
       }).exec(cb);
@@ -52,10 +55,6 @@ module.exports = {
         if(u == null) {
           cb(err, u, false);
         }else {
-          if(u.length === 0) {
-            cb(err, u, false);
-          }
-
           var followList = u.follow;
 
           if(typeof followList == 'undefined') {
