@@ -7,12 +7,12 @@
 				
 			</div>
 
-			<nofo></nofo>
+			<nofo v-show="following.length === 0"></nofo>
 
 			<div class="timeline" v-for="user in following">
 				<div class="col-xs-2" style="padding-right:0px">
 					<div class="timeline-author">
-						<div style="background-image:url({{item.photo | photoNullToVision}})" class="imgdiv"></div>
+						<div style="background-image:url({{user.photo | photoNullToVision}})" class="imgdiv"></div>
 					</div>
 				</div>
 				<div class="col-xs-10" style="padding-bottom:12px;">
@@ -97,9 +97,8 @@
 							return false;
 						}
 
-						_this.$set('following', data[7].follow);
-
-						console.log(data[7].follow);
+						_this.$set('following', data[0].follow);
+						console.log(_this.$get('following'));
 
 					}, function(err) {
 						util.handleError(err);
