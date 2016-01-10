@@ -57,6 +57,10 @@ module.exports = {
 
     		getProfile: function(uid) {
     			return _this.$http.get('user/profile/get/' + uid);
+    		},
+
+    		getRecomended: function() {
+    			return _this.$http.get('user/recommended');
     		}
 
 		}

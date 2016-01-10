@@ -48,18 +48,10 @@
                                     
                                 <div class="photo-group">
                                      <ul>
-                                         <li style="background-image:url(http://www.people.com.cn/mediafile/pic/20140709/49/4202888730341368797.jpg)" @click="toProfile('568697681608724965bf9b83')"></li>
-                                         <li></li>
-                                         <li></li>
-                                         <li></li>
-                                         <li></li>
+                                         <li v-for="user in top5Users" style="background-image:url({{user.photo | photoNullToVision}})" @click="toProfile(user._id)" title="{{user.username}}"></li>
                                      </ul>
                                      <ul>
-                                         <li></li>
-                                         <li></li>
-                                         <li></li>
-                                         <li></li>
-                                         <li></li>
+                                         <li v-for="user in bottom5Users" style="background-image:url({{user.photo | photoNullToVision}})" @click="toProfile(user._id)" title="{{user.username}}"></li>
                                      </ul>
                                 </div>
 
@@ -180,7 +172,10 @@
                 displayNavSearch: false,
                 keywordSearched: '',
 
-                hotThemes: []
+                hotThemes: [],
+
+                top5Users: [],
+                bottom5Users: []
             }
         },
 
@@ -256,32 +251,72 @@
 
                     _this.hotThemes = data;
 
-                    console.log(_this.hotThemes);
+                }, function(err) {
+                    util.handleError(err);
+                });
+            },
+
+            getRecommendUsers: function() {
+
+                var _this = this;
+
+                services.UserService.getRecomended().then(function(res) {
+
+                    var code = res.data.code;
+                    var data = res.data.message;
+
+                    if(code != 200) {
+                        util.messageBox(data);
+                        return false;
+                    }
+
+                    for (var i = 0; i < 5; i++) {
+                        var user = data[i];
+                        if(typeof user != 'undefined') {
+                            _this.top5Users.push(user);
+                        }
+                    };
+
+                    console.log(_this.top5Users);
+
+                    for (var i = 5; i < data.length; i++) {
+                        var user = data[i];
+                        _this.bottom5Users.push(user);
+                    };
+
+                    // _this.top5User 
 
                 }, function(err) {
                     util.handleError(err);
                 });
+
             }
         },
 
         created() {
             var _this = this;
 
-            setTimeout(function() {
-    
-                var slider = document.getElementById('slider');
+            var servicesInterval = setInterval(function() {
+                if(typeof window.services != 'undefined') {
 
-                if(slider != null) {
-                    var sliderInner = slider.childNodes.item(1).getElementsByTagName('div');
-                    var sliderItem = sliderInner[0].getElementsByTagName('div');
-                    sliderItem[0].setAttribute('class', sliderItem[0].getAttribute('class') + ' active');
+                    clearInterval(servicesInterval);
+
+                    var slider = document.getElementById('slider');
+
+                    if(slider != null) {
+                        var sliderInner = slider.childNodes.item(1).getElementsByTagName('div');
+                        var sliderItem = sliderInner[0].getElementsByTagName('div');
+                        sliderItem[0].setAttribute('class', sliderItem[0].getAttribute('class') + ' active');
+                    }
+
+                    util.resetNavSearchSize();
+
+                    _this.getHotThemes();
+
+                    _this.getRecommendUsers();
                 }
+            }, 1);
 
-                util.resetNavSearchSize();
-
-                _this.getHotThemes();
-                
-            }, 100);
         }
     };
 

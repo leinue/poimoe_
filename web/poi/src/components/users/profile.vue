@@ -2,7 +2,7 @@
 
 	<div>
 		<div class="side-profile" style="margin-top:15px;">
-		    <div class="side-profile-photo" style="{{photo}}"></div>
+		    <div class="side-profile-photo" style="{{photo | photoNullToVision}}"></div>
 		    <div class="side-profile-detail">
 		    	<p style="margin-bottom:10px">{{username}}</p>
 		    	<span class="description">{{introduction}}</span>
@@ -27,7 +27,7 @@
 						</div>
 						<div @click="pathTo('')" class="col-xs-4 block">
 							<p>{{deletedCount}}</p>
-							<span>删除</span>
+							<span>转发</span>
 						</div>
 					</div>			    	
 			    </div>
@@ -44,6 +44,7 @@
 <script>
 
 	var util = require('../../commons/scripts/commons.js');
+	var filters = require('../../filters/index.js');
 
 	export default {
 
@@ -99,6 +100,7 @@
 							_this.$set('deletedCount', data.deletedCount);
 							_this.$set('username', profile.username);
 							_this.$set('introduction', profile.intro);
+							profile.photo = filters.get('photoNullToVision')(profile.photo);
 							_this.$set('photo', 'background-image:url(' + profile.photo + ')');
 							_this.$set('uid', profile._id)
 

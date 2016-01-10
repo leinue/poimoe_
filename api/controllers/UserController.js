@@ -717,19 +717,20 @@ var index = {
 
     var User = ctrlInitial.models.User();
 
-    var Themes = ctrlInitial.models.Themes();
+    var User = ctrlInitial.models.User();
 
-    Themes.find({
-      isDeleted: false
+    User.find({
+      isDeleted: false,
+      isBlocked: false
     }).sort({
-      favouritesCount: -1
-    }).limit(10).populate('user_id').exec(function(err, theme) {
+      favouritedCount: -1
+    }).select('_id username photo').limit(10).exec(function(err, user) {
 
       if(err) {
         res.send(util.retMsg(401, err.toString()));
       }
 
-      res.send(util.retMsg(200, theme));
+      res.send(util.retMsg(200, user));
 
     });
 
