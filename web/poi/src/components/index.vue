@@ -76,10 +76,10 @@
                                                 </div>
                                                 <div class="hot-tags-img">
                                                     <ul>
-                                                        <li v-bind:class="key < 2 ? '' : 'displaynone'" v-for="(key, cg) in item.themes" style="background-image: url({{cg.image}})">{{key}}</li>
+                                                        <li @click="viewThisCG(cg._id)" v-bind:class="key < 2 ? '' : 'displaynone'" v-for="(key, cg) in item.themes" style="background-image: url({{cg.image}})"></li>
                                                     </ul>
                                                     <ul>
-                                                        <li v-bind:class="key >= 2 ? '' : 'displaynone'" v-for="(key, cg) in item.themes" style="background-image: url({{cg.image}})">{{key}}</li>
+                                                        <li @click="viewThisCG(item._id)" v-bind:class="key >= 2 ? '' : 'displaynone'" v-for="(key, cg) in item.themes" style="background-image: url({{cg.image}})"></li>
                                                     </ul>
                                                 </div>
                                             </div>
