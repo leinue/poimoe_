@@ -30,39 +30,39 @@ module.exports = {
       }).populate({
         path: 'user_id follow follower',
         populate: {
-          path: 'posts',
-          sort: {
-            createdAt: -1
-          },
-          options: {
-            limit: 5,
-            skip: skipFrom
-          }
+          path: 'posts'
         }
       }).exec(cb);
 
     };
 
     relationsSchema.statics.hasId = function(uid, id_find, cb) {
-      this.findByUid(uid, function(err, u) {
+      this.findOne({
+        user_id: uid,
+        follow: {
+          '$in': [id_find]
+        }
+      }, function(err, u) {
 
         if(err) {
           cb(err, u);
         }
 
-        if(u.length === 0) {
+        if(u == null) {
           cb(err, u, false);
-        }
- 
-        var followList = u.follow;
-
-        for (var i = 0; i < followList.length; i++) {
-          var curr = followList[i];
-          if(curr === id_find) {
-            cb(err, u, true);
-            break;
+        }else {
+          if(u.length === 0) {
+            cb(err, u, false);
           }
-        };
+          
+          var followList = u.follow;
+
+          if(typeof followList == 'undefined') {
+            cb(err, u, false);
+          }else {
+            cb(err, u, followList.length > 0);
+          }
+        }
 
       });
     };

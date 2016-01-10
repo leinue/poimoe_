@@ -52,71 +52,75 @@ var index = {
 					res.send(util.retMsg(401, "该被关注者已被删除，无权操作"));
 				}
 
-			});
+				relations.find({
+					user_id: followerId
+				}, function(err, relation_follower) {
+					if(err) {
+						res.send(util.retMsg(401, err.toString()));
+					}
 
-			relations.findByUid(followerId, function(err, relation_follower) {
-				if(err) {
-					res.send(util.retMsg(401, err.toString()));
-				}
+					if(relation_follower.length === 0) {
+						//如果用户在relations里没有记录则先插入
+						var relation = new relations({
+							user_id: follower[0]._id,
+							follow: [following[0]._id]
+					    });
 
-				if(relation_follower.length === 0) {
-					//如果用户在relations里没有记录则先插入
-					var relation = new relations({
-						user_id: follower[0]._id,
-						follow: [following[0]._id]
-				    });
+					    relation.save(function(err, r) {
 
-				    relation.save(function(err, r) {
+					      if(err) {
+					        res.send(util.retMsg(401, err.toString()));
+					      }
 
-				      if(err) {
-				        res.send(util.retMsg(401, err.toString()));
-				      }
+					      res.send(util.retMsg(200, r));
 
-				      res.send(util.retMsg(200, r));
+					    });
+					}else {
+						//如果有则直接push
+						//检查是否重复关注
 
-				    });
-				}else {
-					//如果有则直接push
-					//检查是否重复关注
-			      	relation.hasId(follower[0]._id, following[0]._id, function(err, u, exist) {
-
-			      		if(err) {
-			      			res.send(util.retMsg(401, err.toString()));
-			      		}
-
-			      		if(exist) {
-			      			res.send(util.retMsg('请不要重复关注'));
-			      		}
-
-			      		var query = {
-				        	user_id: follower[0]._id
-				      	};
-
-				      	var options = {
-				        	new: true
-				      	};
-
-			      		follower[0].follow.push(following[0]._id);
-
-				      	var update = {
-				        	follow: follower[0].follow
-				      	};
-
-				      	this.findOneAndUpdate(query, update, options, function(err, new_follow) {
+				      	relations.hasId(follower[0]._id, following[0]._id, function(err, u, exist) {
 
 				      		if(err) {
-			      				res.send(util.retMsg(401, err.toString()));
-			      			}
+				      			res.send(util.retMsg(401, err.toString()));
+				      		}
 
-			      			res.send(util.retMsg(200, new_follow));
+				      		if(exist) {
+				      			res.send(util.retMsg(401, '请不要重复关注'));
+				      		}
+
+				      		var query = {
+					        	user_id: follower[0]._id
+					      	};
+
+					      	var options = {
+					        	new: true
+					      	};
+
+				      		relation_follower[0].follow.push(following[0]._id);
+
+					      	var update = {
+					        	follow: relation_follower[0].follow
+					      	};
+
+					      	relations.findOneAndUpdate(query, update, options, function(err, new_follow) {
+
+					      		if(err) {
+				      				res.send(util.retMsg(401, err.toString()));
+				      			}
+
+				      			res.send(util.retMsg(200, new_follow));
+
+					      	});
 
 				      	});
 
-			      	});
+					}
 
-				}
+				});
 
 			});
+
 		});
 
 	},

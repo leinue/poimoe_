@@ -7,7 +7,7 @@
 		    	<p style="margin-bottom:10px">{{username}}</p>
 		    	<span class="description">{{introduction}}</span>
 		    	<div style="padding-top:15px;">
-					<button v-show="uid != myUid" style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-plus"></span> 关注</button>
+					<button @click="followThisUser(uid)" v-show="uid != myUid" style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-plus"></span> 关注</button>
 		    	</div>
 		    	<p class="relations">
 			    	<span @click="toFollowing()">{{followingCount}} 关注</span>
@@ -116,10 +116,32 @@
 		},
 
 		methods: {
+
 			pathTo: function(path) {
 				util.cancelActiveMenu();
 				router.go(path);
+			},
+
+			followThisUser: function(uid) {
+
+				services.RelationsService.follow(this.myUid, uid, function(res) {
+
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					util.messageBox(data);
+
+				}, function(err) {
+					util.handleError(err);
+				});
+
 			}
+
 		}
 	}
 

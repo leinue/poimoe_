@@ -23,7 +23,6 @@ module.exports = {
 				return _this.$http.get(baseUrl + '/relations/twoway/' + uid1 + '/' + uid2);
 			}
 
-
 		}
 
 	}

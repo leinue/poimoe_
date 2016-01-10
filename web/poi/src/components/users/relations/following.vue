@@ -21,7 +21,7 @@
 
 						<div class="timeline-content-header">
 							<div class="header-left">
-								xieyang
+								{{user.username}}
 							</div>
 							<div class="header-right">
 								<button style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-plus"></span> 取消关注</button>
@@ -97,7 +97,9 @@
 							return false;
 						}
 
-						_this.$set('following', data);
+						_this.$set('following', data[7].follow);
+
+						console.log(data[7].follow);
 
 					}, function(err) {
 						util.handleError(err);
