@@ -31,12 +31,13 @@ module.exports = {
         path: 'user_id follow follower',
         populate: {
           path: 'posts'
-        }
+        },
+        select: '_id username photo posts'
       }).exec(cb);
 
     };
 
-    relationsSchema.statics.hasId = function(uid, id_find, cb) {
+    relationsSchema.statics.followHasId = function(uid, id_find, cb) {
       this.findOne({
         user_id: uid,
         follow: {
@@ -54,7 +55,7 @@ module.exports = {
           if(u.length === 0) {
             cb(err, u, false);
           }
-          
+
           var followList = u.follow;
 
           if(typeof followList == 'undefined') {

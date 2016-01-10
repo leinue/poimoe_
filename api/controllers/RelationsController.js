@@ -79,7 +79,7 @@ var index = {
 						//如果有则直接push
 						//检查是否重复关注
 
-				      	relations.hasId(follower[0]._id, following[0]._id, function(err, u, exist) {
+				      	relations.followHasId(follower[0]._id, following[0]._id, function(err, u, exist) {
 
 				      		if(err) {
 				      			res.send(util.retMsg(401, err.toString()));
@@ -245,7 +245,23 @@ var index = {
 
 		var user = ctrlInitial.models.User();
 
-		user.findById(uid, function(err, u) {
+		/*
+		.populate({
+			path: 'posts',
+			options: {
+				limit: 3
+			},
+			select: '_id image',
+			sort: {
+				createdAt: -1
+			}
+		})
+		*/
+
+		user.find({
+			_id: uid,
+			isDeleted: false
+		}).select('_id username photo').exec(function(err, u) {
 
 			if(err) {
 				res.send(util.retMsg(401, err.toString()));
@@ -262,6 +278,10 @@ var index = {
 				if(err) {
 					res.send(util.retMsg(401, err.toString()));
 				}
+
+				console.log(themes);
+
+				r[0].user_id.posts = themes;
 
 				res.send(util.retMsg(200, r));
 
