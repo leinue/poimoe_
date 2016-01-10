@@ -43,6 +43,10 @@ module.exports = {
         type: Schema.Types.ObjectId,
         ref: 'themes'
       }],
+      favouritedCount: {
+        type: Schema.Types.Number,
+        default: 0
+      },
       accessToken: {
         type: String,
         default: 'undefined'

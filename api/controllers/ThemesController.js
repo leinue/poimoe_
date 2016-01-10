@@ -179,7 +179,7 @@ var index = {
 						res.send(util.retMsg(401, err.toString()));
 					}
 
-			      	res.send(util.retMsg(200, "删除主题成功");
+			      	res.send(util.retMsg(200, "删除主题成功"));
 
 				});
 
