@@ -2,6 +2,14 @@
 
 	{{init()}}
 
+    <div @click="pathTo('public')" id="main-page" class="type-circle header-circle active" v-bind:class="currentPage == 'public' ? 'active' : ''">
+        <span class="glyphicon glyphicon-home"></span>
+    </div>
+
+    <div @click="pathTo('personal')" id="search-button" class="type-circle header-circle">
+        <span class="glyphicon glyphicon-search"></span>
+    </div>
+
 	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <!-- Brand and toggle get grouped for better mobile display -->
@@ -77,7 +85,7 @@
 
   	<div class="row" style="margin-right:0px">
   		<div class="col-xs-12" style="padding-left: 0px;padding-right: 0px">
-  			<div class="menu-header" id="poi-header">
+  			<div class="menu-header" id="poi-header" style="background-color: rgb(249, 245, 239)">
 	  			<ul>
 					<li route="/index"><span @click="pathTo('/index')" v-bind:class="menu.currentName != '/index' ? '' : 'active'">主页</span></span></li>
 					<li route="/timeline"><span @click="pathTo('/timeline')" v-bind:class="menu.currentName != '/timeline' ? '' : 'active'">时间线</span></li>
@@ -393,8 +401,13 @@
 
 <style>
 	
+	.header-circle {
+		width: 40px!important;
+		height: 40px!important;
+		line-height: 40px!important;
+	}
+
 	.menu-header {
-		border-bottom: 1px solid rgb(220, 220, 220);
 		display: table;
 		margin-top: -15px;
 		width: 100%;
@@ -408,11 +421,11 @@
 	.menu-header ul li {
 		display: table-cell;
 		text-align: center;
-		padding-bottom: 8px;
+		padding-top: 8px;
 	}
 
 	.menu-header ul li span {
-		padding-bottom: 8px;
+		padding-top: 8px;
 		letter-spacing: 1px;
 		color: rgb(68, 68, 68);
 		font-weight: 200;
@@ -423,7 +436,7 @@
 	}
 
 	.menu-header ul li span.active {
-		border-bottom: 2px solid rgb(0, 133, 242);
+		border-top: 2px solid rgb(0, 133, 242);
 		color: rgb(0, 133, 242)!important;
 	}
 
@@ -497,6 +510,15 @@
 	#modify-pencil:hover {
 		cursor: pointer;
 		color: rgb(35, 119, 186);
+	}
+
+	#main-page {
+		top: 10px;
+	}
+
+	#search-button {
+		top: 10px;
+		left: 70px;
 	}
 
 </style>

@@ -1,7 +1,7 @@
 <template>
 
 	<div>
-        <div class="row" style="border-bottom: 1px solid rgb(220, 220, 220);background-color: #eee;">
+        <div class="row" style="background-color: #eee;">
             <div class="col-md-6 col-md-offset-3" style="padding:10px;">
                 <div class="search-area">
                     <div class="input-group">

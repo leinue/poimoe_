@@ -1,7 +1,7 @@
 <template>
     
-    <div>
-        <search></search>
+    <div style="">
+        <!-- <search></search> -->
 
         <div class="row" style="border-bottom: 1px solid rgb(220, 220, 220)">
 
