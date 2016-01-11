@@ -2,11 +2,11 @@
 
 	<div class="timeline-master bg">
 		
-		<div @click="pathTo('public')" id="public-timeline" class="type-circle" v-bind:class="currentPage == 'public' ? 'active' : ''">
+		<div @click="pathTo('public')" id="public-timeline" class="type-circle timeline-circle" v-bind:class="currentPage == 'public' ? 'active' : ''">
 			公共
 		</div>
 
-		<div @click="pathTo('personal')" id="personal-timeline" class="type-circle right" v-bind:class="currentPage != 'public' ? 'active' :  ''">
+		<div @click="pathTo('personal')" id="personal-timeline" class="type-circle right timeline-circle" v-bind:class="currentPage != 'public' ? 'active' :  ''">
 			我的	
 		</div>
 
@@ -74,7 +74,6 @@
 		height: 50px;
 		border-radius: 50%;
 		border: 1px solid rgb(0, 149, 219);
-		left: 20px;
 		top: 110px;
 		transition: all .3s ease;
 		text-align: center;
@@ -92,6 +91,10 @@
 		transform: scale(1.2, 1.2);
 		cursor: pointer;
 		color: rgb(255, 255, 255);
+	}
+
+	.timeline-circle {
+		left: 20px;
 	}
 
 	.type-circle.active {

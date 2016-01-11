@@ -10,6 +10,18 @@
         <span class="glyphicon glyphicon-search"></span>
     </div>
 
+	<div @click="pathToNewCGPage()" id="newcg-button" class="type-circle header-circle right active">
+        <span class="glyphicon glyphicon-plus"></span>
+    </div>
+
+	<div @click="showMyProfile()" id="userprofile-button" class="type-circle header-circle right active">
+        <span class="glyphicon glyphicon-user"></span>
+    </div>
+
+	<div @click="pathTo('personal')" id="exit-button" class="type-circle header-circle right active">
+        <span class="glyphicon glyphicon-log-out"></span>
+    </div>
+
 	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <!-- Brand and toggle get grouped for better mobile display -->
@@ -25,11 +37,11 @@
 
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav navbar-right" id="profile-menu">
-	        <li @click="pathToNewCGPage()"><a>投稿</a></li>
-	        <li v-show="isLogin == 'true'"><a @click="showMyProfile()">个人中心</a></li>
+	        <!-- <li @click="pathToNewCGPage()"><a>投稿</a></li> -->
+	        <!-- <li v-show="isLogin == 'true'"><a @click="showMyProfile()">个人中心</a></li> -->
 	       	<li v-show="isLogin == 'false'" @click="toLogin()"><a>登录</a></li>
 	       	<li v-show="isLogin == 'false'" @click="toRegister()"><a>注册</a></li>
-	       	<li v-show="isLogin == 'true'" @click="logout()"><a>退出</a></li>
+	       	<!-- <li v-show="isLogin == 'true'" @click="logout()"><a>退出</a></li> -->
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
@@ -409,7 +421,7 @@
 
 	.menu-header {
 		display: table;
-		margin-top: -15px;
+		margin-top: -19px;
 		width: 100%;
 	}
 
@@ -513,12 +525,33 @@
 	}
 
 	#main-page {
-		top: 10px;
+		top: 5px;
+		left: 20px;
 	}
 
 	#search-button {
-		top: 10px;
+		top: 5px;
 		left: 70px;
+	}
+
+	.type-circle.right {
+		top: 5px;
+		right: 0!important;
+	}
+
+	#newcg-button {
+		right: 120px!important;
+		top: 5px;
+	}
+
+	#exit-button {
+		right: 20px!important;
+		top: 5px;
+	}
+
+	#userprofile-button {
+		right: 70px!important;
+		top: 5px;
 	}
 
 </style>
