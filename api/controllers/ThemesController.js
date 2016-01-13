@@ -173,7 +173,7 @@ var index = {
 
 				var Tags = ctrlInitial.models.Tags();
 
-				Tags.updateCiteCount(theme.tag_list, true, function(err, tagNew, result) {
+				Tags.updateCiteCount(theme.tag_list, false, function(err, tagNew, result) {
 
 					if(err) {
 						res.send(util.retMsg(401, err.toString()));
