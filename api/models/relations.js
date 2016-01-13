@@ -64,6 +64,29 @@ module.exports = {
 
     };
 
+    relationsSchema.statics.updateFollowing = function(obj, cb) {
+
+      var user_id = obj.user_id;
+      var unfollower = obj.unfollower;
+
+      return this.findOneAndUpdate({
+        user_id: user_id
+      }, {
+        follower: unfollower
+      }, {
+        new: true
+      }, function(err, new_unfollower) {
+
+        if(err) {
+          cb(err, new_unfollower);
+        }
+
+        cb(err, new_unfollower);
+
+      });
+
+    };
+
     relationsSchema.statics.followHasId = function(uid, id_find, cb) {
       this.findOne({
         user_id: uid,

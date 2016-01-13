@@ -87,7 +87,7 @@ module.exports = {
 	},
 
 	handleError: function(err) {
-		this.messageBox('Error status: ' + err.status + ';Error text: ' + err.statusText);
+		this.messageBox('Error status: ' + err.status + '\r\nError text: ' + err.statusText + '\r\nError data:\r\n' + JSON.stringify(err.data));
 	},
 
 	session: function(key, val) {

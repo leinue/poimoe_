@@ -71,7 +71,7 @@ module.exports = {
     server.get('/settings/other/update/:value', ctrl.settingsCtrl.updateOther);
 
     server.get('/relations/follow/:followerId/:followingId', ctrl.relationsCtrl.follow);
-    server.get('/relations/unfollow/:unfollowerId/:unfollowingid', ctrl.relationsCtrl.unfollow);
+    server.get('/relations/unfollow/:unfollowerId/:unfollowingId', ctrl.relationsCtrl.unfollow);
     server.get('/relations/twoway/:id1/:id2', ctrl.relationsCtrl.isTwoWay);
     server.get('/relations/select/:uid/:page/:count', ctrl.relationsCtrl.getFollow);
 

@@ -139,7 +139,7 @@ var index = {
 										        res.send(util.retMsg(401, err.toString()));					      		
 									      	}
 
-										    res.send(util.retMsg(200, r));
+										    res.send(util.retMsg(200, '关注成功'));
 
 									    });
 
@@ -177,7 +177,10 @@ var index = {
 		var relations = ctrlInitial.models.Relations();
 		var user = ctrlInitial.models.User();
 
-		user.findById(unfollowerId, function(err, unfollower) {
+		user.find({
+			_id: unfollowerId,
+			isDeleted: false
+		}, function(err, unfollower) {
 			if(err) {
 				res.send(util.retMsg(401, err.toString()));
 			}
@@ -211,7 +214,9 @@ var index = {
 					res.send(util.retMsg(401, "该被关注者已被删除，无权操作"));
 				}
 
-				relations.findById(unfollowerId, function(err, unfollower_realtion) {
+				relations.find({
+					user_id: unfollowerId
+				}, function(err, unfollower_realtion) {
 
 					if(err) {
 						res.send(util.retMsg(401, err.toString()));
@@ -222,45 +227,83 @@ var index = {
 					}
 
 					var followList = unfollower_realtion[0].follow;
+					var tmpFollowList = followList;
 
 					var flag = false;
 
 					for (var i = 0; i < followList.length; i++) {
 						var curr = followList[i];
-
-						if(curr === unfollowingId) {
-							delete followList[i];
+						if(curr == unfollowingId) {
 							flag = true;
-							break;
+					      	tmpFollowList.splice(i, 1);
 						}
-
 					};
 
 					if(!flag) {
-						res.send(util.retMsg(401, "无此被关注的人"));
+						res.send(util.retMsg(401, "取消关注失败"));
+					}else {
+
+						var query = {
+				        	user_id: unfollowerId
+				      	};
+
+				      	var options = {
+				        	new: true
+				      	};
+
+				      	var update = {
+				        	follow: tmpFollowList
+				      	};
+
+				      	relations.findOneAndUpdate(query, update, options, function(err, new_follow) {
+
+				      		if(err) {
+			      				res.send(util.retMsg(401, err.toString()));
+			      			}
+
+			      			relations.findOne({
+			      				user_id: unfollowingId
+			      			}, function(err, unfollowingRelations) {
+
+			      				if(err) {
+			      					res.send(util.retMsg(401, err.toString()));
+			      				}
+
+			      				if(unfollowingRelations == null) {
+			      					res.send(util.retMsg(200, '取消关注成功'));				      					
+			      				}
+
+			      				var unfollowingList = unfollowingRelations.follower;
+			      				var tmpList = unfollowingList;
+
+			      				var flag = false;
+
+			      				for (var i = 0; i < unfollowingList.length; i++) {
+			      					var curr = unfollowingList[i];
+			      					if(curr == unfollowerId) {
+			      						flag = true;
+			      						tmpList.splice(i, 1);
+			      					}
+			      				};
+
+			      				relations.updateFollowing({
+				      				user_id: unfollowingId,
+				      				unfollower: tmpList
+				      			}, function(err, newunfo) {
+
+				      				if(err) {
+				      					res.send(util.retMsg(401, err.toString()));
+				      				}
+
+					      			res.send(util.retMsg(200, '取消关注成功'));
+
+				      			});
+
+			      			});
+
+				      	});
+
 					}
-
-					var query = {
-			        	user_id: unfollowerId
-			      	};
-
-			      	var options = {
-			        	new: true
-			      	};
-
-			      	var update = {
-			        	follow: followList
-			      	};
-
-			      	relations.findOneAndUpdate(query, update, options, function(err, new_follow) {
-
-			      		if(err) {
-		      				res.send(util.retMsg(401, err.toString()));
-		      			}
-
-		      			res.send(util.retMsg(200, new_follow));
-
-			      	});
 
 				});
 
