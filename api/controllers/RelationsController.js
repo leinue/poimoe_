@@ -127,12 +127,12 @@ var index = {
 					      				user_id: following[0]._id
 					      			}).exec(function(err, new_follow) {
 
-					      				var follower = new_follow.follower;
-					      				follower.unshift(follower[0]._id);
+					      				var followerNew = new_follow.follower;
+					      				followerNew.unshift(follower[0]._id);
 
 									    relations.updateFollower({
 									      user_id: following[0]._id,
-									      follower: follower
+									      follower: followerNew
 									    }, function(err, fer) {
 
 									      	if(err) {

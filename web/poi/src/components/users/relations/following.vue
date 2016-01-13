@@ -85,6 +85,7 @@
 					}
 
 					util.messageBox(data);
+					localStorage.followingCount = parseInt(localStorage.followingCount) - 1;
 
 				}, function(err) {
 					util.handleError(err);
