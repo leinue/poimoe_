@@ -72,7 +72,20 @@ var index = {
 					        res.send(util.retMsg(401, err.toString()));
 					      }
 
-					      res.send(util.retMsg(200, r));
+					      //插入成功后要再在被关注者列表中unshift关注者id
+
+					      relations.updateFollower({
+					      	user_id: following[0]._id,
+					      	follower: [follower[0]._id]
+					      }, function(err, fer) {
+
+					      	if(err) {
+						        res.send(util.retMsg(401, err.toString()));
+					      	}
+
+						    res.send(util.retMsg(200, r));
+
+					      });
 
 					    });
 					}else {
@@ -108,7 +121,29 @@ var index = {
 					      				res.send(util.retMsg(401, err.toString()));
 					      			}
 
-					      			res.send(util.retMsg(200, new_follow));
+					      			//插入成功后要再在被关注者列表中unshift关注者id
+
+					      			relations.findOne({
+					      				user_id: following[0]._id
+					      			}).exec(function(err, new_follow) {
+
+					      				var follower = new_follow.follower;
+					      				follower.unshift(follower[0]._id);
+
+									    relations.updateFollower({
+									      user_id: following[0]._id,
+									      follower: follower
+									    }, function(err, fer) {
+
+									      	if(err) {
+										        res.send(util.retMsg(401, err.toString()));					      		
+									      	}
+
+										    res.send(util.retMsg(200, r));
+
+									    });
+
+					      			});
 
 						      	});
 

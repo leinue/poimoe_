@@ -63,6 +63,9 @@
 								<li @click="transferThis(item._id)">
 									<span class="glyphicon glyphicon-transfer"></span>
 								</li>
+								<li @click="removeThisCG(item._id)">
+									<span class="glyphicon glyphicon-trash"></span>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -139,6 +142,32 @@
 
 			pathToSearch: function(name) {
 				util.pathToSearch(name);
+			},
+
+			removeThisCG: function(id) {
+
+				var isConfirmed = util.confirm('您确定要删除该CG吗');
+
+				if(isConfirmed) {
+
+					services.CGService.remove(id).then(function(res) {
+
+						var code = res.data.code;
+						var data = res.data.message;
+
+						if(code != 200) {
+							util.messageBox(data);
+							return false;
+						}
+
+						util.messageBox(data);
+
+					}, function(err) {
+						util.handleError(err);
+					});
+
+				}
+
 			}
 		},
 

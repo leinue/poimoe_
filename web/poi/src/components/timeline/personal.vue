@@ -69,6 +69,9 @@
 							<li @click="transferThis(item._id)">
 								<span class="glyphicon glyphicon-transfer"></span>
 							</li>
+							<li ng-show="item.user_id == myUid" @click="removeThisCG(item._id)">
+								<span class="glyphicon glyphicon-trash"></span>
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -94,7 +97,8 @@
 				myPhoto: 'background-image: url(' + localStorage.photo + ')!important;',
 				username: localStorage.username,
 				publishTime: 'null',
-				myTimeline: {}
+				myTimeline: {},
+				myUid: localStorage._id
 			}
 		},
 
@@ -113,6 +117,8 @@
 					var data = res.data.message;
 
 					_this.myTimeline = data;
+
+					console.log(data);
 
 				}, function(err) {
 					util.handleError(err);

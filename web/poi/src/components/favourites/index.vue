@@ -48,6 +48,9 @@
 								<li @click="transferThis(item._id)">
 									<span class="glyphicon glyphicon-transfer"></span>
 								</li>
+								<li ng-show="item.user_id._id == myUid" @click="removeThisCG(item._id)">
+									<span class="glyphicon glyphicon-trash"></span>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -72,7 +75,9 @@
 		data() {
 
 			return {
-				favouritesList: {}
+				favouritesList: {},
+
+				myUid: localStorage._id
 			}
 
 		},
@@ -119,7 +124,7 @@
 							return false;
 						}
 
-						console.log(data[0].favourites);
+						console.log(data[0].favourites[0].user_id);
 
 						_this.$set('favouritesList', data[0].favourites);
 

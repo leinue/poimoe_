@@ -82,6 +82,10 @@ module.exports = {
 		alert(message);
 	},
 
+	confirm: function(content) {
+		return confirm(content);
+	},
+
 	handleError: function(err) {
 		this.messageBox('Error status: ' + err.status + ';Error text: ' + err.statusText);
 	},

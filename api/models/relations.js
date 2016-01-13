@@ -40,6 +40,30 @@ module.exports = {
 
     };
 
+    relationsSchema.statics.updateFollower = function(obj, cb) {
+
+      var user_id = obj.user_id;
+      var follower = obj.follower;
+
+      return this.findOneAndUpdate({
+        user_id: user_id
+      }, {
+        follower: follower
+      }, {
+        new: true,
+        upsert: true
+      }, function(err, new_follower) {
+
+        if(err) {
+          cb(err, new_follower);
+        }
+
+        cb(err, new_follower);
+
+      });
+
+    };
+
     relationsSchema.statics.followHasId = function(uid, id_find, cb) {
       this.findOne({
         user_id: uid,

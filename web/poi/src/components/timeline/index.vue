@@ -280,6 +280,10 @@
 		color: rgb(241, 130, 39);
 	}
 
+	.timeline-real-footer ul li:nth-child(4) span:hover {
+		color: rgb(255, 63, 74);
+	}
+
 	.timeline-tags span{
 		color: rgb(0, 147, 222)!important;
 	}

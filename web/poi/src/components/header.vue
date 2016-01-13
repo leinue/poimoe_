@@ -14,11 +14,11 @@
         <span class="glyphicon glyphicon-plus"></span>
     </div>
 
-	<div @click="showMyProfile()" id="userprofile-button" class="type-circle header-circle right active">
+	<div v-show="isLogin == 'true'" @click="showMyProfile()" id="userprofile-button" class="type-circle header-circle right active">
         <span class="glyphicon glyphicon-user"></span>
     </div>
 
-	<div @click="pathTo('personal')" id="exit-button" class="type-circle header-circle right active">
+	<div v-show="isLogin == 'true'" @click="pathTo('personal')" id="exit-button" class="type-circle header-circle right active">
         <span class="glyphicon glyphicon-log-out"></span>
     </div>
 
@@ -252,6 +252,10 @@
 
 			syncProfile: function() {
 
+				this.showRight = false;
+
+				var _this = this;
+
 				services.UserService.countDraft(localStorage._id).then(function(res) {
 
 					var code = res.data.code;
@@ -318,6 +322,8 @@
 
 					_this.followingCount = data.following;
 					_this.followerCount = data.follower;
+
+					_this.showRight = true;
 
 				}, function(err) {
 					util.handleError(err);

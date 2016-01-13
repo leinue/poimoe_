@@ -1,4 +1,4 @@
 module.exports = {
 	entry: '#poi',
-	title: 'poi - Poimoe'
+	title: 'Poi | Poimoe'
 }

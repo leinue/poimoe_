@@ -124,7 +124,7 @@
 
 			followThisUser: function(uid) {
 
-				services.RelationsService.follow(this.myUid, uid, function(res) {
+				services.RelationsService.follow(this.myUid, uid).then(function(res) {
 
 					var code = res.data.code;
 					var data = res.data.message;
@@ -135,6 +135,7 @@
 					}
 
 					util.messageBox(data);
+					localStorage.followingCount = parseInt(localStorage.followingCount) + 1;
 
 				}, function(err) {
 					util.handleError(err);
