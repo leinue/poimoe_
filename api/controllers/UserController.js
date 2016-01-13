@@ -702,8 +702,56 @@ var index = {
           isDeleted: true
         }, function(err, deletedCount) {
 
+          if(err) {
+            res.send(util.retMsg(401, err.toString()));
+          }
+
           result.deletedCount = deletedCount;
-          res.send(util.retMsg(200, result));
+
+          if(req.username == 'anonymous') {
+
+            res.send(util.retMsg(200, result));
+
+          }else {
+
+            //如果用户已登录，要返回是否和当前用户有关注或被关注关系
+
+            User.findByAccessToken(req.authorization.credentials, function(err, currentUser) {
+
+              if(err) {
+                res.send(util.retMsg(401, err.toString()));
+              }
+
+              currentUser = currentUser[0];
+
+              var Relations = ctrlInitial.models.Relations();
+
+              Relations.followerHasId(currentUser._id, uid, function(err, r1, followedMe) {
+
+                if(err) {
+                  res.send(util.retMsg(401, err.toString()));
+                }
+
+                result.followedMe = followedMe;
+
+                Relations.followHasId(currentUser._id, uid, function(err, r2, followedByMe) {
+
+                  if(err) {
+                    res.send(util.retMsg(401, err.toString()));
+                  }
+
+                  result.followedByMe = followedByMe;
+
+                  res.send(util.retMsg(200, result));
+
+                });
+
+              });
+
+
+            });
+
+          }
 
         });
 
@@ -714,8 +762,6 @@ var index = {
   },
 
   getRecommended: function(req, res, next) {
-
-    var User = ctrlInitial.models.User();
 
     var User = ctrlInitial.models.User();
 

@@ -114,6 +114,33 @@ module.exports = {
       });
     };
 
+    relationsSchema.statics.followerHasId = function(uid, id_find, cb) {
+      this.findOne({
+        user_id: uid,
+        follower: {
+          '$in': [id_find]
+        }
+      }, function(err, u) {
+
+        if(err) {
+          cb(err, u);
+        }
+
+        if(u == null) {
+          cb(err, u, false);
+        }else {
+          var followList = u.follow;
+
+          if(typeof followList == 'undefined') {
+            cb(err, u, false);
+          }else {
+            cb(err, u, followList.length > 0);
+          }
+        }
+
+      });
+    };
+
     return relationsSchema;
 
   }

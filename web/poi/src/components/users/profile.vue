@@ -7,7 +7,8 @@
 		    	<p style="margin-bottom:10px">{{username}}</p>
 		    	<span class="description">{{introduction}}</span>
 		    	<div style="padding-top:15px;">
-					<button @click="followThisUser(uid)" v-show="uid != myUid" style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-plus"></span> 关注</button>
+					<button v-show="uid != myUid && !followedByMe" @click="followThisUser(uid)" style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-plus"></span> 关注</button>
+					<button v-show="uid != myUid && followedByMe == true" @click="followThisUser(uid)" v-show="uid != myUid" style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-minus"></span> 取消关注</button>
 		    	</div>
 		    	<p class="relations">
 			    	<span @click="toFollowing()">{{followingCount}} 关注</span>
@@ -63,7 +64,10 @@
 				introduction: '',
 				photo: '',
 				uid: '',
-				myUid: localStorage._id
+				myUid: localStorage._id,
+
+				followedMe: false,
+				followedByMe: false
 
 			};
 
@@ -102,7 +106,11 @@
 							_this.$set('introduction', profile.intro);
 							profile.photo = filters.get('photoNullToVision')(profile.photo);
 							_this.$set('photo', 'background-image:url(' + profile.photo + ')');
-							_this.$set('uid', profile._id)
+							_this.$set('uid', profile._id);
+							_this.$set('followedMe', data.followedMe);
+							_this.$set('followedByMe', data.followedByMe);
+
+							console.log(data);
 
 						}, function(err) {
 							util.handleError(err);
