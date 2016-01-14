@@ -7,6 +7,7 @@ var relationsCtrl = require('./RelationsController');
 var replysCtrl = require('./ReplysController');
 var themesCtrl = require('./ThemesController');
 var userGroupsCtrl = require('./UserGroupsController');
+var timelineCtrl = require('./TimelineController');
 
 var db = {
   mongoose: undefined
@@ -31,6 +32,8 @@ module.exports = {
 
 	replysCtrl: replysCtrl.init(models),
 
-	userGroupsCtrl: userGroupsCtrl.init(models)
+	userGroupsCtrl: userGroupsCtrl.init(models),
+
+	timelineCtrl: timelineCtrl.init(models);
 
 };
