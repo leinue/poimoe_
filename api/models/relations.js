@@ -88,10 +88,17 @@ module.exports = {
     };
 
     relationsSchema.statics.followHasId = function(uid, id_find, cb) {
+
+      if(typeof id_find === 'object') {
+        id_find = id_find;
+      }else {
+        id_find = [id_find];
+      }
+
       this.findOne({
         user_id: uid,
         follow: {
-          '$in': [id_find]
+          '$in': id_find
         }
       }, function(err, u) {
 
@@ -115,6 +122,13 @@ module.exports = {
     };
 
     relationsSchema.statics.followerHasId = function(uid, id_find, cb) {
+
+      if(typeof id_find === 'object') {
+        id_find = id_find;
+      }else {
+        id_find = [id_find];
+      }
+
       this.findOne({
         user_id: uid,
         follower: {

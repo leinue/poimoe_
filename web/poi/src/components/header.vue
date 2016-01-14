@@ -10,7 +10,7 @@
         <span class="glyphicon glyphicon-search"></span>
     </div>
 
-	<div @click="pathToNewCGPage()" id="newcg-button" class="type-circle header-circle right active">
+	<div v-show="isLogin == 'true'" @click="pathToNewCGPage()" id="newcg-button" class="type-circle header-circle right active">
         <span class="glyphicon glyphicon-plus"></span>
     </div>
 

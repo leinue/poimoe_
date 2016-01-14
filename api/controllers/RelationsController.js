@@ -344,7 +344,7 @@ var index = {
 		user.find({
 			_id: uid,
 			isDeleted: false
-		}).select('_id username photo').exec(function(err, u) {
+		}).select('_id username photo followedMe followedByMe').exec(function(err, u) {
 
 			if(err) {
 				res.send(util.retMsg(401, err.toString()));
@@ -354,15 +354,59 @@ var index = {
 				res.send(util.retMsg(401, "用户不存在"));
 			}
 
-			var relations = ctrlInitial.models.Relations();
+			var Relations = ctrlInitial.models.Relations();
 
-			relations.findByUid(uid, page, count, function(err, r) {
+			Relations.findByUid(uid, page, count, function(err, r) {
 
 				if(err) {
 					res.send(util.retMsg(401, err.toString()));
 				}
 
-				res.send(util.retMsg(200, r));
+				var followList = r[0].follow;
+				var followerList = r[0].follower;
+
+				var folen = followList.length - 1;
+				var forlen = followerList.length - 1;
+
+				var result = r[0];
+
+				followerList.forEach(function(val, key) {
+
+		            Relations.followerHasId(val._id, uid, function(err, r1, followedByMe) {
+
+		                if(err) {
+		                  res.send(util.retMsg(401, err.toString()));
+		                }
+
+		                result.follower[key].followedByMe = followedByMe;
+	                  	result.follower[key].followedMe = true;
+
+		                if(key == forlen) {
+
+		                	followList.forEach(function(v, k) {
+
+		                		Relations.followHasId(v.id, uid, function(err, r2, followedMe) {
+
+				                  if(err) {
+				                    res.send(util.retMsg(401, err.toString()));
+				                  }
+
+				                  result.follow[k].followedMe = followedMe;
+				                  result.follow[k].followedByMe = true;
+
+				                  if(k == forlen) {
+					                  res.send(util.retMsg(200, [result]));
+				                  }
+
+				                });
+
+		                	});
+
+		                }
+
+		            });
+
+				});
 
 			});
 

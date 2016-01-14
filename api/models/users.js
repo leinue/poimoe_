@@ -47,6 +47,14 @@ module.exports = {
         type: Number,
         default: 0
       },
+      followedByMe: {
+        type: Boolean,
+        default: false
+      },
+      followedMe: {
+        type: Boolean,
+        default: false
+      },
       accessToken: {
         type: String,
         default: 'undefined'
