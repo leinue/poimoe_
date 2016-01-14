@@ -19,6 +19,7 @@ module.exports = {
   tagsModel: undefined,
   themesModel: undefined,
   settingsModel: undefined,
+  timelineModel: undefined,
 
   cacheMongoose: function(mongoose) {
   	if(util.checkIsUndefined(this.mongoose)) {
@@ -84,8 +85,14 @@ module.exports = {
       name: userAndThemes
     });
     return this.themesModel;
-  }
+  },
 
+  Timeline: function() {
+    this.timelineModel = this.cacheModel('timeline', this.timelineModel, {
+      name: userAndThemes
+    });
+    return this.timelineModel;
+  }
 
 };
 

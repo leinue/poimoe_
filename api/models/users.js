@@ -2,6 +2,7 @@
 var util = require('../util/index.js');
 var tagsModel = require('./tags.js');
 var relationsModel = require('./relations.js');
+var timelineModel = require('./timeline.js');
 
 module.exports = {
 
@@ -9,6 +10,7 @@ module.exports = {
   themesModel: undefined,
   tagsModel: undefined,
   relationsModel: undefined,
+  timelineModel: undefined,
 
   init: function(mongoose) {
 
@@ -291,6 +293,18 @@ module.exports = {
         type: Number,
         default: 0
       },
+      repostCount: {
+        type: Number,
+        default: 0
+      },
+      repost: {
+        type: Schema.Types.ObjectId,
+        red: 'themes'
+      },
+      reposter: [{
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+      }],
       createdAt: {
         type: Date,
         default: Date.now
@@ -461,11 +475,13 @@ module.exports = {
 
     var tagsSchema = tagsModel.init(mongoose);
     var relationsSchema = relationsModel.init(mongoose);
+    var timelineSchema = timelineModel.init(mongoose);
 
     this.userModel = util.cacheMongooseModel(mongoose, userSchema, 'users', this.userModel);
     this.themesModel = util.cacheMongooseModel(mongoose, themesSchema, 'themes', this.themesModel);
     this.tagsModel = util.cacheMongooseModel(mongoose, tagsSchema, 'tags', this.tagsModel);
     this.relationsModel = util.cacheMongooseModel(mongoose, relationsSchema, 'relations', this.relationsModel);
+    this.timelineModel = util.cacheMongooseModel(mongoose, timelineSchema, 'timeline', this.timelineModel);
 
     var _this = this;
 
