@@ -34,6 +34,6 @@ module.exports = {
 
 	userGroupsCtrl: userGroupsCtrl.init(models),
 
-	timelineCtrl: timelineCtrl.init(models);
+	timelineCtrl: timelineCtrl.init(models)
 
 };
