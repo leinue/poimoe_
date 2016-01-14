@@ -95,8 +95,8 @@
   		</div>
   	</sidebar>
 
-  	<div class="row" style="margin-right:0px">
-  		<div class="col-xs-12" style="padding-left: 0px;padding-right: 0px">
+  	<div class="row" style="margin-right:0px;margin-bottom:15px;">
+  		<div class="col-md-6 col-md-offset-3" style="padding-left: 0px;padding-right: 0px">
   			<div class="menu-header" id="poi-header" style="background-color: rgb(249, 245, 239)">
 	  			<ul>
 					<li route="/index"><span @click="pathTo('/index')" v-bind:class="menu.currentName != '/index' ? '' : 'active'">主页</span></span></li>
@@ -440,6 +440,7 @@
 		display: table-cell;
 		text-align: center;
 		padding-top: 8px;
+		width: 25%;
 	}
 
 	.menu-header ul li span {
@@ -451,6 +452,7 @@
 
 	.menu-header ul li span:hover {
 		cursor: pointer;
+		border-top: 2px solid rgb(55, 62, 82);
 	}
 
 	.menu-header ul li span.active {
@@ -531,12 +533,12 @@
 	}
 
 	#main-page {
-		top: 5px;
+		top: 15px;
 		left: 20px;
 	}
 
 	#search-button {
-		top: 5px;
+		top: 15px;
 		left: 70px;
 	}
 
@@ -547,17 +549,17 @@
 
 	#newcg-button {
 		right: 120px!important;
-		top: 5px;
+		top: 15px;
 	}
 
 	#exit-button {
 		right: 20px!important;
-		top: 5px;
+		top: 15px;
 	}
 
 	#userprofile-button {
 		right: 70px!important;
-		top: 5px;
+		top: 15px;
 	}
 
 </style>

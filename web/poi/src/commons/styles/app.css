@@ -27,6 +27,10 @@ ul {
 	margin: 0px!important;
 }
 
+.navbar {
+	min-height: 70px;
+}
+
 .navbar-default {
 	background-color: rgb(255, 255, 255);
 	border: none;
@@ -63,8 +67,8 @@ div.container-fluid {
 }
 
 .navbar-header {
-	height: 60px;
-	line-height: 4.5;
+	height: 70px;
+	line-height: 5.5;
 	top: 0;
 	left: 0;
 	width: 100%;

@@ -48,8 +48,8 @@
 			if(_public != null) {
 
 				if(scrollTop > 94) {
-					_public.setAttribute('style','top:60px;width:40px;height:40px;line-height:40px;');
-					_personal.setAttribute('style', 'top:110px;width:40px;height:40px;line-height:40px;');
+					_public.setAttribute('style','top:70px;width:40px;height:40px;line-height:40px;');
+					_personal.setAttribute('style', 'top:120px;width:40px;height:40px;line-height:40px;');
 				}else {
 					_public.setAttribute('style','top:110px;');
 					_personal.setAttribute('style', 'top:180px;');				
