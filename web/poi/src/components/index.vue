@@ -3,8 +3,7 @@
     <div style="">
         <!-- <search></search> -->
 
-                            <button @click="testphpcors()">sdsdds</button>
-
+                            <!-- <button @click="testphpcors()">sdsdds</button> -->
 
         <div class="row" style="border-bottom: 1px solid rgb(220, 220, 220)">
 

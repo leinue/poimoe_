@@ -47,13 +47,22 @@
 	  </div><!-- /.container-fluid -->
 	</nav>
 
+	<style type="text/css">
+		.imghead {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=image);}
+	</style>
+
   	<sidebar :show.sync="showRight" placement="right" header="Poimoe" :width="600">
   		<div class="side-profile">
   			<span title="修改资料" v-show="!editable" class="glyphicon glyphicon-pencil" @click="modifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
   			<span title="同步资料" class="glyphicon glyphicon-refresh" @click="syncProfile()" style="padding-left:15px;" id="modify-pencil"></span>
   		  	<span title="确认修改" v-show="editable" class="glyphicon glyphicon-ok" @click="confirmToModifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
 		  	<span title="取消修改" v-show="editable" class="glyphicon glyphicon-remove" @click="cancelModifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
-		    <div class="side-profile-photo" style="{{photo}}"></div>
+		    <div @click="uploadMyPhoto()" class="side-profile-photo" style="{{photo}}">
+		    	<div id="photo-outer">
+	    			<img class="side-profile-photo imghead" id="photo-inner" width="100" height="100" border="0">
+				</div>
+	    		<input type="file" id="imgbtn-source" style="display:none" v-on:change="previewImage()" />
+		    </div>
 		    <div class="side-profile-detail">
 		    	<div>
    			    	<p style="margin-bottom:10px" v-on:DblClick="modifyProfile()">{{username | nullToVisual}}</p>
@@ -348,7 +357,15 @@
 					_this.followerCount = localStorage.followerCount;
 				}
 
-			}
+			},
+
+			previewImage: function() {
+				var img = util.previewImage('imgbtn-source', 'photo-outer', 'photo-inner', 'side-profile-photo', 'margin-top:0px;');
+			},
+
+	        uploadMyPhoto: function() {
+	        	document.getElementById("imgbtn-source").click();	        		
+	        }
 		},
 
         props: {
@@ -468,6 +485,12 @@
 		background-position: center;
 		background-repeat: no-repeat;
 		margin: 0 auto;
+		cursor: pointer;
+		transition: all .3s ease;
+	}
+
+	.side-profile-photo:hover {
+		transform: scale(1.05, 1.05);
 	}
 
 	.side-profile-detail {

@@ -13,9 +13,13 @@
 						</div>
 					</div>
 
-					<div class="timeline-new-section upload" style="background: rgb(237, 247, 253);height:88px;cursor:default">
-						<div class="timeline-new-section-outer">
-							<h1>上传图像</h1>
+					<div class="timeline-new-section upload" style="background: rgb(237, 247, 253);cursor:default">
+						<div @click="uploadCG()" class="timeline-new-section-outer" id="my-cg-viewer">
+							<h1 v-show="isCGShow === false" style="line-height: 14">上传CG</h1>
+							<div id="cg-outer">
+	    						<img style="display:none" class="cg-viewer" width="100" height="100" border="0">
+							</div>
+	    					<input type="file" id="cg-source" style="display:none" v-on:change="previewImage()" />
 						</div>
 					</div>
 
@@ -83,7 +87,9 @@
 
 				tagsConfrimed: [],
 
-				keyExistsInTagsSearched: true
+				keyExistsInTagsSearched: true,
+
+				isCGShow: false
 
 			}
 		},
@@ -217,7 +223,20 @@
 				}, function(err) {
 					util.handleError(err);
 				});
-			}
+			},
+
+			uploadCG: function() {
+	        	document.getElementById("cg-source").click();
+			},
+
+			previewImage: function() {
+
+				var width = document.getElementById('my-cg-viewer').style.width;
+				var height = document.getElementById('my-cg-viewer').offsetHeight - 2;
+
+				util.previewImage('cg-source', 'cg-outer', 'cg-viewer', '', 'width:100%;height:' + height + 'px;');
+				this.isCGShow = true;
+			},
 		}
 	}
 	
@@ -249,6 +268,7 @@
 
 	.timeline-new-section-outer {
 		border: 1px dashed rgb(220, 220, 217);
+		height: 100%;
 	}
 
 	.timeline-new-section-outer h1 {
