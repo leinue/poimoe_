@@ -17,6 +17,13 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
 header('Access-Control-Allow-Credentials: true');
 header("Content-type: text/html; charset=utf-8");
 
+function returnMessage($status, $message, $ret = false) {
+    if($ret) {
+        return json_encode(array('status' => $status, 'message' => $message));
+    }
+    die(json_encode(array('status' => $status, 'message' => $message)));
+}
+
 //上传文件类型列表
 $uptypes=array(
     'image/jpg',
@@ -32,8 +39,26 @@ if(!isset($_GET['uid'])) {
     returnMessage(401, '缺少uid');
 }
 
+$cors = false;
+
+if(!isset($_GET['cors'])) {
+    $cors = false;
+}else {
+    $cors = true;
+}
+
+$corsurl = '';
+
+if($cors) {
+    if(!isset($_GET['corsurl'])) {
+        returnMessage(401, '指定cors情况下，corsurl不可为空');
+    }else {
+        $corsurl = $_GET['corsurl'];
+    }
+}
+
 $max_file_size = 2000000;     //上传文件大小限制, 单位BYTE
-$destination_folder = "./upload/".$_GET['uid']; //上传文件路径
+$destination_folder = "./upload/".$_GET['uid'].'/'; //上传文件路径
 $watermark = 0;      //是否附加水印(1为加水印,其他为不加水印);
 $watertype = 1;      //水印类型(1为文字,2为图片)
 $waterposition = 1;     //水印位置(1为左下角,2为右下角,3为左上角,4为右上角,5为居中);
@@ -42,34 +67,43 @@ $waterimg = "xplore.gif";    //水印图片
 $imgpreview = 1;      //是否生成预览图(1为生成,其他为不生成);
 $imgpreviewsize= 1/2;    //缩略图比例
 
-function returnMessage($status, $message) {
-    die(json_encode(array('status' => $status, 'message' => $message)));
-}
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
     if (!is_uploaded_file($_FILES["upfile"][tmp_name]))
     //是否存在文件
     {
-        returnMessage(401, '图片不存在');
+        if(!$cors) {
+            returnMessage(401, '图片不存在');            
+        }else {
+            header('Location:'.$corsurl.'?data='.returnMessage(401, '图片不存在', true));
+        }
     }
 
     $file = $_FILES["upfile"];
     if($max_file_size < $file["size"])
     //检查文件大小
     {
-        returnMessage(401, '图片太大');
+        if(!$cors) {
+            returnMessage(401, '图片太大');            
+        }else {
+            header('Location:'.$corsurl.'?data='.returnMessage(401, '图片太大', true));
+        }
     }
 
     if(!in_array($file["type"], $uptypes))
     //检查文件类型
     {
-        returnMessage(401, "文件类型不符，".$file["type"]);
+        if(!$cors) {
+            returnMessage(401, "文件类型不符，".$file["type"]);            
+        }else {
+            header('Location:'.$corsurl.'?data='.returnMessage(401, "文件类型不符，".$file["type"], true));
+        }
     }
 
     if(!file_exists($destination_folder))
     {
         mkdir($destination_folder);
+        chmod($destination_folder, 0777);
     }
 
     $filename=$file["tmp_name"];
@@ -79,12 +113,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $destination = $destination_folder.time().".".$ftype;
     if (file_exists($destination) && $overwrite != true)
     {
-        returnMessage(401, "同名文件已经存在了");
+        if(!$cors) {
+            returnMessage(401, '同名文件已经存在了');            
+        }else {
+            header('Location:'.$corsurl.'?data='.returnMessage(401, '同名文件已经存在了', true));
+        }
     }
 
     if(!move_uploaded_file ($filename, $destination))
     {
-        returnMessage(401, "移动文件出错");
+        if(!$cors) {
+            returnMessage(401, '移动文件出错');            
+        }else {
+            header('Location:'.$corsurl.'?data='.returnMessage(401, '移动文件出错', true));
+        }
     }
 
     $pinfo=pathinfo($destination);
@@ -162,6 +204,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	   //  // echo " alt=\"图片预览:\r文件名:".$destination."\r上传时间:\">";
     // }
 
-    returnMessage(200, array('origin' => 'http://image.poimoe.com/'.$destination_folder.$fname, 'preview' => 'http://image.poimoe.com/'.$destination));
+    if(!$cors) {
+        returnMessage(200, array('origin' => 'http://image.poimoe.com/'.$destination_folder.$fname, 'preview' => 'http://image.poimoe.com/'.$destination));
+    }else {
+        header('Location:'.$corsurl.'?data='.returnMessage(200, array('origin' => 'http://image.poimoe.com/'.$destination_folder.$fname, 'preview' => 'http://image.poimoe.com/'.$destination), true));
+    }
 }
 ?>

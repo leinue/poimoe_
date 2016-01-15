@@ -1,6 +1,9 @@
 <template>
 
 <div style="background: rgb(249, 245, 239);" id="new-cg-container">
+
+<iframe style="display:none" id="ifr" name="upload"></iframe> 
+
 	<div class="col-md-6 col-md-offset-3" style="padding-top:12px;">
 		<div class="timeline">
 			<div class="col-xs-10" style="padding-bottom:12px;width:100%;">
@@ -19,7 +22,10 @@
 							<div id="cg-outer">
 	    						<img style="display:none" class="cg-viewer" width="100" height="100" border="0">
 							</div>
-	    					<input type="file" id="cg-source" style="display:none" v-on:change="previewImage()" />
+							<form enctype="multipart/form-data" method="post" target="upload" action="http://image.poimoe.com/upload.php?uid=1&cors=true&corsurl=http://localhost:8080/upload.html" > 
+								<input type="file" id="cg-source" name="upfile" v-on:change="previewImage()"/>
+								<input id="submit-cg-btn" type="submit" /> 
+							</form>
 						</div>
 					</div>
 
@@ -236,7 +242,28 @@
 
 				util.previewImage('cg-source', 'cg-outer', 'cg-viewer', '', 'width:100%;height:' + height + 'px;');
 				this.isCGShow = true;
+
+	        	this.sync();
 			},
+
+			sync: function() {
+				document.getElementById('submit-cg-btn').click();
+
+		        var getJSON = function() {
+		        	console.log(localStorage.pictureUploadedJSON);
+		        };
+
+		        var oFrm = document.getElementById('ifr');
+
+				oFrm.onload = oFrm.onreadystatechange = function() {
+				     if (this.readyState && this.readyState != 'complete') {
+				     	return false;
+				     }
+				     else {
+				         getJSON();
+				     }
+				}
+			}
 		}
 	}
 	
