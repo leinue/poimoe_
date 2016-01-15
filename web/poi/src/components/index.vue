@@ -3,6 +3,9 @@
     <div style="">
         <!-- <search></search> -->
 
+                            <button @click="testphpcors()">sdsdds</button>
+
+
         <div class="row" style="border-bottom: 1px solid rgb(220, 220, 220)">
 
             <div class="col-md-10 col-md-offset-1" style="padding-top:15px;padding-bottom:15px;">
@@ -260,6 +263,26 @@
                     util.handleError(err);
                 });
 
+            },
+
+            testphpcors: function() {
+                services.UserService.uploadPicture({
+                    a: 'fuck'
+                }).then(function(res) {
+                    var code = res.data.status;
+                    var message  = res.data.message;
+
+                    if(code != 200) {
+                        util.messageBox(message);
+                        return false;
+                    }
+
+                    var origin = message.origin;
+                    var preview = message.preview;
+
+                }, function(err) {
+                    util.handleError(err);
+                });
             }
         },
 

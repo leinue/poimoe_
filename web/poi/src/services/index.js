@@ -6,7 +6,7 @@ var RelationsService = require('./RelationsService.js');
 
 var model = {
 	instance: undefined,
-	baseUrl: 'http://api.poimoe.com/'
+	baseUrl: ''
 };
 
 module.exports = {

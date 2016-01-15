@@ -61,6 +61,10 @@ module.exports = {
 
     		getRecomended: function() {
     			return _this.$http.get('user/recommended');
+    		},
+
+    		uploadPicture: function(data) {
+    			return _this.$http.post('http://image.poimoe.com/upload.php');
     		}
 
 		}
