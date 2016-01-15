@@ -22,7 +22,7 @@
 							<div id="cg-outer">
 	    						<img style="display:none" class="cg-viewer" width="100" height="100" border="0">
 							</div>
-							<form enctype="multipart/form-data" method="post" target="upload" action="http://image.poimoe.com/upload.php?uid=1&cors=true&corsurl=http://localhost:8080/upload.html" > 
+							<form style="display:none" enctype="multipart/form-data" method="post" target="upload" action="http://image.poimoe.com/upload.php?uid=1&cors=true&corsurl=http://localhost:8080/upload.html" > 
 								<input type="file" id="cg-source" name="upfile" v-on:change="previewImage()"/>
 								<input id="submit-cg-btn" type="submit" /> 
 							</form>
@@ -80,7 +80,7 @@
 					content: '',
 					uid: localStorage._id,
 					tag_list: [],
-					image: 'http://www.html5tricks.com/demo/css3-image-hover-effect/iceberg_1x.jpg'
+					image: ''
 				},
 
 				username: localStorage.username,
@@ -106,6 +106,12 @@
 			},
 
 			publishNewCG: function() {
+
+				if(this.cg.image == '') {
+					util.messageBox('请上传图片');
+					return false;
+				}
+
 				services.CGService.publish(this.cg).then(function(res) {
 
 					var code = res.data.code;
@@ -249,8 +255,17 @@
 			sync: function() {
 				document.getElementById('submit-cg-btn').click();
 
+				var _this = this;
+
 		        var getJSON = function() {
-		        	console.log(localStorage.pictureUploadedJSON);
+		        	var picJSON = JSON.parse(localStorage.pictureUploadedJSON);
+
+		        	if(picJSON.status != 200) {
+		        		util.messageBox('上传失败，请重试');
+		        		return false;
+		        	}
+
+		        	_this.cg.image = picJSON.message.preview;
 		        };
 
 		        var oFrm = document.getElementById('ifr');
