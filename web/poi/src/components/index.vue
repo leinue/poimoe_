@@ -437,6 +437,7 @@
         margin-bottom: 10px;
         cursor: pointer;
         background-position: center;
+        background-size: cover;
     }
 
     .cg-img:hover {
