@@ -29,6 +29,14 @@ module.exports = {
 			}
 		});
 
+		this.vue.filter('judgePhotoIsTransfered', function(item) {
+			if(item.isRepost == true) {
+				return item.repost.image;
+			}else {
+				return item.image;
+			}
+		});
+
 	},
 
 	get: function(filter) {

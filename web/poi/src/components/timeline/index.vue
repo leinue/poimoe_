@@ -292,5 +292,19 @@
 		text-decoration: underline;
 	}
 
+	.timeline-transfer {
+		font-size: 10px;
+		height: 20px;
+	}
+
+	.timeline-transfer-name {
+		color: rgb(209, 202, 192)!important;
+		margin-left: 10px;
+	}
+
+	.timeline-transfer .header-right {
+		/*margin-top: -40px;*/
+	}
+
 </style>
 	

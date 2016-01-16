@@ -55,7 +55,7 @@
 						<div class="timeline-real-footer">
 							<ul>
 								<li @click="viewPeopleWhoLikeThis(item._id)">
-									{{item.likeCnt | numberToZero}}个收藏
+									{{item.favouritesCount | numberToZero}}个收藏
 								</li>
 								<li @click="likeThis(item._id)">
 									<span class="glyphicon glyphicon-heart-empty" v-bind:class="item.favourited == true ? 'like-active' : ''"></span>

@@ -33,7 +33,7 @@ var _util = {
 			var currentTheme = themes[i];
 			var currentThemeId = currentTheme._id;
 			var favourites = currentTheme.user_id.favourites;
-	      
+
 			for (var j = 0; j < favourites.length; j++) {
 				var currentLike = favourites[j];
 
@@ -369,6 +369,87 @@ var index = {
 			}
 
 			res.send(util.retMsg(200, theme));
+
+		});
+
+	},
+
+	repostTheme: function(req, res, next) {
+
+		var tid = req.params.tid;
+		var uid = req.params.uid;
+
+		if(tid == '' || tid == undefined) {
+			res.send(util.retMsg(401, '主题id不能为空'));
+		}
+
+		if(uid == '' || uid == undefined) {
+			res.send(util.retMsg(401, '缺少参数：用户id'));
+		}
+
+		var Themes = ctrlInitial.models.Themes();
+
+		Themes.find({
+			isDeleted: false,
+			_id: tid
+		}, function(err, theme) {
+
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+			if(theme.length === 0) {
+				res.send(util.retMsg(401, '无此主题'));
+			}
+
+			var User = ctrlInitial.models.User();
+
+			User.find({
+				_id: uid,
+				isDeleted: false,
+				isBlocked: false
+			}).exec(function(err, user) {
+
+				if(err) {
+					res.send(util.retMsg(401, err.toString()));
+				}				
+
+				if(user.length === 0) {
+					res.send(util.retMsg(401, '该用户不存在或已被锁定'));
+				}
+
+				var repost = new Themes({
+			    	user_id: uid,
+			    	repost: tid,
+			    	isRepost: true
+			    });
+
+			    repost.save(function(err, re) {
+
+					if(err) {
+						res.send(util.retMsg(401, err.toString()));
+					}				
+
+					var themeReposted = theme[0];
+
+					themeReposted.reposter.unshift(uid);
+
+					Themes.update(tid, {
+						repostCount: themeReposted.repostCount + 1,
+						reposter: themeReposted.reposter
+					}, function(err, theme_new) {
+
+						if(err) {
+				        	res.send(util.retMsg(401, err.toString()));
+				      	}
+
+				      	res.send(util.retMsg(200, theme_new));
+
+					});
+
+			    });
+
+			});
 
 		});
 

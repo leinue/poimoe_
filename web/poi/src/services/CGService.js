@@ -37,6 +37,10 @@ module.exports = {
 
 			viewOne: function(tid) {
 				return _this.$http.get(baseUrl + 'themes/select/' + tid);
+			},
+
+			repost: function(uid, tid) {
+				return _this.$http.get(baseUrl + 'themes/repost/' + uid + '/' + tid);
 			}
 
 		}

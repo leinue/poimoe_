@@ -41,19 +41,26 @@
 			<div class="timeline-new content">
 
 				<div class="timeline-content-header">
+					<div v-show="item.isRepost == true" class="timeline-transfer">
+						<span class="glyphicon glyphicon-transfer" style="color:rgb(241, 130, 39);"></span>
+						<span class="timeline-transfer-name">{{item.repost.user_id.username | nullToVisual}}</span>
+						<div class="header-right" style="font-size:10px;">
+							{{item.repost.updatedAt | nullToVisual}}
+						</div>
+					</div>
 					<div class="header-left">
-						{{username}}
+						{{item.user_id.username | nullToVisual}}
 					</div>
 					<div class="header-right">
-						{{item.updatedAt}}
+						{{item.updatedAt | nullToVisual}}
 					</div>
 				</div>
 
-				<div class="timeline-new-section" style="background-image:url({{item.image}})"></div>
+				<div class="timeline-new-section" style="background-image:url({{item | judgePhotoIsTransfered}})"></div>
 
 				<div class="timeline-content-footer">
 					<div class="timeline-content">
-						<span>{{item.content}}</span>
+						<span>{{item.content || item.repost.content}}</span>
 						<div class="timeline-tags">
 							<span v-for="tag in item.tag_list">#{{tag.name}}</span>
 						</div>
@@ -61,15 +68,15 @@
 					<div class="timeline-real-footer">
 						<ul>
 							<li @click="viewPeopleWhoLikeThis(item._id)">
-								{{item.likeCnt | numberToZero}}个收藏
+								{{item.favouritesCount | numberToZero}}个收藏
 							</li>
 							<li @click="likeThis(item._id, item.favourited, key)">
 								<span class="glyphicon glyphicon-heart-empty" v-bind:class="item.favourited == true ? 'like-active' : ''"></span>
 							</li>
-							<li @click="transferThis(item._id)">
+							<li @click="transferThis(item._id, item.repost._id)">
 								<span class="glyphicon glyphicon-transfer"></span>
 							</li>
-							<li ng-show="item.user_id == myUid" @click="removeThisCG(item._id)">
+							<li v-show="item.user_id == myUid" @click="removeThisCG(item._id)">
 								<span class="glyphicon glyphicon-trash"></span>
 							</li>
 						</ul>
@@ -138,6 +145,22 @@
 			},
 
 			transferThis: function(id) {
+
+				services.CGService.repost(localStorage._id, id).then(function(res) {
+
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					console.log(data);
+
+				}, function(err) {
+					util.handleError(err);
+				});
 
 			},
 

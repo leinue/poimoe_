@@ -301,10 +301,18 @@ module.exports = {
         type: Schema.Types.ObjectId,
         red: 'themes'
       },
+      isRepost: {
+        type: Schema.Types.Boolean,
+        default: false
+      },
       reposter: [{
         type: Schema.Types.ObjectId,
         ref: 'users'
       }],
+      reposted: {
+        type: Schema.Types.Boolean,
+        default: false
+      },
       createdAt: {
         type: Date,
         default: Date.now
@@ -327,7 +335,17 @@ module.exports = {
       return this.find({
         _id: id,
         isDeleted: false
-      }).populate('user_id').populate('tag_list').exec(cb);
+      }).populate({
+        path: 'user_id',
+        select: '_id username email photo'
+      }).populate({
+        path: 'tag_list',
+        select: '_id name description'
+      }).populate({
+        path: 'user_id',
+        select: '_id username email photo',
+        populate: 'reposter tag_list user_id'
+      }).populate('repost').exec(cb);
     };
 
     themesSchema.statics.search = function(name, page, count, cb) {
@@ -338,7 +356,8 @@ module.exports = {
 
       return this.find({
         content: new RegExp(name),
-        isDeleted: false
+        isDeleted: false,
+        isRepost: false
       }).populate({
         path: 'tag_list',
         select: '_id name description'
@@ -359,7 +378,18 @@ module.exports = {
       return this.find({
         user_id: uid,
         isDeleted: false
-      }).populate('user_id').populate('tag_list').sort({
+      }).populate({
+        path: 'user_id',
+        select: '-accessToken -password'
+      }).populate('tag_list').populate({
+        path: 'reposter',
+        select: '-accessToken -password'
+      }).populate({
+        path: 'repost',
+        populate: {
+          path: 'user_id tag_list'
+        }
+      }).sort({
         createdAt: -1
       }).skip(skipFrom).limit(count).exec(cb);
     };
@@ -371,7 +401,7 @@ module.exports = {
 
       return this.find({
        isDeleted: false 
-      }).populate('user_id').populate('tag_list').sort({
+      }).populate('user_id').populate('tag_list').populate('reposter').populate('repost').sort({
         createdAt: -1
       }).skip(skipFrom).limit(count).exec(cb);
     };
@@ -406,7 +436,8 @@ module.exports = {
           isDeleted: false,
           tag_list: {
             '$in': [tagId]
-          }
+          },
+          isRepost: false
         }).sort({
           favouritesCount: -1
         }).limit(4).select('_id image').exec(function(err, themes) {
@@ -436,7 +467,7 @@ module.exports = {
       var skipFrom = (page * count) - count;
 
       return this.find({
-       isDeleted: true 
+       isDeleted: true
       }).populate('user_id').populate('tag_list').sort({
         createdAt: -1
       }).skip(skipFrom).limit(count).exec(cb);
