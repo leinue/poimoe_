@@ -319,8 +319,10 @@ var index = {
 
           theme = theme[0];
 
-          var tid = theme._id;
+          // var tid = theme._id;
           var cnt = theme.favouritesCount - 1;
+
+          console.log(theme.favouritesCount);
 
           if(cnt < 0) {
             cnt = 0;
@@ -338,6 +340,8 @@ var index = {
             if(err) {
               res.send(util.retMsg(400, err.toString()));
             }
+
+            console.log(t);
 
             res.send(util.retMsg(200, '取消收藏成功'));
 
@@ -364,8 +368,9 @@ var index = {
       res.send(util.retMsg(400, '主题id不能为空'));
     }
 
-    var User = ctrlInitial.models.User();
+    console.log(tid);
 
+    var User = ctrlInitial.models.User();
 
     User.find({_id: uid}, function(err, user) {
 
@@ -418,14 +423,14 @@ var index = {
 
               var theme = currentTheme[0];
 
-              var tid = theme._id;
+              // var tid = theme._id;
               var cnt = theme.favouritesCount;
 
               Themes.findOneAndUpdate({
                 _id: tid,
                 isDeleted: false
               }, {
-                favouritesCount: cnt + 1
+                favouritesCount: cnt
               }, {
                 new: true
               }, function(err, user) {
