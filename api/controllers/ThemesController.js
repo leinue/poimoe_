@@ -35,6 +35,7 @@ var _util = {
 			var currentTheme = themes[i];
 			var currentThemeId = currentTheme._id;
 			var favourites = currentTheme.user_id.favourites;
+			var reposter = currentTheme.reposter;
 
 			favourites.forEach(function(currentLike, j) {
 				if(currentThemeId.toString() == currentLike.toString()){
@@ -42,6 +43,14 @@ var _util = {
 					return true;
 				}
 			});
+
+			for (var k = 0; k < reposter.length; k++) {
+				var currentReposter = reposter[k];
+				if(currentReposter._id.toString() == currentTheme.user_id._id.toString()) {
+					themes[i].reposted = true;
+					break;
+				}
+			};
 
 		});
 
@@ -153,7 +162,10 @@ var index = {
 
 		var Themes = ctrlInitial.models.Themes();
 
-		Themes.findById(thisThemeId, function(err, theme) {
+		Themes.find({
+			_id: thisThemeId,
+			isDeleted: false
+		}, function(err, theme) {
 
 			if(err) {
 	        	res.send(util.retMsg(401, err.toString()));
@@ -167,7 +179,7 @@ var index = {
 	      		res.send(util.retMsg(401, '该主题已被删除'));
 	      	}
 
-			Themes._remove(thisThemeId, function(err, theme) {
+			Themes._remove(theme[0], function(err, theme) {
 
 				if(err) {
 		        	res.send(util.retMsg(401, err.toString()));

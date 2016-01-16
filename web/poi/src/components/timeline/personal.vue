@@ -74,7 +74,7 @@
 								<span class="glyphicon glyphicon-heart-empty" v-bind:class="item.favourited == true ? 'like-active' : ''"></span>
 							</li>
 							<li @click="transferThis(item._id)">
-								<span class="glyphicon glyphicon-transfer"></span>
+								<span class="glyphicon glyphicon-transfer" v-bind:class="item.reposted == true ? 'transfer-active' : ''"></span>
 							</li>
 							<li v-show="item.user_id == myUid" @click="removeThisCG(item._id)">
 								<span class="glyphicon glyphicon-trash"></span>

@@ -348,7 +348,12 @@ module.exports = {
       }).populate({
         path: 'user_id',
         select: '_id username email photo',
-        populate: 'reposter tag_list user_id'
+        populate: {
+          path: 'reposter tag_list user_id',
+          match: {
+            isDeleted: false
+          }
+        }
       }).populate('repost').exec(cb);
     };
 
@@ -387,7 +392,10 @@ module.exports = {
         select: '-accessToken -password'
       }).populate('tag_list').populate({
         path: 'reposter',
-        select: '-accessToken -password'
+        select: '-accessToken -password',
+        match: {
+          isDeleted: false
+        }
       }).populate({
         path: 'repost'
       }).sort({
@@ -402,7 +410,12 @@ module.exports = {
 
       return this.find({
        isDeleted: false 
-      }).populate('user_id').populate('tag_list').populate('reposter').populate('repost').sort({
+      }).populate('user_id').populate('tag_list').populate({
+        path: 'reposter',
+        match: {
+          isDeleted: false
+        }
+      }).populate('repost').sort({
         createdAt: -1
       }).skip(skipFrom).limit(count).exec(cb);
     };
@@ -476,9 +489,10 @@ module.exports = {
       }).skip(skipFrom).limit(count).exec(cb);
     };
 
-    themesSchema.statics._remove = function(id, cb) {
+    themesSchema.statics._remove = function(theme, cb) {
       var query = {
-        _id: id
+        _id: theme._id,
+        isDeleted: false
       };
 
       var options = {
@@ -490,7 +504,53 @@ module.exports = {
         deletedAt: Date.now()
       };
 
-      return this.findOneAndUpdate(query, update, options, cb);
+      var _this = this;
+
+      return _this.findOneAndUpdate(query, update, options, function(err, t) {
+
+        if(err) {
+          cb(err, t);
+        }
+
+        if(theme.isRepost === true) {
+
+          _this.findOne({
+            _id: t.repost
+          }).exec(function(err, origin_theme) {
+
+            var reposter = origin_theme.reposter;
+
+            for (var i = 0; i < reposter.length; i++) {
+              if(reposter[i].toString() == theme.user_id.toString()) {
+                reposter.splice(i, 1);
+                break;
+              }
+            };
+
+            _this.findOneAndUpdate({
+              _id: t.repost
+            },{
+              reposter: reposter,
+              repostCount: origin_theme.repostCount - 1
+            }, {
+              new: true
+            }, function(err, new_r) {
+
+              if(err) {
+                cb(err, new_r);
+              }else {
+                cb(err, t);
+              }
+
+            });
+
+          });
+
+        }else {
+          cb(err, t);
+        }
+
+      });
     };
 
     themesSchema.statics.update = function(id, obj, cb) {
