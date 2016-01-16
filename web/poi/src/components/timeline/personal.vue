@@ -43,7 +43,7 @@
 				<div class="timeline-content-header">
 					<div v-show="item.isRepost == true" class="timeline-transfer">
 						<span class="glyphicon glyphicon-transfer" style="color:rgb(241, 130, 39);"></span>
-						<span class="timeline-transfer-name">{{item.repost.user_id.username | nullToVisual}}</span>
+						<span class="timeline-transfer-name" style="font-size: 12px;">{{item.repost.user_id.username | nullToVisual}}</span>
 						<div class="header-right" style="font-size:10px;">
 							{{item.repost.updatedAt | nullToVisual}}
 						</div>

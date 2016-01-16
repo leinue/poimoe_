@@ -410,9 +410,11 @@ module.exports = {
 
       var count = 6;
       return this.find({
-        isDeleted: false
+        isDeleted: false,
+        isRepost: false
       }).sort({
-        favouritesCount: -1
+        favouritesCount: -1,
+        repostCount: -1
       }).populate('user_id').limit(count).exec(cb);
 
     };
