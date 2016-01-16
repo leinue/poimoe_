@@ -29,20 +29,22 @@ var _util = {
 	},
 
 	getIsFavourited: function(req, res, themes) {
-  		for (var i = 0; i < themes.length; i++) {
+
+		themes.forEach(function(currentTheme, i) {
+
 			var currentTheme = themes[i];
 			var currentThemeId = currentTheme._id;
 			var favourites = currentTheme.user_id.favourites;
 
-			for (var j = 0; j < favourites.length; j++) {
-				var currentLike = favourites[j];
-
+			favourites.forEach(function(currentLike, j) {
 				if(currentThemeId.toString() == currentLike.toString()){
 					themes[i].favourited = true;
-					continue;
+					return true;
 				}
-			};
-		};
+			});
+
+		});
+
 		return themes;
 	},
 
@@ -418,10 +420,15 @@ var index = {
 					res.send(util.retMsg(401, '该用户不存在或已被锁定'));
 				}
 
+				var themeReposted = theme[0];
+
 				var repost = new Themes({
 			    	user_id: uid,
 			    	repost: tid,
-			    	isRepost: true
+			    	isRepost: true,
+			    	tag_list: themeReposted.tag_list,
+					image: themeReposted.image,
+					reposterName: user[0].username
 			    });
 
 			    repost.save(function(err, re) {
@@ -429,8 +436,6 @@ var index = {
 					if(err) {
 						res.send(util.retMsg(401, err.toString()));
 					}				
-
-					var themeReposted = theme[0];
 
 					themeReposted.reposter.unshift(uid);
 

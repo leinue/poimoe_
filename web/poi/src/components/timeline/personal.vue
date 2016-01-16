@@ -43,7 +43,7 @@
 				<div class="timeline-content-header">
 					<div v-show="item.isRepost == true" class="timeline-transfer">
 						<span class="glyphicon glyphicon-transfer" style="color:rgb(241, 130, 39);"></span>
-						<span class="timeline-transfer-name" style="font-size: 12px;">{{item.repost.user_id.username | nullToVisual}}</span>
+						<span class="timeline-transfer-name" style="font-size: 12px;">{{item.reposterName | nullToVisual}}</span>
 						<div class="header-right" style="font-size:10px;">
 							{{item.repost.updatedAt | nullToVisual}}
 						</div>
@@ -73,7 +73,7 @@
 							<li @click="likeThis(item._id, item.favourited, key)">
 								<span class="glyphicon glyphicon-heart-empty" v-bind:class="item.favourited == true ? 'like-active' : ''"></span>
 							</li>
-							<li @click="transferThis(item._id, item.repost._id)">
+							<li @click="transferThis(item._id)">
 								<span class="glyphicon glyphicon-transfer"></span>
 							</li>
 							<li v-show="item.user_id == myUid" @click="removeThisCG(item._id)">
@@ -156,7 +156,7 @@
 						return false;
 					}
 
-					console.log(data);
+					util.messageBox('转发成功');
 
 				}, function(err) {
 					util.handleError(err);

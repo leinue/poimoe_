@@ -309,6 +309,10 @@ module.exports = {
         type: Schema.Types.ObjectId,
         ref: 'users'
       }],
+      reposterName: {
+        type: String,
+        default: ''
+      },
       reposted: {
         type: Schema.Types.Boolean,
         default: false
@@ -385,10 +389,7 @@ module.exports = {
         path: 'reposter',
         select: '-accessToken -password'
       }).populate({
-        path: 'repost',
-        populate: {
-          path: 'user_id tag_list'
-        }
+        path: 'repost'
       }).sort({
         createdAt: -1
       }).skip(skipFrom).limit(count).exec(cb);
@@ -410,8 +411,8 @@ module.exports = {
 
       var count = 6;
       return this.find({
-        isDeleted: false,
-        isRepost: false
+        isDeleted: false
+        // isRepost: false
       }).sort({
         favouritesCount: -1,
         repostCount: -1
