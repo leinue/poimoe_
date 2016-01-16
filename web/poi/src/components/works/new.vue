@@ -2,8 +2,6 @@
 
 <div style="background: rgb(249, 245, 239);" id="new-cg-container">
 
-<iframe style="display:none" id="ifr" name="upload"></iframe> 
-
 	<div class="col-md-6 col-md-offset-3" style="padding-top:12px;">
 		<div class="timeline">
 			<div class="col-xs-10" style="padding-bottom:12px;width:100%;">
@@ -26,6 +24,7 @@
 								<input type="file" id="cg-source" name="upfile" v-on:change="previewImage()"/>
 								<input id="submit-cg-btn" type="submit" /> 
 							</form>
+							<iframe style="display:none" id="ifr" name="upload"></iframe>
 						</div>
 					</div>
 
@@ -249,35 +248,11 @@
 				util.previewImage('cg-source', 'cg-outer', 'cg-viewer', '', 'width:100%;height:' + height + 'px;');
 				this.isCGShow = true;
 
-	        	this.sync();
-			},
-
-			sync: function() {
-				document.getElementById('submit-cg-btn').click();
-
 				var _this = this;
 
-		        var getJSON = function() {
-		        	var picJSON = JSON.parse(localStorage.pictureUploadedJSON);
-
-		        	if(picJSON.status != 200) {
-		        		util.messageBox('上传失败，请重试');
-		        		return false;
-		        	}
-
+	        	util.syncUploadPic('submit-cg-btn', 'ifr', function(picJSON) {
 		        	_this.cg.image = picJSON.message.preview;
-		        };
-
-		        var oFrm = document.getElementById('ifr');
-
-				oFrm.onload = oFrm.onreadystatechange = function() {
-				     if (this.readyState && this.readyState != 'complete') {
-				     	return false;
-				     }
-				     else {
-				         getJSON();
-				     }
-				}
+	        	});
 			}
 		}
 	}

@@ -57,11 +57,15 @@
   			<span title="同步资料" class="glyphicon glyphicon-refresh" @click="syncProfile()" style="padding-left:15px;" id="modify-pencil"></span>
   		  	<span title="确认修改" v-show="editable" class="glyphicon glyphicon-ok" @click="confirmToModifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
 		  	<span title="取消修改" v-show="editable" class="glyphicon glyphicon-remove" @click="cancelModifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
+			<form style="display:none" enctype="multipart/form-data" method="post" target="pupload" action="http://image.poimoe.com/upload.php?uid=1&cors=true&corsurl=http://localhost:8080/upload.html" > 
+	    		<input type="file" id="imgbtn-source" name="upfile" v-on:change="previewImage()" />
+				<input id="submit-photo-btn" type="submit" /> 
+			</form>
+			<iframe style="display:none" id="photo-ifr" name="pupload"></iframe>
 		    <div @click="uploadMyPhoto()" class="side-profile-photo" style="{{photo}}">
-		    	<div id="photo-outer">
+		    	<div v-show="editable" id="photo-outer">
 	    			<img class="side-profile-photo imghead" id="photo-inner" width="100" height="100" border="0">
 				</div>
-	    		<input type="file" id="imgbtn-source" style="display:none" v-on:change="previewImage()" />
 		    </div>
 		    <div class="side-profile-detail">
 		    	<div>
@@ -231,32 +235,47 @@
 
 				var _this = this;
 
-				services.UserService.modifyProfile({
-					uid: localStorage._id,
-					sex: localStorage.sex,
-					photo: localStorage.photo,
-					intro: _this.introduction,
-					region: localStorage.region,
-					username: _this.username
-				}).then(function(res) {
+				_this.uploadPhoto(function(picJSON) {
 
-					var code = res.data.code;
-					var data = res.data.message;
+					console.log(picJSON);
 
-					if(code != 200) {
+					localStorage.photo = picJSON.message.preview;
+					_this.photoSrc = localStorage.photo;
+					_this.photo = 'background-image: url(' + localStorage.photo + ');';
+
+					services.UserService.modifyProfile({
+						uid: localStorage._id,
+						sex: localStorage.sex,
+						photo: localStorage.photo,
+						intro: _this.introduction,
+						region: localStorage.region,
+						username: _this.username
+					}).then(function(res) {
+
+						var code = res.data.code;
+						var data = res.data.message;
+
+						if(code != 200) {
+							util.messageBox(data);
+							return false;
+						}
+
 						util.messageBox(data);
-						return false;
-					}
+						_this.editable = false;
+						localStorage.username = _this.username;
+						localStorage.introduction = _this.introduction;
 
-					util.messageBox(data);
-					_this.editable = false;
-					localStorage.username = _this.username;
-					localStorage.introduction = _this.introduction;
-					localStorage.photo = _this.photoSrc;
+					}, function(err) {
+						util.handleError(err);
+					});
 
-				}, function(err) {
-					util.handleError(err);
 				});
+			},
+
+			uploadPhoto: function(cb) {
+				util.syncUploadPic('submit-photo-btn', 'photo-ifr', function(picJSON) {
+					cb(picJSON);
+	        	});
 			},
 
 			syncProfile: function() {
@@ -364,6 +383,7 @@
 			},
 
 	        uploadMyPhoto: function() {
+	        	this.editable = true;
 	        	document.getElementById("imgbtn-source").click();	        		
 	        }
 		},

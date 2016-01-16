@@ -76,7 +76,7 @@
 							<li @click="transferThis(item._id)">
 								<span class="glyphicon glyphicon-transfer" v-bind:class="item.reposted == true ? 'transfer-active' : ''"></span>
 							</li>
-							<li v-show="item.user_id == myUid" @click="removeThisCG(item._id)">
+							<li v-show="item.user_id._id == myUid" @click="removeThisCG(item._id)">
 								<span class="glyphicon glyphicon-trash"></span>
 							</li>
 						</ul>
@@ -134,38 +134,22 @@
 
 			likeThis: function(tid, favourited, key) {
 				if(!favourited) {
-					util.likeThisTheme(tid, function(data) {
-
-					});
+					util.likeThisTheme(tid, function(data) {});
 				}else {
-					util.unlikeThisTheme(tid, function(data) {
-
-					})
+					util.unlikeThisTheme(tid, function(data) {});
 				}
 			},
 
 			transferThis: function(id) {
-
-				services.CGService.repost(localStorage._id, id).then(function(res) {
-
-					var code = res.data.code;
-					var data = res.data.message;
-
-					if(code != 200) {
-						util.messageBox(data);
-						return false;
-					}
-
-					util.messageBox('转发成功');
-
-				}, function(err) {
-					util.handleError(err);
-				});
-
+				util.transferThis(id, function(data) {});
 			},
 
 			viewPeopleWhoLikeThis: function(id) {
 
+			},
+
+			removeThisCG: function(id) {
+				util.removeThisCG(id, function(data) {});
 			}
 		},
 

@@ -10,7 +10,7 @@
 		    <div class="timeline" v-for="item in cg">
 				<div class="col-xs-2" style="padding-right:0px">
 					<div class="timeline-author">
-						<div style="background-image:url({{item.photo | photoNullToVision}})" class="imgdiv"></div>
+						<div style="background-image:url({{item.user_id.photo | photoNullToVision}})" class="imgdiv"></div>
 					</div>
 				</div>
 				<div class="col-xs-10" style="padding-bottom:12px;">
@@ -46,13 +46,16 @@
 							<div class="timeline-real-footer">
 								<ul>
 									<li @click="viewPeopleWhoLikeThis(item._id)">
-										{{item.likeCnt | numberToZero}}个收藏
+										{{item.favouritesCount | numberToZero}}个收藏
 									</li>
-									<li @click="unlikeThis(item._id, index)">
-										<span class="glyphicon glyphicon-heart-empty like-active"></span>
+									<li @click="likeThis(item._id, item.favourited, key)">
+										<span class="glyphicon glyphicon-heart-empty" v-bind:class="item.favourited == true ? 'like-active' : ''"></span>
 									</li>
 									<li @click="transferThis(item._id)">
-										<span class="glyphicon glyphicon-transfer"></span>
+										<span class="glyphicon glyphicon-transfer" v-bind:class="item.reposted == true ? 'transfer-active' : ''"></span>
+									</li>
+									<li v-show="item.user_id._id == myUid" @click="removeThisCG(item._id)">
+										<span class="glyphicon glyphicon-trash"></span>
 									</li>
 								</ul>
 							</div>
@@ -77,7 +80,11 @@
 
 		data() {
 
-			cg: []
+			return {
+				cg: [],
+
+				myUid: localStorage._id
+			}
 
 		},
 
@@ -87,10 +94,24 @@
 				util.pathToSearch(name);
 			},
 
-			unlikeThis: function(id, index) {
-				util.unlikeThisTheme(id, function() {
-					
-				});
+			likeThis: function(tid, favourited, key) {
+				if(!favourited) {
+					util.likeThisTheme(tid, function(data) {});
+				}else {
+					util.unlikeThisTheme(tid, function(data) {});
+				}
+			},
+
+			transferThis: function(id) {
+				util.transferThis(id, function(data) {});
+			},
+
+			viewPeopleWhoLikeThis: function(id) {
+
+			},
+
+			removeThisCG: function(id) {
+				util.removeThisCG(id, function(data) {});
 			}
 
 		},
@@ -118,6 +139,8 @@
 								util.messageBox(data);
 								return false;
 							}
+
+							console.log(data);
 
 							_this.$set('cg', data);
 

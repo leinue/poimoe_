@@ -256,7 +256,9 @@ var index = {
         res.send(util.retMsg(400, err.toString()));
       }
 
-      res.send(util.retMsg(200, f));
+      util.seekFavourited(req, res, f[0].favourites);
+
+      // res.send(util.retMsg(200, f));
 
     });
 
@@ -322,8 +324,6 @@ var index = {
           // var tid = theme._id;
           var cnt = theme.favouritesCount - 1;
 
-          console.log(theme.favouritesCount);
-
           if(cnt < 0) {
             cnt = 0;
           }
@@ -340,8 +340,6 @@ var index = {
             if(err) {
               res.send(util.retMsg(400, err.toString()));
             }
-
-            console.log(t);
 
             res.send(util.retMsg(200, '取消收藏成功'));
 

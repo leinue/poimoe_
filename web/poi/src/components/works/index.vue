@@ -64,11 +64,11 @@
 								<li @click="viewPeopleWhoLikeThis(item._id)">
 									{{item.favouritesCount | numberToZero}}个收藏
 								</li>
-								<li @click="likeThis(item._id)">
+								<li @click="likeThis(item._id, item.favourited, key)">
 									<span class="glyphicon glyphicon-heart-empty" v-bind:class="item.favourited == true ? 'like-active' : ''"></span>
 								</li>
 								<li @click="transferThis(item._id)">
-									<span class="glyphicon glyphicon-transfer"></span>
+									<span class="glyphicon glyphicon-transfer" v-bind:class="item.reposted == true ? 'transfer-active' : ''"></span>
 								</li>
 								<li @click="removeThisCG(item._id)">
 									<span class="glyphicon glyphicon-trash"></span>
@@ -128,19 +128,16 @@
 			},
 
 			likeThis: function(tid, favourited, key) {
+				console.log(favourited);
 				if(!favourited) {
-					util.likeThisTheme(tid, function(data) {
-
-					});
+					util.likeThisTheme(tid, function(data) {});
 				}else {
-					util.unlikeThisTheme(tid, function(data) {
-
-					})
+					util.unlikeThisTheme(tid, function(data) {})
 				}
 			},
 			
 			transferThis: function(id) {
-
+				util.transferThis(id, function(data) {});
 			},
 
 			viewPeopleWhoLikeThis: function(id) {
@@ -152,29 +149,7 @@
 			},
 
 			removeThisCG: function(id) {
-
-				var isConfirmed = util.confirm('您确定要删除该CG吗');
-
-				if(isConfirmed) {
-
-					services.CGService.remove(id).then(function(res) {
-
-						var code = res.data.code;
-						var data = res.data.message;
-
-						if(code != 200) {
-							util.messageBox(data);
-							return false;
-						}
-
-						util.messageBox(data);
-
-					}, function(err) {
-						util.handleError(err);
-					});
-
-				}
-
+				util.removeThisCG(id, function(data) {});
 			}
 		},
 

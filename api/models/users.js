@@ -162,8 +162,8 @@ module.exports = {
       }).populate({
         path: 'favourites',
         populate: {
-          path: 'tag_list user_id',
-          select: '_id email username photo'
+          path: 'user_id tag_list',
+          select: '_id email username photo favourites'
         }
       }).sort({
         createdAt: -1

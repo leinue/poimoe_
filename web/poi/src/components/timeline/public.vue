@@ -70,11 +70,14 @@
 							<li @click="viewPeopleWhoLikeThis(item._id)">
 								{{item.favouritesCount | numberToZero}}个收藏
 							</li>
-							<li @click="likeThis(item._id)">
-								<span class="glyphicon glyphicon-heart-empty"></span>
+							<li @click="likeThis(item._id, item.favourited, key)">
+								<span class="glyphicon glyphicon-heart-empty" v-bind:class="item.favourited == true ? 'like-active' : ''"></span>
 							</li>
 							<li @click="transferThis(item._id)">
-								<span class="glyphicon glyphicon-transfer"></span>
+								<span class="glyphicon glyphicon-transfer" v-bind:class="item.reposted == true ? 'transfer-active' : ''"></span>
+							</li>
+							<li v-show="item.user_id._id == myUid" @click="removeThisCG(item._id)">
+								<span class="glyphicon glyphicon-trash"></span>
 							</li>
 						</ul>
 					</div>
@@ -97,7 +100,9 @@
 		data() {
 			return {
 				publicTimeline: {},
-				myPhoto: 'background-image: url(' + localStorage.photo + ')!important;'
+				myPhoto: 'background-image: url(' + localStorage.photo + ')!important;',
+
+				myUid: localStorage._id
 			}
 		},
 		components: {
@@ -142,6 +147,15 @@
 					})
 				}
 			},
+
+			transferThis: function(id) {
+				util.transferThis(id, function(data) {});
+			},
+
+			removeThisCG: function(id) {
+				util.removeThisCG(id, function(data) {});
+			}
+
 		}
 	};
 

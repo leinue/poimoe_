@@ -26,40 +26,6 @@ var _util = {
 
    	 	}
 
-	},
-
-	getIsFavourited: function(req, res, themes) {
-
-		themes.forEach(function(currentTheme, i) {
-
-			var currentTheme = themes[i];
-			var currentThemeId = currentTheme._id;
-			var favourites = currentTheme.user_id.favourites;
-			var reposter = currentTheme.reposter;
-
-			favourites.forEach(function(currentLike, j) {
-				if(currentThemeId.toString() == currentLike.toString()){
-					themes[i].favourited = true;
-					return true;
-				}
-			});
-
-			for (var k = 0; k < reposter.length; k++) {
-				var currentReposter = reposter[k];
-				if(currentReposter._id.toString() == currentTheme.user_id._id.toString()) {
-					themes[i].reposted = true;
-					break;
-				}
-			};
-
-		});
-
-		return themes;
-	},
-
-	seekFavourited: function(req, res, themes) {
-  		themes = _util.getIsFavourited(req, res, themes);
-      	res.send(util.retMsg(200, themes));
 	}
 
 };
@@ -285,7 +251,7 @@ var index = {
 	        	res.send(util.retMsg(401, err.toString()));
 	      	}
 
-	      	_util.seekFavourited(req, res, themes);
+	      	util.seekFavourited(req, res, themes);
 
 		});
 
@@ -321,7 +287,7 @@ var index = {
    		 			res.send(util.retMsg(401, err.toString()));
 	   	 		}
 
-		      	_util.seekFavourited(req, res, themes);
+		      	util.seekFavourited(req, res, themes);
 
 			});
 
@@ -341,7 +307,7 @@ var index = {
 	        	res.send(util.retMsg(401, err.toString()));
 	      	}
 
-	      	_util.seekFavourited(req, res, themes);
+	      	util.seekFavourited(req, res, themes);
 
 		});
 
@@ -382,7 +348,9 @@ var index = {
 				res.send(util.retMsg(401, err.toString()));
 			}
 
-			res.send(util.retMsg(200, theme));
+	      	util.seekFavourited(req, res, theme);
+
+  	      	// res.send(util.retMsg(200, theme));
 
 		});
 

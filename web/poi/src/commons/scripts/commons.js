@@ -198,6 +198,55 @@ module.exports = {
 		});
 	},
 
+	transferThis: function(id, cb) {
+		services.CGService.repost(localStorage._id, id).then(function(res) {
+
+			var code = res.data.code;
+			var data = res.data.message;
+
+			if(code != 200) {
+				util.messageBox(data);
+				return false;
+			}
+
+			util.messageBox('转发成功');
+			cb(data);
+
+		}, function(err) {
+			util.handleError(err);
+		});
+	},
+
+	removeThisCG: function(id, cb) {
+
+		var isConfirmed = util.confirm('您确定要删除该CG吗');
+
+		if(isConfirmed) {
+
+			services.CGService.remove(id).then(function(res) {
+
+				var code = res.data.code;
+				var data = res.data.message;
+
+				if(code != 200) {
+					util.messageBox(data);
+					return false;
+				}
+
+				localStorage.draftsCount = parseInt(localStorage.draftsCount) - 1;
+
+				util.messageBox(data);
+
+				cb(data);
+
+			}, function(err) {
+				util.handleError(err);
+			});
+
+		}
+
+	},
+
 	//图片上传预览,IE使用了滤镜
     previewImage: function(fileid, outer, inner, class_, style_) {
 
@@ -256,5 +305,31 @@ module.exports = {
 	    param.top = Math.round((maxHeight - param.height) / 2);
 	    return param;
 	},
+
+	syncUploadPic: function(submitBtnId, ifrId, cb) {
+		document.getElementById(submitBtnId).click();
+
+        var getJSON = function() {
+        	var picJSON = JSON.parse(localStorage.pictureUploadedJSON);
+
+        	if(picJSON.status != 200) {
+        		util.messageBox('上传失败，请重试');
+        		return false;
+        	}
+
+        	cb(picJSON);
+        };
+
+        var oFrm = document.getElementById(ifrId);
+
+		oFrm.onload = oFrm.onreadystatechange = function() {
+		     if (this.readyState && this.readyState != 'complete') {
+		     	return false;
+		     }
+		     else {
+		         getJSON();
+		     }
+		}
+	}
 
 };

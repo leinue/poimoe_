@@ -12,7 +12,7 @@
 	    <div class="timeline" v-for="(index, item) in favouritesList">
 			<div class="col-xs-2" style="padding-right:0px">
 				<div class="timeline-author">
-					<div style="background-image:url({{item.photo | photoNullToVision}})" class="imgdiv"></div>
+					<div style="background-image:url({{item.user_id.photo | photoNullToVision}})" class="imgdiv"></div>
 				</div>
 			</div>
 			<div class="col-xs-10" style="padding-bottom:12px;">
@@ -54,7 +54,7 @@
 									<span class="glyphicon glyphicon-heart-empty like-active"></span>
 								</li>
 								<li @click="transferThis(item._id)">
-									<span class="glyphicon glyphicon-transfer"></span>
+									<span class="glyphicon glyphicon-transfer" v-bind:class="item.reposted == true ? 'transfer-active' : ''"></span>
 								</li>
 								<li ng-show="item.user_id._id == myUid" @click="removeThisCG(item._id)">
 									<span class="glyphicon glyphicon-trash"></span>
@@ -132,9 +132,7 @@
 							return false;
 						}
 
-						console.log(data[0].favourites[0].user_id);
-
-						_this.$set('favouritesList', data[0].favourites);
+						_this.$set('favouritesList', data);
 
 					}, function(err) {
 						util.handleError(err);
