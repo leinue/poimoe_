@@ -33,7 +33,7 @@
 	<div class="timeline" v-for="(key, item) in myTimeline">
 		<div class="col-xs-2" style="padding-right:0px">
 			<div class="timeline-author">
-				<div style="{{myPhoto}}" class="imgdiv"></div>
+				<div style="background-image: url({{item.user_id.photo | photoNullToVision}})" class="imgdiv"></div>
 			</div>
 		</div>
 		<div class="col-xs-10" style="padding-bottom:12px;">
@@ -119,17 +119,24 @@
 
 				var _this = this;
 
-				services.CGService.getByUid(localStorage._id, 1, 10).then(function(res) {
-				
-					var data = res.data.message;
+				services.UserService.loadTimeline(1, 10).then(function(res) {
+
+					console.log(res);
+
+	        		var code = res.data.code;
+	        		var data = res.data.message;
+
+	        		if(code != 200) {
+	        			util.messageBox(data);
+	        		}
+
+	        		console.log(data);
 
 					_this.myTimeline = data;
 
-					console.log(data);
-
-				}, function(err) {
-					util.handleError(err);
-				});
+	        	}, function(err) {
+	        		util.handleError(err);
+	        	});
 			},
 
 			likeThis: function(tid, favourited, key) {

@@ -362,6 +362,10 @@ var index = {
 					res.send(util.retMsg(401, err.toString()));
 				}
 
+				if(r.length === 0) {
+					res.send(util.retMsg(200, []));
+				}
+
 				var followList = r[0].follow;
 				var followerList = r[0].follower;
 

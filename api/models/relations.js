@@ -40,6 +40,12 @@ module.exports = {
 
     };
 
+    relationsSchema.statics.getFollowingWithoutPopulate = function(uid, cb) {
+      return this.find({
+        user_id: uid
+      }).select('follow').exec(cb);
+    }
+
     relationsSchema.statics.updateFollower = function(obj, cb) {
 
       var user_id = obj.user_id;

@@ -65,6 +65,10 @@ module.exports = {
 
     		uploadPicture: function(data) {
     			return _this.$http.post('http://image.poimoe.com/upload.php');
+    		},
+
+    		loadTimeline: function(page, count) {
+    			return _this.$http.get('timeline/' + page + '/' + count);
     		}
 
 		}

@@ -18,7 +18,7 @@
         <span class="glyphicon glyphicon-user"></span>
     </div>
 
-	<div v-show="isLogin == 'true'" @click="pathTo('personal')" id="exit-button" class="type-circle header-circle right active">
+	<div v-show="isLogin == 'true'" @click="logout()" id="exit-button" class="type-circle header-circle right active">
         <span class="glyphicon glyphicon-log-out"></span>
     </div>
 
@@ -386,6 +386,7 @@
 	        	this.editable = true;
 	        	document.getElementById("imgbtn-source").click();	        		
 	        }
+
 		},
 
         props: {

@@ -71,6 +71,8 @@ var index = {
           res.send(util(400, "账号为：" + thisEmail + " 的用户已被删除"));
         }
 
+        global.currentUserId = u[0]._id;
+
         return next();
 
       });
@@ -539,6 +541,8 @@ var index = {
         res.send(util.retMsg(401, err.toString()));
       }
 
+      favourites = favourites[0].favourites;
+
       var count = favourites.length;
 
       res.send(util.retMsg(200, count));
@@ -780,6 +784,81 @@ var index = {
       }
 
       res.send(util.retMsg(200, user));
+
+    });
+
+  },
+
+  loadTimeline: function(req, res, next) {
+
+    var page = req.params.page;
+    var count = req.params.count;
+
+    page = page || 1;
+    count = count || 10;
+    var skipFrom = (page * count) - count;
+
+    var User = ctrlInitial.models.User();
+
+    User.findByAccessToken(req.authorization.credentials, function(err, u) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
+
+      if(u.length === 0) {
+        res.send(util.retMsg(401, '用户不存在'));
+      }
+
+      var Relations = ctrlInitial.models.Relations();
+
+      Relations.getFollowingWithoutPopulate(u[0]._id, function(err, follow) {
+
+        if(err) {
+          res.send(util.retMsg(401, err.toString()));
+        }
+
+        var Themes = ctrlInitial.models.Themes();
+
+        if(follow.length === 0) {
+          follow.unshift(u[0]._id);
+        }else {
+          follow = follow[0].follow;
+
+          follow.unshift(u[0]._id);
+        }
+
+        console.log(follow);
+
+        Themes.find({
+          user_id: {'$in': follow},
+          isDeleted: false
+        }).populate({
+          path: 'user_id',
+          select: '-accessToken -password'
+        }).populate('tag_list').populate({
+          path: 'reposter',
+          select: '-accessToken -password',
+          match: {
+            isDeleted: false
+          }
+        }).populate({
+          path: 'repost'
+        }).sort({
+          createdAt: -1
+        }).skip(skipFrom).limit(count).exec(function(err, timeline) {
+
+          if(err) {
+            res.send(util.retMsg(401, err.toString()));
+          }
+
+          util.seekFavourited(req, res, timeline);
+
+          // res.send(util.retMsg(200, timeline));
+
+        });
+
+      });
 
     });
 

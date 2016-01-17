@@ -435,7 +435,7 @@ module.exports = {
 
     themesSchema.statics.getHotThemesByTagId = function(tags, cb) {
 
-      var tagCnt = 3;//counting from zero
+      var tagCnt = tags.length > 3 ? 3 : tags.length - 1;//counting from zero
       var _this = this;
 
       var result = [];
@@ -466,6 +466,9 @@ module.exports = {
           tmp.names = name;
           tmp.themes = themes;
           result.push(tmp);
+
+          console.log(key);
+          console.log(tagCnt);
 
           if(key === tagCnt) {
             cb(err, result);
