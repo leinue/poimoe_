@@ -50,7 +50,10 @@ module.exports = {
     server.get('/user/count/fo/:uid', ctrl.userCtrl.countFo);
     server.get('/user/profile/get/:uid', ctrl.userCtrl.getProfileByUid);
     server.get('/user/recommended', ctrl.userCtrl.getRecommended);
+
     server.get('/timeline/:page/:count', ctrl.userCtrl.loadTimeline);
+    server.get('/timeline/message/count', ctrl.userCtrl.getMessageCount);
+    server.get('/timeline/message/lastest', ctrl.userCtrl.getLastestMessage);
 
     server.get('/session/:name', function(req, res, next) {
       res.send(util.retMsg(200, "您通过了验证"));

@@ -862,6 +862,14 @@ var index = {
 
     });
 
+  },
+
+  getMessageCount: function(req, res, next) {
+
+  },
+
+  getLastestMessage: function(req, res, next) {
+
   }
 
 };
