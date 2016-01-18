@@ -935,7 +935,24 @@ var index = {
 
       msg = msg[0];
 
-      res.send(util.retMsg(200, msg.messageQueue));
+      var messageQueue = msg.messageQueue;
+
+      Timeline.findOneAndUpdate({
+        _id: msg[0]._id
+      }, {
+        messageCount: 0,
+        messageQueue: []
+      }, {
+        new: false
+      }, function(err, old_tl) {
+
+        if(err) {
+         res,send(util.retMsg(401, err.toString())); 
+        }
+
+        res.send(util.retMsg(200, msg.messageQueue));
+
+      });
 
     });
 
@@ -1014,7 +1031,22 @@ var index = {
 
       msg = msg[0];
 
-      res.send(util.retMsg(200, msg.personalMessageQueue));
+      Timeline.findOneAndUpdate({
+        _id: msg[0]._id
+      }, {
+        personalMessageCount: 0,
+        personalMessageQueue: []
+      }, {
+        new: false
+      }, function(err, old_tl) {
+
+        if(err) {
+         res,send(util.retMsg(401, err.toString())); 
+        }
+
+        res.send(util.retMsg(200, msg.personalMessageQueue));
+
+      });
 
     });
 
