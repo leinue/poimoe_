@@ -872,20 +872,72 @@ var index = {
 
     var Timeline = ctrlInitial.models.Timeline();
 
-    Timeline.findMessageCount(uid, function(err, tl) {
+    Timeline.findMessageCount(uid, function(err, tl_messageCount) {
 
       if(err) {
         res.send(util.retMsg(401, err.toString()));        
       }
 
-      tl = tl == null ? 0 : tl;
+      if(tl_messageCount == null) {
 
-      res.send(util.retMsg(200, tl));
+        var tline = new Timeline({
+          user_id: uid
+        });
+
+        tline.save(function(err, new_tl) {
+
+          if(err) {
+            res.send(util.retMsg(401, err.toString()));
+          }
+
+          res.send(util.retMsg(200, new_tl.messageCount));
+
+        });
+
+      }else {
+        res.send(util.retMsg(200, tl_messageCount.messageCount));
+      }
 
     });
   },
 
   getLastestMessage: function(req, res, next) {
+    var uid = req.params.uid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(401, '用户id不能为空'));
+    }
+
+    var Timeline = ctrlInitial.models.Timeline();
+
+    Timeline.findMessage(uid, function(err, msg) {
+
+      if(err) {
+        res,send(util.retMsg(401, err.toString()));
+      }
+
+      if(msg.length === 0) {
+        
+        var tline = new Timeline({
+          user_id: uid
+        });
+
+        tline.save(function(err, new_tl) {
+
+          if(err) {
+            res.send(util.retMsg(401, err.toString()));
+          }
+
+          res.send(util.retMsg(200, []));
+        });
+
+      }
+
+      msg = msg[0];
+
+      res.send(util.retMsg(200, msg.messageQueue));
+
+    });
 
   },
 
@@ -897,8 +949,6 @@ var index = {
       res.send(util.retMsg(401, '用户id不能为空'));
     }
 
-    var User = ctrlInitial.models.User();
-
     var Timeline = ctrlInitial.models.Timeline();
 
     Timeline.findPersonalMessageCount(uid, function(err, tl) {
@@ -907,14 +957,66 @@ var index = {
         res.send(util.retMsg(401, err.toString()));        
       }
 
-      tl = tl == null ? 0 : tl;
+      if(tl == null) {
 
-      res.send(util.retMsg(200, tl));
+        var tline = new Timeline({
+          user_id: uid
+        });
+
+        tline.save(function(err, new_tl) {
+
+          if(err) {
+            res.send(util.retMsg(401, err.toString()));
+          }
+
+          res.send(util.retMsg(200, new_tl.messageCount));
+
+        });
+
+      }else {
+        res.send(util.retMsg(200, tl.personalMessageCount));
+      }
 
     });
   },
 
-  getPersonalMessage: function(req, res, next) {
+  getLastestPersonalMessage: function(req, res, next) {
+    var uid = req.params.uid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(401, '用户id不能为空'));
+    }
+
+    var Timeline = ctrlInitial.models.Timeline();
+
+    Timeline.findPersonalMessage(uid, function(err, msg) {
+
+      if(err) {
+        res,send(util.retMsg(401, err.toString()));
+      }
+
+      if(msg.length === 0) {
+        
+        var tline = new Timeline({
+          user_id: uid
+        });
+
+        tline.save(function(err, new_tl) {
+
+          if(err) {
+            res.send(util.retMsg(401, err.toString()));
+          }
+
+          res.send(util.retMsg(200, []));
+        });
+
+      }
+
+      msg = msg[0];
+
+      res.send(util.retMsg(200, msg.personalMessageQueue));
+
+    });
 
   }
 
