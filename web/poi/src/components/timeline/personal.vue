@@ -28,6 +28,8 @@
 		</div>
 	</div>
 
+	<button @click="testcount()">testcount</button>
+
 	{{loadMyTimeline()}}
 
 	<div class="timeline" v-for="(key, item) in myTimeline">
@@ -157,6 +159,24 @@
 
 			removeThisCG: function(id) {
 				util.removeThisCG(id, function(data) {});
+			},
+
+			testcount: function() {
+				services.TimelineService.getMessageCount(localStorage._id).then(function(res) {
+
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					console.log(data);
+
+				}, function(err) {
+					util.handleError(err);
+				});
 			}
 		},
 

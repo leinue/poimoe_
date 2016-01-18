@@ -16,8 +16,54 @@ module.exports = {
       messageQueue: [{
         type: Schema.Types.ObjectId,
         ref: 'themes'
+      }],
+      personalMessageCount: {
+        type: Number,
+        default: 0
+      },
+      personalMessageQueue: [{
+        operator: {
+          type: Schema.Types.ObjectId,
+          ref: 'users'
+        },
+        targetUser: {
+          type: Schema.Types.ObjectId,
+          ref: 'users'
+        },
+        targetTheme: {
+          type: Schema.Types.ObjectId,
+          ref: 'themes'
+        },
+        did: {
+          type: String,
+          default: 'repost' //repost || favourite
+        }
       }]
     });
+
+    timelineSchema.statics.findMessageCount = function(uid, cb) {
+      return this.findOne({
+        user_id: uid
+      }).select('messageCount').exec(cb);
+    };
+
+    timelineSchema.statics.findMessage = function(uid, cb) {
+      return this.find({
+        user_id: uid
+      }).select('messageQueue').exec(cb);
+    };
+
+    timelineSchema.statics.findPersonalMessageCount = function(uid, cb) {
+      return this.findOne({
+        user_id: uid
+      }).select('personalMessageCount').exec(cb);
+    };
+
+    timelineSchema.statics.findPersonalMessage = function(uid, cb) {
+      return this.find({
+        user_id: uid
+      }).select('personalMessageQueue').exec(cb);
+    };
 
     return timelineSchema;
 

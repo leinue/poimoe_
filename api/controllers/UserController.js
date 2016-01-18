@@ -368,8 +368,6 @@ var index = {
       res.send(util.retMsg(400, '主题id不能为空'));
     }
 
-    console.log(tid);
-
     var User = ctrlInitial.models.User();
 
     User.find({_id: uid}, function(err, user) {
@@ -828,8 +826,6 @@ var index = {
           follow.unshift(u[0]._id);
         }
 
-        console.log(follow);
-
         Themes.find({
           user_id: {'$in': follow},
           isDeleted: false
@@ -866,9 +862,59 @@ var index = {
 
   getMessageCount: function(req, res, next) {
 
+    var uid = req.params.uid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(401, '用户id不能为空'));
+    }
+
+    var User = ctrlInitial.models.User();
+
+    var Timeline = ctrlInitial.models.Timeline();
+
+    Timeline.findMessageCount(uid, function(err, tl) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));        
+      }
+
+      tl = tl == null ? 0 : tl;
+
+      res.send(util.retMsg(200, tl));
+
+    });
   },
 
   getLastestMessage: function(req, res, next) {
+
+  },
+
+  getPersonalMessageCount: function(req, res, next) {
+
+    var uid = req.params.uid;
+
+    if(uid == '' || uid == undefined) {
+      res.send(util.retMsg(401, '用户id不能为空'));
+    }
+
+    var User = ctrlInitial.models.User();
+
+    var Timeline = ctrlInitial.models.Timeline();
+
+    Timeline.findPersonalMessageCount(uid, function(err, tl) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));        
+      }
+
+      tl = tl == null ? 0 : tl;
+
+      res.send(util.retMsg(200, tl));
+
+    });
+  },
+
+  getPersonalMessage: function(req, res, next) {
 
   }
 

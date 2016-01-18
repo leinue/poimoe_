@@ -586,7 +586,8 @@ module.exports = {
       users: _this.userModel,
       themes: _this.themesModel,
       tags: _this.tagsModel,
-      relations: _this.relationsModel
+      relations: _this.relationsModel,
+      timeline: _this.timelineModel
     };
 
   }

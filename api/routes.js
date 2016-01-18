@@ -27,7 +27,7 @@ module.exports = {
     	return next();
     });
 
-    // server.use(ctrl.userCtrl.auth);
+    server.use(ctrl.userCtrl.auth);
   
     server.get('/log/', function(req, res, next) {
         ret = util.retMsg(200, '膜蛤');
@@ -52,8 +52,10 @@ module.exports = {
     server.get('/user/recommended', ctrl.userCtrl.getRecommended);
 
     server.get('/timeline/:page/:count', ctrl.userCtrl.loadTimeline);
-    server.get('/timeline/message/count', ctrl.userCtrl.getMessageCount);
-    server.get('/timeline/message/lastest', ctrl.userCtrl.getLastestMessage);
+    server.get('/timeline/message/index/count/:uid', ctrl.userCtrl.getMessageCount);
+    server.get('/timeline/message/index/lastest/:count', ctrl.userCtrl.getLastestMessage);
+    server.get('/timeline/message/personal/count/:uid', ctrl.userCtrl.getPersonalMessageCount);
+    server.get('/timeline/message/personal/lastest/:count', ctrl.userCtrl.getPersonalMessage);
 
     server.get('/session/:name', function(req, res, next) {
       res.send(util.retMsg(200, "您通过了验证"));
