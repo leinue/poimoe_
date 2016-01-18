@@ -65,6 +65,46 @@ module.exports = {
       }).select('personalMessageQueue').exec(cb);
     };
 
+    timelineSchema.statics.resetMessageCount = function(uid, cb) {
+      return this.findOneAndUpdate({
+        user_id: uid
+      }, {
+        messageCount: 0
+      }, {
+        new: true
+      }, cb);
+    };
+
+    timelineSchema.statics.resetPersonalMessageCount = function(uid, cb) {
+      return this.findOneAndUpdate({
+        user_id: uid
+      }, {
+        personalMessageCount: 0
+      }, {
+        new: true
+      }, cb);
+    };
+
+    timelineSchema.statics.resetMessageQueue = function(uid, cb) {
+      return this.findOneAndUpdate({
+        user_id: uid
+      }, {
+        messageQueue: []
+      }, {
+        new: true
+      }, cb)
+    };
+
+    timelineSchema.statics.resetPersonalMessageQueue = function(uid, cb) {
+      return this.findOneAndUpdate({
+        user_id: uid
+      }, {
+        personalMessageQueue: []
+      }, {
+        new: true
+      }, cb);
+    };
+
     return timelineSchema;
 
   }
