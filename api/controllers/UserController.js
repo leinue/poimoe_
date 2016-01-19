@@ -866,6 +866,12 @@ var index = {
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
+    res.writeHead(200, {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive"
+    });
+
     var count = 0;
 
     var loadMessageCount = function() {
@@ -915,10 +921,10 @@ var index = {
 
     };
 
-    loadMessageCount();
-
     var getCountInterval = setInterval(function() {
-      loadMessageCount();
+      // loadMessageCount();
+      console.log("data: " + Date.now() + "\n\n");
+      res.write("data: " + Date.now() + "\n\n");
     }, 500);
 
   },
