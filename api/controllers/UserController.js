@@ -862,43 +862,65 @@ var index = {
 
   getMessageCount: function(req, res, next) {
 
-    var uid = req.params.uid;
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
 
-    if(uid == '' || uid == undefined) {
-      res.send(util.retMsg(401, '用户id不能为空'));
-    }
+    var count = 0;
 
-    var User = ctrlInitial.models.User();
+    var loadMessageCount = function() {
+      
+      var uid = req.params.uid;
 
-    var Timeline = ctrlInitial.models.Timeline();
-
-    Timeline.findMessageCount(uid, function(err, tl_messageCount) {
-
-      if(err) {
-        res.send(util.retMsg(401, err.toString()));        
+      if(uid == '' || uid == undefined) {
+        res.send(util.retMsg(401, '用户id不能为空'));
       }
 
-      if(tl_messageCount == null) {
+      var User = ctrlInitial.models.User();
 
-        var tline = new Timeline({
-          user_id: uid
-        });
+      var Timeline = ctrlInitial.models.Timeline();
 
-        tline.save(function(err, new_tl) {
+      Timeline.findMessageCount(uid, function(err, tl_messageCount) {
 
-          if(err) {
-            res.send(util.retMsg(401, err.toString()));
-          }
+        if(err) {
+          res.send(util.retMsg(401, err.toString()));        
+        }
 
-          res.send(util.retMsg(200, new_tl.messageCount));
+        if(tl_messageCount == null) {
 
-        });
+          var tline = new Timeline({
+            user_id: uid
+          });
 
-      }else {
-        res.send(util.retMsg(200, tl_messageCount.messageCount));
-      }
+          tline.save(function(err, new_tl) {
 
-    });
+            if(err) {
+              res.send(util.retMsg(401, err.toString()));
+            }
+
+            res.send(util.retMsg(200, new_tl.messageCount));
+
+          });
+
+        }else {
+
+          console.log('======');
+          console.log(tl_messageCount.messageCount);
+          console.log('======');
+
+          res.send(util.retMsg(200, tl_messageCount.messageCount));
+        }
+
+      });
+
+    };
+
+    loadMessageCount();
+
+    var getCountInterval = setInterval(function() {
+      loadMessageCount();
+    }, 500);
+
   },
 
   getLastestMessage: function(req, res, next) {

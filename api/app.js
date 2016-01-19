@@ -19,7 +19,20 @@ db.once('open', function(callback) {
 
 //创建restify服务器
 var server = restify.createServer({
-	name: 'poimoe'
+	name: 'poimoe',
+	formatters: {
+	    'text/event-stream': function formatEventSource(req, res, body, cb) {
+	      if (body instanceof Error) {
+	        return body.stack;
+	      }
+
+	      if (Buffer.isBuffer(body)) {
+	        return cb(null, body.toString('base64'));
+	      }
+
+	      return cb(null, util.inspect(body));
+	    }
+	 }
 });
 
 server.use(restify.authorizationParser());

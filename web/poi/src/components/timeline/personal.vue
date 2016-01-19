@@ -162,21 +162,38 @@
 			},
 
 			testcount: function() {
-				services.TimelineService.getMessageCount(localStorage._id).then(function(res) {
 
-					var code = res.data.code;
-					var data = res.data.message;
+				var es = new EventSource('http://api.poimoe.com//timeline/message/index/count/569b0e6d9621c9b10d0aaf38');
 
-					if(code != 200) {
-						util.messageBox(data);
-						return false;
-					}
+				console.log(es);
 
-					console.log(data);
+				es.onmessage = function(e) {
+					console.log(e);
+				};
 
-				}, function(err) {
-					util.handleError(err);
-				});
+				es.onerror = function(e) {
+					console.log(e);
+				};
+
+				es.onopen = function(e) {
+					console.log(e);
+				}
+
+				// services.TimelineService.getMessageCount(localStorage._id).then(function(res) {
+
+				// 	var code = res.data.code;
+				// 	var data = res.data.message;
+
+				// 	if(code != 200) {
+				// 		util.messageBox(data);
+				// 		return false;
+				// 	}
+
+				// 	console.log(data);
+
+				// }, function(err) {
+				// 	util.handleError(err);
+				// });
 			}
 		},
 

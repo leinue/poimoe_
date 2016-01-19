@@ -27,7 +27,7 @@ module.exports = {
     	return next();
     });
 
-    server.use(ctrl.userCtrl.auth);
+    // server.use(ctrl.userCtrl.auth);
   
     server.get('/log/', function(req, res, next) {
         ret = util.retMsg(200, '膜蛤');
