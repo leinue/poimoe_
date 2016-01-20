@@ -916,11 +916,14 @@ var index = {
 
     };
 
+    console.log('user start index message count comet service');
+
     global.currentCountInterval = setInterval(function() {
       loadMessageCount();
     }, 500);
 
     res.connection.on('end', function(){
+      console.log('user exit index message count comet service');
       clearInterval(currentCountInterval);
     });
 
@@ -1079,6 +1082,7 @@ var index = {
 
   turnOffES: function(req, res, send) {
     util.turnOffES(currentCountInterval);
+    console.log('user exit index message count comet service');
     res.send(util.retMsg(200, '关闭成功'));
   }
 

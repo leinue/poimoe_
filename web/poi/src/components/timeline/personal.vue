@@ -20,18 +20,18 @@
 		</div>
 	</div>
 
-	<div class="timeline">
+	<div class="timeline" v-show="indexMessageCount > 0">
 		<div class="col-xs-10 col-xs-offset-2">
 			 <div class="timeline-new content newtime" @click="loadMyTimeline()">
-			 	有15条新消息
+			 	有 {{indexMesssageCount}} 条新消息
 			 </div>
 		</div>
 	</div>
 
-	<button @click="testcount()">testcount</button>
-	<button @click="turnoff()">turnoff</button>
+	<button @click="turnoffIndexTimelineComet()">turnoff</button>
 
 	{{loadMyTimeline()}}
+	{{startIndexTimelineComet()}}
 
 	<div class="timeline" v-for="(key, item) in myTimeline">
 		<div class="col-xs-2" style="padding-right:0px">
@@ -108,7 +108,8 @@
 				username: localStorage.username,
 				publishTime: 'null',
 				myTimeline: {},
-				myUid: localStorage._id
+				myUid: localStorage._id,
+				indexMesssageCount: 0
 			}
 		},
 
@@ -162,42 +163,24 @@
 				util.removeThisCG(id, function(data) {});
 			},
 
-			testcount: function() {
+			startIndexTimelineComet: function() {
 
-				var es = new EventSource('http://api.poimoe.com//timeline/message/index/count/569b0e6d9621c9b10d0aaf38');
+				var _this = this;
 
-				console.log(es);
+				var es = new EventSource('http://api.poimoe.com//timeline/message/index/count/' + localStorage._id);
 
 				es.onmessage = function(e) {
-					console.log(e);
+					_this.indexMesssageCount = JSON.parse(e.data).message;
 				};
 
 				es.onerror = function(e) {
-					console.log(e);
+					util.handleError('comet服务出错');
 				};
 
-				es.onopen = function(e) {
-					console.log(e);
-				}
-
-				// services.TimelineService.getMessageCount(localStorage._id).then(function(res) {
-
-				// 	var code = res.data.code;
-				// 	var data = res.data.message;
-
-				// 	if(code != 200) {
-				// 		util.messageBox(data);
-				// 		return false;
-				// 	}
-
-				// 	console.log(data);
-
-				// }, function(err) {
-				// 	util.handleError(err);
-				// });
+				es.onopen = function(e) {}
 			},
 
-			turnoff: function() {
+			turnoffIndexTimelineComet: function() {
 				services.TimelineService.turnOffES().then(function(res) {
 
 					var code = res.data.code;
@@ -208,7 +191,7 @@
 						return false;
 					}
 
-					console.log(data);
+					util.messageBox(data);
 
 				}, function(err) {
 					util.handleError(err);
