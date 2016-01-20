@@ -29,6 +29,7 @@
 	</div>
 
 	<button @click="testcount()">testcount</button>
+	<button @click="turnoff()">turnoff</button>
 
 	{{loadMyTimeline()}}
 
@@ -194,6 +195,24 @@
 				// }, function(err) {
 				// 	util.handleError(err);
 				// });
+			},
+
+			turnoff: function() {
+				services.TimelineService.turnOffES().then(function(res) {
+
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					console.log(data);
+
+				}, function(err) {
+					util.handleError(err);
+				});
 			}
 		},
 

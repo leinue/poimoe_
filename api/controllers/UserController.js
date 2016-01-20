@@ -879,7 +879,7 @@ var index = {
       var uid = req.params.uid;
 
       if(uid == '' || uid == undefined) {
-        res.send(util.retMsg(401, '用户id不能为空'));
+        res.write(util.retESMsg(401, '用户id不能为空'));
       }
 
       var User = ctrlInitial.models.User();
@@ -889,7 +889,7 @@ var index = {
       Timeline.findMessageCount(uid, function(err, tl_messageCount) {
 
         if(err) {
-          res.send(util.retMsg(401, err.toString()));        
+          res.write(util.retESMsg(401, err.toString()));        
         }
 
         if(tl_messageCount == null) {
@@ -901,31 +901,28 @@ var index = {
           tline.save(function(err, new_tl) {
 
             if(err) {
-              res.send(util.retMsg(401, err.toString()));
+              res.write(util.retESMsg(401, err.toString()));
             }
 
-            res.send(util.retMsg(200, new_tl.messageCount));
+            res.write(util.retESMsg(200, new_tl.messageCount));
 
           });
 
         }else {
-
-          console.log('======');
-          console.log(tl_messageCount.messageCount);
-          console.log('======');
-
-          res.send(util.retMsg(200, tl_messageCount.messageCount));
+          res.write(util.retESMsg(200, tl_messageCount.messageCount));
         }
 
       });
 
     };
 
-    var getCountInterval = setInterval(function() {
-      // loadMessageCount();
-      console.log("data: " + Date.now() + "\n\n");
-      res.write("data: " + Date.now() + "\n\n");
+    global.currentCountInterval = setInterval(function() {
+      loadMessageCount();
     }, 500);
+
+    res.connection.on('end', function(){
+      clearInterval(currentCountInterval);
+    });
 
   },
 
@@ -1078,6 +1075,11 @@ var index = {
 
     });
 
+  },
+
+  turnOffES: function(req, res, send) {
+    util.turnOffES(currentCountInterval);
+    res.send(util.retMsg(200, '关闭成功'));
   }
 
 };

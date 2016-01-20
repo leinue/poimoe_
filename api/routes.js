@@ -56,6 +56,7 @@ module.exports = {
     server.get('/timeline/message/index/lastest/:count', ctrl.userCtrl.getLastestMessage);
     server.get('/timeline/message/personal/count/:uid', ctrl.userCtrl.getPersonalMessageCount);
     server.get('/timeline/message/personal/lastest/:count', ctrl.userCtrl.getLastestPersonalMessage);
+    server.get('/timeline/public/es/turnoff', ctrl.userCtrl.turnOffES);
 
     server.get('/session/:name', function(req, res, next) {
       res.send(util.retMsg(200, "您通过了验证"));

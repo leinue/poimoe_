@@ -21,6 +21,10 @@ module.exports = {
 
     		getPersonalMessage: function(count) {
     			return _this.$http.get('timeline/message/personal/lastest/' + count);
+    		},
+
+    		turnOffES: function() {
+    			return _this.$http.get('timeline/public/es/turnoff');
     		}
 
 		}

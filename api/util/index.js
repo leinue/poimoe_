@@ -14,6 +14,14 @@ var util = {
     };
   },
 
+  retESMsg: function(code, msg, d) {
+    return 'data: ' + JSON.stringify(this.retMsg(code, msg, d)) + '\n\n';
+  },
+
+  turnOffES: function(id) {
+    clearInterval(id);
+  },
+
   retUndefinedError: function(v) {
     v = v === null ? undefined : v;
     
