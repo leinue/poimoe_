@@ -330,6 +330,30 @@ module.exports = {
 		         getJSON();
 		     }
 		}
+	},
+
+	turnoffEventSource: function(backend) {
+		backend = backend || false;
+
+		services.TimelineService.turnOffES().then(function(res) {
+
+			var code = res.data.code;
+			var data = res.data.message;
+
+			if(code != 200) {
+				if(!backend) {
+					util.messageBox(data);					
+				}
+				return false;
+			}
+
+			if(!backend) {
+				util.messageBox(data);
+			}
+
+		}, function(err) {
+			util.handleError(err);
+		});
 	}
 
 };
