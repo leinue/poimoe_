@@ -106,7 +106,29 @@ module.exports = {
         messageQueue: []
       }, {
         new: true
+      }, cb);
+    };
+
+    timelineSchema.statics.resetMessage = function(uid, cb) {
+      return this.findOneAndUpdate({
+        user_id: uid
+      }, {
+        messageQueue: [],
+        messageCount: 0
+      }, {
+        new: true
       }, cb)
+    };
+
+    timelineSchema.statics.resetPersonalMessage = function(uid, cb) {
+      return this.findOneAndUpdate({
+        user_id: uid
+      }, {
+        personalMessageQueue: [],
+        personalMessageCount: 0
+      }, {
+        new: true
+      }, cb);
     };
 
     timelineSchema.statics.resetPersonalMessageQueue = function(uid, cb) {
@@ -139,7 +161,7 @@ module.exports = {
           var mc = 1;
         }else {
           var mq = timeline.messageQueue;
-          mq.push(message);
+          mq.unshift(message);
 
           var mc = timeline.messageCount + 1;
         }
@@ -178,7 +200,7 @@ module.exports = {
         }else {
           var pmc = timeline.personalMessageCount + 1;
           var pmqList = timeline.personalMessageQueue;
-          pmqList.push(pmq);
+          pmqList.unshift(pmq);
         }
 
         _this.findOneAndUpdate({

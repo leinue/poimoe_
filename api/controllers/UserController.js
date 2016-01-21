@@ -866,9 +866,31 @@ var index = {
             res.send(util.retMsg(401, err.toString()));
           }
 
-          util.seekFavourited(req, res, timeline);
+          var Timeline = ctrlInitial.models.Timeline();
 
-          // res.send(util.retMsg(200, timeline));
+          Timeline.findMessageCount(u[0]._id, function(err, mc) {
+
+            if(err) {
+              res.send(util.retMsg(401, err.toString()));
+            }
+
+            if(mc.messageCount !== 0) {
+
+              Timeline.resetMessage(u[0]._id, function(err, cb) {
+
+                if(err) {
+                  res.send(util.retMsg(401, err.toString()));
+                }
+
+                util.seekFavourited(req, res, timeline);
+
+              });
+
+            }else {
+                util.seekFavourited(req, res, timeline);
+            }
+
+          });
 
         });
 

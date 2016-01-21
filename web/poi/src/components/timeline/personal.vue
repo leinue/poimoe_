@@ -20,15 +20,13 @@
 		</div>
 	</div>
 
-	<div class="timeline" v-show="indexMessageCount > 0">
+	<div class="timeline" v-show="indexMesssageCount > 0">
 		<div class="col-xs-10 col-xs-offset-2">
 			 <div class="timeline-new content newtime" @click="loadMyTimeline()">
 			 	有 {{indexMesssageCount}} 条新消息
 			 </div>
 		</div>
 	</div>
-
-	<button @click="turnoffIndexTimelineComet()">turnoff</button>
 
 	{{loadMyTimeline()}}
 	{{startIndexTimelineComet()}}
@@ -171,6 +169,7 @@
 
 				es.onmessage = function(e) {
 					_this.indexMesssageCount = JSON.parse(e.data).message;
+					console.log(_this.indexMesssageCount);
 				};
 
 				es.onerror = function(e) {
