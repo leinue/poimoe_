@@ -1040,41 +1040,55 @@ var index = {
       "Connection": "keep-alive"
     });
 
-    var uid = req.params.uid;
+    var loadPersonalMessageCount = function() {
+      var uid = req.params.uid;
 
-    if(uid == '' || uid == undefined) {
-      res.write(util.retESMsg(401, '用户id不能为空'));
-    }
-
-    var Timeline = ctrlInitial.models.Timeline();
-
-    Timeline.findPersonalMessageCount(uid, function(err, tl) {
-
-      if(err) {
-        res.write(util.retESMsg(401, err.toString()));        
+      if(uid == '' || uid == undefined) {
+        res.write(util.retESMsg(401, '用户id不能为空'));
       }
 
-      if(tl == null) {
+      var Timeline = ctrlInitial.models.Timeline();
 
-        var tline = new Timeline({
-          user_id: uid
-        });
+      Timeline.findPersonalMessageCount(uid, function(err, tl) {
 
-        tline.save(function(err, new_tl) {
+        if(err) {
+          res.write(util.retESMsg(401, err.toString()));        
+        }
 
-          if(err) {
-            res.write(util.retESMsg(401, err.toString()));
-          }
+        if(tl == null) {
 
-          res.write(util.retESMsg(200, new_tl.messageCount));
+          var tline = new Timeline({
+            user_id: uid
+          });
 
-        });
+          tline.save(function(err, new_tl) {
 
-      }else {
-        res.write(util.retESMsg(200, tl.personalMessageCount));
-      }
+            if(err) {
+              res.write(util.retESMsg(401, err.toString()));
+            }
 
+            res.write(util.retESMsg(200, new_tl.messageCount));
+
+          });
+
+        }else {
+          res.write(util.retESMsg(200, tl.personalMessageCount));
+        }
+
+      });
+    };
+
+    console.log('user start personal message count comet service');
+
+    global.currentPersonalCountInterval = setInterval(function() {
+      loadPersonalMessageCount();
+    }, 500);
+
+    res.connection.on('end', function(){
+      console.log('user exit personal message count comet service');
+      clearInterval(currentPersonalCountInterval);
     });
+
   },
 
   getLastestPersonalMessage: function(req, res, next) {

@@ -14,18 +14,18 @@
         <span class="glyphicon glyphicon-plus"></span>
     </div>
 
-	<div v-show="isLogin == 'true'" @click="showMyProfile()" id="userprofile-button" class="type-circle header-circle right active">
+	<div v-show="isLogin == 'true'" @click="showMyProfile()" id="userprofile-button" class="type-circle header-circle right">
         <span class="glyphicon glyphicon-user"></span>
     </div>
 
-    <div v-show="isLogin == 'true'" @click="showNotifications()" id="usernoti-button" class="type-circle header-circle right active">
+    <div v-show="isLogin == 'true'" @click="showNotifications()" id="usernoti-button" class="type-circle header-circle right">
     	<div v-show="notificationCount > 0" class="noti-tip">
     		<span>{{notificationCount}}</span>
     	</div>
     	<span class="glyphicon glyphicon-bell"></span>
     </div>
 
-	<div v-show="isLogin == 'true'" @click="logout()" id="exit-button" class="type-circle header-circle right active">
+	<div v-show="isLogin == 'true'" @click="logout()" id="exit-button" class="type-circle header-circle right">
         <span class="glyphicon glyphicon-log-out"></span>
     </div>
 
@@ -407,8 +407,8 @@
 				var es = new EventSource('http://api.poimoe.com/timeline/message/personal/count/' + localStorage._id);
 
 				es.onmessage = function(e) {
-					_this.indexMesssageCount = JSON.parse(e.data).message;
-					console.log(_this.indexMesssageCount);
+					_this.notificationCount = JSON.parse(e.data).message;
+					console.log(_this.notificationCount);
 				};
 
 				es.onerror = function(e) {
@@ -651,6 +651,7 @@
 		border-radius: 9px;
 		line-height: 18px;
 		margin-left: 24px;
+		color: white;
 	}
 
 </style>
