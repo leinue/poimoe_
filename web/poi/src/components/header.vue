@@ -29,6 +29,46 @@
         <span class="glyphicon glyphicon-log-out"></span>
     </div>
 
+    <div class="notification-center {{boncein}}">
+    	<ul>
+    		<li>
+    			<div class="avatar"></div>
+    			<div class="body">
+    				<span><a>阿久津　圭@モイライ</a>さんがあなたのリスナップを</span>
+    				<span class="time">3 days ago</span>
+    			</div>
+    			<div class="noti-item"></div>
+    		</li>
+    		<li>
+    			<div class="avatar"></div>
+    			<div class="body">
+    				<span><a>阿久津　圭@モイライ</a>さんがあなたのリスナップを</span>
+    				<span class="time">3 days ago</span>
+    			</div>
+    			<div class="noti-item"></div>
+    		</li>
+    		<li>
+    			<div class="avatar"></div>
+    			<div class="body">
+    				<span><a>阿久津　圭@モイライ</a>さんがあなたのリスナップを</span>
+    				<span class="time">3 days ago</span>
+    			</div>
+    			<div class="noti-item"></div>
+    		</li>
+    		<li>
+    			<div class="avatar"></div>
+    			<div class="body">
+    				<span><a>阿久津　圭@モイライ</a>さんがあなたのリスナップを</span>
+    				<span class="time">3 days ago</span>
+    			</div>
+    			<div class="noti-item"></div>
+    		</li>
+    		<li>
+    			<div class="body"><a>查看更多</a></div>
+    		</li>
+    	</ul>
+    </div>
+
 	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <!-- Brand and toggle get grouped for better mobile display -->
@@ -158,7 +198,9 @@
 				followingCount: localStorage.followingCount,
 
 				notificationCount: 0,
-				realNofiticationCount: 0
+				realNofiticationCount: 0,
+
+				boncein: ''
 			};
 		},
 
@@ -399,7 +441,7 @@
 	        },
 
 	        showNotifications: function() {
-
+	        	this.boncein = this.boncein == 'a-bouncein' ? '' : 'a-bouncein';
 	        },
 
 	        startNotificationComet: function() {
@@ -658,6 +700,75 @@
 		color: white;
 		font-size: 12px;
 		letter-spacing: .1px;
+	}
+
+	.notification-center {
+		background: rgb(255, 255, 255);
+		width: 280px;
+		position: absolute;
+		right: 20px;
+		font-size: 12px;
+		line-height: 15px;
+		border-radius: 4px;
+		max-height: 360px;
+		top: 66px;
+		height: 360px;
+		z-index: 3000;
+		box-shadow: 0 0 15px rgba(99, 75, 37, 0.1);
+		opacity: 0
+	}
+
+	.notification-center ul {
+		width: 100%;
+		height: 100%;
+		padding: 0px;
+	}
+
+	.notification-center ul li {
+		padding: 10px;
+		border-bottom: 1px solid rgba(46, 151, 216, 0.12);
+	}
+
+	.notification-center ul li .avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 20px;
+		background-image: url(https://img-sketch.secure.pixiv.net/uploads/user_icon/file/135897/sq240_1643466286050960645.png);
+		background-color: #FFFFFF;
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: 50% 50%;
+	}
+
+	.notification-center ul li .body {
+		display: inline-block;
+		vertical-align: top;
+		padding-top: 8px;
+		padding-left: 50px;
+		padding-right: 50px;
+		margin-top: -40px;
+	}
+
+	.notification-center ul li .body .time {
+		color: #d0cac1;
+		font-size: 10px;
+		display: block;
+	}
+
+	.notification-center ul li .noti-item {
+		width: 40px;
+		height: 40px;
+		background-image: url(https://img-sketch.secure.pixiv.net/c/c_120/uploads/medium/file/447932/7480797498277370337.jpg);
+		background-color: #FFFFFF;
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: 50% 50%;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		vertical-align: top;
+		width: 40px;
+		height: 40px;
 	}
 
 </style>
