@@ -431,13 +431,31 @@ var index = {
                 favouritesCount: cnt
               }, {
                 new: true
-              }, function(err, user) {
+              }, function(err, themeAuthor) {
 
                 if(err) {
                   res.send(util.retMsg(400, err.toString()));
                 }
 
-                res.send(util.retMsg(200, '收藏成功'));
+                var Timeline = ctrlInitial.models.Timeline();
+
+                Timeline.updatePersonalMessageQueue({
+                  uid: uid,
+                  pmq: {
+                    operator: uid,
+                    targetUser: themeAuthor.user_id,
+                    targetTheme: tid,
+                    did: 'favourite' //repost || favourite
+                  }
+                }, function(err, tl) {
+
+                  if(err) {
+                    res.send('收藏成功，推送消息给作者失败');
+                  }
+
+                  res.send(util.retMsg(200, '收藏成功'));
+
+                });
 
               });
 

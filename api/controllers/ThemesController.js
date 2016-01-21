@@ -444,19 +444,33 @@ var index = {
 				      	var Timeline = ctrlInitial.models.Timeline();
 
 						Timeline.updateMessageQueue({
-							uid: _uid,
-							message: t._id
+							uid: uid,
+							message: re._id
 						}, function(err, tl) {
 
 							if(err) {
 								res.send('转发成功，推送到时间线失败');
 							}
 
-					      	res.send(util.retMsg(200, t));
+			                Timeline.updatePersonalMessageQueue({
+			                  uid: uid,
+			                  pmq: {
+			                    operator: uid,
+			                    targetUser: theme_new.user_id,
+			                    targetTheme: tid,
+			                    did: 'repost' //repost || favourite
+			                  }
+			                }, function(err, tl) {
+
+			                  if(err) {
+			                    res.send('转发成功，推送消息给作者失败');
+			                  }
+
+			                  res.send(util.retMsg(200, '转发成功'));
+
+			                });
 
 						});
-
-				      	res.send(util.retMsg(200, theme_new));
 
 					});
 

@@ -199,27 +199,32 @@ module.exports = {
 	},
 
 	transferThis: function(id, cb) {
+
+		var _this  = this;
+
 		services.CGService.repost(localStorage._id, id).then(function(res) {
 
 			var code = res.data.code;
 			var data = res.data.message;
 
 			if(code != 200) {
-				util.messageBox(data);
+				_this.messageBox(data);
 				return false;
 			}
 
-			util.messageBox('转发成功');
+			_this.messageBox('转发成功');
 			cb(data);
 
 		}, function(err) {
-			util.handleError(err);
+			_this.handleError(err);
 		});
 	},
 
 	removeThisCG: function(id, cb) {
 
-		var isConfirmed = util.confirm('您确定要删除该CG吗');
+		var _this = this;
+
+		var isConfirmed = _this.confirm('您确定要删除该CG吗');
 
 		if(isConfirmed) {
 
@@ -229,18 +234,18 @@ module.exports = {
 				var data = res.data.message;
 
 				if(code != 200) {
-					util.messageBox(data);
+					_this.messageBox(data);
 					return false;
 				}
 
 				localStorage.draftsCount = parseInt(localStorage.draftsCount) - 1;
 
-				util.messageBox(data);
+				_this.messageBox(data);
 
 				cb(data);
 
 			}, function(err) {
-				util.handleError(err);
+				_this.handleError(err);
 			});
 
 		}
@@ -309,11 +314,13 @@ module.exports = {
 	syncUploadPic: function(submitBtnId, ifrId, cb) {
 		document.getElementById(submitBtnId).click();
 
+		var _this = this;
+
         var getJSON = function() {
         	var picJSON = JSON.parse(localStorage.pictureUploadedJSON);
 
         	if(picJSON.status != 200) {
-        		util.messageBox('上传失败，请重试');
+        		_this.messageBox('上传失败，请重试');
         		return false;
         	}
 
@@ -335,6 +342,8 @@ module.exports = {
 	turnoffEventSource: function(backend) {
 		backend = backend || false;
 
+		var _this = this;
+
 		services.TimelineService.turnOffES().then(function(res) {
 
 			var code = res.data.code;
@@ -342,17 +351,17 @@ module.exports = {
 
 			if(code != 200) {
 				if(!backend) {
-					util.messageBox(data);					
+					_this.messageBox(data);					
 				}
 				return false;
 			}
 
 			if(!backend) {
-				util.messageBox(data);
+				_this.messageBox(data);
 			}
 
 		}, function(err) {
-			util.handleError(err);
+			_this.handleError(err);
 		});
 	}
 

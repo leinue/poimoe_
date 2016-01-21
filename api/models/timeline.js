@@ -159,7 +159,39 @@ module.exports = {
 
     timelineSchema.statics.updatePersonalMessageQueue = function(obj, cb) {
 
+      var uid = obj.uid;
+      var pmq = obj.pmq;
 
+      var _this = this;
+
+      return _this.findOne({
+        user_id: uid
+      }, function(err, timeline) {
+
+        if(err) {
+          cb(err, timeline);
+        }
+
+        if(timeline == null) {
+          var pmc = 1;
+          var pmqList = [pmq];
+        }else {
+          var pmc = timeline.personalMessageCount + 1;
+          var pmqList = timeline.personalMessageQueue;
+          pmqList.push(pmq);
+        }
+
+        _this.findOneAndUpdate({
+          user_id: uid
+        }, {
+          personalMessageCount: pmc,
+          personalMessageQueue: pmqList
+        }, {
+          new: true,
+          upsert: true
+        }, cb);
+
+      });
 
     };
 
