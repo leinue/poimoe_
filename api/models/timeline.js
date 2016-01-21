@@ -50,7 +50,16 @@ module.exports = {
     timelineSchema.statics.findMessage = function(uid, cb) {
       return this.find({
         user_id: uid
-      }).select('messageQueue').exec(cb);
+      }).select('messageQueue').populate({
+        path: 'messageQueue',
+        match: {
+          isDeleted: false,
+          populate: {
+            path: 'user_id tag_list',
+            select: '_id email username photo favourites'
+          }
+        }
+      }).exec(cb);
     };
 
     timelineSchema.statics.findPersonalMessageCount = function(uid, cb) {
@@ -62,7 +71,12 @@ module.exports = {
     timelineSchema.statics.findPersonalMessage = function(uid, cb) {
       return this.find({
         user_id: uid
-      }).select('personalMessageQueue').exec(cb);
+      }).select('personalMessageQueue').populate({
+        path: 'personalMessageQueue',
+        match: {
+          isDeleted: false
+        }
+      }).exec(cb);
     };
 
     timelineSchema.statics.resetMessageCount = function(uid, cb) {
@@ -103,6 +117,50 @@ module.exports = {
       }, {
         new: true
       }, cb);
+    };
+
+    timelineSchema.statics.updateMessageQueue = function(obj, cb) {
+
+      var uid = obj.uid;
+      var message = obj.message;
+
+      var _this = this;
+
+      return _this.findOne({
+        user_id: uid
+      }).exec(function(err, timeline) {
+
+        if(err) {
+          cb(err, timeline);
+        }
+
+        if(timeline == null ){
+          var mq = [message];
+          var mc = 1;
+        }else {
+          var mq = timeline.messageQueue;
+          mq.push(message);
+
+          var mc = timeline.messageCount + 1;
+        }
+
+        _this.findOneAndUpdate({
+          user_id: uid
+        }, {
+            messageCount: mc,
+            messageQueue: mq
+        }, {
+          new: true,
+          upsert: true
+        }, cb);
+
+      });
+    };
+
+    timelineSchema.statics.updatePersonalMessageQueue = function(obj, cb) {
+
+
+
     };
 
     return timelineSchema;

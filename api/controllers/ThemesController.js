@@ -106,7 +106,20 @@ var index = {
 						res.send(util.retMsg(401, err.toString()));
 					}
 
-			      	res.send(util.retMsg(200, t));
+					var Timeline = ctrlInitial.models.Timeline();
+
+					Timeline.updateMessageQueue({
+						uid: _uid,
+						message: t._id
+					}, function(err, tl) {
+
+						if(err) {
+							res.send(util.retMsg(401, '发布成功，推送到时间线失败'));
+						}
+
+				      	res.send(util.retMsg(200, t));
+
+					});
 
 				});
 
@@ -427,6 +440,21 @@ var index = {
 						if(err) {
 				        	res.send(util.retMsg(401, err.toString()));
 				      	}
+
+				      	var Timeline = ctrlInitial.models.Timeline();
+
+						Timeline.updateMessageQueue({
+							uid: _uid,
+							message: t._id
+						}, function(err, tl) {
+
+							if(err) {
+								res.send('转发成功，推送到时间线失败');
+							}
+
+					      	res.send(util.retMsg(200, t));
+
+						});
 
 				      	res.send(util.retMsg(200, theme_new));
 

@@ -63,7 +63,7 @@ module.exports = {
       var _this = this;
       var tagCount = tagList.length - 1;
 
-      if(tagCount === 0) {
+      if(tagCount < 0) {
         cb(false, null, true);
       }else {
         tagList.forEach(function(tagId, key) {
@@ -99,7 +99,6 @@ module.exports = {
             });
 
           });
-
 
         });
       }
