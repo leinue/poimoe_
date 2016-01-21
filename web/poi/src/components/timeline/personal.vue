@@ -158,7 +158,6 @@
 			},
 
 			startIndexTimelineComet: function() {
-
 				var _this = this;
 
 				var es = new EventSource('http://api.poimoe.com//timeline/message/index/count/' + localStorage._id);

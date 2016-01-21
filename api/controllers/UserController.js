@@ -902,8 +902,6 @@ var index = {
 
   getPublicMessageCount: function(req, res, next) {
 
-
-
   },
 
   getMessageCount: function(req, res, next) {
@@ -1036,10 +1034,16 @@ var index = {
 
   getPersonalMessageCount: function(req, res, next) {
 
+    res.writeHead(200, {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive"
+    });
+
     var uid = req.params.uid;
 
     if(uid == '' || uid == undefined) {
-      res.send(util.retMsg(401, '用户id不能为空'));
+      res.write(util.retESMsg(401, '用户id不能为空'));
     }
 
     var Timeline = ctrlInitial.models.Timeline();
@@ -1047,7 +1051,7 @@ var index = {
     Timeline.findPersonalMessageCount(uid, function(err, tl) {
 
       if(err) {
-        res.send(util.retMsg(401, err.toString()));        
+        res.write(util.retESMsg(401, err.toString()));        
       }
 
       if(tl == null) {
@@ -1059,15 +1063,15 @@ var index = {
         tline.save(function(err, new_tl) {
 
           if(err) {
-            res.send(util.retMsg(401, err.toString()));
+            res.write(util.retESMsg(401, err.toString()));
           }
 
-          res.send(util.retMsg(200, new_tl.messageCount));
+          res.write(util.retESMsg(200, new_tl.messageCount));
 
         });
 
       }else {
-        res.send(util.retMsg(200, tl.personalMessageCount));
+        res.write(util.retESMsg(200, tl.personalMessageCount));
       }
 
     });

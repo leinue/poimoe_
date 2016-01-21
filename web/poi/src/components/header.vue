@@ -164,6 +164,7 @@
 		methods: {
 			init: function() {
 				this.isLogin = localStorage.login;
+				this.startNotificationComet();
 			},
 
 			pathTo: function(path){
@@ -398,6 +399,23 @@
 
 	        showNotifications: function() {
 
+	        },
+
+	        startNotificationComet: function() {
+				var _this = this;
+
+				var es = new EventSource('http://api.poimoe.com/timeline/message/personal/count/' + localStorage._id);
+
+				es.onmessage = function(e) {
+					_this.indexMesssageCount = JSON.parse(e.data).message;
+					console.log(_this.indexMesssageCount);
+				};
+
+				es.onerror = function(e) {
+					util.handleError('comet服务出错');
+				};
+
+				es.onopen = function(e) {}
 	        }
 
 		},
