@@ -20,10 +20,10 @@
 		</div>
 	</div>
 
-	<div class="timeline">
+	<div class="timeline" @click="loadPublicTimeline()">
 		<div class="col-xs-10 col-xs-offset-2">
-			 <div class="timeline-new content newtime">
-			 	有15条新消息
+			 <div style="text-align:center" class="timeline-new content newtime">
+			 刷新
 			 </div>
 		</div>
 	</div>
@@ -102,7 +102,9 @@
 				publicTimeline: {},
 				myPhoto: 'background-image: url(' + localStorage.photo + ')!important;',
 
-				myUid: localStorage._id
+				myUid: localStorage._id,
+
+				publicMessageCount: 0
 			}
 		},
 		components: {
@@ -155,7 +157,6 @@
 			removeThisCG: function(id) {
 				util.removeThisCG(id, function(data) {});
 			}
-
 		}
 	};
 

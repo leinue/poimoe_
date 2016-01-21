@@ -123,16 +123,12 @@
 
 				services.UserService.loadTimeline(1, 10).then(function(res) {
 
-					console.log(res);
-
 	        		var code = res.data.code;
 	        		var data = res.data.message;
 
 	        		if(code != 200) {
 	        			util.messageBox(data);
 	        		}
-
-	        		console.log(data);
 
 					_this.myTimeline = data;
 
@@ -198,7 +194,7 @@
 			}
 		},
 
-		created() {
+		ready() {
 
 			// var _this = this;
 

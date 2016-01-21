@@ -900,6 +900,12 @@ var index = {
 
   },
 
+  getPublicMessageCount: function(req, res, next) {
+
+
+
+  },
+
   getMessageCount: function(req, res, next) {
 
     res.setHeader('Content-Type', 'text/event-stream');
