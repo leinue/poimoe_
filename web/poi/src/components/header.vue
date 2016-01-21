@@ -19,7 +19,7 @@
     </div>
 
     <div v-show="isLogin == 'true'" @click="showNotifications()" id="usernoti-button" class="type-circle header-circle right">
-    	<div v-show="notificationCount > 0" class="noti-tip">
+    	<div v-show="notificationCount > 0 || notificationCount == '99+'" class="noti-tip">
     		<span>{{notificationCount}}</span>
     	</div>
     	<span class="glyphicon glyphicon-bell"></span>
@@ -157,7 +157,8 @@
 				followerCount: localStorage.followerCount,
 				followingCount: localStorage.followingCount,
 
-				notificationCount: 0
+				notificationCount: 0,
+				realNofiticationCount: 0
 			};
 		},
 
@@ -408,7 +409,10 @@
 
 				es.onmessage = function(e) {
 					_this.notificationCount = JSON.parse(e.data).message;
-					console.log(_this.notificationCount);
+					_this.realNofiticationCount = _this.notificationCount;
+					if(_this.notificationCount >= 100) {
+						_this.realNofiticationCount = '99+';
+					}
 				};
 
 				es.onerror = function(e) {
@@ -652,6 +656,8 @@
 		line-height: 18px;
 		margin-left: 24px;
 		color: white;
+		font-size: 12px;
+		letter-spacing: .1px;
 	}
 
 </style>
