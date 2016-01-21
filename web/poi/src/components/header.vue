@@ -10,12 +10,19 @@
         <span class="glyphicon glyphicon-search"></span>
     </div>
 
-	<div v-show="isLogin == 'true'" @click="pathToNewCGPage()" id="newcg-button" class="type-circle header-circle right active">
+	<div v-show="isLogin == 'true'" @click="pathToNewCGPage()" id="newcg-button" class="type-circle header-circle right">
         <span class="glyphicon glyphicon-plus"></span>
     </div>
 
 	<div v-show="isLogin == 'true'" @click="showMyProfile()" id="userprofile-button" class="type-circle header-circle right active">
         <span class="glyphicon glyphicon-user"></span>
+    </div>
+
+    <div v-show="isLogin == 'true'" @click="showNotifications()" id="usernoti-button" class="type-circle header-circle right active">
+    	<div v-show="notificationCount > 0" class="noti-tip">
+    		<span>{{notificationCount}}</span>
+    	</div>
+    	<span class="glyphicon glyphicon-bell"></span>
     </div>
 
 	<div v-show="isLogin == 'true'" @click="logout()" id="exit-button" class="type-circle header-circle right active">
@@ -148,7 +155,9 @@
 				deletedCount: localStorage.deletedCount,
 
 				followerCount: localStorage.followerCount,
-				followingCount: localStorage.followingCount
+				followingCount: localStorage.followingCount,
+
+				notificationCount: 0
 			};
 		},
 
@@ -385,6 +394,10 @@
 	        uploadMyPhoto: function() {
 	        	this.editable = true;
 	        	document.getElementById("imgbtn-source").click();	        		
+	        },
+
+	        showNotifications: function() {
+
 	        }
 
 		},
@@ -592,7 +605,7 @@
 	}
 
 	#newcg-button {
-		right: 120px!important;
+		right: 170px!important;
 		top: 15px;
 	}
 
@@ -602,8 +615,24 @@
 	}
 
 	#userprofile-button {
+		right: 120px!important;
+		top: 15px;
+	}
+
+	#usernoti-button {
 		right: 70px!important;
 		top: 15px;
+	}
+
+	.noti-tip {
+		background: rgb(207, 0, 31);
+		position: absolute;
+		border: none;
+		width: 18px;
+		height: 18px;
+		border-radius: 9px;
+		line-height: 18px;
+		margin-left: 24px;
 	}
 
 </style>
