@@ -64,7 +64,7 @@
     			<div class="noti-item"></div>
     		</li>
     		<li>
-    			<div class="body"><a>查看更多</a></div>
+    			<div class="body more"><a>查看更多</a></div>
     		</li>
     	</ul>
     </div>
@@ -705,14 +705,14 @@
 	.notification-center {
 		background: rgb(255, 255, 255);
 		width: 280px;
-		position: absolute;
+		position: fixed;
 		right: 20px;
 		font-size: 12px;
 		line-height: 15px;
 		border-radius: 4px;
 		max-height: 360px;
 		top: 66px;
-		height: 360px;
+		/*height: 360px;*/
 		z-index: 3000;
 		box-shadow: 0 0 15px rgba(99, 75, 37, 0.1);
 		opacity: 0
@@ -727,6 +727,10 @@
 	.notification-center ul li {
 		padding: 10px;
 		border-bottom: 1px solid rgba(46, 151, 216, 0.12);
+	}
+
+	.notification-center ul li a {
+		cursor: pointer;
 	}
 
 	.notification-center ul li .avatar {
@@ -747,6 +751,13 @@
 		padding-left: 50px;
 		padding-right: 50px;
 		margin-top: -40px;
+	}
+
+	.notification-center ul li .body.more {
+		width: 100%;
+		text-align: center;
+		vertical-align: middle;
+		margin-top: -4px;
 	}
 
 	.notification-center ul li .body .time {
