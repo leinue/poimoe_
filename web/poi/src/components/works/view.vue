@@ -2,7 +2,7 @@
 
 	<div style="background: rgb(249, 245, 239);">
 		
-		<div class="col-md-6 col-md-offset-3">
+		<div class="col-md-6 col-md-offset-3 a-bounceinB">
 			<div class="timeline" style="padding-top:12px;">
 				
 			</div>

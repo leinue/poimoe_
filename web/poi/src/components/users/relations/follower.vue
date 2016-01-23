@@ -9,7 +9,7 @@
 
 			<nodata v-show="fans.length === 0"></nodata>
 
-			<div class="timeline" v-for="(key, fan) in fans">
+			<div class="timeline a-bounceinB" v-for="(key, fan) in fans">
 				<div class="col-xs-2" style="padding-right:0px">
 					<div class="timeline-author">
 						<div style="background-image:url({{fan.photo | photoNullToVision}})" class="imgdiv"></div>

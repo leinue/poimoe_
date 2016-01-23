@@ -9,7 +9,7 @@
 
 			<nofo v-show="following.length === 0"></nofo>
 
-			<div class="timeline" v-for="user in following">
+			<div class="timeline a-bounceinB" v-for="user in following">
 				<div class="col-xs-2" style="padding-right:0px">
 					<div class="timeline-author">
 						<div @click="toProfile(user._id)" style="background-image:url({{user.photo | photoNullToVision}})" class="imgdiv"></div>

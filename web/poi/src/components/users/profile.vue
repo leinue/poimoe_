@@ -1,7 +1,7 @@
 <template>
 
 	<div>
-		<div class="side-profile" style="margin-top:15px;">
+		<div class="side-profile a-bounceinT" style="margin-top:15px;">
 		    <div class="side-profile-photo" style="{{photo | photoNullToVision}}"></div>
 		    <div class="side-profile-detail">
 		    	<p style="margin-bottom:10px">{{username}}</p>

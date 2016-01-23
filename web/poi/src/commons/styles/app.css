@@ -323,7 +323,18 @@ button.navbar-toggle.collapsed {
 	display: none!important;
 }
 
-.a-bouncein{
+.notification-page {
+	position: relative!important;
+	width: 100%!important;
+	right: 0px!important;
+	top: 20px!important;
+}
+
+.aside {
+	z-index: 65535;
+}
+
+.a-bouncein {
 	opacity: 1!important;
 	animation: bouncein .8s linear 0s 1 alternate;
 	-moz-animation: bouncein .8s linear 0s 1 alternate;
@@ -331,6 +342,21 @@ button.navbar-toggle.collapsed {
 	-o-animation: bouncein .8s linear 0s 1 alternate;
 }
 
+.a-bounceinB {
+	-webkit-animation: bounceinB .8s linear 0s 1 alternate;
+	-moz-animation: bounceinB .8s linear 0s 1 alternate;
+	-ms-animation: bounceinB .8s linear 0s 1 alternate;
+	animation: bounceinB .8s linear 0s 1 alternate;
+}
+
+.a-bounceinT {
+	-webkit-animation: bounceinT 1.2s linear 0s 1 alternate;
+	-moz-animation: bounceinT 1.2s linear 0s 1 alternate;
+	-ms-animation: bounceinT 1.2s linear 0s 1 alternate;
+	animation: bounceinT 1.2s linear 0s 1 alternate;
+}
+
+/*弹出*/
 @-webkit-keyframes bouncein{
 	0%{opacity:0;-webkit-transform:scale(0.3);}
 	25%{opacity:1;-webkit-transform:scale(1.05);}
@@ -356,3 +382,54 @@ button.navbar-toggle.collapsed {
 	100%{transform:scale(1);}
 }
 
+/* 弹入-从下 */
+@-webkit-keyframes bounceinB{
+	0%{opacity:0;-webkit-transform:translateY(100px);}
+	25%{opacity:1;-webkit-transform:translateY(-30px);}
+	50%{-webkit-transform:translateY(10px);}
+	100%{-webkit-transform:translateY(0);}
+}
+@-moz-keyframes bounceinB{
+	0%{opacity:0;-moz-transform:translateY(100px);}
+	25%{opacity:1;-moz-transform:translateY(-30px);}
+	50%{-moz-transform:translateY(10px);}
+	100%{-moz-transform:translateY(0);}
+}
+@-ms-keyframes bounceinB{
+	0%{opacity:0;-ms-transform:translateY(100px);}
+	25%{opacity:1;-ms-transform:translateY(-30px);}
+	50%{-ms-transform:translateY(10px);}
+	100%{-ms-transform:translateY(0);}
+}
+@keyframes bounceinB{
+	0%{opacity:0;transform:translateY(100px);}
+	25%{opacity:1;transform:translateY(-30px);}
+	50%{transform:translateY(10px);}
+	100%{transform:translateY(0);}
+}
+
+/* 弹入-从上 */
+@-webkit-keyframes bounceinT{
+	0%{opacity:0;-webkit-transform:translateY(-100px);}
+	25%{opacity:1;-webkit-transform:translateY(30px);}
+	50%{-webkit-transform:translateY(-10px);}
+	100%{-webkit-transform:translateY(0);}
+}
+@-moz-keyframes bounceinT{
+	0%{opacity:0;-moz-transform:translateY(-100px);}
+	25%{opacity:1;-moz-transform:translateY(30px);}
+	50%{-moz-transform:translateY(-10px);}
+	100%{-moz-transform:translateY(0);}
+}
+@-ms-keyframes bounceinT{
+	0%{opacity:0;-ms-transform:translateY(-100px);}
+	25%{opacity:1;-ms-transform:translateY(30px);}
+	50%{-ms-transform:translateY(-10px);}
+	100%{-ms-transform:translateY(0);}
+}
+@keyframes bounceinT{
+	0%{opacity:0;transform:translateY(-100px);}
+	25%{opacity:1;transform:translateY(30px);}
+	50%{transform:translateY(-10px);}
+	100%{transform:translateY(0);}
+}

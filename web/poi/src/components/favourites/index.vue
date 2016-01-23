@@ -9,7 +9,7 @@
 
 		<no-favourites v-show="favouritesList.length === 0"></no-favourites>
 
-	    <div class="timeline" v-for="(index, item) in favouritesList">
+	    <div class="timeline a-bouncein" v-for="(index, item) in favouritesList">
 			<div class="col-xs-2" style="padding-right:0px">
 				<div class="timeline-author">
 					<div style="background-image:url({{item.user_id.photo | photoNullToVision}})" class="imgdiv"></div>

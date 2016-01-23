@@ -30,7 +30,7 @@
 
 	{{loadPublicTimeline()}}
 
-	<div class="timeline" v-for="item in publicTimeline">
+	<div class="timeline a-bounceinB" v-for="item in publicTimeline">
 		<div class="col-xs-2" style="padding-right:0px">
 			<div class="timeline-author">
 				<div style="background-image: url({{item.user_id.photo | photoNullToVision}})" class="imgdiv"></div>

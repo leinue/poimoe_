@@ -62,6 +62,9 @@ module.exports = function(router){
 			name: 'search-key',
 			component: require('./components/search.vue')
 		},
+		'/notifications': {
+			component: require('./components/users/notifications.vue')
+		},
 		'/404': {
 			component: {
 				component: require('./404.vue')

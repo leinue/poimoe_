@@ -64,7 +64,7 @@
     			<div class="noti-item"></div>
     		</li>
     		<li>
-    			<div class="body more"><a>查看更多</a></div>
+    			<div @click="pathToNotifications()" class="body more"><a>查看更多</a></div>
     		</li>
     	</ul>
     </div>
@@ -462,6 +462,12 @@
 				};
 
 				es.onopen = function(e) {}
+	        },
+
+	        pathToNotifications: function() {
+	        	util.cancelActiveMenu();
+	        	router.go('/notifications');
+	        	this.boncein = '';
 	        }
 
 		},

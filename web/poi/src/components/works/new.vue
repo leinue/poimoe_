@@ -2,7 +2,7 @@
 
 <div style="background: rgb(249, 245, 239);" id="new-cg-container">
 
-	<div class="col-md-6 col-md-offset-3" style="padding-top:12px;">
+	<div class="col-md-6 col-md-offset-3 a-bounceinB" style="padding-top:12px;">
 		<div class="timeline">
 			<div class="col-xs-10" style="padding-bottom:12px;width:100%;">
 				
@@ -56,6 +56,7 @@
 			</div>
 		</div>
 	</div>
+
 </div>
 
 </template>

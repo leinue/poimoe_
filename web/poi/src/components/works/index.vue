@@ -24,7 +24,7 @@
 
 		{{loadMyTimeline()}}
 
-		<div class="timeline" v-for="item in myTimeline">
+		<div class="timeline a-bounceinB" v-for="item in myTimeline">
 			<div class="col-xs-2" style="padding-right:0px">
 				<div class="timeline-author">
 					<div style="{{myPhoto}}" class="imgdiv"></div>
