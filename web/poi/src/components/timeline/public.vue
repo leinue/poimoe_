@@ -20,11 +20,12 @@
 		</div>
 	</div>
 
-	<div class="timeline" @click="loadPublicTimeline()">
+	<div @click="loadPublicTimeline()" id="public-refresh-timeline" class="type-circle header=circle right right-circle active">
+		<span class="glyphicon glyphicon-refresh"></span>
+	</div>
+
+	<div class="timeline">
 		<div class="col-xs-10 col-xs-offset-2">
-			 <div style="text-align:center" class="timeline-new content newtime">
-			 刷新
-			 </div>
 		</div>
 	</div>
 

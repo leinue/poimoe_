@@ -44,15 +44,18 @@
 			scrollTop=document.body.scrollTop;
 			var _public = document.getElementById('public-timeline');
 			var _personal = document.getElementById('personal-timeline');
+			var _refresh = document.getElementById('public-refresh-timeline');
 
 			if(_public != null) {
 
 				if(scrollTop > 94) {
 					_public.setAttribute('style','top:70px;width:40px;height:40px;line-height:40px;');
 					_personal.setAttribute('style', 'top:120px;width:40px;height:40px;line-height:40px;');
+					_refresh.setAttribute('style', 'top:70px!important;width:40px;height:40px;line-height:40px;');
 				}else {
 					_public.setAttribute('style','top:110px;');
-					_personal.setAttribute('style', 'top:180px;');				
+					_personal.setAttribute('style', 'top:180px;');
+					_refresh.setAttribute('style', 'top:110px;');	
 				}
 
 			}
@@ -308,6 +311,12 @@
 
 	.timeline-transfer .header-right {
 		/*margin-top: -40px;*/
+	}
+
+	#public-refresh-timeline {
+		right: 20px!important;
+		top: 110px;
+		z-index: 6000;
 	}
 
 </style>
