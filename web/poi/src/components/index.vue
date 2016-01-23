@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="col-md-6 hot-cg-imgs">
-                    <div @click="viewThisCG(item._id)" class="col-md-4" v-for="(key, item) in hotThemes">
+                    <div @click="viewThisCG(item._id)" class="col-md-4 cg-container" id="cgc-index" v-for="(key, item) in hotThemes">
                         <div v-on:mouseenter="showCover" v-on:mouseleave="hideCover" class="cg-img" style="background-image:url('{{item.image}}')">
                             <div v-show="cgReco.showCover" transition="cgrecocover" class="cg-img-cover">
                                 <div class="span">{{key + 1}}</div>
@@ -509,6 +509,34 @@
             width: 100%;
         }
 
+    }
+
+    @media screen and (max-width: 800px) {
+        .cg-container {
+            padding-left: 0px;
+        }
+
+        #cgc-index {
+            margin-top: 10px;
+        }
+
+        .cg-img {
+            height: 320px;
+        }
+
+        .photo-group ul li {
+            width: 100px;
+            height: 100px;
+            background-size: 100px;
+        }
+    }
+
+    @media screen and (max-width: 414px) {
+        .photo-group ul li {
+            width: 60px;
+            height: 60px;
+            background-size: 60px;
+        }
     }
 
     @media screen and (max-width: 1023px) {

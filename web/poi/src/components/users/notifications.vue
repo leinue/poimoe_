@@ -2,7 +2,7 @@
 
 	<div>
 		<!-- {{animateNotificationPanel()}} -->
-		<div class="col-md-6 col-md-offset-3">
+		<div class="col-md-6 col-md-offset-3" style="padding:15px;">
 			<div class="notification-center a-bouncein notification-page">
 		    	<ul>
 		    		<li>
