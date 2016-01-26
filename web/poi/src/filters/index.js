@@ -37,6 +37,14 @@ module.exports = {
 			}
 		});
 
+		this.vue.filter('notificationActionFilter', function(item) {
+			if(item == 'repost') {
+				return '转发';
+			}else {
+				return '喜欢';
+			}
+		});
+
 	},
 
 	get: function(filter) {

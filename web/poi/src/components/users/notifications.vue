@@ -3,40 +3,16 @@
 	<div>
 		<!-- {{animateNotificationPanel()}} -->
 		<div class="col-md-6 col-md-offset-3" style="padding:15px;">
-			<div class="notification-center a-bouncein notification-page">
+			<div class="notification-center a-bouncein notification-page noti-big-page">
 		    	<ul>
-		    		<li>
-		    			<div class="avatar"></div>
-		    			<div class="body">
-		    				<span><a>阿久津　圭@モイライ</a>さんがあなたのリスナップを</span>
-		    				<span class="time">3 days ago</span>
-		    			</div>
-		    			<div class="noti-item"></div>
-		    		</li>
-		    		<li>
-		    			<div class="avatar"></div>
-		    			<div class="body">
-		    				<span><a>阿久津　圭@モイライ</a>さんがあなたのリスナップを</span>
-		    				<span class="time">3 days ago</span>
-		    			</div>
-		    			<div class="noti-item"></div>
-		    		</li>
-		    		<li>
-		    			<div class="avatar"></div>
-		    			<div class="body">
-		    				<span><a>阿久津　圭@モイライ</a>さんがあなたのリスナップを</span>
-		    				<span class="time">3 days ago</span>
-		    			</div>
-		    			<div class="noti-item"></div>
-		    		</li>
-		    		<li>
-		    			<div class="avatar"></div>
-		    			<div class="body">
-		    				<span><a>阿久津　圭@モイライ</a>さんがあなたのリスナップを</span>
-		    				<span class="time">3 days ago</span>
-		    			</div>
-		    			<div class="noti-item"></div>
-		    		</li>
+		    		<li v-for="noti in notiList">
+						<div @click="pathToProfile(noti.operator._id)" class="avatar" style="background-image: url({{noti.targetUser.photo}});"></div>
+    					<div class="body">
+    						<span><a @click="pathToProfile(noti.operator._id)">{{noti.operator.username}}</a> {{noti.did | notificationActionFilter}}了您的分享 </span>
+    						<span class="time">{{noti.createdAt}}</span>
+    					</div>
+    					<div @click="pathToCG(noti.targetTheme._id)" class="noti-item noti-big" style="background-image: url({{noti.targetTheme.image}});"></div>		    		
+    				</li>
 		    		<li>
 		    			<div class="body more" style="padding-bottom: 10px;"><a>查看更多</a></div>
 		    		</li>
@@ -59,7 +35,8 @@
 
 			return {
 
-				boncein: ''
+				boncein: '',
+				notiList: []
 
 			};
 
@@ -79,21 +56,21 @@
 
 						clearInterval(servicesInterval);
 
-						// window.services.UserService.getProfile(uid).then(function(res) {
+						services.TimelineService.getPersonalMessage(localStorage._id, 1, 10).then(function(res) {
 
-						// 	var code = res.data.code;
-						// 	var data = res.data.message;
+			        		var code = res.data.code;
+			        		var data = res.data.message;
 
-						// 	if(code != 200) {
-						// 		util.messageBox(data);
-						// 		return false;
-						// 	}
+			        		if(code != 200) {
+			        			util.messageBox(data);
+			        		}
 
+			        		_this.$set('notiList', data);
 
-						// }, function(err) {
-						// 	util.handleError(err);
-						// });
-					}
+			        	}, function(err) {
+			        		util.handleError(err);
+			        	});
+						}
 
 				}, 1);
 
@@ -106,7 +83,18 @@
 			animateNotificationPanel: function() {
 	        	this.boncein = this.boncein == 'a-bouncein' ? '' : 'a-bouncein';
 	        	console.log(this.boncein);
-			}
+			},
+
+			pathToCG: function(id) {
+	        	util.cancelActiveMenu();
+	        	router.go('/view/' + id);
+	        },
+
+	        pathToProfile: function(id) {
+	        	util.cancelActiveMenu();
+	        	router.go('/profile/' + id);
+	        }
+
 
 		}
 	}
@@ -114,5 +102,15 @@
 </script>
 
 <style>
+
+	.noti-big {
+		position: absolute;
+		right: 15px;
+	}
+
+	.noti-big-page {
+		max-height: 810px;
+		margin-bottom: 30px;
+	}
 
 </style>

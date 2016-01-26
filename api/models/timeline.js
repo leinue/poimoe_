@@ -37,6 +37,10 @@ module.exports = {
         did: {
           type: String,
           default: 'repost' //repost || favourite
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now
         }
       }]
     });
@@ -68,13 +72,29 @@ module.exports = {
       }).select('personalMessageCount').exec(cb);
     };
 
-    timelineSchema.statics.findPersonalMessage = function(uid, cb) {
+    timelineSchema.statics.findPersonalMessage = function(uid, page, count, cb) {
+
+      page = page || 1;
+      count = count || 10;
+      var skipFrom = (page * count) - count;
+
       return this.find({
         user_id: uid
       }).select('personalMessageQueue').populate({
         path: 'personalMessageQueue',
         match: {
           isDeleted: false
+        },
+        options: {
+          skip: skipFrom,
+          limit: count
+        },
+        populate: {
+          path: 'operator targetUser targetTheme',
+          match: {
+            isDeleted: false
+          },
+          select: '-password -accessToken -blockedAt -deletedAt -createdAt -favourites -followerByMe -followedMe -posts'
         }
       }).exec(cb);
     };

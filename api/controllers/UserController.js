@@ -445,7 +445,8 @@ var index = {
                     operator: uid,
                     targetUser: themeAuthor.user_id,
                     targetTheme: tid,
-                    did: 'favourite' //repost || favourite
+                    did: 'favourite', //repost || favourite
+                    createdAt: Date.now()
                   }
                 }, function(err, tl) {
 
@@ -1093,6 +1094,8 @@ var index = {
 
   getLastestPersonalMessage: function(req, res, next) {
     var uid = req.params.uid;
+    var page = req.params.page;
+    var count = req.params.count;
 
     if(uid == '' || uid == undefined) {
       res.send(util.retMsg(401, '用户id不能为空'));
@@ -1100,7 +1103,7 @@ var index = {
 
     var Timeline = ctrlInitial.models.Timeline();
 
-    Timeline.findPersonalMessage(uid, function(err, msg) {
+    Timeline.findPersonalMessage(uid, page, count, function(err, msg) {
 
       if(err) {
         res,send(util.retMsg(401, err.toString()));
@@ -1126,10 +1129,9 @@ var index = {
         msg = msg[0];
 
         Timeline.findOneAndUpdate({
-          _id: msg[0]._id
+          _id: msg._id
         }, {
-          personalMessageCount: 0,
-          personalMessageQueue: []
+          personalMessageCount: 0
         }, {
           new: false
         }, function(err, old_tl) {

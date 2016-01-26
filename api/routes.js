@@ -55,7 +55,7 @@ module.exports = {
     server.get('/timeline/message/index/count/:uid', ctrl.userCtrl.getMessageCount);
     server.get('/timeline/message/index/lastest/:count', ctrl.userCtrl.getLastestMessage);
     server.get('/timeline/message/personal/count/:uid', ctrl.userCtrl.getPersonalMessageCount);
-    server.get('/timeline/message/personal/lastest/:count', ctrl.userCtrl.getLastestPersonalMessage);
+    server.get('/timeline/message/personal/lastest/:uid/:page/:count', ctrl.userCtrl.getLastestPersonalMessage);
     server.get('/timeline/message/public/count', ctrl.userCtrl.getPublicMessageCount);
     server.get('/timeline/public/es/turnoff', ctrl.userCtrl.turnOffES);
 

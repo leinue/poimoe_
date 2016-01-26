@@ -31,37 +31,13 @@
 
     <div class="notification-center {{boncein}}">
     	<ul>
-    		<li>
-    			<div class="avatar"></div>
+    		<li v-for="noti in notificationsList">
+    			<div @click="pathToProfile(noti.operator._id)" class="avatar" style="background-image: url({{noti.targetUser.photo}});"></div>
     			<div class="body">
-    				<span><a>阿久津　圭@モイライ</a>さんがあなたのリスナップを</span>
-    				<span class="time">3 days ago</span>
+    				<span><a @click="pathToProfile(noti.operator._id)">{{noti.operator.username}}</a> {{noti.did | notificationActionFilter}}了您的分享 </span>
+    				<span class="time">{{noti.createdAt}}</span>
     			</div>
-    			<div class="noti-item"></div>
-    		</li>
-    		<li>
-    			<div class="avatar"></div>
-    			<div class="body">
-    				<span><a>阿久津　圭@モイライ</a>さんがあなたのリスナップを</span>
-    				<span class="time">3 days ago</span>
-    			</div>
-    			<div class="noti-item"></div>
-    		</li>
-    		<li>
-    			<div class="avatar"></div>
-    			<div class="body">
-    				<span><a>阿久津　圭@モイライ</a>さんがあなたのリスナップを</span>
-    				<span class="time">3 days ago</span>
-    			</div>
-    			<div class="noti-item"></div>
-    		</li>
-    		<li>
-    			<div class="avatar"></div>
-    			<div class="body">
-    				<span><a>阿久津　圭@モイライ</a>さんがあなたのリスナップを</span>
-    				<span class="time">3 days ago</span>
-    			</div>
-    			<div class="noti-item"></div>
+    			<div @click="pathToCG(noti.targetTheme._id)" class="noti-item" style="background-image: url({{noti.targetTheme.image}});"></div>
     		</li>
     		<li>
     			<div @click="pathToNotifications()" class="body more"><a>查看更多</a></div>
@@ -200,7 +176,9 @@
 				notificationCount: 0,
 				realNofiticationCount: 0,
 
-				boncein: ''
+				boncein: '',
+
+				notificationsList: []
 			};
 		},
 
@@ -213,7 +191,7 @@
 			pathTo: function(path){
 				util.cancelActiveMenu();
 				this.menu.currentName = path;
-				router.go(path);
+				router.replace(path);
 			},
 
 			pathToAndCloseThis: function(path) {
@@ -441,6 +419,26 @@
 	        },
 
 	        showNotifications: function() {
+
+	        	var _this = this;
+
+	        	if(this.boncein != 'a-bouncein') {
+		        	services.TimelineService.getPersonalMessage(localStorage._id, 1, 4).then(function(res) {
+
+		        		var code = res.data.code;
+		        		var data = res.data.message;
+
+		        		if(code != 200) {
+		        			util.messageBox(data);
+		        		}
+
+		        		_this.notificationsList = data;
+		        		console.log(_this.notificationsList);
+
+		        	}, function(err) {
+		        		util.handleError(err);
+		        	});	        		
+	        	}
 	        	this.boncein = this.boncein == 'a-bouncein' ? '' : 'a-bouncein';
 	        },
 
@@ -468,6 +466,14 @@
 	        	util.cancelActiveMenu();
 	        	router.go('/notifications');
 	        	this.boncein = '';
+	        },
+
+	        pathToCG: function(id) {
+	        	this.pathTo('/view/' + id);
+	        },
+
+	        pathToProfile: function(id) {
+	        	this.pathTo('/profile/' + id);
 	        }
 
 		},
@@ -718,7 +724,6 @@
 		border-radius: 4px;
 		max-height: 360px;
 		top: 66px;
-		/*height: 360px;*/
 		z-index: 3000;
 		box-shadow: 0 0 15px rgba(99, 75, 37, 0.1);
 		opacity: 0
@@ -743,11 +748,11 @@
 		width: 40px;
 		height: 40px;
 		border-radius: 20px;
-		background-image: url(https://img-sketch.secure.pixiv.net/uploads/user_icon/file/135897/sq240_1643466286050960645.png);
 		background-color: #FFFFFF;
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: 50% 50%;
+		cursor: pointer;
 	}
 
 	.notification-center ul li .body {
@@ -775,17 +780,15 @@
 	.notification-center ul li .noti-item {
 		width: 40px;
 		height: 40px;
-		background-image: url(https://img-sketch.secure.pixiv.net/c/c_120/uploads/medium/file/447932/7480797498277370337.jpg);
 		background-color: #FFFFFF;
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: 50% 50%;
 		position: absolute;
-		top: 10px;
-		right: 10px;
+		margin-top: -55px;
+		margin-left: 220px;
 		vertical-align: top;
-		width: 40px;
-		height: 40px;
+		cursor: pointer;
 	}
 
 </style>

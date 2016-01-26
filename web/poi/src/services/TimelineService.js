@@ -19,8 +19,8 @@ module.exports = {
     			return _this.$http.get('timeline/message/personal/count/' + uid);
     		},
 
-    		getPersonalMessage: function(count) {
-    			return _this.$http.get('timeline/message/personal/lastest/' + count);
+    		getPersonalMessage: function(uid, page, count) {
+    			return _this.$http.get('timeline/message/personal/lastest/' + uid + '/' + page + '/' + count);
     		},
 
     		turnOffES: function() {
