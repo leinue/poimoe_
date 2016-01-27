@@ -1,6 +1,9 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://127.0.0.1/test');
 
 app.get('/', function(req, res){
   res.send('welcome to poimoe socket server');
@@ -13,11 +16,9 @@ chat.on('connection', function(socket){
 
 	console.log('user connected to chat socket');
 
-	// io.emit('chat message', 'hello fresh');
-
 	socket.on('chat message', function(msg){
-		console.log('msg reveived');
-	    io.emit('chat message', msg);
+		console.log('msg reveived: ' + msg);
+	    socket.emit('chat message', msg);
 	});
 
 });
@@ -25,6 +26,11 @@ chat.on('connection', function(socket){
 kaku.on('connection', function(socket) {
 
 	console.log('user connected to kaku socket');
+
+	socket.on('kaku message', function(msg){
+		console.log('msg reveived: ' + msg);
+	    socket.emit('kaku message', msg);
+	});
 
 });
 

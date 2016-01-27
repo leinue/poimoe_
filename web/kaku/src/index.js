@@ -5,7 +5,14 @@ var filter = require('./filters/index.js');
 var vueStrap = require('../node_modules/vue-strap/dist/vue-strap.min.js');
 var config = require('./config.js');
 var services = require('./services/index.js');
-var socketio = require("../node_modules/socket.io/lib/client.js");//init socket.io client
+var io = require("../node_modules/socket.io-client/lib/index.js");//init socket.io client
+
+//初始化webSocket
+var socket = io('ws://socket.poimoe.com/kaku');
+socket.emit('kaku message', 'fuck');
+socket.on('kaku message', function(msg){
+	console.log(msg);
+});
 
 //初始化用户登录状态
 // localStorage.login = typeof localStorage.login == 'undefined' ? 'false' : localStorage.login;
@@ -91,9 +98,6 @@ router.beforeEach(function () {
 router.afterEach(function() {
 	var currentPath = router._currentRoute.path;
 });
-
-//连接websocket
-
 
 //默认路由至404
 router.redirect({

@@ -4,6 +4,8 @@
   "description": "my first socket.io app",
   "dependencies": {
     "express": "~4.10.2",
+    "express-mongoose": "^0.1.0",
+    "mongoose": "^4.3.7",
     "socket.io": "~1.2.0"
   }
 }
