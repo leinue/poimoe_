@@ -39,6 +39,10 @@ module.exports = {
       }
     });
 
+    kakuSchema.statics.create = function() {
+
+    };
+
     return kakuSchema;
 
   }
