@@ -4,7 +4,7 @@ module.exports = {
 
   	var Schema = mongoose.Schema;
 
-    var kakuRoomSchema = Schema({
+    var kakuSchema = Schema({
       name: {
         type: String,
         default: ''
@@ -36,26 +36,6 @@ module.exports = {
       updatedAt: {
         type: Date,
         default: Date.now
-      }
-    });
-
-    var kakuSchema = Schema({
-      user_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'users'
-      },
-      room: [kakuRoomSchema],
-      messageCount: {
-        type: Number,
-        default: 0
-      },
-      messageQueue: [{
-        type: Schema.Types.ObjectId,
-        ref: 'themes'
-      }],
-      personalMessageCount: {
-        type: Number,
-        default: 0
       }
     });
 
