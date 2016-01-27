@@ -8,6 +8,7 @@ var replysCtrl = require('./ReplysController');
 var themesCtrl = require('./ThemesController');
 var userGroupsCtrl = require('./UserGroupsController');
 var timelineCtrl = require('./TimelineController');
+var kakuCtrl = require('./KakuController');
 
 var db = {
   mongoose: undefined
@@ -34,6 +35,8 @@ module.exports = {
 
 	userGroupsCtrl: userGroupsCtrl.init(models),
 
-	timelineCtrl: timelineCtrl.init(models)
+	timelineCtrl: timelineCtrl.init(models),
+
+	kakuCtrl: kakuCtrl.init(models);
 
 };
