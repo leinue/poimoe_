@@ -37,6 +37,6 @@ module.exports = {
 
 	timelineCtrl: timelineCtrl.init(models),
 
-	kakuCtrl: kakuCtrl.init(models);
+	kakuCtrl: kakuCtrl.init(models)
 
 };

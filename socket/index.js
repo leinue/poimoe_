@@ -3,14 +3,17 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mongoose = require('mongoose');
 var request = require('request');
+var lib = require('./util/index.js');
+
 
 app.get('/', function(req, res){
   res.send('welcome to poimoe socket server');
 });
 
+
 request.get({
-        url:'http://api.poimoe.com/log',
-        encoding:'utf8'
+        url: 'http://api.poimoe.com/log',
+        encoding: 'utf8'
     },
     function(error, response, body){
         if(response.statusCode == 200){
@@ -38,6 +41,8 @@ chat.on('connection', function(socket){
 kaku.on('connection', function(socket) {
 
 	console.log('user connected to kaku socket');
+
+    socket.emit('chat message', msg);
 
 	socket.on('kaku message', function(msg){
 		console.log('msg reveived: ' + msg);
