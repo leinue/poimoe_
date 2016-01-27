@@ -1,23 +1,42 @@
 <template>
 
-<p>hello vue seeds</p>
+	<header>
+		<poi-header></poi-header>
+	</header>
 
+	<section>
+	    <div class="page">
+    	    <router-view transition="expand"></router-view>
+    	</div>
+	</section>
 
-	<ul class="nav">
-        <li><a v-link="{ path: '/index' }">Home</a></li>
-        <li><a v-link="{ path: '/list' }">List</a></li>
-        <li><a v-link="{ path: '/about' }">About</a></li>
-    </ul>
-    <div class="page">
-        <router-view></router-view>
-    </div>
-hello,poimoe kaku
+	<footer>
+	    <poi-footer></poi-footer>
+	</footer>
+
 </template>
 
 <script>
-	
-	console.log('hello poimoe kaku');
+	import poiHeader from './components/header.vue';
+	import poiFooter from './components/footer.vue';
 
+	export default {
+		data() {
+			return {
+				
+			}
+		},
+		components: {
+			poiHeader,
+			poiFooter
+		},
+		methods: {
+			
+		},
+		created() {
+
+		}
+	};
 </script>
 
 <style>

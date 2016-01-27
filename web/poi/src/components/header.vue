@@ -726,7 +726,7 @@
 		top: 66px;
 		z-index: 3000;
 		box-shadow: 0 0 15px rgba(99, 75, 37, 0.1);
-		opacity: 0
+		opacity: 0;
 	}
 
 	.notification-center ul {

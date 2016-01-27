@@ -1,4 +1,5 @@
 module.exports = function(router){
+	router.transitionOnLoad = true;
 	router.map({
 		'/index': {
 			component: require('./components/index.vue'),
@@ -6,17 +7,12 @@ module.exports = function(router){
 
 			}
 		},
-		'/list': {
-			component: require('./components/list.vue'),
-			subRoutes: {
-				'/user/:userId': {
-					component: require('./components/list/list.vue')
-				}
-			}
+		'/timeline': {
+			component: require('./components/menu2/index.vue')
 		},
-		'*': {
+		'/404': {
 			component: {
-				template: '<h1>not found</h1>'
+				component: require('./404.vue')
 			}
 		}
 	});

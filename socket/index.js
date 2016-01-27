@@ -10,6 +10,7 @@ var chat = io.of('/chat');
 var kaku = io.of('/kaku');
 
 chat.on('connection', function(socket){
+
 	console.log('user connected to chat socket');
 
 	// io.emit('chat message', 'hello fresh');
@@ -18,6 +19,7 @@ chat.on('connection', function(socket){
 		console.log('msg reveived');
 	    io.emit('chat message', msg);
 	});
+
 });
 
 kaku.on('connection', function(socket) {
