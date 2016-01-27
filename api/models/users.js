@@ -3,6 +3,7 @@ var util = require('../util/index.js');
 var tagsModel = require('./tags.js');
 var relationsModel = require('./relations.js');
 var timelineModel = require('./timeline.js');
+var kaku = require('./kaku.js');
 
 module.exports = {
 
@@ -11,6 +12,7 @@ module.exports = {
   tagsModel: undefined,
   relationsModel: undefined,
   timelineModel: undefined,
+  kakuModel: undefined,
 
   init: function(mongoose) {
 
@@ -573,12 +575,14 @@ module.exports = {
     var tagsSchema = tagsModel.init(mongoose);
     var relationsSchema = relationsModel.init(mongoose);
     var timelineSchema = timelineModel.init(mongoose);
+    var kakuSchema = kakuModel.init(mongoose);
 
     this.userModel = util.cacheMongooseModel(mongoose, userSchema, 'users', this.userModel);
     this.themesModel = util.cacheMongooseModel(mongoose, themesSchema, 'themes', this.themesModel);
     this.tagsModel = util.cacheMongooseModel(mongoose, tagsSchema, 'tags', this.tagsModel);
     this.relationsModel = util.cacheMongooseModel(mongoose, relationsSchema, 'relations', this.relationsModel);
     this.timelineModel = util.cacheMongooseModel(mongoose, timelineSchema, 'timeline', this.timelineModel);
+    this.kakuModel = util.cacheMongooseModel(mongoose, kakuSchema, 'kaku', this.kakuModel);
 
     var _this = this;
 
@@ -587,7 +591,8 @@ module.exports = {
       themes: _this.themesModel,
       tags: _this.tagsModel,
       relations: _this.relationsModel,
-      timeline: _this.timelineModel
+      timeline: _this.timelineModel,
+      kaku: _this.kakuModel
     };
 
   }

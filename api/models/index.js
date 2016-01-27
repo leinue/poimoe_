@@ -20,6 +20,7 @@ module.exports = {
   themesModel: undefined,
   settingsModel: undefined,
   timelineModel: undefined,
+  kakuModel: undefined,
 
   cacheMongoose: function(mongoose) {
   	if(util.checkIsUndefined(this.mongoose)) {
@@ -92,6 +93,13 @@ module.exports = {
       name: userAndThemes
     });
     return this.timelineModel;
+  },
+
+  Kaku: function() {
+    this.kakuModel = this.cacheModel('kaku', this.kakuModel, {
+      name: userAndThemes
+    });
+    return this.kakuModel;
   }
 
 };

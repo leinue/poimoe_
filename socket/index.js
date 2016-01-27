@@ -2,12 +2,24 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mongoose = require('mongoose');
-
-mongoose.connect('mongodb://127.0.0.1/test');
+var request = require('request');
 
 app.get('/', function(req, res){
   res.send('welcome to poimoe socket server');
 });
+
+request.get({
+        url:'http://api.poimoe.com/log',
+        encoding:'utf8'
+    },
+    function(error, response, body){
+        if(response.statusCode == 200){
+            console.log(body);
+        }else{
+            console.log(response.statusCode);
+        }
+    }
+);
 
 var chat = io.of('/chat');
 var kaku = io.of('/kaku');
