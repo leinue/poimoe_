@@ -11,7 +11,11 @@ module.exports = {
       },
       peopleLimit: {
         type: Number,
-        default: 0
+        default: 4
+      },
+      isLocked: {
+        type: Boolean,
+        default: false
       },
       passport: {
         type: String,
@@ -39,7 +43,33 @@ module.exports = {
       }
     });
 
+    kakuSchema.statics.indexAll = function(page, count, cb) {
+      page = page || 1;
+      count = count || 10;
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+        isDeleted: false
+      }).skip(skipFrom).limit(count).exec(cb);
+    };
+
     kakuSchema.statics.create = function() {
+
+    };
+
+    kakuSchema.statics.enter = function() {
+
+    };
+
+    kakuSchema.statics.leave = function() {
+
+    };
+
+    kakuSchema.statics.lock = function() {
+
+    };
+
+    kakuSchema.statics.unlock = function() {
 
     };
 

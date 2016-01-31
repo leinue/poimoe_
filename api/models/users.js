@@ -3,7 +3,7 @@ var util = require('../util/index.js');
 var tagsModel = require('./tags.js');
 var relationsModel = require('./relations.js');
 var timelineModel = require('./timeline.js');
-var kaku = require('./kaku.js');
+var kakuModel = require('./kaku.js');
 
 module.exports = {
 

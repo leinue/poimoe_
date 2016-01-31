@@ -117,7 +117,7 @@
 					if(data.code === 200) {
 
 						var real = data.data;
-
+						
 						util.login(real);
 
 						router.go('/index');

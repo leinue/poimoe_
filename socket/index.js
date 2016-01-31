@@ -11,18 +11,18 @@ app.get('/', function(req, res){
 });
 
 
-request.get({
-        url: 'http://api.poimoe.com/log',
-        encoding: 'utf8'
-    },
-    function(error, response, body){
-        if(response.statusCode == 200){
-            console.log(body);
-        }else{
-            console.log(response.statusCode);
-        }
-    }
-);
+// request.get({
+//         url: 'http://api.poimoe.com/log',
+//         encoding: 'utf8'
+//     },
+//     function(error, response, body){
+//         if(response.statusCode == 200){
+//             console.log(body);
+//         }else{
+//             console.log(response.statusCode);
+//         }
+//     }
+// );
 
 var chat = io.of('/chat');
 var kaku = io.of('/kaku');
@@ -41,8 +41,6 @@ chat.on('connection', function(socket){
 kaku.on('connection', function(socket) {
 
 	console.log('user connected to kaku socket');
-
-    socket.emit('chat message', msg);
 
 	socket.on('kaku message', function(msg){
 		console.log('msg reveived: ' + msg);

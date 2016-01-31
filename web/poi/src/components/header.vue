@@ -718,7 +718,7 @@
 		background: rgb(255, 255, 255);
 		width: 280px;
 		position: fixed;
-		right: 20px;
+		right: 20px; 
 		font-size: 12px;
 		line-height: 15px;
 		border-radius: 4px;

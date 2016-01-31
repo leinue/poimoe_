@@ -105,9 +105,9 @@ module.exports = {
     server.post('/groups/update', ctrl.userGroupsCtrl.update);
     server.get('/groups/remove/:id', ctrl.userGroupsCtrl.remove);
 
-
-    server.get('/kaku/room/all', ctrl.kakuCtrl.indexAll);
+    server.get('/kaku/room/all/:page/:count', ctrl.kakuCtrl.indexAll);
     server.post('/kaku/room/create', ctrl.kakuCtrl.create);
+    server.get('/kaku/room/enter/:id', ctrl.kakuCtrl.enter);
     server.get('/kaku/room/leave/:id', ctrl.kakuCtrl.leave);
     server.post('/kaku/room/lock', ctrl.kakuCtrl.lock);
     server.get('/kaku/room/remove/:id', ctrl.kakuCtrl.remove);
