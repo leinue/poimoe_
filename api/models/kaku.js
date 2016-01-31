@@ -50,7 +50,7 @@ module.exports = {
 
       return this.find({
         isDeleted: false
-      }).skip(skipFrom).limit(count).exec(cb);
+      }).skip(skipFrom).limit(count).select('-passport').exec(cb);
     };
 
     kakuSchema.statics.findPeopleByRoomId = function(id, cb) {
@@ -58,10 +58,6 @@ module.exports = {
         isDeleted: false,
         _id: id
       }).exec(cb);
-    };
-
-    kakuSchema.statics.create = function() {
-
     };
 
     kakuSchema.statics.enter = function(obj, cb) {
@@ -78,7 +74,7 @@ module.exports = {
       }, cb);
     };
 
-    kakuSchema.statics.leave = function() {
+    kakuSchema.statics.leave = function(obj, cb) {
       var roomId = obj.roomId;
       var peopleList = obj.peopleList; 
 
@@ -92,14 +88,64 @@ module.exports = {
       }, cb);
     };
 
-    kakuSchema.statics.lock = function() {
-
+    kakuSchema.statics.lock = function(id, cb) {
+      return this.findOneAndUpdate({
+        _id: id,
+        isDeleted: false
+      }, {
+        isLocked: false
+      }, {
+        new: true
+      }, cb);      
     };
 
-    kakuSchema.statics.unlock = function() {
+    kakuSchema.statics.unlock = function(obj, cb) {
+      var roomId = obj.room;
+      var passport = obj.passport
 
+      return this.findOneAndUpdate({
+        _id: roomId,
+        isDeleted: false
+      }, {
+        isLocked: true,
+        passport: passport
+      }, {
+        new: true
+      }, cb);
     };
 
+    kakuSchema.statics.abort = function(roomId, cb) {
+      return this.findOneAndUpdate({
+        _id: roomId,
+        isDeleted: false
+      }, {
+        isDeleted: true
+      }, {
+        new: true
+      }, cb);
+    };
+
+    kakuSchema.statics.alterName = function(obj, cb) {
+      return this.findOneAndUpdate({
+        _id: obj.room,
+        isDeleted: false
+      }, {
+        name: obj.name
+      }, {
+        new: true
+      }, cb);
+    };
+
+    kakuSchema.statics.alterPassport = function(obj, cb) {
+      return this.findOneAndUpdate({
+        _id: obj.room,
+        isDeleted: false
+      }, {
+        passport: obj.passport
+      }, {
+        new: true
+      }, cb);
+    };
     return kakuSchema;
 
   }

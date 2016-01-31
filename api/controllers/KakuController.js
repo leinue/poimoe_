@@ -1,5 +1,40 @@
 var util = require('../util/index');
 
+var _util = {
+
+	enterRoom: function(kaku, peopleList, res) {
+
+		var isPeopleHaveEntered = false;
+
+   		peopleList.forEach(function(index, singlePeople) {
+ 			if(singlePeople == peopleEnter) {
+ 				isPeopleHaveEntered = true;
+ 				return false;
+ 			}
+ 		});
+
+ 		if(isPeopleHaveEntered) {
+ 			res.send(util.retMsg(401, '请不要重复加入同一个房间'));
+ 		}else {
+
+ 			peopleList.unshift(peopleEnter);
+
+ 			kaku.enter({
+ 				roomId: roomId,
+ 				peopleList: peopleList
+ 			}, function(err, newRoom) {
+   	 		if(err) {
+   	 			res.send(util.retMsg(401, err.toString()));
+   	 		}
+
+   	 			res.send(util.retMsg(200, newRoom));
+ 			});
+
+ 		}
+	}
+
+};
+
 var index = {
 
 	indexAll: function(req, res, next) {
@@ -74,6 +109,7 @@ var index = {
 
 		var peopleEnter = req.params.people;
 		var roomId = req.params.roomId;
+		var passport = req.params.passport || '';
 
 		if(peopleEnter == undefined || peopleEnter == '') {
 			res.send(util.retMsg(401, '缺少参数：进入者id'));
@@ -85,37 +121,26 @@ var index = {
 
 		var Kaku = ctrlInitial.models.Kaku();
 
-		Kaku.findPeopleByRoomId(roomId, function(err, peopleList) {
+		Kaku.findPeopleByRoomId(roomId, function(err, singleKaku) {
    	 		if(err) {
    	 			res.send(util.retMsg(401, err.toString()));
    	 		}
 
    	 		var isPeopleHaveEntered = false;
 
-   	 		peopleList.forEach(function(index, singlePeople) {
-   	 			if(singlePeople == peopleEnter) {
-   	 				isPeopleHaveEntered = true;
-   	 				return false;
+   	 		var peopleList = singleKaku.peopleList;
+   	 		var isRoomLocked = singleKaku.isLocked;
+
+   	 		if(isRoomLocked === true) {
+
+   	 			if(singleKaku.passport === passport) {
+		   	 		_util.enterRoom(kaku, peopleList, res);
+   	 			}else {
+   	 				res.send(util.retMsg(401, '密码验证失败'));
    	 			}
-   	 		});
 
-   	 		if(isPeopleHaveEntered) {
-   	 			res.send(util.retMsg(401, '请不要重复加入同一个房间'));
    	 		}else {
-
-   	 			peopleList.unshift(peopleEnter);
-
-   	 			kaku.enter({
-   	 				roomId: roomId,
-   	 				peopleList: peopleList
-   	 			}, function(err, newRoom) {
-		   	 		if(err) {
-		   	 			res.send(util.retMsg(401, err.toString()));
-		   	 		}
-
-		   	 		res.send(util.retMsg(200, newRoom));
-   	 			});
-
+	   	 		_util.enterRoom(kaku, peopleList, res);
    	 		}
 
 		});
@@ -174,18 +199,114 @@ var index = {
 
 	unlock: function(req, res, next) {
 
+		var roomId = req.params.roomId;
+
+		if(roomId == undefined || roomId == '') {
+			res.send(util.retMsg(401, '缺少参数：房间id'));
+		}
+
+		var Kaku = ctrlInitial.models.Kaku();
+
+		Kaku.unlock(roomId, function(err, newRoom) {
+   	 		if(err) {
+   	 			res.send(util.retMsg(401, err.toString()));
+   	 		}
+
+   	 		res.send(util.retMsg(200, '取消加密成功'));
+
+		});
+
 	},
 
 	lock: function(req, res, next) {
+		var roomId = req.params.roomId;
+		var passport = req.params.passport || '';
+
+		if(roomId == undefined || roomId == '') {
+			res.send(util.retMsg(401, '缺少参数：房间id'));
+		}
+
+		var Kaku = ctrlInitial.models.Kaku();
+
+		Kaku.unlock({
+			room: roomId,
+			passport: passport
+		}, function(err, newRoom) {
+   	 		if(err) {
+   	 			res.send(util.retMsg(401, err.toString()));
+   	 		}
+
+   	 		res.send(util.retMsg(200, '加密成功'));
+
+		});
 
 	},
 
 	remove: function(req, res, next) {
+		var roomId = req.params.roomId;
 
+		if(roomId == undefined || roomId == '') {
+			res.send(util.retMsg(401, '缺少参数：房间id'));
+		}
+
+		var Kaku = ctrlInitial.models.Kaku();
+
+		kaku.abort(roomId, function(err, newRoom) {
+   	 		if(err) {
+   	 			res.send(util.retMsg(401, err.toString()));
+   	 		}
+
+   	 		res.send(util.retMsg(200, '删除成功'));
+
+		});
 	},
 
 	alterName: function(req, res, next) {
-		
+		var roomId = req.params.roomId;
+		var name = req.params.name || '';
+
+		if(roomId == undefined || roomId == '') {
+			res.send(util.retMsg(401, '缺少参数：房间id'));
+		}
+
+		var Kaku = ctrlInitial.models.Kaku();
+
+		Kaku.alterPassport({
+			room: roomId,
+			name: name
+		}, function(err, newRoom) {
+   	 		if(err) {
+   	 			res.send(util.retMsg(401, err.toString()));
+   	 		}
+
+   	 		res.send(util.retMsg(200, '改名成功'));
+
+		});	
+	},
+
+	alterPassport: function(req, res, next) {
+
+		var roomId = req.params.roomId;
+		var passport = req.params.passport || '';
+
+		if(roomId == undefined || roomId == '') {
+			res.send(util.retMsg(401, '缺少参数：房间id'));
+		}
+
+		var Kaku = ctrlInitial.models.Kaku();
+
+		Kaku.alterPassport({
+			room: roomId,
+			passport: passport
+		}, function(err, newRoom) {
+   	 		if(err) {
+   	 			res.send(util.retMsg(401, err.toString()));
+   	 		}
+
+   	 		res.send(util.retMsg(200, '更改密码成功'));
+
+		});
+
 	}
 
 };
