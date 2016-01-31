@@ -146,6 +146,18 @@ module.exports = {
         new: true
       }, cb);
     };
+
+    kakuSchema.statics.alterPeopleLimit = function() {
+      return this.findOneAndUpdate({
+        _id: obj.room,
+        isDeleted: false
+      }, {
+        peopleLimit: obj.peopleLimit
+      }, {
+        new: true
+      }, cb);
+    };
+
     return kakuSchema;
 
   }

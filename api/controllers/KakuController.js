@@ -307,6 +307,30 @@ var index = {
 
 		});
 
+	},
+
+	alterPeopleLimit: function(req, res, next) {
+		var roomId = req.params.roomId;
+		var limit = req.params.limit || 4;
+
+		if(roomId == undefined || roomId == '') {
+			res.send(util.retMsg(401, '缺少参数：房间id'));
+		}
+
+		var Kaku = ctrlInitial.models.Kaku();
+
+		Kaku.alterPeopleLimit({
+			room: roomId,
+			peopleLimit: limit
+		}, function(err, newRoom) {
+   	 		if(err) {
+   	 			res.send(util.retMsg(401, err.toString()));
+   	 		}
+
+   	 		res.send(util.retMsg(200, '更改房间人数上限成功'));
+
+		});
+
 	}
 
 };
