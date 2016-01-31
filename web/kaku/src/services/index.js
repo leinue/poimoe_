@@ -1,4 +1,4 @@
-var UserService = require('./UserService.js');
+var KakuService = require('./KakuService.js');
 
 var model = {
 	instance: undefined,
@@ -11,7 +11,7 @@ module.exports = {
 		model.instance = obj;
 		
 		return {
-			UserService: UserService.init(model.instance, model.baseUrl)
+			KakuService: KakuService.init(model.instance, model.baseUrl)
 		}
 	}
 
