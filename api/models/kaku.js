@@ -53,16 +53,43 @@ module.exports = {
       }).skip(skipFrom).limit(count).exec(cb);
     };
 
+    kakuSchema.statics.findPeopleByRoomId = function(id, cb) {
+      return this.findOne({
+        isDeleted: false,
+        _id: id
+      }).exec(cb);
+    };
+
     kakuSchema.statics.create = function() {
 
     };
 
-    kakuSchema.statics.enter = function() {
+    kakuSchema.statics.enter = function(obj, cb) {
+      var roomId = obj.roomId;
+      var peopleList = obj.peopleList; 
 
+      return this.findOneAndUpdate({
+        _id: roomId,
+        isDeleted: false
+      }, {
+        people: peopleList
+      }, {
+        new: true
+      }, cb);
     };
 
     kakuSchema.statics.leave = function() {
+      var roomId = obj.roomId;
+      var peopleList = obj.peopleList; 
 
+      return this.findOneAndUpdate({
+        _id: roomId,
+        isDeleted: false
+      }, {
+        people: peopleList
+      }, {
+        new: true
+      }, cb);
     };
 
     kakuSchema.statics.lock = function() {

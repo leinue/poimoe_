@@ -46,12 +46,16 @@ var index = {
 
    	 		var Kaku = ctrlInitial.models.Kaku();
 
+   	 		var people = [];
+   	 		people.unshift(creator);
+
    	 		var kaku = new Kaku({
    	 			creator: creator,
    	 			name: name,
    	 			isLocked: isLocked,
    	 			passport: passport,
-   	 			peopleLimit: peopleLimit
+   	 			peopleLimit: peopleLimit,
+   	 			people: people
    	 		});
 
    	 		kaku.save(function(err, k) {
@@ -68,9 +72,103 @@ var index = {
 
 	enter: function(req, res, next) {
 
+		var peopleEnter = req.params.people;
+		var roomId = req.params.roomId;
+
+		if(peopleEnter == undefined || peopleEnter == '') {
+			res.send(util.retMsg(401, '缺少参数：进入者id'));
+		}
+
+		if(roomId == undefined || roomId == '') {
+			res.send(util.retMsg(401, '缺少参数：所进入房间id'));
+		}
+
+		var Kaku = ctrlInitial.models.Kaku();
+
+		Kaku.findPeopleByRoomId(roomId, function(err, peopleList) {
+   	 		if(err) {
+   	 			res.send(util.retMsg(401, err.toString()));
+   	 		}
+
+   	 		var isPeopleHaveEntered = false;
+
+   	 		peopleList.forEach(function(index, singlePeople) {
+   	 			if(singlePeople == peopleEnter) {
+   	 				isPeopleHaveEntered = true;
+   	 				return false;
+   	 			}
+   	 		});
+
+   	 		if(isPeopleHaveEntered) {
+   	 			res.send(util.retMsg(401, '请不要重复加入同一个房间'));
+   	 		}else {
+
+   	 			peopleList.unshift(peopleEnter);
+
+   	 			kaku.enter({
+   	 				roomId: roomId,
+   	 				peopleList: peopleList
+   	 			}, function(err, newRoom) {
+		   	 		if(err) {
+		   	 			res.send(util.retMsg(401, err.toString()));
+		   	 		}
+
+		   	 		res.send(util.retMsg(200, newRoom));
+   	 			});
+
+   	 		}
+
+		});
+
 	},
 
 	leave: function(req, res, next) {
+		var leaver = req.params.leaver;
+		var roomId = req.params.roomId;
+
+		if(leaver == undefined || leaver == '') {
+			res.send(util.retMsg(401, '缺少参数：进入者id'));
+		}
+
+		if(roomId == undefined || roomId == '') {
+			res.send(util.retMsg(401, '缺少参数：所进入房间id'));
+		}
+
+		var Kaku = ctrlInitial.models.Kaku();
+
+		Kaku.findPeopleByRoomId(roomId, function(err, peopleList) {
+   	 		if(err) {
+   	 			res.send(util.retMsg(401, err.toString()));
+   	 		}
+
+   	 		var isPeopleHaveEntered = false;
+
+   	 		peopleList.forEach(function(index, singlePeople) {
+   	 			if(singlePeople == peopleEnter) {
+   	 				peopleList.splice(index, 1);
+   	 				isPeopleHaveEntered = true;
+   	 				return false;
+   	 			}
+   	 		});
+
+   	 		if(!isPeopleHaveEntered) {
+   	 			res.send(util.retMsg(401, '您尚未加入该房间'));
+   	 		}else {
+
+   	 			kaku.enter({
+   	 				roomId: roomId,
+   	 				peopleList: peopleList
+   	 			}, function(err, newRoom) {
+		   	 		if(err) {
+		   	 			res.send(util.retMsg(401, err.toString()));
+		   	 		}
+
+		   	 		res.send(util.retMsg(200, newRoom));
+   	 			});
+
+   	 		}
+
+		});
 
 	},
 
