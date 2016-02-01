@@ -7,8 +7,8 @@ module.exports = function(router){
 
 			}
 		},
-		'/timeline': {
-			component: require('./components/menu2/index.vue')
+		'/sketch': {
+			component: require('./components/kaku/index.vue')
 		},
 		'/404': {
 			component: {

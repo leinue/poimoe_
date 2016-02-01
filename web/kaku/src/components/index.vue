@@ -31,7 +31,7 @@
                     <div class="col-md-6">
                         <div class="room-rect">
                             <h2>帕秋莉go</h2>
-                            <div class="room-enter"><span class="glyphicon glyphicon-hand-up"></span></div>
+                            <div class="room-enter" @click="toSkecthRoom()"><span class="glyphicon glyphicon-hand-up"></span></div>
                             <span class="glyphicon glyphicon-user"> xieyang</span>
                             <span style="margin-left:15px;" class="glyphicon glyphicon-flag"> 4/5</span>
                             <div class="room-member">
@@ -170,6 +170,10 @@
         },
 
         methods: {
+
+            toSkecthRoom: function() {
+                router.go('/sketch');
+            }
 
         },
 
