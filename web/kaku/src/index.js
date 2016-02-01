@@ -8,7 +8,7 @@ var services = require('./services/index.js');
 var io = require("../node_modules/socket.io-client/lib/index.js");//init socket.io client
 var util = require('./commons/scripts/commons.js');
 
-document.domain = 'poimoe.com';
+// document.domain = 'poimoe.com';
 var userData = util.getCookie('userData');
 console.log(userData);
 
