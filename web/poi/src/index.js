@@ -6,7 +6,7 @@ var vueStrap = require('../node_modules/vue-strap/dist/vue-strap.min.js');
 var config = require('./config.js');
 var services = require('./services/index.js');
 
-document.domain = 'poimoe.com';
+// document.domain = 'poimoe.com';
 
 //初始化用户登录状态
 localStorage.login = typeof localStorage.login == 'undefined' ? 'false' : localStorage.login;
@@ -17,7 +17,7 @@ localStorage.accessToken = typeof localStorage.accessToken == 'undefined' ? '' :
 vue.use(require('vue-resource'));
 vue.http.options.root = 'http://api.poimoe.com/';
 vue.http.headers['x-poimoe'] = 'moha';
-vue.http.headers['withCredentials'] = 'true';
+vue.http.headers.withCredentials = true;
 if(localStorage.login == 'true') {
 	vue.http.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;	
 }
