@@ -25,9 +25,10 @@ var server = restify.createServer({
 server.use(restify.authorizationParser());
 server.use(restify.bodyParser());
 server.use(restify.queryParser());
+server.use(restify.CORS());
 
 //初始化路由
-routes.init(server, mongoose);
+routes.init(server, mongoose, restify);
 
 //开始监听服务器端口
 server.listen(2333, function() {

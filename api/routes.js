@@ -2,25 +2,19 @@ var ctrl = require('./controllers/index');
 var util = require('./util/index');
 var nodemailer = require('nodemailer');
 var connect = require('connect');
-var restify = require('restify');
 
 module.exports = {
 
   mongoose: undefined,
  
-  init: function(server, mongo) {
+  init: function(server, mongo, restify) {
     
     ctrl.init(mongo);
     this.mongoose = mongo;
 
-    server.use(restify.CORS({
-        origins: ['*'],
-        credentials: true,
-        headers: ['x-poimoe', 'Authorization']
-    }));
-
     server.pre(function(req, res, next) {
     	res.charSet('utf-8');
+        res.setHeader('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Access-Control-Allow-Headers', 'Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Api-Version, Authorization');
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
