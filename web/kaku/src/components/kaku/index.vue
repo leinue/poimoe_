@@ -27,12 +27,52 @@
 		        			</div>
 		        			<div class="layer-well">
 		        				<div class="layer-content">
-		        					<ul class="layer-list">
-		        						
+		        					<ul class="layer-list" style="height:270px;">
+		        						<li class="active">
+		        							<input type="text" class="name-input">
+		        							<span class="layer-name">layer name</span>
+		        							<div class="eye-button">
+		        								 <span class="glyphicon glyphicon-eye-open"></span>
+		        							</div>
+		        							<div class="opacity-rate">
+		        								<span>100</span>
+		        							</div>
+		        						</li>
+		        						<li>
+		        							<input type="text" class="name-input">
+		        							<span class="layer-name">layer name</span>
+		        							<div class="eye-button">
+		        								 <span class="glyphicon glyphicon-eye-open"></span>
+		        							</div>
+		        							<div class="opacity-rate">
+		        								<span>100</span>
+		        							</div>
+		        						</li>
+		        						<li>
+		        							<input type="text" class="name-input">
+		        							<span class="layer-name">layer name</span>
+		        							<div class="eye-button">
+		        								 <span class="glyphicon glyphicon-eye-open"></span>
+		        							</div>
+		        							<div class="opacity-rate">
+		        								<span>100</span>
+		        							</div>
+		        						</li>
+		        						<li>
+		        							<input type="text" class="name-input">
+		        							<span class="layer-name">layer name</span>
+		        							<div class="eye-button">
+		        								 <span class="glyphicon glyphicon-eye-open"></span>
+		        							</div>
+		        							<div class="opacity-rate">
+		        								<span>100</span>
+		        							</div>
+		        						</li>
 		        					</ul>
 		        				</div>
 		        				<div class="layer-opacity-slider">
-		        					
+		        					<span>透明度</span>
+
 		        				</div>
 		        				<div class="layer-controls">
 									<div class="zoom-button"><span class="glyphicon glyphicon-plus"></span></div>
@@ -64,7 +104,7 @@
 
 	.main-canvas {
 		width: 100%;
-		border: rgb(240, 236, 230);
+		border: 1px solid rgb(240, 236, 230);
 	}
 
 	.main-canvas canvas{
@@ -79,7 +119,7 @@
 		padding-right: 20px;
 		padding-top: 6px;
 		padding-bottom: 2px;
-		border: rgb(245, 245, 245);
+		border: 1px solid #d8d8d8;
 		border-radius: 4px;
 	}
 
@@ -90,15 +130,16 @@
 
 	.kaku-viewer {
 		position: absolute;
-		height: 50%;
 		width: 70%;
 		border: 1px solid rgb(0, 0, 0);
-		top: 5px;
+		top: 10px;
+		height: 10%;
 	}
 
 	.zoom-control {
 		margin-top: 5px;
 		height: 23px;
+		margin-bottom: 5px;
 	}
 
 	.zoom-control .zoom-button, .layer-controls .zoom-button{
@@ -139,6 +180,91 @@
 	.layer-well {
 		width: 100%;
 		height: 120px;
+	}
+
+	.layer-content {
+		background: rgb(234, 234, 234);
+		border: 1px solid #d8d8d8;
+		border-radius: 4px;
+		padding: 5px;
+	}
+
+	.layer-list {
+		margin-bottom: 0px;
+		overflow-x: hidden;
+		overflow-y: auto;
+		color: #000;
+		text-align: left;
+		padding: 0;
+		list-style: none;
+	}
+
+	.layer-list li {
+		width: 100%;
+		padding: 4px;
+		color: rgb(0, 0, 0);
+		cursor: default;
+		font-size: 11px;
+		line-height: 22px;
+		overflow: hidden;
+		text-align: left;
+		border-bottom: 1px solid #d8d8d8;
+		color: #000;
+	}
+
+	.layer-list li input {
+		display: none;
+	}
+
+	.layer-list li.edit-status input{
+		display: block;
+	}
+
+	.layer-list li.edit-status .layer-name {
+		display: none;
+	}
+
+	.layer-list li.active {
+		background: rgb(255, 255, 255);
+	}
+
+	.layer-list li.active .layer-name {
+		font-weight: bold;
+		font-style: italic;
+		color: #808080;
+	}
+
+	.layer-list li.active span{
+		color: rgb(0, 0, 0);
+	}
+
+	.layer-list li .layer-name {
+		color: #7f7f7f;
+	}
+
+	.eye-button {
+		position: absolute;
+		right: 10px;
+		font-size: 12px;
+		margin-top: -20px;
+		cursor: pointer;
+	}
+
+	.eye-button span, .opacity-rate span {
+		color: #7f7f7f;
+	}
+
+	.opacity-rate {
+		position: absolute;
+		right: 32px;
+		margin-top: -21px;
+	}
+
+	.name-input {
+		border-top: 0px;
+		border-left: 0px;
+		border-right: 0px;
+		border-bottom: 1px solid #d8d8d8;
 	}
 
 </style>
