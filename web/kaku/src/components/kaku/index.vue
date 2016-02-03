@@ -137,7 +137,7 @@
 
 	.main-canvas canvas{
 		width: 100%;
-		height: 500px;
+		height: 74vh;
 	}
 
 	.kaku-map {
@@ -207,8 +207,8 @@
 
 	.layer-well {
 		width: 100%;
-		height: calc(100% - 223px);
-		height: -moz-calc(100% - 223px);
+		height: calc(100% - 158px);
+		height: -moz-calc(100% - 158px);
 	}
 
 	.layer-content {
