@@ -12,7 +12,7 @@
 								<canvas id="kakuCanvas"></canvas>
 							</div>
 		        		</div>
-		        		<div class="col-md-3" style="padding-left:0px;padding-right:0px">
+		        		<div class="col-md-3" style="padding-left:0px;padding-right:0px;height:500px">
 		        			<div class="zoom-well">
 			        			<div class="kaku-map">
 			        				<canvas></canvas>
@@ -27,7 +27,7 @@
 		        			</div>
 		        			<div class="layer-well">
 		        				<div class="layer-content">
-		        					<ul class="layer-list" style="height:270px;">
+		        					<ul class="layer-list">
 		        						<li class="active">
 		        							<input type="text" class="name-input">
 		        							<span class="layer-name">layer name</span>
@@ -71,8 +71,17 @@
 		        					</ul>
 		        				</div>
 		        				<div class="layer-opacity-slider">
-		        					<span>透明度</span>
-
+		        					<div class="row">
+		        						<div class="col-md-2" style="padding:0px;">
+				        					<span class="label">透明度</span>
+			        					</div>
+			        					<div class="col-md-8">
+				        					<input class="opacity-slider" type="range">		        						
+			        					</div>
+			        					<div class="col-md-2" style="padding:0px;">
+			        						<span class="label">100%</span>
+			        					</div>
+		        					</div>
 		        				</div>
 		        				<div class="layer-controls">
 									<div class="zoom-button"><span class="glyphicon glyphicon-plus"></span></div>
@@ -80,6 +89,25 @@
 		        				</div>
 		        			</div>
 		        		</div>   			
+	        		</div>
+	        		<div class="row">
+	        			<div class="col-md-4">
+			        		<div class="master-controls">
+			        			<div class="button-container">
+			        				<a class="tool-button"><span class="glyphicon glyphicon-erase"></span></a>
+			        				<a class="tool-button"><span class="glyphicon glyphicon-pushpin"></span></a>
+			        				<a class="tool-button active"><span class="glyphicon glyphicon-pencil"></span></a>
+			        				<a class="tool-button"><span class="glyphicon glyphicon-share-alt"></span></a>
+			        				<a class="tool-button reverse"><span class="glyphicon glyphicon-share-alt"></span></a>
+			        			</div>
+			        		</div>	        				
+	        			</div>
+	        			<div class="col-md-4">
+	        				
+	        			</div>
+	        			<div class="col-md-4">
+	        				
+	        			</div>
 	        		</div>
 	        	</div>
 	        	<div class="col-md-3" style="padding-left:0px;padding-right:0px">
@@ -179,7 +207,8 @@
 
 	.layer-well {
 		width: 100%;
-		height: 120px;
+		height: calc(100% - 223px);
+		height: -moz-calc(100% - 223px);
 	}
 
 	.layer-content {
@@ -187,6 +216,7 @@
 		border: 1px solid #d8d8d8;
 		border-radius: 4px;
 		padding: 5px;
+		height: 100%;
 	}
 
 	.layer-list {
@@ -265,6 +295,13 @@
 		border-left: 0px;
 		border-right: 0px;
 		border-bottom: 1px solid #d8d8d8;
+	}
+
+	.opacity-slider {
+		height: 10px;
+		margin-top: 7px;
+		box-shadow: none;
+		background: rgb(170, 170, 170);
 	}
 
 </style>

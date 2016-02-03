@@ -360,6 +360,81 @@ button.navbar-toggle.collapsed {
 	animation: bounceinT 1.2s linear 0s 1 alternate;
 }
 
+.label {
+	height: 10px;
+	position: relative;
+	color: #7f7f7f;
+	text-align: right;
+	margin-top: 3px;
+}
+
+.master-controls {
+	height: 74px;
+}
+
+.button-container {
+	width: 100;
+	height: 45px;
+	margin: 17px 15px 0 0; 
+}
+
+.tool-button {
+	float: right;
+	width: 40px;
+	height: 40px;
+	display: block;
+	overflow: hidden;
+	position: relative;
+	cursor: pointer;
+	margin: 0 2px 0 3px;
+	-moz-transition: all .2s ease-in-out;
+	-webkit-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
+	text-align: center;
+	line-height: 40px;
+}
+
+.tool-button span {
+	height: 40px;
+	width: 40px;
+	font-weight: 200;
+	color: rgb(66, 66, 66);
+}
+
+.tool-button:hover {
+	transform: scale(1.3);
+}
+
+.tool-button.active {
+	border: 1px solid rgb(170, 170, 170);
+	background: rgb(234, 234, 234);
+	border-radius: 4px;
+}
+
+.tool-button span:hover {
+	color: rgb(0, 114, 158);
+}
+
+.tool-button.reverse {
+	transform:rotateY(180deg);
+	-ms-transform:rotateY(180deg); 	/* IE 9 */
+	-moz-transform:rotateY(180deg); 	/* Firefox */
+	-webkit-transform:rotateY(180deg); /* Safari 和 Chrome */
+	-o-transform:rotateY(180deg); 	/* Opera */
+}
+
+.tool-button.reverse:hover {
+	animation: rot 0.8s linear 0s 1 alternate;
+}
+
+/*撤销按钮3d旋转*/
+@keyframes rot{
+	0%{opacity:0;transform:rotateY(170deg);}
+	25%{opacity:1;transform:rotateY(240deg);}
+	50%{transform:rotateY(360deg);}
+	100%{transform:rotateY(180deg);}
+}
+
 /*弹出*/
 @-webkit-keyframes bouncein{
 	0%{opacity:0;-webkit-transform:scale(0.3);}
