@@ -1,13 +1,24 @@
 <template>
     
-    <div style="">
+    <div style="margin-top:-21px;z-index:3000">
 
-        <div class="row a-bouncein">
+        <div class="row a-bounceinT">
 
-        	<div class="col-md-12">
-	        	<div class="col-md-9">
-	        		<div class="row">
-		        		<div class="col-md-9">
+        	<div class="col-md-12" style="padding:0px;border-top:1px solid rgb(217, 217, 217)">
+        		<div class="col-md-3" style="padding-left:0px;padding-right:0px;border-bottom:1px solid rgb(217, 217, 217)">
+	        		<div class="chatting-section">
+	        			<div class="kaku-member">
+                            <div class="room-photo"></div>                              
+                            <div class="room-photo"></div>                              
+                            <div class="room-photo"></div>                              
+                            <div class="room-photo"></div>                              
+                            <div class="room-photo"></div>
+	        			</div>
+	        		</div>
+	        	</div>
+	        	<div class="col-md-9" style="padding-left:0px;padding-right:0px">
+	        		<div class="row" style="border-bottom: 1px solid #d8d8d8;">
+		        		<div class="col-md-9" style="padding:0px;">
 							<div class="main-canvas">
 								<canvas id="kakuCanvas"></canvas>
 							</div>
@@ -19,10 +30,10 @@
 			        				<div class="kaku-viewer"></div>
 			        			</div>
 								<div class="zoom-control">
-									<div class="zoom-button"><span class="glyphicon glyphicon-zoom-in"></span></div>									
+									<div class="zoom-button"><span class="glyphicon glyphicon-zoom-in"></span></div>
 									<div class="zoom-button"><span class="glyphicon glyphicon-resize-full"></span></div>
-									<div class="zoom-button"><span class="glyphicon glyphicon-zoom-out"></span></div>									
-									<div class="zoom-button right">100%</div>									
+									<div class="zoom-button"><span class="glyphicon glyphicon-zoom-out"></span></div>
+									<div class="zoom-button right">100%</div>
 								</div>		        				
 		        			</div>
 		        			<div class="layer-well">
@@ -106,12 +117,43 @@
 	        				
 	        			</div>
 	        			<div class="col-md-4">
-	        				
+	        				<div class="button-container" style="margin-top:7px;">
+	    						<div class="row">
+	        						<div class="col-md-2" style="padding:0px;text-align:center">
+			        					<span class="label">透明度</span>
+		        					</div>
+		        					<div class="col-md-8">
+			        					<input class="opacity-slider" type="range">		        						
+		        					</div>
+		        					<div class="col-md-2" style="padding:0px;">
+		        						<span class="label">100%</span>
+		        					</div>
+	        					</div>
+	        					<div class="row">
+	        						<div class="col-md-2" style="padding:0px;text-align:center">
+			        					<span class="label">大小</span>
+		        					</div>
+		        					<div class="col-md-8">
+			        					<input class="opacity-slider" type="range">		        						
+		        					</div>
+		        					<div class="col-md-2" style="padding:0px;">
+		        						<span class="label">100%</span>
+		        					</div>
+	        					</div>
+	        					<div class="row">
+	        						<div class="col-md-2" style="padding:0px;text-align:center;text-align:center">
+			        					<span class="label">阴影</span>
+		        					</div>
+		        					<div class="col-md-8">
+			        					<input class="opacity-slider" type="range">		        						
+		        					</div>
+		        					<div class="col-md-2" style="padding:0px;">
+		        						<span class="label">100%</span>
+		        					</div>
+	        					</div>
+	        				</div>
 	        			</div>
 	        		</div>
-	        	</div>
-	        	<div class="col-md-3" style="padding-left:0px;padding-right:0px">
-	        		ddd
 	        	</div>
 	        </div>
 
@@ -132,23 +174,27 @@
 
 	.main-canvas {
 		width: 100%;
-		border: 1px solid rgb(240, 236, 230);
+		border: 1px solid rgb(216, 216, 216);
+		border-top: none;
+		border-bottom: none;
+		height: 74vh;
+		overflow: scroll;
 	}
 
 	.main-canvas canvas{
 		width: 100%;
-		height: 74vh;
+		height: 100%;
 	}
 
 	.kaku-map {
 		width: 100%;
-		background: rgb(234, 234, 234);
+		/*background: rgb(234, 234, 234);*/
 		padding-left: 20px;
 		padding-right: 20px;
 		padding-top: 6px;
 		padding-bottom: 2px;
-		border: 1px solid #d8d8d8;
-		border-radius: 4px;
+		border-bottom: 1px solid #d8d8d8;
+		border-radius: 2px;
 	}
 
 	.kaku-map canvas {
@@ -207,14 +253,13 @@
 
 	.layer-well {
 		width: 100%;
-		height: calc(100% - 158px);
-		height: -moz-calc(100% - 158px);
+		height: calc(100% - 164px);
+		height: -moz-calc(100% - 164px);
 	}
 
-	.layer-content {
-		background: rgb(234, 234, 234);
-		border: 1px solid #d8d8d8;
-		border-radius: 4px;
+	.layer-content, .chatting-section {
+		/*background: rgb(234, 234, 234);*/
+		border-radius: 2px;
 		padding: 5px;
 		height: 100%;
 	}
