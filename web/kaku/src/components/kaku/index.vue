@@ -1,18 +1,63 @@
 <template>
     
-    <div style="margin-top:-21px;z-index:3000">
+    <div @click="rollbackStatus()" style="margin-top:-21px;z-index:3000">
 
         <div class="row a-bounceinT">
 
         	<div class="col-md-12" style="padding:0px;border-top:1px solid rgb(217, 217, 217)">
-        		<div class="col-md-3" style="padding-left:0px;padding-right:0px;border-bottom:1px solid rgb(217, 217, 217)">
+        		<div class="col-md-3" style="padding-left:0px;padding-right:0px;border-bottom:1px solid rgb(217, 217, 217);height:90vh;border-right:1px solid rgb(217, 217, 217)">
 	        		<div class="chatting-section">
 	        			<div class="kaku-member">
-                            <div class="room-photo"></div>                              
-                            <div class="room-photo"></div>                              
-                            <div class="room-photo"></div>                              
-                            <div class="room-photo"></div>                              
+                            <div class="room-photo"></div>     
                             <div class="room-photo"></div>
+                            <div class="room-photo"></div>
+                            <div class="room-photo"></div>
+                            <div class="room-photo"></div>
+	        			</div>
+	        			<div class="message-detail">
+	        				<div class="message-detail-content">
+	        					<div class="direct-message creator">
+	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
+	        						</div>
+	        						<div class="direct-message-body">
+	        							<div class="direct-message-header">
+	        								<span class="direct-message-creator-name">ivy</span>
+	        								<time class="time-stamp">2天前</time>
+	        							</div>
+	        							<div class="direct-message-content">
+	        								dssdssdssdssdssdssdssdssdssdssdssdssdssdssdssdssdssdssdssdss
+	        							</div>
+	        						</div>
+	        					</div>
+	        					<div class="direct-message creator">
+	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
+	        						</div>
+	        						<div class="direct-message-body">
+	        							<div class="direct-message-header">
+	        								<span class="direct-message-creator-name">ivy</span>
+	        								<time class="time-stamp">2天前</time>
+	        							</div>
+	        							<div class="direct-message-content">
+	        								ddd
+	        							</div>
+	        						</div>
+	        					</div>
+	        					<div class="direct-message receiver">
+	        						
+	        					</div>
+	        				</div>
+	        				<div class="message-send-form">
+	        					<div class="message-box-wrap" v-bind:class="{'active': isShowFullSendForm == true, 'noactive': isShowFullSendForm == false}">
+        							<div @click="showFullSendForm()" class="msg-input-wrap">
+        								<textarea placeholder="说点什么..."></textarea>
+        							</div>
+	        						<div class="message-send-input-wrap">
+	        							<div class="msg-btn-wrap">
+	        								<button>发送</button>
+	        							</div>
+	        						</div>
+	        					</div>
+	        				</div>
 	        			</div>
 	        		</div>
 	        	</div>
@@ -164,6 +209,52 @@
 
 <script>
 	
+    import util from '../../commons/scripts/commons.js';
+
+    export default {
+        data() {
+            return {
+            	isShowFullSendForm: false,
+            	sendFormClicked: false
+            }
+        },
+
+        components: {
+
+        },
+
+        methods: {
+
+        	showFullSendForm: function() {
+        		this.sendFormClicked = true;
+        		this.isShowFullSendForm = true;
+        	},
+
+        	rollbackStatus: function() {
+        		if(!this.sendFormClicked) {
+	        		this.isShowFullSendForm = false;        			
+        		}else {
+	        		this.sendFormClicked = false;        			
+        		}
+        	}
+
+        },
+
+        created() {
+            var _this = this;
+
+            var servicesInterval = setInterval(function() {
+                if(typeof window.services != 'undefined') {
+
+                    clearInterval(servicesInterval);
+
+                }
+            }, 1);
+
+        }
+    };
+
+
 </script>
 
 <style>
@@ -177,6 +268,7 @@
 		border: 1px solid rgb(216, 216, 216);
 		border-top: none;
 		border-bottom: none;
+		border-left: none;
 		height: 74vh;
 		overflow: scroll;
 	}

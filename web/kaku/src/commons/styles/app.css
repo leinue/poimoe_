@@ -428,7 +428,7 @@ button.navbar-toggle.collapsed {
 }
 
 .chatting-section {
-	padding: 0px;
+	padding: 10px!important;
 }
 
 .kaku-member {
@@ -443,6 +443,155 @@ button.navbar-toggle.collapsed {
 
 .kaku-member .room-photo {
 	display: block;
+}
+
+.message-detail {
+	background: rgb(255, 255, 255);
+	border-radius: 2px;
+	height: 100%;
+}
+
+.message-detail-content {
+}
+
+.message-send-form {
+	background: rgb(230, 230, 230);
+	border-top: 1px solid rgb(214, 214, 214);
+	border-bottom: 1px solid rgb(214, 214, 214);
+	width: 100%;
+}
+
+.message-box-wrap {
+	position: relative;
+	z-index: 1;
+	padding: 6px;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+	background-color: #fff;
+	border-bottom: 1px solid transparent;
+	-webkit-transform: translateZ(0);
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-webkit-transition: border 218ms ease .1s;
+	-o-transition: border 218ms ease .1s;
+	transition: border 218ms ease .1s;
+	cursor: text;
+	color: rgb(170, 170, 170);
+}
+
+.message-send-input-wrap {
+	display: none;
+}
+
+.message-box-wrap.active {
+	/*border: 1px solid rgb(166, 166, 166);*/
+	padding: 0px;
+	animation: bounceinT 0.8s linear 0s 1 alternate;
+}
+
+.message-box-wrap.noactive {
+	animation: bouncein 0.8s linear 0s 1 alternate;	
+}
+
+.message-box-wrap.active span{
+	display: none;
+}
+
+.message-box-wrap.active .message-send-input-wrap{
+	display: block;
+}
+
+.msg-btn-wrap {
+	border-top: 1px solid rgb(217, 217, 217);	
+	text-align: right;
+	padding: 6px;
+}
+
+.message-box-wrap.active .msg-input-wrap {
+	padding: 6px;
+}
+
+button {
+	height: 30px;
+	color: #fff;
+	font-size: 14px;
+	cursor: pointer;
+	line-height: 14px;
+	border-radius: 2px;
+	background-color: #03a9f4;
+	margin: 2px 5px 2px 12px;
+	border: none;
+	min-width: 71px;
+}
+
+.msg-input-wrap textarea {
+	border: none;
+	width: 100%;
+	height: 30px;
+	outline: 0;
+	resize: none;
+}
+
+input:focus {
+	border: none;
+}
+
+.direct-message {
+	position: relative;
+	overflow: hidden;
+	margin: 15px
+}
+
+.direct-message .direct-message-body {
+	margin: 0 0 0 46px;
+}
+
+.direct-message .direct-message-body .direct-message-header .direct-message-creator-name {
+	float: left;
+	color: grey;
+}
+
+.time-stamp {
+	display: inline-block;
+	margin: 0 0 0 10px;
+	font-size: 12px;
+	color: #a6a6a6;
+	font-size: 12px;
+	position: absolute;
+	right: 0;
+	-webkit-transition: opacity .2s ease .1s;
+	-o-transition: opacity .2s ease .1s;
+	transition: opacity .2s ease .1s
+}
+
+.direct-message-header {
+	min-height: 18px;
+}
+
+.direct-message-creator-photo {
+	float: left;
+}
+
+.direct-message-content {
+	color: #383838;
+	word-wrap: break-word;
+	word-break: normal;
+}
+
+.message-detail-content {
+	padding-top: 1px;
+}
+
+.avatar {
+	background-size: cover !important;
+	background-repeat: no-repeat !important;
+	background-position: center !important;
+	width: 36px;
+	height: 36px;
 }
 
 /*撤销按钮3d旋转*/
