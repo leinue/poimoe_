@@ -449,6 +449,7 @@ button.navbar-toggle.collapsed {
 	background: rgb(255, 255, 255);
 	border-radius: 2px;
 	height: 100%;
+	overflow: scroll;
 }
 
 .message-detail-content {
@@ -458,7 +459,8 @@ button.navbar-toggle.collapsed {
 	background: rgb(230, 230, 230);
 	border-top: 1px solid rgb(214, 214, 214);
 	border-bottom: 1px solid rgb(214, 214, 214);
-	width: 100%;
+	bottom: 0;
+	position: absolute;
 }
 
 .message-box-wrap {
@@ -550,9 +552,21 @@ input:focus {
 	margin: 0 0 0 46px;
 }
 
+.direct-message.receiver .direct-message-body {
+	margin: 0 46px 0 0;	
+}
+
 .direct-message .direct-message-body .direct-message-header .direct-message-creator-name {
 	float: left;
 	color: grey;
+}
+
+.direct-message.receiver .direct-message-body .direct-message-header .direct-message-creator-name {
+	float: right;
+}
+
+.receiver .time-stamp {
+	left: 0;
 }
 
 .time-stamp {
@@ -572,6 +586,10 @@ input:focus {
 	min-height: 18px;
 }
 
+.direct-message.receiver .direct-message-creator-photo {
+	float: right;
+}
+
 .direct-message-creator-photo {
 	float: left;
 }
@@ -580,6 +598,10 @@ input:focus {
 	color: #383838;
 	word-wrap: break-word;
 	word-break: normal;
+}
+
+.receiver .direct-message-content {
+	text-align: right;
 }
 
 .message-detail-content {

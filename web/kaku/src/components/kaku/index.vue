@@ -1,6 +1,6 @@
 <template>
-    
-    <div @click="rollbackStatus()" style="margin-top:-21px;z-index:3000">
+   
+    <div style="margin-top:-21px;z-index:3000">
 
         <div class="row a-bounceinT">
 
@@ -14,7 +14,7 @@
                             <div class="room-photo"></div>
                             <div class="room-photo"></div>
 	        			</div>
-	        			<div class="message-detail">
+	        			<div class="message-detail" id="msg-wrap">
 	        				<div class="message-detail-content">
 	        					<div class="direct-message creator">
 	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
@@ -25,7 +25,22 @@
 	        								<time class="time-stamp">2天前</time>
 	        							</div>
 	        							<div class="direct-message-content">
-	        								dssdssdssdssdssdssdssdssdssdssdssdssdssdssdssdssdssdssdssdss
+	        							<br>
+	        								你好
+	        							</div>
+	        						</div>
+	        					</div>
+	        					<div class="direct-message receiver">
+	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
+	        						</div>
+	        						<div class="direct-message-body">
+	        							<div class="direct-message-header">
+	        								<span class="direct-message-creator-name">xieyang</span>
+	        								<time class="time-stamp">2天前</time>
+	        							</div>
+	        							<div class="direct-message-content">
+	        							<br>
+	        								测试kaku聊天功能
 	        							</div>
 	        						</div>
 	        					</div>
@@ -38,22 +53,62 @@
 	        								<time class="time-stamp">2天前</time>
 	        							</div>
 	        							<div class="direct-message-content">
-	        								ddd
+	        							<br>
+	        								看上去蛮正常的
 	        							</div>
 	        						</div>
 	        					</div>
 	        					<div class="direct-message receiver">
-	        						
+	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
+	        						</div>
+	        						<div class="direct-message-body">
+	        							<div class="direct-message-header">
+	        								<span class="direct-message-creator-name">xieyang</span>
+	        								<time class="time-stamp">2天前</time>
+	        							</div>
+	        							<div class="direct-message-content">
+	        							<br>
+	        								接下来要测试滚动条功能，麻烦你也多发几条
+	        							</div>
+	        						</div>
+	        					</div>
+	        					<div class="direct-message creator">
+	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
+	        						</div>
+	        						<div class="direct-message-body">
+	        							<div class="direct-message-header">
+	        								<span class="direct-message-creator-name">ivy</span>
+	        								<time class="time-stamp">2天前</time>
+	        							</div>
+	        							<div class="direct-message-content">
+	        							<br>
+	        								好的，那我刷个屏得了。蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤
+	        							</div>
+	        						</div>
+	        					</div>
+	        					<div class="direct-message receiver">
+	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
+	        						</div>
+	        						<div class="direct-message-body">
+	        							<div class="direct-message-header">
+	        								<span class="direct-message-creator-name">xieyang</span>
+	        								<time class="time-stamp">2天前</time>
+	        							</div>
+	        							<div class="direct-message-content">
+	        							<br>
+	        								看上去差不多了，好像有些问题。
+	        							</div>
+	        						</div>
 	        					</div>
 	        				</div>
-	        				<div class="message-send-form">
+	        				<div class="message-send-form" id="msg-send-wrap-id">
 	        					<div class="message-box-wrap" v-bind:class="{'active': isShowFullSendForm == true, 'noactive': isShowFullSendForm == false}">
-        							<div @click="showFullSendForm()" class="msg-input-wrap">
-        								<textarea placeholder="说点什么..."></textarea>
+        							<div class="msg-input-wrap">
+        								<textarea v-on:blur="rollbackSendFormStatus()" v-on:focus="showFullSendForm()" placeholder="说点什么..."></textarea>
         							</div>
 	        						<div class="message-send-input-wrap">
 	        							<div class="msg-btn-wrap">
-	        								<button>发送</button>
+	        								<button @click="confirmToSendChattingMessage()">发送</button>
 	        							</div>
 	        						</div>
 	        					</div>
@@ -211,6 +266,37 @@
 	
     import util from '../../commons/scripts/commons.js';
 
+    var common = {
+
+    	adjustUI: function(form, closeForm) {
+
+    		form = form || false;
+    		closeForm = closeForm || false;
+
+    		var msgWrap = document.getElementById('msg-wrap');
+        	var msgWrapWidth = msgWrap.offsetWidth;
+        	var msgWrapHeight = msgWrap.offsetHeight;
+
+        	var msgSendWrap = document.getElementById('msg-send-wrap-id');
+        	var msgSendWrapHeight = msgSendWrap.offsetHeight;
+
+        	msgSendWrap.setAttribute('style', 'width:' + msgWrapWidth + 'px');
+        	if(!form) {
+	        	msgWrap.setAttribute('style', 'height:' + (msgWrapHeight - msgSendWrapHeight - 87) + 'px');        		
+        	}else {
+        		if(!closeForm) {
+		        	msgWrap.setAttribute('style', 'height:' + (msgWrapHeight - msgSendWrapHeight + 50) + 'px');        				
+        		}else {
+		        	msgWrap.setAttribute('style', 'height:' + (msgWrapHeight - msgSendWrapHeight + 144) + 'px');
+        		}
+        	}
+
+        	msgWrap.scrollTop = msgWrapHeight;
+
+    	}
+
+    };
+
     export default {
         data() {
             return {
@@ -226,31 +312,31 @@
         methods: {
 
         	showFullSendForm: function() {
-        		this.sendFormClicked = true;
-        		this.isShowFullSendForm = true;
+        		if(!this.sendFormClicked) {
+	        		this.sendFormClicked = true;
+	        		this.isShowFullSendForm = true;
+		        	setTimeout(function() {
+			        	common.adjustUI(true);
+		        	}, 500);
+        		}
         	},
 
-        	rollbackStatus: function() {
-        		if(!this.sendFormClicked) {
-	        		this.isShowFullSendForm = false;        			
-        		}else {
-	        		this.sendFormClicked = false;        			
+        	rollbackSendFormStatus: function() {
+        		if(this.sendFormClicked) {
+	        		this.isShowFullSendForm = false;
+	        		this.sendFormClicked = false;
+		        	common.adjustUI(true, true);
         		}
+        	},
+
+        	confirmToSendChattingMessage: function() {
+        		this.rollbackSendFormStatus();
         	}
 
         },
 
-        created() {
-            var _this = this;
-
-            var servicesInterval = setInterval(function() {
-                if(typeof window.services != 'undefined') {
-
-                    clearInterval(servicesInterval);
-
-                }
-            }, 1);
-
+        ready() {
+        	common.adjustUI();
         }
     };
 
