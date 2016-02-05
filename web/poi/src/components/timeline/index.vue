@@ -106,9 +106,7 @@
 	}
 
 	.timeline {
-
 		padding-bottom: 0px;
-
 	}
 
 	.timeline-author {

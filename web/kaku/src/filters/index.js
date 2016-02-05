@@ -5,9 +5,9 @@ module.exports = {
 	init: function(v) {
 		this.vue = v;
 
-		this.vue.filter('nullToVisual', function(value) {
-			if(value == null || value == undefined){
-				return '暂无数据';
+		this.vue.filter('nullRoomNameFilter', function(value) {
+			if(value == null || value == undefined || value == ''){
+				return '暂无名称';
 			}else {
 				return value;
 			}

@@ -337,6 +337,10 @@
 
         ready() {
         	common.adjustUI();
+
+			var id = router._currentRoute.params.id;
+
+			console.log(id);
         }
     };
 

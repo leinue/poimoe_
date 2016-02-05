@@ -50,7 +50,10 @@ module.exports = {
 
       return this.find({
         isDeleted: false
-      }).skip(skipFrom).limit(count).select('-passport').exec(cb);
+      }).populate({
+        path: 'people creator',
+        select: '_id username photo'
+      }).skip(skipFrom).limit(count).select('').exec(cb);
     };
 
     kakuSchema.statics.findPeopleByRoomId = function(id, cb) {

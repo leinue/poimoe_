@@ -7,8 +7,11 @@ module.exports = function(router){
 
 			}
 		},
-		'/sketch': {
+		'/sketch/:id': {
 			component: require('./components/kaku/index.vue')
+		},
+		'/room/new': {
+			component: require('./components/kaku/newRoom.vue')
 		},
 		'/404': {
 			component: {

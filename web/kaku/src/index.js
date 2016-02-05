@@ -10,13 +10,17 @@ var util = require('./commons/scripts/commons.js');
 
 // document.domain = 'poimoe.com';
 var userData = util.getCookie('userData');
-console.log(userData);
-
 
 //初始化webSocket
-var socket = io('ws://socket.poimoe.com/kaku');
-socket.emit('kaku message', 'fuck');
-socket.on('kaku message', function(msg){
+var kakuSocket = io('ws://socket.poimoe.com/kaku');
+kakuSocket.emit('kaku message', 'fuck');
+kakuSocket.on('kaku message', function(msg){
+	console.log(msg);
+});
+
+var chatSocket = io('ws://socket.poimoe.com/chat');
+chatSocket.emit('chat message', 'fuck');
+chatSocket.on('chat message', function(msg) {
 	console.log(msg);
 });
 

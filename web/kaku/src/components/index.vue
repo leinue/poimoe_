@@ -1,148 +1,28 @@
 <template>
     
     <div style="">
-
         <div class="row a-bounceinT">
             <div class="col-md-8 col-md-offset-2">
                 <div class="col-md-12">
-                    <div class="col-md-6">
+                    <div class="col-md-6" v-for="room in kakuRoomList">
                         <div class="room-rect">
-                            <h2>帕秋莉go</h2>
-                            <div class="room-enter"><span class="glyphicon glyphicon-hand-up"></span></div>
-                            <span class="glyphicon glyphicon-user"> xieyang</span>
-                            <span style="margin-left:15px;" class="glyphicon glyphicon-flag"> 4/5</span>
+                            <h2 style="cursor:pointer" @click="toSkecthRoom(room._id)">{{room.name | nullRoomNameFilter}}</h2>
+                            <div class="room-enter" @click="toSkecthRoom(room._id)"><span class="glyphicon glyphicon-hand-up"></span></div>
+                            <span class="glyphicon glyphicon-user"> {{room.creator.username}}</span>
+                            <span style="margin-left:15px;" class="glyphicon glyphicon-flag"> {{room.people.length}}/{{room.peopleLimit}}</span>
                             <div class="room-member">
                                 <div class="row">
                                     <div class="col-md-2" style="padding:0px;height:30px;padding-top:5px;">
                                         <span>成员：</span>                                    
                                     </div>
                                     <div class="col-md-10" style="padding:0px;">
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>
-                                        <div class="room-photo more">7+</div>                       
+                                        <div @click="viewProfile(people._id)" class="room-photo" v-for="people in room.people" style="background-image: url({{people.photo}});"></div>                              
+                                        <div class="room-photo more" v-show="room.people.length > 5">7+</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="room-rect">
-                            <h2>帕秋莉go</h2>
-                            <div class="room-enter" @click="toSkecthRoom()"><span class="glyphicon glyphicon-hand-up"></span></div>
-                            <span class="glyphicon glyphicon-user"> xieyang</span>
-                            <span style="margin-left:15px;" class="glyphicon glyphicon-flag"> 4/5</span>
-                            <div class="room-member">
-                                <div class="row">
-                                    <div class="col-md-2" style="padding:0px;height:30px;padding-top:5px;">
-                                        <span>成员：</span>                                    
-                                    </div>
-                                    <div class="col-md-10" style="padding:0px;">
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>
-                                        <div class="room-photo more">7+</div>                       
-                                    </div>
-                                </div>
-                            </div>
-                        </div>      
-                    </div> 
-                    <div class="col-md-6">
-                        <div class="room-rect grey">
-                            <h2>帕秋莉go</h2>
-                            <div class="room-enter"><span class="glyphicon glyphicon-hand-up"></span></div>
-                            <span class="glyphicon glyphicon-user"> xieyang</span>
-                            <span style="margin-left:15px;" class="glyphicon glyphicon-flag"> 4/5</span>
-                            <div class="room-member">
-                                <div class="row">
-                                    <div class="col-md-2" style="padding:0px;height:30px;padding-top:5px;">
-                                        <span>成员：</span>                                    
-                                    </div>
-                                    <div class="col-md-10" style="padding:0px;">
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>
-                                        <div class="room-photo more">7+</div>                       
-                                    </div>
-                                </div>
-                            </div>
-                        </div>      
-                    </div>
-                    <div class="col-md-6">
-                        <div class="room-rect grey">
-                            <h2>帕秋莉go</h2>
-                            <div class="room-enter"><span class="glyphicon glyphicon-hand-up"></span></div>
-                            <span class="glyphicon glyphicon-user"> xieyang</span>
-                            <span style="margin-left:15px;" class="glyphicon glyphicon-flag"> 4/5</span>
-                            <div class="room-member">
-                                <div class="row">
-                                    <div class="col-md-2" style="padding:0px;height:30px;padding-top:5px;">
-                                        <span>成员：</span>                                    
-                                    </div>
-                                    <div class="col-md-10" style="padding:0px;">
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>
-                                        <div class="room-photo more">7+</div>                       
-                                    </div>
-                                </div>
-                            </div>
-                        </div>      
-                    </div>     
-                    <div class="col-md-6">
-                        <div class="room-rect">
-                            <h2>帕秋莉go</h2>
-                            <div class="room-enter"><span class="glyphicon glyphicon-hand-up"></span></div>
-                            <span class="glyphicon glyphicon-user"> xieyang</span>
-                            <span style="margin-left:15px;" class="glyphicon glyphicon-flag"> 4/5</span>
-                            <div class="room-member">
-                                <div class="row">
-                                    <div class="col-md-2" style="padding:0px;height:30px;padding-top:5px;">
-                                        <span>成员：</span>                                    
-                                    </div>
-                                    <div class="col-md-10" style="padding:0px;">
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>
-                                        <div class="room-photo more">7+</div>                       
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="room-rect">
-                            <h2>帕秋莉go</h2>
-                            <div class="room-enter"><span class="glyphicon glyphicon-hand-up"></span></div>
-                            <span class="glyphicon glyphicon-user"> xieyang</span>
-                            <span style="margin-left:15px;" class="glyphicon glyphicon-flag"> 4/5</span>
-                            <div class="room-member">
-                                <div class="row">
-                                    <div class="col-md-2" style="padding:0px;height:30px;padding-top:5px;">
-                                        <span>成员：</span>                                    
-                                    </div>
-                                    <div class="col-md-10" style="padding:0px;">
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>                              
-                                        <div class="room-photo"></div>
-                                        <div class="room-photo more">7+</div>                       
-                                    </div>
-                                </div>
-                            </div>
-                        </div>      
-                    </div> 
                 </div>
                 <div class="col-md-12">
                     <div class="load-more">
@@ -162,6 +42,7 @@
     export default {
         data() {
             return {
+                kakuRoomList: []
             }
         },
 
@@ -171,8 +52,36 @@
 
         methods: {
 
-            toSkecthRoom: function() {
-                router.go('/sketch');
+            toSkecthRoom: function(id) {
+                router.go('/sketch/' + id);
+            },
+
+            loadKakuRoom: function() {
+
+                var _this = this;
+
+                window.services.KakuService.indexAll(1, 10).then(function(res) {
+
+                    var code = res.data.code;
+                    var data = res.data.message;
+
+                    if(code != 200) {
+                        util.messageBox(data);
+                        return false;
+                    }
+
+                    _this.kakuRoomList = data;
+
+                    console.log(_this.kakuRoomList);
+
+                }, function(err) {
+                    util.handleError(err);
+                });
+            },
+
+            viewProfile: function(id) {
+                console.log(id);
+                window.location.href = 'http://poi.poimoe.com/#!/profile/' + id;
             }
 
         },
@@ -183,12 +92,14 @@
             var servicesInterval = setInterval(function() {
                 if(typeof window.services != 'undefined') {
 
+                    _this.$get('loadKakuRoom')();
+
                     clearInterval(servicesInterval);
 
                 }
             }, 1);
-
         }
+
     };
 
 </script>
@@ -230,7 +141,6 @@
         height: 30px;
         background-size: cover;
         background-position: center;
-        background-image: url(http://image.poimoe.com/./upload/1/1453345164.JPG);
         border-radius: 50%;
         float: left;
         margin-right: 6px;

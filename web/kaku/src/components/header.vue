@@ -3,6 +3,10 @@
     <div class="notification-center {{boncein}}">
     </div>
 
+	<div @click="pathToNewRoomPage()" class="type-circle header-circle">
+        <span class="glyphicon glyphicon-plus"></span>
+    </div>
+
 	<nav class="navbar navbar-default" style="">
 	  <div class="container-fluid">
 	    <!-- Brand and toggle get grouped for better mobile display -->
@@ -87,17 +91,9 @@
 				this.startNotificationComet();
 			},
 
-			pathTo: function(path){
-				util.cancelActiveMenu();
-				this.menu.currentName = path;
-				router.replace(path);
-			},
-
-			pathToAndCloseThis: function(path) {
-				this.pathTo(path);
-				this.showRight = false;
+			pathToNewRoomPage: function(){
+				router.replace('/room/new');
 			}
-
 		},
 
         props: {
@@ -244,6 +240,28 @@
 	#search-button {
 		top: 15px;
 		left: 70px;
+	}
+
+	.type-circle {
+		position: fixed;
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		border: 1px solid rgb(0, 149, 219);
+		top: 15px;
+		left: 15px;
+		transition: all .3s ease;
+		text-align: center;
+		line-height: 50px;
+		z-index: 655;
+		color: rgb(0, 149, 219);
+	}
+
+	.type-circle:hover {
+		background: rgb(0, 149, 219);
+		transform: scale(1.2, 1.2);
+		cursor: pointer;
+		color: rgb(255, 255, 255);
 	}
 
 	.type-circle.right {
