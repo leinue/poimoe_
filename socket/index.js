@@ -33,7 +33,33 @@ chat.on('connection', function(socket){
 
 	socket.on('chat message', function(msg){
 		console.log('msg reveived: ' + msg);
-	    socket.emit('chat message', msg);
+
+		msg = JSON.parse(msg);
+
+		request.post({
+		        url: 'http://api.poimoe.com/kaku/room/chat/send',
+		        encoding: 'utf8',
+		        headers: {
+		        	'Authorization': 'Basic ' + msg.accessToken 
+		        },
+		        form: msg
+		    },
+		    function(error, response, body){
+		        if(!error && response.statusCode == 200){
+		            console.log(body);
+				    socket.emit('chat message', body);
+		        }else{
+		            console.log(response.statusCode);
+	        	    socket.emit('chat message', {
+	        	    	code: response.statusCode,
+	        	    	message: response.body,
+	        	    	error: error,
+	        	    	headers: response.headers,
+	        	    	request: response.request
+	        	    });
+		        }
+		    }
+		);
 	});
 
 });

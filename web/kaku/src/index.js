@@ -18,11 +18,12 @@ kakuSocket.on('kaku message', function(msg){
 	console.log(msg);
 });
 
+window.kakuSocket = kakuSocket;
+
 var chatSocket = io('ws://socket.poimoe.com/chat');
-chatSocket.emit('chat message', 'fuck');
-chatSocket.on('chat message', function(msg) {
-	console.log(msg);
-});
+// chatSocket.emit('chat message', 'fuck');
+
+window.chatSocket = chatSocket;
 
 //初始化用户登录状态
 // localStorage.login = typeof localStorage.login == 'undefined' ? 'false' : localStorage.login;

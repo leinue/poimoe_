@@ -364,7 +364,7 @@ var index = {
 			if(err) {
 				res.send(util.retMsg(401, err.toString()));
 			}
-
+						
 			res.send(util.retMsg(200, msg));
 
 		});
@@ -372,7 +372,7 @@ var index = {
 	},
 
 	getMessage: function(req, res, next) {
-		var room = req.params.roomId;
+		var room = req.params.id;
 		var page = req.params.page || 1;
 		var count = req.params.count || 10;
 

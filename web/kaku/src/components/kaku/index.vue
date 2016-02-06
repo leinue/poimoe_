@@ -12,87 +12,17 @@
 	        			</div>
 	        			<div class="message-detail" id="msg-wrap">
 	        				<div class="message-detail-content">
-	        					<div class="direct-message creator">
-	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
+	        					<div class="direct-message creator" v-bind:class="{'creator': myId == people.sender._id, 'receiver': myId != people.sender._id}" v-for="chat in room.chatting">
+	        						<div class="avatar direct-message-creator-photo" style="background-image: url({{chat.sender.photo}});" @click="viewProfile(chat.sender._id)">
 	        						</div>
 	        						<div class="direct-message-body">
 	        							<div class="direct-message-header">
-	        								<span class="direct-message-creator-name">ivy</span>
-	        								<time class="time-stamp">2天前</time>
+	        								<span class="direct-message-creator-name">{{chat.sender.username}}</span>
+	        								<time class="time-stamp">{{chat.createdAt}}</time>
 	        							</div>
 	        							<div class="direct-message-content">
 	        							<br>
-	        								你好
-	        							</div>
-	        						</div>
-	        					</div>
-	        					<div class="direct-message receiver">
-	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
-	        						</div>
-	        						<div class="direct-message-body">
-	        							<div class="direct-message-header">
-	        								<span class="direct-message-creator-name">xieyang</span>
-	        								<time class="time-stamp">2天前</time>
-	        							</div>
-	        							<div class="direct-message-content">
-	        							<br>
-	        								测试kaku聊天功能
-	        							</div>
-	        						</div>
-	        					</div>
-	        					<div class="direct-message creator">
-	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
-	        						</div>
-	        						<div class="direct-message-body">
-	        							<div class="direct-message-header">
-	        								<span class="direct-message-creator-name">ivy</span>
-	        								<time class="time-stamp">2天前</time>
-	        							</div>
-	        							<div class="direct-message-content">
-	        							<br>
-	        								看上去蛮正常的
-	        							</div>
-	        						</div>
-	        					</div>
-	        					<div class="direct-message receiver">
-	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
-	        						</div>
-	        						<div class="direct-message-body">
-	        							<div class="direct-message-header">
-	        								<span class="direct-message-creator-name">xieyang</span>
-	        								<time class="time-stamp">2天前</time>
-	        							</div>
-	        							<div class="direct-message-content">
-	        							<br>
-	        								接下来要测试滚动条功能，麻烦你也多发几条
-	        							</div>
-	        						</div>
-	        					</div>
-	        					<div class="direct-message creator">
-	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
-	        						</div>
-	        						<div class="direct-message-body">
-	        							<div class="direct-message-header">
-	        								<span class="direct-message-creator-name">ivy</span>
-	        								<time class="time-stamp">2天前</time>
-	        							</div>
-	        							<div class="direct-message-content">
-	        							<br>
-	        								好的，那我刷个屏得了。蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤
-	        							</div>
-	        						</div>
-	        					</div>
-	        					<div class="direct-message receiver">
-	        						<div class="avatar direct-message-creator-photo" style="background-image: url(https://striker.teambition.net/thumbnail/110bc5147487043b89dd35934036b20cfdd3/w/100/h/100);">
-	        						</div>
-	        						<div class="direct-message-body">
-	        							<div class="direct-message-header">
-	        								<span class="direct-message-creator-name">xieyang</span>
-	        								<time class="time-stamp">2天前</time>
-	        							</div>
-	        							<div class="direct-message-content">
-	        							<br>
-	        								看上去差不多了，好像有些问题。
+	        								{{chat.content}}
 	        							</div>
 	        						</div>
 	        					</div>
@@ -100,10 +30,12 @@
 	        				<div class="message-send-form" id="msg-send-wrap-id">
 	        					<div class="message-box-wrap" v-bind:class="{'active': isShowFullSendForm == true, 'noactive': isShowFullSendForm == false}">
         							<div class="msg-input-wrap">
-        								<textarea v-on:blur="rollbackSendFormStatus()" v-on:focus="showFullSendForm()" placeholder="说点什么..."></textarea>
+        								<textarea v-model="message"  v-on:focus="showFullSendForm()" placeholder="说点什么..."></textarea>
+        								<!-- v-on:blur="rollbackSendFormStatus()" -->
         							</div>
 	        						<div class="message-send-input-wrap">
 	        							<div class="msg-btn-wrap">
+	        								<button @click="rollbackSendFormStatus()">取消</button>
 	        								<button @click="confirmToSendChattingMessage()">发送</button>
 	        							</div>
 	        						</div>
@@ -299,7 +231,10 @@
             	isShowFullSendForm: false,
             	sendFormClicked: false,
 
-            	room: {}
+            	myId: localStorage._id,
+
+            	room: {},
+            	message: ''
             }
         },
 
@@ -328,7 +263,14 @@
         	},
 
         	confirmToSendChattingMessage: function() {
-        		this.rollbackSendFormStatus();
+        		var _this = this;
+        		var chatMessage = {
+        			sender: localStorage._id,
+        			roomId: _this.room._id,
+        			message: _this.message,
+        			accessToken: localStorage.accessToken
+        		};
+        		chatSocket.emit('chat message', JSON.stringify(chatMessage));
         	},
 
         	enterRoom: function(id) {
@@ -351,7 +293,27 @@
 
                     _this.room = data[0];
 
-                    console.log(_this.room);
+                    _this.room.chatting.reverse();
+
+                    chatSocket.on('chat message', function(msg) {
+
+	        			if(typeof msg === 'string') {
+	        				msg = JSON.parse(msg);
+	        			}
+
+						console.log(msg);
+
+						var code = msg.code;
+						var data = msg.message;
+
+						if(code != 200) {
+							util.messageBox(data);
+							return false;
+						}
+
+						_this.room.chatting.push(data.chatting[0]);
+						_this.message = '';
+					});
 
 
         		}, function(err) {

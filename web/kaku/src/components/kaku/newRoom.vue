@@ -27,7 +27,7 @@
                                 <span class="input-group-addon" id="sizing-addon3">加密口令<span class="required" v-show="room.isLocked">*</span></span>
                                 <input type="text" v-model="room.passport" class="form-control" disabled="{{!room.isLocked}}">
                             </div>                            
-                        </div>                        
+                        </div>         
                     </div>
                     <div class="msg-btn-wrap" style="border:none">
                         <button @click="back()">取消</button>

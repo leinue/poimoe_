@@ -87,7 +87,17 @@ module.exports = {
       }).populate({
         path: 'people creator',
         select: '_id username photo'
-      }).select('-chatting').exec(cb);
+      }).populate({
+        path: 'chatting',
+        options: {
+          skip: 0,
+          limit: 10,
+        },
+        populate: {
+          path: 'sender',
+          select: '_id username photo'
+        }
+      }).exec(cb);
     };
 
     kakuSchema.statics.enter = function(obj, cb) {
@@ -209,14 +219,14 @@ module.exports = {
       return _this.findOne({
         _id: roomToSend,
         isDeleted: false
-      }).select('-chatting').exec(function(err, room) {
+      }).exec(function(err, room) {
 
         if(err) {
           cb(err, room);
         }
 
         var chat = room.chatting;
-        chat.unshit(chattingDetail);
+        chat.unshift(chattingDetail);
 
         _this.findOneAndUpdate({
           _id: roomToSend,
@@ -225,7 +235,27 @@ module.exports = {
           chatting: chat
         }, {
           new: true
-        }, cb);
+        }, function(err, newRoom) {
+
+          if(err) {
+            cb(err, newRoom);
+          }
+
+          _this.findOne({
+            _id: roomToSend,
+            isDeleted: false
+          }).populate({
+            path: 'chatting',
+            options: {
+              limit: 1
+            },
+            populate: {
+              path: 'sender',
+              select: '_id username photo'
+            }
+          }).select('chatting').exec(cb);
+
+        });
 
       });
     };
