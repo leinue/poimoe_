@@ -67,7 +67,17 @@ module.exports = {
       }).populate({
         path: 'people creator',
         select: '_id username photo'
-      }).skip(skipFrom).limit(count).select('-chatting').exec(cb);
+      }).skip(skipFrom).limit(count).populate({
+        path: 'chatting',
+        options: {
+          skip: skipFrom,
+          limit: count
+        },
+        populate: {
+          path: 'sender',
+          select: '_id username photo'
+        }
+      }).exec(cb);
     };
 
     kakuSchema.statics.findPeopleByRoomId = function(id, cb) {
@@ -224,13 +234,22 @@ module.exports = {
 
       page = page || 1;
       count = count || 10;
+      var skipFrom = (page * count) - count;
 
       return this.findOne({
         _id: room,
         isDeleted: false
       }).select('chatting').populate({
-        path: 'chatting'
-      }).exec(cb);;
+        path: 'chatting',
+        options: {
+          skip: skipFrom,
+          limit: count
+        },
+        populate: {
+          path: 'sender',
+          select: '_id username photo'
+        }
+      }).exec(cb);
 
     };
 

@@ -41,6 +41,10 @@ module.exports = {
 			
 			alterPassport: function(data) {
 				return _this.$http.post('kaku/room/alter/name', data);
+			},
+
+			getChattingMessage: function(room, page, count) {
+				return _this.$http.get('kaku/room/chat/get/' + room + '/' + page + '/' + count);
 			}
 
 		}

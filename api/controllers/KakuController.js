@@ -129,15 +129,18 @@ var index = {
    	 			res.send(util.retMsg(401, err.toString()));
    	 		}
 
-   	 		var isPeopleHaveEntered = false;
-
-   	 		var peopleList = singleKaku.people;
    	 		var isRoomLocked = singleKaku.isLocked;
 
    	 		if(isRoomLocked === true) {
 
    	 			if(singleKaku.passport === passport) {
-		   	 		_util.enterRoom(Kaku, singleKaku, peopleEnter, res);
+
+   	 				if(singleKaku.peopleLimit > singleKaku.people.length) {
+	   	 				res.send(util.retMsg(401, '该房间已达到人数上限，无法进入'));
+   	 				}else {
+			   	 		_util.enterRoom(Kaku, singleKaku, peopleEnter, res);
+   	 				}
+
    	 			}else {
    	 				res.send(util.retMsg(401, '密码验证失败'));
    	 			}
@@ -336,7 +339,7 @@ var index = {
 
 	},
 
-	storeMessage: function() {
+	storeMessage: function(req, res, next) {
 
 		var sender = req.params.sender;
 		var roomToSend = req.params.roomId;
@@ -368,7 +371,7 @@ var index = {
 
 	},
 
-	getMessage: function() {
+	getMessage: function(req, res, next) {
 		var room = req.params.roomId;
 		var page = req.params.page || 1;
 		var count = req.params.count || 10;
