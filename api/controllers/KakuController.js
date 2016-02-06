@@ -2,25 +2,28 @@ var util = require('../util/index');
 
 var _util = {
 
-	enterRoom: function(kaku, peopleList, res) {
+	enterRoom: function(kaku, singleKaku, peopleEnter, res) {
 
 		var isPeopleHaveEntered = false;
 
-   		peopleList.forEach(function(index, singlePeople) {
- 			if(singlePeople == peopleEnter) {
+		peopleList = singleKaku.people;
+
+		for (var i = peopleList.length - 1; i >= 0; i--) {
+			var singlePeople = peopleList[i]._id;
+			if(singlePeople.toString() == peopleEnter.toString()) {
  				isPeopleHaveEntered = true;
- 				return false;
+ 				break;
  			}
- 		});
+		};
 
  		if(isPeopleHaveEntered) {
- 			res.send(util.retMsg(401, '请不要重复加入同一个房间'));
+ 			res.send(util.retMsg(200, [singleKaku]));
  		}else {
 
  			peopleList.unshift(peopleEnter);
 
  			kaku.enter({
- 				roomId: roomId,
+ 				roomId: singleKaku._id,
  				peopleList: peopleList
  			}, function(err, newRoom) {
    	 		if(err) {
@@ -128,19 +131,19 @@ var index = {
 
    	 		var isPeopleHaveEntered = false;
 
-   	 		var peopleList = singleKaku.peopleList;
+   	 		var peopleList = singleKaku.people;
    	 		var isRoomLocked = singleKaku.isLocked;
 
    	 		if(isRoomLocked === true) {
 
    	 			if(singleKaku.passport === passport) {
-		   	 		_util.enterRoom(kaku, peopleList, res);
+		   	 		_util.enterRoom(Kaku, singleKaku, peopleEnter, res);
    	 			}else {
    	 				res.send(util.retMsg(401, '密码验证失败'));
    	 			}
 
    	 		}else {
-	   	 		_util.enterRoom(kaku, peopleList, res);
+	   	 		_util.enterRoom(Kaku, singleKaku, peopleEnter, res);
    	 		}
 
 		});
@@ -330,6 +333,41 @@ var index = {
    	 		res.send(util.retMsg(200, '更改房间人数上限成功'));
 
 		});
+
+	},
+
+	storeMessage: function() {
+
+		var sender = req.params.sender;
+		var roomToSend = req.params.roomId;
+		var message = req.params.message;
+
+		if(sender == undefined || sender == '') {
+			res.send(util.retMsg(401, '缺少参数：发送消息者id'));
+		}
+
+		if(roomToSend == undefined || roomToSend == '') {
+			res.send(util.retMsg(401, '缺少参数：房间id'));
+		}
+
+		var Kaku = ctrlInitial.models.Kaku();
+		Kaku.storeMessage({
+			room: roomToSend,
+			sender: sender,
+			content: message
+		}, function(err, msg) {
+
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+			res.send(util.retMsg(200, msg));
+
+		});
+
+	},
+
+	getMessage: function() {
 
 	}
 

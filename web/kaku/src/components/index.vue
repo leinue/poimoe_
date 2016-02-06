@@ -80,7 +80,6 @@
             },
 
             viewProfile: function(id) {
-                console.log(id);
                 window.location.href = 'http://poi.poimoe.com/#!/profile/' + id;
             }
 

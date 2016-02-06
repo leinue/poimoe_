@@ -30,6 +30,7 @@
                         </div>                        
                     </div>
                     <div class="msg-btn-wrap" style="border:none">
+                        <button @click="back()">取消</button>
                         <button @click="submitNewRoom()">提交</button>
                     </div>
                 </div>
@@ -93,6 +94,10 @@
                 }, function(err) {
                     util.handleError(err);
                 });
+            },
+
+            back: function() {
+                window.history.back();
             }
 
         },

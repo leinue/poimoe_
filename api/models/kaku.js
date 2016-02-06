@@ -29,6 +29,20 @@ module.exports = {
         type: Schema.Types.ObjectId,
         ref: 'users'
       }],
+      chatting: [{
+        sender: {
+          type: Schema.Types.ObjectId,
+          ref: 'users'
+        },
+        content: {
+          type: String,
+          default: ''
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now
+        }
+      }]
       isDeleted: {
         type: Boolean,
         default: false
@@ -53,13 +67,16 @@ module.exports = {
       }).populate({
         path: 'people creator',
         select: '_id username photo'
-      }).skip(skipFrom).limit(count).select('').exec(cb);
+      }).skip(skipFrom).limit(count).exec(cb);
     };
 
     kakuSchema.statics.findPeopleByRoomId = function(id, cb) {
       return this.findOne({
         isDeleted: false,
         _id: id
+      }).populate({
+        path: 'people creator',
+        select: '_id username photo'
       }).exec(cb);
     };
 
@@ -159,6 +176,40 @@ module.exports = {
       }, {
         new: true
       }, cb);
+    };
+
+    kakuSchema.statics.storeMessage = function(obj, cb) {
+
+      var roomToSend = obj.room;
+      var chattingDetail = {
+        sender: obj.sender,
+        content: obj.content
+      };
+
+      var _this = this;
+
+      return _this.findOne({
+        _id: roomToSend,
+        isDeleted: false
+      }, function(err, room) {
+
+        if(err) {
+          cb(err, room);
+        }
+
+        var chat = room.chatting;
+        chat.unshit(chattingDetail);
+
+        _this.findOneAndUpdate({
+          _id: roomToSend,
+          isDeleted: false
+        }, {
+          chatting: chat
+        }, {
+          new: true
+        }, cb);
+
+        });
     };
 
     return kakuSchema;

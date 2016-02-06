@@ -8,11 +8,7 @@
         		<div class="col-md-3" style="padding-left:0px;padding-right:0px;border-bottom:1px solid rgb(217, 217, 217);height:90vh;border-right:1px solid rgb(217, 217, 217)">
 	        		<div class="chatting-section">
 	        			<div class="kaku-member">
-                            <div class="room-photo"></div>     
-                            <div class="room-photo"></div>
-                            <div class="room-photo"></div>
-                            <div class="room-photo"></div>
-                            <div class="room-photo"></div>
+                            <div title="{{people.username}}" @click="viewProfile(people._id)" class="room-photo" v-for="people in room.people" style="background-image: url({{people.photo}});"></div>     
 	        			</div>
 	        			<div class="message-detail" id="msg-wrap">
 	        				<div class="message-detail-content">
@@ -301,7 +297,9 @@
         data() {
             return {
             	isShowFullSendForm: false,
-            	sendFormClicked: false
+            	sendFormClicked: false,
+
+            	room: {}
             }
         },
 
@@ -331,16 +329,57 @@
 
         	confirmToSendChattingMessage: function() {
         		this.rollbackSendFormStatus();
+        	},
+
+        	enterRoom: function(id) {
+
+        		var _this = this;
+
+        		window.services.KakuService.enter({
+        			people: localStorage._id,
+        			roomId: id,
+        			passport: ''
+        		}).then(function(res) {
+
+        			var code = res.data.code;
+                    var data = res.data.message;
+
+                    if(code != 200) {
+                        util.messageBox(data);
+                        return false;
+                    }
+
+                    _this.room = data[0];
+
+                    console.log(_this.room);
+
+
+        		}, function(err) {
+        			util.handleError(err);
+        		});
+        	},
+
+        	viewProfile: function(id) {
+        		window.open('http://poi.poimoe.com/#!/profile/' + id);
         	}
 
         },
 
         ready() {
         	common.adjustUI();
-
 			var id = router._currentRoute.params.id;
 
-			console.log(id);
+			var _this = this;
+
+            var servicesInterval = setInterval(function() {
+                if(typeof window.services != 'undefined') {
+
+					_this.$get('enterRoom')(id);
+
+                    clearInterval(servicesInterval);
+
+                }
+            }, 1);
         }
     };
 
