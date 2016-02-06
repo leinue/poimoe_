@@ -41,7 +41,7 @@ module.exports = {
 			
 			alterPassport: function(data) {
 				return _this.$http.post('kaku/room/alter/name', data);
-			},
+			}
 
 		}
 

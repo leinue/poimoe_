@@ -351,6 +351,7 @@ var index = {
 		}
 
 		var Kaku = ctrlInitial.models.Kaku();
+
 		Kaku.storeMessage({
 			room: roomToSend,
 			sender: sender,
@@ -368,6 +369,25 @@ var index = {
 	},
 
 	getMessage: function() {
+		var room = req.params.roomId;
+		var page = req.params.page || 1;
+		var count = req.params.count || 10;
+
+		if(room == undefined || room == '') {
+			res.send(util.retMsg(401, '缺少参数：房间id'));
+		}
+
+		var Kaku = ctrlInitial.models.Kaku();
+
+		Kaku.getMessage(room, page, count, function(err, msg) {
+
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+			res.send(util.retMsg(200, msg));			
+
+		});
 
 	}
 

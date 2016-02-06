@@ -110,7 +110,7 @@ module.exports = {
     server.post('/kaku/room/alter/name', ctrl.kakuCtrl.alterName);
     server.post('/kaku/room/alter/passport', ctrl.kakuCtrl.alterPassport);
     server.post('/kaku/room/chat/send', ctrl.kakuCtrl.storeMessage);
-    server.get('/kaku/room/chat/get/:page/:count', ctrl.kakuCtrl.getMessage);
+    server.get('/kaku/room/chat/get/:id/:page/:count', ctrl.kakuCtrl.getMessage);
   }
 
 };

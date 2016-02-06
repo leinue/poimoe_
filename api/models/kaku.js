@@ -42,7 +42,7 @@ module.exports = {
           type: Date,
           default: Date.now
         }
-      }]
+      }],
       isDeleted: {
         type: Boolean,
         default: false
@@ -67,7 +67,7 @@ module.exports = {
       }).populate({
         path: 'people creator',
         select: '_id username photo'
-      }).skip(skipFrom).limit(count).exec(cb);
+      }).skip(skipFrom).limit(count).select('-chatting').exec(cb);
     };
 
     kakuSchema.statics.findPeopleByRoomId = function(id, cb) {
@@ -77,7 +77,7 @@ module.exports = {
       }).populate({
         path: 'people creator',
         select: '_id username photo'
-      }).exec(cb);
+      }).select('-chatting').exec(cb);
     };
 
     kakuSchema.statics.enter = function(obj, cb) {
@@ -90,7 +90,8 @@ module.exports = {
       }, {
         people: peopleList
       }, {
-        new: true
+        new: true,
+        select: '-chatting'
       }, cb);
     };
 
@@ -104,7 +105,8 @@ module.exports = {
       }, {
         people: peopleList
       }, {
-        new: true
+        new: true,
+        select: '-chatting'
       }, cb);
     };
 
@@ -115,7 +117,8 @@ module.exports = {
       }, {
         isLocked: false
       }, {
-        new: true
+        new: true,
+        select: '-chatting'
       }, cb);      
     };
 
@@ -130,7 +133,8 @@ module.exports = {
         isLocked: true,
         passport: passport
       }, {
-        new: true
+        new: true,
+        select: '-chatting'
       }, cb);
     };
 
@@ -141,7 +145,8 @@ module.exports = {
       }, {
         isDeleted: true
       }, {
-        new: true
+        new: true,
+        select: '-chatting'
       }, cb);
     };
 
@@ -152,7 +157,8 @@ module.exports = {
       }, {
         name: obj.name
       }, {
-        new: true
+        new: true,
+        select: '-chatting'
       }, cb);
     };
 
@@ -163,7 +169,8 @@ module.exports = {
       }, {
         passport: obj.passport
       }, {
-        new: true
+        new: true,
+        select: '-chatting'
       }, cb);
     };
 
@@ -174,7 +181,8 @@ module.exports = {
       }, {
         peopleLimit: obj.peopleLimit
       }, {
-        new: true
+        new: true,
+        select: '-chatting'
       }, cb);
     };
 
@@ -191,7 +199,7 @@ module.exports = {
       return _this.findOne({
         _id: roomToSend,
         isDeleted: false
-      }, function(err, room) {
+      }).select('-chatting').exec(function(err, room) {
 
         if(err) {
           cb(err, room);
@@ -209,7 +217,21 @@ module.exports = {
           new: true
         }, cb);
 
-        });
+      });
+    };
+
+    kakuSchema.statics.getMessage = function(room, page, count, cb) {
+
+      page = page || 1;
+      count = count || 10;
+
+      return this.findOne({
+        _id: room,
+        isDeleted: false
+      }).select('chatting').populate({
+        path: 'chatting'
+      }).exec(cb);;
+
     };
 
     return kakuSchema;
