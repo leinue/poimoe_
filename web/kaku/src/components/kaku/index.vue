@@ -2,6 +2,10 @@
    
     <div style="margin-top:-21px;z-index:3000">
 
+        <div @click="leaveThisRoom()" class="type-circle header-circle" style="left: 65px;">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+        </div>
+
         <div class="row a-bounceinT">
 
         	<div class="col-md-12" style="padding:0px;border-top:1px solid rgb(217, 217, 217)">
@@ -270,7 +274,8 @@
         			message: _this.message,
         			accessToken: localStorage.accessToken
         		};
-        		chatSocket.emit('chat message', JSON.stringify(chatMessage));
+        		console.log(chatMessage);
+        		chatSocket.emit('chat message', chatMessage);
         	},
 
         	enterRoom: function(id) {
@@ -281,7 +286,7 @@
 				chatSocket.emit('enter chatting room', {
         			people: localStorage._id,
         			roomId: id,
-        			passport: '',
+        			passport: sessionStorage[id],
         			username: localStorage.username
         		});
 
@@ -294,8 +299,11 @@
 
                     if(code != 200) {
                         util.messageBox(data);
+                        router.go('/index');
                         return false;
                     }
+
+                    console.log(res);
 
                     _this.room = data[0];
 
@@ -305,6 +313,11 @@
 
 				chatSocket.on('enter chatting room failed', function(msg) {
 					console.log(msg);
+				});
+
+				chatSocket.on('leave room failed', function(msg) {
+					console.log(msg);
+					util.handleError(msg);
 				});
 
 				chatSocket.on('sys', function(msg) {
@@ -331,6 +344,22 @@
 					_this.message = '';
 				});
 
+        	},
+
+        	leaveThisRoom: function() {
+        		// var _this = this;
+        		// chatSocket.emit('leave', {
+        		// 	leaver: localStorage._id,
+        		// 	roomId: _this.room._id
+        		// });
+
+        		router.go('/index');
+        		
+    //     		chatSocket.on('leave room succeed', function(msg) {
+				// 	console.log(msg);
+				// });
+
+				// chatSocket = undefined;
         	},
 
         	viewProfile: function(id) {

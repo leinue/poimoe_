@@ -72,7 +72,9 @@ chat.on('connection', function(socket){
 						roomInfo[roomId] = [];
 					}
 
-					var data = body.message[0];
+					console.log(body);
+
+					var data = body.message[0] || body.message;
 
 					var people = data.people;
 
@@ -82,9 +84,11 @@ chat.on('connection', function(socket){
 					username = msg.username;
 					socket.join(roomId);
 					chat.to(roomId).emit('sys', msg.username + '加入了房间');
+				    chat.to(roomId).emit('enter chatting room succeed', body);
+	        	}else {
+				    chat.emit('enter chatting room succeed', body);
 	        	}
 
-			    chat.to(roomId).emit('enter chatting room succeed', body);
 	        }else{
         	    socket.emit('enter chatting room failed', {
         	    	code: response.statusCode,
@@ -99,9 +103,11 @@ chat.on('connection', function(socket){
 	})
 
 	socket.on('chat message', function(msg){
-		console.log('msg reveived: ' + msg);
+		console.log('msg reveived: ');
 
-		msg = JSON.parse(msg);
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
 
 		if (roomInfo[roomId].indexOfA(user) === -1) {  
 	      return false;
@@ -133,15 +139,52 @@ chat.on('connection', function(socket){
 		);
 	});
 
-	socket.on('disconnect', function () {
-	    // 从房间名单中移除
+	var leaveThisRoom = function(msg) {
+
+	}
+
+	socket.on('leave', function(msg) {
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		// 从房间名单中移除
 	    var index = roomInfo[roomId].indexOfA(user);
-	    if (index !== -1) {
-	      roomInfo[roomID].splice(index, 1);
+	    console.log(roomInfo);
+	    console.log(index);
+	    if (index === -1) {
+	    	return false;
 	    }
 
-	    socket.leave(roomID);    // 退出房间
-	    chat.to(roomID).emit('sys', username + '退出了房间');
+		request.post({
+		        url: 'http://api.poimoe.com/kaku/room/leave',
+		        encoding: 'utf8',
+		        headers: {
+		        	'Authorization': 'Basic ' + msg.accessToken 
+		        },
+		        form: msg
+		    },
+		    function(error, response, body){
+		        if(!error && response.statusCode == 200){
+	        	    roomInfo[roomId].splice(index, 1);
+	        	    socket.leave(roomId);// 退出房间
+		            console.log(body);
+				    chat.to(roomId).emit('sys', username + '退出了房间');
+				    chat.to(roomId).emit('leave room succeed', body);
+		        }else{
+	        	    chat.to(roomId).emit('leave room failed', {
+	        	    	code: response.statusCode,
+	        	    	message: response.body,
+	        	    	error: error,
+	        	    	headers: response.headers,
+	        	    	request: response.request
+	        	    });
+		        }
+		    }
+		);	});
+
+	socket.on('disconnect', function (msg) {
+		leaveThisRoom(msg);
 	});
 
 });

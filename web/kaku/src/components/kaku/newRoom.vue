@@ -1,6 +1,7 @@
 <template>
     
     <div style="">
+
         <div class="row a-bounceinT">
             <div class="col-md-8 col-md-offset-2">
                 <div class="new-room-container">
@@ -30,7 +31,7 @@
                         </div>         
                     </div>
                     <div class="msg-btn-wrap" style="border:none">
-                        <button @click="back()">取消</button>
+                        <button @click="back()">返回主页</button>
                         <button @click="submitNewRoom()">提交</button>
                     </div>
                 </div>
@@ -69,7 +70,7 @@
 
             submitNewRoom: function() {
 
-                if(this.room.name == '' || this.room.isLocked == '') {
+                if(this.room.name == '') {
                     util.messageBox('请完整填写必要信息');
                     return false;
                 }
@@ -89,7 +90,7 @@
                         return false;
                     }
 
-                    util.messageBox(data);
+                    router.go('/sketch/' + data._id);
 
                 }, function(err) {
                     util.handleError(err);
@@ -97,7 +98,7 @@
             },
 
             back: function() {
-                window.history.back();
+                router.go('/index');
             }
 
         },

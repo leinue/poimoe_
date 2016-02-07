@@ -101,6 +101,13 @@ router.beforeEach(function () {
 
 	var prevPath = router._currentRoute.path;
 
+	if(prevPath.indexOf('sketch') != -1) {
+		chatSocket.emit('leave', {
+			leaver: localStorage._id,
+			roomId: router._currentRoute.params.id
+		});
+	}
+
 });
 
 router.afterEach(function() {

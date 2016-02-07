@@ -26,11 +26,11 @@ var _util = {
  				roomId: singleKaku._id,
  				peopleList: peopleList
  			}, function(err, newRoom) {
-   	 		if(err) {
-   	 			res.send(util.retMsg(401, err.toString()));
-   	 		}
+   	 			if(err) {
+   	 				res.send(util.retMsg(401, err.toString()));
+   	 			}
 
-   	 			res.send(util.retMsg(200, newRoom));
+   	 			res.send(util.retMsg(200, [newRoom]));
  			});
 
  		}
@@ -135,7 +135,7 @@ var index = {
 
    	 			if(singleKaku.passport === passport) {
 
-   	 				if(singleKaku.peopleLimit > singleKaku.people.length) {
+   	 				if(util.count(singleKaku.people) >= singleKaku.peopleLimit) {
 	   	 				res.send(util.retMsg(401, '该房间已达到人数上限，无法进入'));
    	 				}else {
 			   	 		_util.enterRoom(Kaku, singleKaku, peopleEnter, res);
@@ -146,7 +146,11 @@ var index = {
    	 			}
 
    	 		}else {
-	   	 		_util.enterRoom(Kaku, singleKaku, peopleEnter, res);
+   	 			if(util.count(singleKaku.people) >= singleKaku.peopleLimit) {
+	   	 			res.send(util.retMsg(401, '该房间已达到人数上限，无法进入'));
+	   	 		}else {
+		   	 		_util.enterRoom(Kaku, singleKaku, peopleEnter, res);	   	 			
+	   	 		}
    	 		}
 
 		});
@@ -167,26 +171,29 @@ var index = {
 
 		var Kaku = ctrlInitial.models.Kaku();
 
-		Kaku.findPeopleByRoomId(roomId, function(err, peopleList) {
+		Kaku.findPeopleByRoomId(roomId, function(err, room) {
    	 		if(err) {
    	 			res.send(util.retMsg(401, err.toString()));
    	 		}
 
    	 		var isPeopleHaveEntered = false;
 
-   	 		peopleList.forEach(function(index, singlePeople) {
-   	 			if(singlePeople == peopleEnter) {
-   	 				peopleList.splice(index, 1);
+   	 		var peopleList = room.people;
+
+   	 		for (var i = peopleList.length - 1; i >= 0; i--) {
+   	 			var people = peopleList[i];
+   	 			if(people._id == leaver) {
    	 				isPeopleHaveEntered = true;
-   	 				return false;
+   	 				peopleList.splice(i, 1);
+   	 				break;
    	 			}
-   	 		});
+   	 		};
 
    	 		if(!isPeopleHaveEntered) {
    	 			res.send(util.retMsg(401, '您尚未加入该房间'));
    	 		}else {
 
-   	 			kaku.enter({
+   	 			Kaku.leave({
    	 				roomId: roomId,
    	 				peopleList: peopleList
    	 			}, function(err, newRoom) {

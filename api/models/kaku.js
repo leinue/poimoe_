@@ -104,6 +104,8 @@ module.exports = {
       var roomId = obj.roomId;
       var peopleList = obj.peopleList; 
 
+      var _this = this;
+
       return this.findOneAndUpdate({
         _id: roomId,
         isDeleted: false
@@ -112,7 +114,30 @@ module.exports = {
       }, {
         new: true,
         select: '-chatting'
-      }, cb);
+      }, function(err, newRoom) {
+
+          if(err) {
+            cb(err, newRoom);
+          }
+
+          _this.findOne({
+            _id: roomId,
+            isDeleted: false
+          }).populate({
+            path: 'chatting',
+            options: {
+              limit: 10
+            },
+            populate: {
+              path: 'sender',
+              select: '_id username photo'
+            }
+          }).populate({
+            path: 'people creator',
+            select: '_id username photo'
+          }).exec(cb);
+
+      });
     };
 
     kakuSchema.statics.leave = function(obj, cb) {

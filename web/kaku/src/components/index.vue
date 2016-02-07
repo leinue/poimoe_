@@ -6,8 +6,11 @@
                 <div class="col-md-12">
                     <div class="col-md-6" v-for="room in kakuRoomList">
                         <div class="room-rect">
-                            <h2 style="cursor:pointer" @click="toSkecthRoom(room._id)">{{room.name | nullRoomNameFilter}}</h2>
-                            <div class="room-enter" @click="toSkecthRoom(room._id)"><span class="glyphicon glyphicon-hand-up"></span></div>
+                            <h2 style="cursor:pointer" @click="toSkecthRoom(room._id, room.isLocked)">{{room.name | nullRoomNameFilter}}</h2>
+                            <div class="room-enter" @click="toSkecthRoom(room._id)">
+                                <span v-show="room.isLocked == false" class="glyphicon glyphicon-hand-up"></span>
+                                <span v-show="room.isLocked == true" class="glyphicon glyphicon-lock"></span>
+                            </div>
                             <span class="glyphicon glyphicon-user"> {{room.creator.username}}</span>
                             <span style="margin-left:15px;" class="glyphicon glyphicon-flag"> {{room.people.length}}/{{room.peopleLimit}}</span>
                             <div class="room-member">
@@ -52,8 +55,15 @@
 
         methods: {
 
-            toSkecthRoom: function(id) {
-                router.go('/sketch/' + id);
+            toSkecthRoom: function(id, isLocked) {
+                if(isLocked) {
+                    var pw = prompt('请输入房间密码');
+                    sessionStorage[id] = pw;
+                    router.go('/sketch/' + id);
+                }else {
+                    sessionStorage[id] = '';
+                    router.go('/sketch/' + id);
+                }
             },
 
             loadKakuRoom: function() {
@@ -116,6 +126,8 @@
     .room-rect {
         background: rgb(255, 255, 255);
         padding: 15px;
+        border-top: 2px solid rgb(0, 149, 219);
+        margin-bottom: 15px;
     }
 
     .room-rect.grey {
