@@ -277,14 +277,20 @@
 
         		var _this = this;
 
-        		window.services.KakuService.enter({
+                var chatSocket = io('ws://socket.poimoe.com/chat');
+				chatSocket.emit('enter chatting room', {
         			people: localStorage._id,
         			roomId: id,
-        			passport: ''
-        		}).then(function(res) {
+        			passport: '',
+        			username: localStorage.username
+        		});
 
-        			var code = res.data.code;
-                    var data = res.data.message;
+				window.chatSocket = chatSocket;
+
+				chatSocket.on('enter chatting room succeed', function(res) {
+
+        			var code = res.code;
+                    var data = res.message;
 
                     if(code != 200) {
                         util.messageBox(data);
@@ -295,30 +301,36 @@
 
                     _this.room.chatting.reverse();
 
-                    chatSocket.on('chat message', function(msg) {
+				});
 
-	        			if(typeof msg === 'string') {
-	        				msg = JSON.parse(msg);
-	        			}
+				chatSocket.on('enter chatting room failed', function(msg) {
+					console.log(msg);
+				});
 
-						console.log(msg);
+				chatSocket.on('sys', function(msg) {
+					console.log(msg);
+				});
 
-						var code = msg.code;
-						var data = msg.message;
+                chatSocket.on('chat message', function(msg) {
 
-						if(code != 200) {
-							util.messageBox(data);
-							return false;
-						}
+        			if(typeof msg === 'string') {
+        				msg = JSON.parse(msg);
+        			}
 
-						_this.room.chatting.push(data.chatting[0]);
-						_this.message = '';
-					});
+					console.log(msg);
 
+					var code = msg.code;
+					var data = msg.message;
 
-        		}, function(err) {
-        			util.handleError(err);
-        		});
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					_this.room.chatting.push(data.chatting[0]);
+					_this.message = '';
+				});
+
         	},
 
         	viewProfile: function(id) {
