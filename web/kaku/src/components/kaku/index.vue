@@ -34,7 +34,7 @@
 	        				<div class="message-send-form" id="msg-send-wrap-id">
 	        					<div class="message-box-wrap" v-bind:class="{'active': isShowFullSendForm == true, 'noactive': isShowFullSendForm == false}">
         							<div class="msg-input-wrap">
-        								<textarea v-model="message"  v-on:focus="showFullSendForm()" placeholder="说点什么..."></textarea>
+        								<textarea v-model="message"  v-on:focus="showFullSendForm()" v-on:keyup.enter="confirmToSendChattingMessage()" placeholder="说点什么..."></textarea>
         								<!-- v-on:blur="rollbackSendFormStatus()" -->
         							</div>
 	        						<div class="message-send-input-wrap">
@@ -137,11 +137,12 @@
 	        			<div class="col-md-4">
 			        		<div class="master-controls">
 			        			<div class="button-container">
+			        				<a class="tool-button"><span class="glyphicon glyphicon-trash"></span></a>
 			        				<a class="tool-button"><span class="glyphicon glyphicon-erase"></span></a>
 			        				<a class="tool-button"><span class="glyphicon glyphicon-pushpin"></span></a>
 			        				<a class="tool-button active"><span class="glyphicon glyphicon-pencil"></span></a>
 			        				<a class="tool-button"><span class="glyphicon glyphicon-share-alt"></span></a>
-			        				<a class="tool-button reverse"><span class="glyphicon glyphicon-share-alt"></span></a>
+			        				<a @click="clearCanvas()" class="tool-button reverse"><span class="glyphicon glyphicon-share-alt"></span></a>
 			        			</div>
 			        		</div>	        				
 	        			</div>
@@ -238,7 +239,20 @@
             	myId: localStorage._id,
 
             	room: {},
-            	message: ''
+            	message: '',
+
+            	paint: {
+            		x: [], //鼠标移动时x坐标
+            		y: [], //鼠标移动时y坐标
+            		lock: false, //鼠标移动前，判断鼠标是否按下
+            		isErase: false,
+            		eraseRadius: 15,
+            		color: ["#000000","#FF0000","#80FF00","#00FFFF","#808080","#FF8000","#408080","#8000FF","#CCCC00"],
+            		canvas: document.getElementById('kakuCanvas'),
+            		cxt: '',
+            		width: 0,
+            		height: 0
+            	}
             }
         },
 
@@ -278,6 +292,26 @@
         		chatSocket.emit('chat message', chatMessage);
         	},
 
+        	initPaint: function() {
+
+        		if(!this.paint.canvas.getContext) {
+        			util.messageBox('对不起，您的浏览器暂不支持canvas');
+        			return false;
+        		}
+
+        		this.paint.cxt = this.paint.canvas.getContext('2d');
+        		this.paint.cxt.lineJoin = 'round';//两条线段连接方式
+        		this.paint.cxt.lineWidth = 5;//线条宽度
+
+        		this.paint.width = this.paint.canvas.width;
+        		this.paint.height = this.paint.canvas.height;
+
+        	},
+
+        	clearCanvas: function() {
+
+        	},
+
         	enterRoom: function(id) {
 
         		var _this = this;
@@ -308,6 +342,8 @@
                     _this.room = data[0];
 
                     _this.room.chatting.reverse();
+
+                    _this.initPaint();
 
 				});
 
