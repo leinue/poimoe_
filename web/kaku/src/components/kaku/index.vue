@@ -138,9 +138,9 @@
 			        		<div class="master-controls">
 			        			<div class="button-container">
 			        				<a @click="clearCanvas()" class="tool-button"><span class="glyphicon glyphicon-trash"></span></a>
-			        				<a @click="useEraser()" v-bind:class="{'active': paint.isEraser == true, 'noac': paint.isEraser == false}" class="tool-button"><span class="glyphicon glyphicon-erase"></span></a>
-			        				<a class="tool-button"><span class="glyphicon glyphicon-pushpin"></span></a>
-			        				<a @click="useBrush()" class="tool-button" v-bind:class="{'active': paint.isEraser == false, 'noac': paint.isEraser == true}"><span class="glyphicon glyphicon-pencil"></span></a>
+			        				<a @click="useEraser()" v-bind:class="{'active': paint.isEraser == true && paint.isColorPicker == false, 'noac': paint.isEraser == false}" class="tool-button"><span class="glyphicon glyphicon-erase"></span></a>
+			        				<a @click="useColorPicker()" v-bind:class="{'active': paint.isColorPicker == true, 'noac': paint.isColorPicker == false}" class="tool-button"><span class="glyphicon glyphicon-pushpin"></span></a>
+			        				<a @click="useBrush()" class="tool-button" v-bind:class="{'active': paint.isEraser == false && paint.isColorPicker == false, 'noac': paint.isEraser == true}"><span class="glyphicon glyphicon-pencil"></span></a>
 			        				<!-- <a class="tool-button"><span class="glyphicon glyphicon-share-alt"></span></a> -->
 			        				<a class="tool-button reverse"><span class="glyphicon glyphicon-share-alt"></span></a>
 			        				<a @click="getImgUrl()" class="tool-button"><span class="glyphicon glyphicon-download-alt"></span></a>
@@ -157,7 +157,7 @@
 			        					<span class="label">透明度</span>
 		        					</div>
 		        					<div class="col-md-8">
-			        					<input class="opacity-slider" type="range">		        						
+			        					<input disabled="true" class="opacity-slider" type="range">		        						
 		        					</div>
 		        					<div class="col-md-2" style="padding:0px;">
 		        						<span class="label">100%</span>
@@ -172,7 +172,8 @@
 			        					<input v-show="paint.isEraser == true" class="opacity-slider" type="range" min="1" max="100" v-model="paint.eraserRadius">
 		        					</div>
 		        					<div class="col-md-2" style="padding:0px;">
-		        						<span class="label">100%</span>
+		        						<span v-show="paint.isEraser == false" class="label">{{paint.lineWidth}}px</span>
+		        						<span v-show="paint.isEraser == true" class="label">{{paint.eraserRadius}}px</span>
 		        					</div>
 	        					</div>
 	        					<div class="row">
@@ -180,7 +181,7 @@
 			        					<span class="label">阴影</span>
 		        					</div>
 		        					<div class="col-md-8">
-			        					<input class="opacity-slider" type="range">		        						
+			        					<input disabled="true" class="opacity-slider" type="range">		        						
 		        					</div>
 		        					<div class="col-md-2" style="padding:0px;">
 		        						<span class="label">100%</span>
@@ -249,10 +250,12 @@
             		lock: false, //鼠标移动前，判断鼠标是否按下
             		isEraser: false,
             		eraserRadius: 15,
+            		isColorPicker: false,
             		color: ["#000000","#FF0000","#80FF00","#00FFFF","#808080","#FF8000","#408080","#8000FF","#CCCC00"],
             		canvas: '',
             		cxt: '',
             		lineWidth: 5,
+            		strokeStyle: 'rgb(0, 0, 0)',
             		width: 0,
             		height: 0,
 
@@ -327,6 +330,7 @@
 	            /*鼠标按下事件，记录鼠标位置，并绘制，解锁lock，打开mousemove事件*/
         		t.canvas['on' + t.startEvent] = function(e) {
 	        		t.cxt.lineWidth = t.lineWidth;//线条宽度
+	        		t.cxt.strokeStyle = t.strokeStyle;//线条颜色
 	                var touch = t.touch ? e.touches[0] : e;
 	                var mp = _this.getMousePos(touch);
 	                var _x = mp.x;
@@ -334,8 +338,13 @@
                     if(t.isEraser) {
                     	_this.resetErase(_x, _y, touch);
                     }else {
-                    	_this.movePoint(_x, _y);
-                    	_this.drawPoint();
+                    	if(t.isColorPicker) {
+                    		var pixcolor = _this.getPixelColor(_x, _y);
+    						console.log(pixcolor);
+                    	}else {
+	                        _this.movePoint(_x, _y, true);//记录鼠标位置
+	                        _this.drawPoint();//绘制路线
+                    	}
                     }
                     t.lock = true;
         		};
@@ -349,8 +358,13 @@
 	                    if(t.isEraser) {
                             _this.resetErase(_x, _y, touch);
 	                    }else {
-	                        _this.movePoint(_x, _y, true);//记录鼠标位置
-	                        _this.drawPoint();//绘制路线
+	                    	if(t.isColorPicker) {
+	                    		var pixcolor = _this.getPixelColor(_x, _y);
+	                    		console.log(pixcolor);
+	                    	}else {
+		                        _this.movePoint(_x, _y, true);//记录鼠标位置
+		                        _this.drawPoint();//绘制路线
+	                    	}
 	                    }
 	                }
 	            };
@@ -374,6 +388,14 @@
                 	x: _x,
                 	y: _y
                 }
+        	},
+
+        	getPixelColor: function(_x, _y) {
+        		var t = this.paint;
+				var imageData = t.cxt.getImageData(_x, _y, 1, 1);
+				var pixel = imageData.data;
+				var pixcolor = "rgba(" + pixel[0] + "," + pixel[1] + "," + pixel[2] + "," + pixel[3] + ")";
+				return pixcolor;
         	},
 
         	clearCanvas: function() {
@@ -420,11 +442,18 @@
 
         	useEraser: function() {
         		this.paint.isEraser = true;
+        		this.paint.isColorPicker = false;
         	},
 
         	useBrush: function() {
         		this.paint.isEraser = false;
-        		this.paint.cxt.strokeStyle = 'rgb(0, 0, 0)';
+        		this.paint.isColorPicker = false;
+        		this.paint.cxt.strokeStyle = this.paint.strokeStyle;
+        	},
+
+        	useColorPicker: function() {
+        		this.paint.isEraser = false;
+        		this.paint.isColorPicker = true;
         	},
 
         	toggleBtnStatus: function() {
