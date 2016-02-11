@@ -52,7 +52,7 @@
 	        		<div class="row" style="border-bottom: 1px solid #d8d8d8;">
 		        		<div class="col-md-9" style="padding:0px;">
 							<div class="main-canvas">
-								<canvas id="kakuCanvas"></canvas>
+								<canvas width="740" height="800" id="kakuCanvas"></canvas>
 							</div>
 		        		</div>
 		        		<div class="col-md-3" style="padding-left:0px;padding-right:0px;height:500px">
@@ -138,7 +138,7 @@
 			        		<div class="master-controls">
 			        			<div class="button-container">
 			        				<a class="tool-button"><span class="glyphicon glyphicon-trash"></span></a>
-			        				<a class="tool-button"><span class="glyphicon glyphicon-erase"></span></a>
+			        				<a @click="useEraser()" class="tool-button"><span class="glyphicon glyphicon-erase"></span></a>
 			        				<a class="tool-button"><span class="glyphicon glyphicon-pushpin"></span></a>
 			        				<a class="tool-button active"><span class="glyphicon glyphicon-pencil"></span></a>
 			        				<a class="tool-button"><span class="glyphicon glyphicon-share-alt"></span></a>
@@ -245,13 +245,20 @@
             		x: [], //鼠标移动时x坐标
             		y: [], //鼠标移动时y坐标
             		lock: false, //鼠标移动前，判断鼠标是否按下
-            		isErase: false,
-            		eraseRadius: 15,
+            		isEraser: false,
+            		eraserRadius: 15,
             		color: ["#000000","#FF0000","#80FF00","#00FFFF","#808080","#FF8000","#408080","#8000FF","#CCCC00"],
-            		canvas: document.getElementById('kakuCanvas'),
+            		canvas: '',
             		cxt: '',
             		width: 0,
-            		height: 0
+            		height: 0,
+
+            		clickDrag: [],
+
+            		touch: ('createTouch' in document),
+            		startEvent: this.touch ? 'touchstart' : 'mousedown',
+            		moveEvent: this.touch ? 'touchmove' : 'mousemove',
+            		endEvent: this.touch ? 'touchend' : 'mouseup'
             	}
             }
         },
@@ -293,6 +300,8 @@
         	},
 
         	initPaint: function() {
+        		
+        		this.paint.canvas = document.getElementById('kakuCanvas');
 
         		if(!this.paint.canvas.getContext) {
         			util.messageBox('对不起，您的浏览器暂不支持canvas');
@@ -306,10 +315,104 @@
         		this.paint.width = this.paint.canvas.width;
         		this.paint.height = this.paint.canvas.height;
 
+        		this.bindCanvas();
+        	},
+
+        	bindCanvas: function() {
+        		var _this = this;
+        		var t = _this.paint;
+	            /*鼠标按下事件，记录鼠标位置，并绘制，解锁lock，打开mousemove事件*/
+        		t.canvas['on' + t.startEvent] = function(e) {
+	                var touch = t.touch ? e.touches[0] : e;
+	                var mp = _this.getMousePos(touch);
+	                var _x = mp.x;
+	                var _y = mp.y;
+                    if(t.isEraser) {
+                    	_this.resetErase(_x, _y, touch);
+                    }else {
+                    	_this.movePoint(_x, _y);
+                    	_this.drawPoint();
+                    }
+                    t.lock = true;
+        		};
+        		/*鼠标移动事件*/
+	            t.canvas['on' + t.moveEvent] = function(e) {
+	                var touch = t.touch ? e.touches[0] : e;
+	                if(t.lock) {
+    	                var mp = _this.getMousePos(touch);
+		                var _x = mp.x;
+		                var _y = mp.y;
+	                    if(t.isEraser) {
+                            _this.resetEraser(_x, _y, touch);
+	                    }else {
+	                        _this.movePoint(_x, _y, true);//记录鼠标位置
+	                        _this.drawPoint();//绘制路线
+	                    }
+	                }
+	            };
+	            /*鼠标弹起事件*/
+	            t.canvas['on' + t.endEvent] = function(e) {
+	                /*重置数据*/
+	                t.lock = false;
+	                t.x = [];
+	                t.y = [];
+	                t.clickDrag = [];
+            	};
+
+        	},
+
+        	getMousePos: function(touch) {
+        		var t = this.paint;
+                var rect = t.canvas.getBoundingClientRect(); 
+                var _x = touch.clientX - rect.left * (t.canvas.width / rect.width);//鼠标在画布上的x坐标，以画布左上角为起点
+                var _y = touch.clientY - rect.top * (t.canvas.height / rect.height);//鼠标在画布上的y坐标，以画布左上角为起点
+                return {
+                	x: _x,
+                	y: _y
+                }
         	},
 
         	clearCanvas: function() {
+	            this.paint.cxt.clearRect(0, 0, this.paint.width, this.paint.height);//清除画布，左上角为起点
+        	},
 
+        	resetErase: function(_x, _y, touch) {
+        		var t = this.paint;
+        		t.cxt.globalCompositeOperation = "destination-out";
+	            t.cxt.beginPath();
+	            t.cxt.arc(_x, _y, t.eraserRadius, 0, Math.PI * 2);
+	            t.cxt.strokeStyle = "rgba(250,250,250,0)";
+	            t.cxt.fill();
+	            t.cxt.globalCompositeOperation = "source-over";
+        	},
+
+        	movePoint: function(x, y, dragging) {
+        		var t = this.paint;
+	            t.x.push(x);
+	            t.y.push(y);
+	            t.clickDrag.push(y);
+	            // this.drawPoint();
+        	},
+
+        	drawPoint: function() {
+        		var t = this.paint;
+        		t.cxt.fillStyle = "#000000";
+				for(var i=0; i < t.x.length; i++) {   
+	                t.cxt.beginPath();//context.beginPath() , 准备绘制一条路径	                
+	                if(t.clickDrag[i] && i){//当是拖动而且i!=0时，从上一个点开始画线。
+	                    t.cxt.moveTo(t.x[i-1], t.y[i-1]);//context.moveTo(x, y) , 新开一个路径，并指定路径的起点
+	                }else{
+	                    t.cxt.moveTo(t.x[i] - 1, t.y[i]);
+	                }
+
+	                t.cxt.lineTo(t.x[i], t.y[i]);//context.lineTo(x, y) , 将当前点与指定的点用一条笔直的路径连接起来
+	                t.cxt.closePath();//context.closePath() , 如果当前路径是打开的则关闭它
+	                t.cxt.stroke();//context.stroke() , 绘制当前路径
+	            }
+        	},
+
+        	useEraser: function() {
+        		this.paint.isEraser = true;
         	},
 
         	enterRoom: function(id) {
@@ -439,11 +542,6 @@
 		border-left: none;
 		height: 74vh;
 		overflow: scroll;
-	}
-
-	.main-canvas canvas{
-		width: 100%;
-		height: 100%;
 	}
 
 	.kaku-map {
