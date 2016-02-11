@@ -148,9 +148,7 @@
 			        			</div>
 			        		</div>
 	        			</div>
-	        			<div class="col-md-4">
-	        				
-	        			</div>
+	        			<div class="col-md-4" id="color-picker-area"></div>
 	        			<div class="col-md-4">
 	        				<div class="button-container" style="margin-top:7px;">
 	    						<div class="row">
@@ -203,6 +201,7 @@
 	
     import util from '../../commons/scripts/commons.js';
     import colorPickerCursor from '../../commons/images/cursor.png';
+    import ColorPicker from '../../commons/scripts/ColorPicker.js';
 
     var common = {
 
@@ -270,7 +269,8 @@
             	},
 
             	paintUI: {
-            		colorPickerCursorPosition: ''
+            		colorPickerCursorPosition: '',
+            		colorPicker: {}
             	}
             }
         },
@@ -327,6 +327,16 @@
         		this.paint.width = this.paint.canvas.width;
         		this.paint.height = this.paint.canvas.height;
 
+        		var _this = this;
+
+    		    _this.colorPicker = ColorPicker.init({
+        			onColorChange: function(color) {
+        				_this.paint.strokeStyle = color;
+        			}
+        		});
+			    var panel = _this.colorPicker.getPanel();
+			    document.getElementById('color-picker-area').appendChild(panel);
+
         		this.bindCanvas();
         	},
 
@@ -341,20 +351,20 @@
 	                var mp = _this.getMousePos(touch);
 	                var _x = mp.x;
 	                var _y = mp.y;
+                    t.lock = true;
                     if(t.isEraser) {
                     	_this.resetErase(_x, _y, touch);
                     }else {
                     	if(t.isColorPicker) {
                     		var pixcolor = _this.getPixelColor(_x, _y);
                     		_this.paintUI.colorPickerCursorPosition = 'left:' + _x + 'px;top:' + _y + 'px';
-                    		console.log(_this.paintUI.colorPickerCursorPosition);
-                    		_this.serBrushColor(pixcolor);
+                    		_this.setBrushColor(pixcolor);
+                    		t.lock = false;
                     	}else {
 	                        _this.movePoint(_x, _y, true);//记录鼠标位置
 	                        _this.drawPoint();//绘制路线
                     	}
                     }
-                    t.lock = true;
         		};
         		/*鼠标移动事件*/
 	            t.canvas['on' + t.moveEvent] = function(e) {
@@ -366,14 +376,14 @@
 	                    if(t.isEraser) {
                             _this.resetErase(_x, _y, touch);
 	                    }else {
-	                    	if(t.isColorPicker) {
-	                    		var pixcolor = _this.getPixelColor(_x, _y);
-	                    		_this.serBrushColor(pixcolor);
-	                    	}else {
-		                        _this.movePoint(_x, _y, true);//记录鼠标位置
-		                        _this.drawPoint();//绘制路线
-	                    	}
+	                        _this.movePoint(_x, _y, true);//记录鼠标位置
+	                        _this.drawPoint();//绘制路线
 	                    }
+	                }else {
+	                	if(t.isColorPicker) {
+                    		var pixcolor = _this.getPixelColor(_x, _y);
+                    		_this.paintUI.colorPickerCursorPosition = 'left:' + _x + 'px;top:' + _y + 'px';
+                    	}
 	                }
 	            };
 	            /*鼠标弹起事件*/
@@ -406,8 +416,9 @@
 				return pixcolor;
         	},
 
-        	serBrushColor: function(color) {
+        	setBrushColor: function(color) {
         		this.paint.strokeStyle = color;
+        		this.colorPicker.setThumbnailSwatchColor(color);
         	},
 
         	clearCanvas: function() {
@@ -774,6 +785,16 @@
 		width: 11px;
 		background: url(../../commons/images/cursor.png);
 		z-index: 65535;
+	}
+
+	.swatch {
+		width: 20px;
+		height: 20px;
+		float: right;
+	}
+
+	.color-picker-panel {
+		padding: 15px;
 	}
 
 </style>

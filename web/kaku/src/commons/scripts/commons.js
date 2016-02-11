@@ -248,6 +248,6 @@ module.exports = {
 		}, function(err) {
 			_this.handleError(err);
 		});
-	}
-
+	},
+	
 };
