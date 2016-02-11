@@ -10,9 +10,10 @@
 
         	<div class="col-md-12" style="padding:0px;border-top:1px solid rgb(217, 217, 217)">
         		<div class="col-md-3" style="padding-left:0px;padding-right:0px;border-bottom:1px solid rgb(217, 217, 217);height:90vh;border-right:1px solid rgb(217, 217, 217)">
-	        		<div class="chatting-section">
+	        		<div class="chatting-section" style="text-align:center">
+	        		<span>房间名称：{{room.name}}</span>
 	        			<div class="kaku-member">
-                            <div title="{{people.username}}" @click="viewProfile(people._id)" class="room-photo" v-for="people in room.people" style="background-image: url({{people.photo}});"></div>     
+                            <div title="{{people.username}}" @click="viewProfile(people._id)" class="room-photo" v-for="people in room.people" style="background-image: url({{people.photo}});"></div>
 	        			</div>
 	        			<div class="message-detail" id="msg-wrap">
 	        				<div class="message-detail-content">
@@ -143,7 +144,7 @@
 			        				<a @click="useColorPicker()" v-bind:class="{'active': paint.isColorPicker == true, 'noac': paint.isColorPicker == false}" class="tool-button"><span class="glyphicon glyphicon-pushpin"></span></a>
 			        				<a @click="useBrush()" class="tool-button" v-bind:class="{'active': paint.isEraser == false && paint.isColorPicker == false, 'noac': paint.isEraser == true}"><span class="glyphicon glyphicon-pencil"></span></a>
 			        				<!-- <a class="tool-button"><span class="glyphicon glyphicon-share-alt"></span></a> -->
-			        				<a class="tool-button reverse"><span class="glyphicon glyphicon-share-alt"></span></a>
+			        				<a @click="reDraw()" class="tool-button reverse"><span class="glyphicon glyphicon-share-alt"></span></a>
 			        				<a @click="getImgUrl()" class="tool-button"><span class="glyphicon glyphicon-download-alt"></span></a>
 			        			</div>
 			        		</div>
@@ -332,7 +333,8 @@
     		    _this.colorPicker = ColorPicker.init({
         			onColorChange: function(color) {
         				_this.paint.strokeStyle = color;
-        			}
+        			},
+        			defaultColor: 'rgba(0, 0, 0, 255)'
         		});
 			    var panel = _this.colorPicker.getPanel();
 			    document.getElementById('color-picker-area').appendChild(panel);
@@ -461,6 +463,11 @@
 	                t.cxt.closePath();//context.closePath() , 如果当前路径是打开的则关闭它
 	                t.cxt.stroke();//context.stroke() , 绘制当前路径
 	            }
+	            t.cxt.save();
+        	},
+
+        	reDraw: function() {
+        		this.paint.cxt.restore();
         	},
 
         	useEraser: function() {

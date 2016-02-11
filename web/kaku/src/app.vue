@@ -20,6 +20,8 @@
 	import poiHeader from './components/header.vue';
 	import poiFooter from './components/footer.vue';
 
+	window.header = poiHeader;
+
 	export default {
 		data() {
 			return {
