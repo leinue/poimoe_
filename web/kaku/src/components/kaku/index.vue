@@ -53,6 +53,7 @@
 		        		<div class="col-md-9" style="padding:0px;">
 							<div class="main-canvas">
 								<canvas width="740" height="800" id="kakuCanvas"></canvas>
+								<div id="cursor" v-bind:style="paintUI.colorPickerCursorPosition" v-show="paint.isColorPicker == true"></div>
 							</div>
 		        		</div>
 		        		<div class="col-md-3" style="padding-left:0px;padding-right:0px;height:500px">
@@ -201,6 +202,7 @@
 <script>
 	
     import util from '../../commons/scripts/commons.js';
+    import colorPickerCursor from '../../commons/images/cursor.png';
 
     var common = {
 
@@ -265,6 +267,10 @@
             		startEvent: this.touch ? 'touchstart' : 'mousedown',
             		moveEvent: this.touch ? 'touchmove' : 'mousemove',
             		endEvent: this.touch ? 'touchend' : 'mouseup'
+            	},
+
+            	paintUI: {
+            		colorPickerCursorPosition: ''
             	}
             }
         },
@@ -340,7 +346,9 @@
                     }else {
                     	if(t.isColorPicker) {
                     		var pixcolor = _this.getPixelColor(_x, _y);
-    						console.log(pixcolor);
+                    		_this.paintUI.colorPickerCursorPosition = 'left:' + _x + 'px;top:' + _y + 'px';
+                    		console.log(_this.paintUI.colorPickerCursorPosition);
+                    		_this.serBrushColor(pixcolor);
                     	}else {
 	                        _this.movePoint(_x, _y, true);//记录鼠标位置
 	                        _this.drawPoint();//绘制路线
@@ -360,7 +368,7 @@
 	                    }else {
 	                    	if(t.isColorPicker) {
 	                    		var pixcolor = _this.getPixelColor(_x, _y);
-	                    		console.log(pixcolor);
+	                    		_this.serBrushColor(pixcolor);
 	                    	}else {
 		                        _this.movePoint(_x, _y, true);//记录鼠标位置
 		                        _this.drawPoint();//绘制路线
@@ -396,6 +404,10 @@
 				var pixel = imageData.data;
 				var pixcolor = "rgba(" + pixel[0] + "," + pixel[1] + "," + pixel[2] + "," + pixel[3] + ")";
 				return pixcolor;
+        	},
+
+        	serBrushColor: function(color) {
+        		this.paint.strokeStyle = color;
         	},
 
         	clearCanvas: function() {
@@ -754,6 +766,14 @@
 		margin-top: 7px;
 		box-shadow: none;
 		background: rgb(170, 170, 170);
+	}
+
+	#cursor {
+		position: absolute;
+		height: 11px;
+		width: 11px;
+		background: url(../../commons/images/cursor.png);
+		z-index: 65535;
 	}
 
 </style>
