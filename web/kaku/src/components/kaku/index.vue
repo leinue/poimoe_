@@ -137,14 +137,15 @@
 	        			<div class="col-md-4">
 			        		<div class="master-controls">
 			        			<div class="button-container">
-			        				<a class="tool-button"><span class="glyphicon glyphicon-trash"></span></a>
-			        				<a @click="useEraser()" class="tool-button"><span class="glyphicon glyphicon-erase"></span></a>
+			        				<a @click="clearCanvas()" class="tool-button"><span class="glyphicon glyphicon-trash"></span></a>
+			        				<a @click="useEraser()" v-bind:class="{'active': paint.isEraser == true, 'noac': paint.isEraser == false}" class="tool-button"><span class="glyphicon glyphicon-erase"></span></a>
 			        				<a class="tool-button"><span class="glyphicon glyphicon-pushpin"></span></a>
-			        				<a class="tool-button active"><span class="glyphicon glyphicon-pencil"></span></a>
-			        				<a class="tool-button"><span class="glyphicon glyphicon-share-alt"></span></a>
-			        				<a @click="clearCanvas()" class="tool-button reverse"><span class="glyphicon glyphicon-share-alt"></span></a>
+			        				<a @click="useBrush()" class="tool-button" v-bind:class="{'active': paint.isEraser == false, 'noac': paint.isEraser == true}"><span class="glyphicon glyphicon-pencil"></span></a>
+			        				<!-- <a class="tool-button"><span class="glyphicon glyphicon-share-alt"></span></a> -->
+			        				<a class="tool-button reverse"><span class="glyphicon glyphicon-share-alt"></span></a>
+			        				<a @click="getImgUrl()" class="tool-button"><span class="glyphicon glyphicon-download-alt"></span></a>
 			        			</div>
-			        		</div>	        				
+			        		</div>
 	        			</div>
 	        			<div class="col-md-4">
 	        				
@@ -167,7 +168,8 @@
 			        					<span class="label">大小</span>
 		        					</div>
 		        					<div class="col-md-8">
-			        					<input class="opacity-slider" type="range">		        						
+			        					<input v-show="paint.isEraser == false" class="opacity-slider" type="range" min="1" max="100" v-model="paint.lineWidth">
+			        					<input v-show="paint.isEraser == true" class="opacity-slider" type="range" min="1" max="100" v-model="paint.eraserRadius">
 		        					</div>
 		        					<div class="col-md-2" style="padding:0px;">
 		        						<span class="label">100%</span>
@@ -250,6 +252,7 @@
             		color: ["#000000","#FF0000","#80FF00","#00FFFF","#808080","#FF8000","#408080","#8000FF","#CCCC00"],
             		canvas: '',
             		cxt: '',
+            		lineWidth: 5,
             		width: 0,
             		height: 0,
 
@@ -310,7 +313,7 @@
 
         		this.paint.cxt = this.paint.canvas.getContext('2d');
         		this.paint.cxt.lineJoin = 'round';//两条线段连接方式
-        		this.paint.cxt.lineWidth = 5;//线条宽度
+        		this.paint.cxt.lineWidth = this.paint.lineWidth;//线条宽度
 
         		this.paint.width = this.paint.canvas.width;
         		this.paint.height = this.paint.canvas.height;
@@ -323,6 +326,7 @@
         		var t = _this.paint;
 	            /*鼠标按下事件，记录鼠标位置，并绘制，解锁lock，打开mousemove事件*/
         		t.canvas['on' + t.startEvent] = function(e) {
+	        		t.cxt.lineWidth = t.lineWidth;//线条宽度
 	                var touch = t.touch ? e.touches[0] : e;
 	                var mp = _this.getMousePos(touch);
 	                var _x = mp.x;
@@ -343,7 +347,7 @@
 		                var _x = mp.x;
 		                var _y = mp.y;
 	                    if(t.isEraser) {
-                            _this.resetEraser(_x, _y, touch);
+                            _this.resetErase(_x, _y, touch);
 	                    }else {
 	                        _this.movePoint(_x, _y, true);//记录鼠标位置
 	                        _this.drawPoint();//绘制路线
@@ -386,12 +390,15 @@
 	            t.cxt.globalCompositeOperation = "source-over";
         	},
 
+        	resetBrush: function() {
+
+        	},
+
         	movePoint: function(x, y, dragging) {
         		var t = this.paint;
 	            t.x.push(x);
 	            t.y.push(y);
 	            t.clickDrag.push(y);
-	            // this.drawPoint();
         	},
 
         	drawPoint: function() {
@@ -413,6 +420,19 @@
 
         	useEraser: function() {
         		this.paint.isEraser = true;
+        	},
+
+        	useBrush: function() {
+        		this.paint.isEraser = false;
+        		this.paint.cxt.strokeStyle = 'rgb(0, 0, 0)';
+        	},
+
+        	toggleBtnStatus: function() {
+
+        	},
+
+        	getImgUrl: function() {
+        		window.open(this.paint.canvas.toDataURL());
         	},
 
         	enterRoom: function(id) {
