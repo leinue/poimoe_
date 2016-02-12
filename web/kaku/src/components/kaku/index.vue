@@ -364,7 +364,7 @@
                     		t.lock = false;
                     	}else {
 	                        _this.movePoint(_x, _y, true);//记录鼠标位置
-	                        _this.drawPoint();//绘制路线
+	                        _this.drawPoint(true);//绘制路线
                     	}
                     }
         		};
@@ -379,7 +379,7 @@
                             _this.resetErase(_x, _y, touch);
 	                    }else {
 	                        _this.movePoint(_x, _y, true);//记录鼠标位置
-	                        _this.drawPoint();//绘制路线
+	                        _this.drawPoint(true);//绘制路线
 	                    }
 	                }else {
 	                	if(t.isColorPicker) {
@@ -448,18 +448,24 @@
 	            t.clickDrag.push(y);
         	},
 
-        	drawPoint: function() {
+        	drawPoint: function(sendSocket) {
+
+        		sendSocket = sendSocket || false;
+
         		var t = this.paint;
         		t.cxt.fillStyle = "#000000";
 
-        		chatSocket.emit('start draw kaku', {
-        			x: t.x,
-        			y: t.y,
-        			strokeStyle: t.strokeStyle,
-        			clickDrag: t.clickDrag,
-        			lineWidth: t.lineWidth,
-        			eraserRadius: t.eraserRadius
-        		});
+        		if(sendSocket) {
+	        		chatSocket.emit('start draw kaku', {
+	        			x: t.x,
+	        			y: t.y,
+	        			strokeStyle: t.strokeStyle,
+	        			clickDrag: t.clickDrag,
+	        			lineWidth: t.lineWidth,
+	        			eraserRadius: t.eraserRadius,
+	        			people: localStorage._id
+	        		});
+        		}
 
 				for(var i=0; i < t.x.length; i++) {   
 	                t.cxt.beginPath();//context.beginPath() , 准备绘制一条路径	                
@@ -473,6 +479,7 @@
 	                t.cxt.closePath();//context.closePath() , 如果当前路径是打开的则关闭它
 	                t.cxt.stroke();//context.stroke() , 绘制当前路径
 	            }
+
 	            t.cxt.save();
         	},
 
@@ -560,8 +567,6 @@
         				msg = JSON.parse(msg);
         			}
 
-					console.log(msg);
-
 					var code = msg.code;
 					var data = msg.message;
 
@@ -576,8 +581,15 @@
 
 				chatSocket.on('get kaku path', function(data) {
 
-					console.log(data);
-
+					if(!(data.people.toString() == localStorage._id)) {
+						_this.paint.strokeStyle = data.strokeStyle;
+						_this.paint.lineWidth = data.lineWidth;
+						_this.paint.x = data.x;
+						_this.paint.y = data.y;
+						_this.paint.clickDrag = data.clickDrag;
+						_this.paint.eraserRadius = data.eraserRadius;
+						_this.drawPoint();
+					}
 				});
 
         	},
