@@ -11,14 +11,6 @@ var util = require('./commons/scripts/commons.js');
 // document.domain = 'poimoe.com';
 var userData = util.getCookie('userData');
 
-//初始化webSocket
-var kakuSocket = io('ws://socket.poimoe.com/kaku');
-kakuSocket.emit('kaku message', 'fuck');
-kakuSocket.on('kaku message', function(msg){
-	console.log(msg);
-});
-
-window.kakuSocket = kakuSocket;
 window.io = io;
 
 //初始化用户登录状态
@@ -100,6 +92,10 @@ router.beforeEach(function () {
 	console.log('before each');
 
 	var prevPath = router._currentRoute.path;
+
+	if(prevPath == undefined) {
+		return;
+	}
 
 	if(prevPath.indexOf('sketch') != -1) {
 		chatSocket.emit('leave', {

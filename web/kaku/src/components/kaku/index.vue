@@ -451,6 +451,14 @@
         	drawPoint: function() {
         		var t = this.paint;
         		t.cxt.fillStyle = "#000000";
+
+        		chatSocket.emit('start draw kaku', {
+        			people: localStorage._id,
+        			roomId: id,
+        			passport: sessionStorage[id],
+        			username: localStorage.username
+        		});
+
 				for(var i=0; i < t.x.length; i++) {   
 	                t.cxt.beginPath();//context.beginPath() , 准备绘制一条路径	                
 	                if(t.clickDrag[i] && i){//当是拖动而且i!=0时，从上一个点开始画线。
@@ -527,6 +535,8 @@
 
                     _this.initPaint();
 
+                    // _this.initKakuSocket(id);
+
 				});
 
 				chatSocket.on('enter chatting room failed', function(msg) {
@@ -561,6 +571,24 @@
 					_this.room.chatting.push(data.chatting[0]);
 					_this.message = '';
 				});
+
+        	},
+
+        	initKakuSocket: function(id) {
+
+				var kakuSocket = io('ws://socket.poimoe.com/kaku');
+
+				kakuSocket.emit('kaku message', {
+					roomId: id,
+					people: localStorage._id,
+					username: localStorage.username
+				});
+
+				kakuSocket.on('kaku message', function(msg){
+					console.log(msg);
+				});
+
+				window.kakuSocket = kakuSocket;
 
         	},
 

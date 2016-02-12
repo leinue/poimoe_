@@ -598,6 +598,7 @@ input:focus {
 	color: #383838;
 	word-wrap: break-word;
 	word-break: normal;
+	text-align: left;
 }
 
 .receiver .direct-message-content {
