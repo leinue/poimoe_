@@ -453,10 +453,12 @@
         		t.cxt.fillStyle = "#000000";
 
         		chatSocket.emit('start draw kaku', {
-        			people: localStorage._id,
-        			roomId: id,
-        			passport: sessionStorage[id],
-        			username: localStorage.username
+        			x: t.x,
+        			y: t.y,
+        			strokeStyle: t.strokeStyle,
+        			clickDrag: t.clickDrag,
+        			lineWidth: t.lineWidth,
+        			eraserRadius: t.eraserRadius
         		});
 
 				for(var i=0; i < t.x.length; i++) {   
@@ -570,6 +572,12 @@
 
 					_this.room.chatting.push(data.chatting[0]);
 					_this.message = '';
+				});
+
+				chatSocket.on('get kaku path', function(data) {
+
+					console.log(data);
+
 				});
 
         	},

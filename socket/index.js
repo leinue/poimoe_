@@ -139,6 +139,20 @@ chat.on('connection', function(socket){
 		);
 	});
 
+	socket.on('start draw kaku', function(msg) {
+
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		if (roomInfo[roomId].indexOfA(user) === -1) {  
+	      return false;
+	    }
+
+	    chat.to(roomId).emit('get kaku path', msg);
+
+	});
+
 	var leaveThisRoom = function(msg) {
 
 	}
