@@ -53,7 +53,7 @@
 	        		<div class="row" style="border-bottom: 1px solid #d8d8d8;">
 		        		<div class="col-md-9" style="padding:0px;">
 							<div class="main-canvas">
-								<canvas width="740" height="800" id="{{layer.id}}" v-for="layer in paint.layer"></canvas>
+								<canvas v-bind:style="{zIndex: layer.zindex, display: layer.display}" width="300" height="800" id="{{layer.id}}" v-for="layer in paint.layer"></canvas>
 								<div id="cursor" v-bind:style="paintUI.colorPickerCursorPosition" v-show="paint.isColorPicker == true"></div>
 							</div>
 		        		</div>
@@ -77,8 +77,8 @@
 		        							<input type="text" class="name-input">
 		        							<span class="layer-name">{{layer.name}}</span>
 		        							<div class="eye-button">
-		        								 <span v-show="layer.visible == true" class="glyphicon glyphicon-eye-open"></span>
-		        								 <span v-show="layer.visible == false" class="glyphicon glyphicon-eye-close"></span>
+		        								 <span @click="hideThisLayer(key)" v-show="layer.display == 'block'" class="glyphicon glyphicon-eye-open"></span>
+		        								 <span @click="showThisLayer(key)" v-show="layer.display == 'none'" class="glyphicon glyphicon-eye-close"></span>
 		        							</div>
 		        							<div class="opacity-rate">
 		        								<span>{{layer.opacity}}</span>
@@ -242,7 +242,7 @@
             		layer: [{
             			name: '背景',
             			opacity: 100,
-            			visible: true,
+            			display: 'block',
             			zindex: 1,
             			id: 'layer-bg',
             			active: true
@@ -303,13 +303,14 @@
         		var currentLayerIndex = thisPaint.currentLayer.index;
 
         		thisPaintLayer[currentLayerIndex].active = false;
+        		thisPaintLayer[currentLayerIndex].zindex = -1;
 
         		var layerId = 'LAYER' + util.randomString(8);
         		var layerCount = thisPaintLayer.length;
         		var layer = {
 					name: '背景' + layerCount,
         			opacity: 100,
-        			visible: true,
+        			display: 'block',
         			zindex: 1,
         			id: layerId,
         			active: true
@@ -335,6 +336,10 @@
         	},
 
         	toggleLayer: function(activeIndex, activeId, unactiveIndex) {
+        		if(activeIndex == unactiveIndex) {
+        			return false;
+        		}
+
         		var thisPaint = this.paint;
         		var thisPaintLayer = thisPaint.layer;
         		var currentLayer = thisPaint.currentLayer;
@@ -342,10 +347,21 @@
         		currentLayer.index = activeIndex;
         		currentLayer.id = activeId;
         		thisPaintLayer[activeIndex].active = true;
+        		thisPaintLayer[activeIndex].zindex = 1;
         		if(typeof unactiveIndex != 'undefined') {
-	        		thisPaintLayer[unactiveIndex].active = false;        			
+	        		thisPaintLayer[unactiveIndex].active = false;
+	        		thisPaintLayer[unactiveIndex].zindex = -1;  			
         		}
         		this.initPaintInterval(activeId);
+        	},
+
+        	showThisLayer: function(id) {
+        		this.paint.layer[id].display = 'block';
+        	},
+
+        	hideThisLayer: function(id) {
+        		// console.log(this.paint.layer[id]);
+        		this.paint.layer[id].display = 'none';
         	},
 
         	initPaintInterval: function(activeId) {
@@ -365,8 +381,6 @@
         		
         		this.paint.canvas = canvas || document.getElementById(this.paint.currentLayer.id);
 
-        		console.log(this.paint.currentLayer.id, this.paint.canvas);
-
         		if(!this.paint.canvas.getContext) {
         			util.messageBox('对不起，您的浏览器暂不支持canvas');
         			return false;
@@ -375,6 +389,7 @@
         		this.paint.cxt = this.paint.canvas.getContext('2d');
         		this.paint.cxt.lineJoin = 'round';//两条线段连接方式
         		this.paint.cxt.lineWidth = this.paint.lineWidth;//线条宽度
+        		this.paint.cxt.globalCompositeOperation = "source-over";
 
         		this.paint.width = this.paint.canvas.width;
         		this.paint.height = this.paint.canvas.height;
@@ -708,6 +723,10 @@
 		border-left: none;
 		height: 74vh;
 		overflow: scroll;
+	}
+
+	.main-canvas canvas {
+		position: absolute;
 	}
 
 	.kaku-map {
