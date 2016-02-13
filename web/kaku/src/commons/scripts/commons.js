@@ -139,7 +139,6 @@ module.exports = {
 	
 	//图片上传预览,IE使用了滤镜
     previewImage: function(fileid, outer, inner, class_, style_) {
-
     	var _this = this;
 
     	var file = document.getElementById(fileid);

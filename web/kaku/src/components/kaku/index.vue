@@ -111,13 +111,16 @@
 	        			<div class="col-md-4">
 			        		<div class="master-controls">
 			        			<div class="button-container">
-			        				<a @click="clearCanvas()" class="tool-button"><span class="glyphicon glyphicon-trash"></span></a>
-			        				<a @click="useEraser()" v-bind:class="{'active': paint.isEraser == true && paint.isColorPicker == false, 'noac': paint.isEraser == false}" class="tool-button"><span class="glyphicon glyphicon-erase"></span></a>
-			        				<a @click="useColorPicker()" v-bind:class="{'active': paint.isColorPicker == true, 'noac': paint.isColorPicker == false}" class="tool-button"><span class="glyphicon glyphicon-pushpin"></span></a>
 			        				<a @click="useBrush()" class="tool-button" v-bind:class="{'active': paint.isEraser == false && paint.isColorPicker == false, 'noac': paint.isEraser == true}"><span class="glyphicon glyphicon-pencil"></span></a>
-			        				<!-- <a class="tool-button"><span class="glyphicon glyphicon-share-alt"></span></a> -->
+			        				<a @click="useColorPicker()" v-bind:class="{'active': paint.isColorPicker == true, 'noac': paint.isColorPicker == false}" class="tool-button"><span class="glyphicon glyphicon-pushpin"></span></a>
+			        				<a @click="useEraser()" v-bind:class="{'active': paint.isEraser == true && paint.isColorPicker == false, 'noac': paint.isEraser == false}" class="tool-button"><span class="glyphicon glyphicon-erase"></span></a>
 			        				<a @click="reDraw()" class="tool-button reverse"><span class="glyphicon glyphicon-share-alt"></span></a>
+			        				<a @click="uploadPic()" class="tool-button">
+			        					<span class="glyphicon glyphicon-cloud-upload"></span>
+			        					<input id="upfile" v-on:change="getPicFile()" type="file" style="display:none" v-model="paint.picData">
+			        				</a>
 			        				<a @click="getImgUrl()" class="tool-button"><span class="glyphicon glyphicon-download-alt"></span></a>
+			        				<a @click="clearCanvas()" class="tool-button"><span class="glyphicon glyphicon-trash"></span></a>
 			        			</div>
 			        		</div>
 	        			</div>
@@ -255,7 +258,9 @@
             		currentLayer: {
             			id: 'layer-bg',
             			index: 0
-            		}
+            		},
+
+            		picData: ''
             	},
 
             	paintUI: {
@@ -625,6 +630,36 @@
 
         	getImgUrl: function() {
         		window.open(this.paint.baseCanvas.toDataURL());
+        	},
+
+        	uploadPic: function() {
+        		document.getElementById('upfile').click();
+        	},
+
+        	getPicFile: function() {
+
+        		var file = document.getElementById('upfile');
+
+			    var reader = new FileReader();
+
+			    var _this = this;
+
+			    reader.readAsDataURL(file.files[0]);  
+			    reader.onload = function(e){
+	        		var image = new Image();
+	        		image.src = this.result;
+	        		image.onload = function() {
+		        		_this.paint.cxt.drawImage(image, 0, 0);
+	        		};
+			    };
+
+			    reader.onerror = function(e) {
+			    	console.log(e);
+			    };
+
+			    reader.onabort = function(e) {
+			    	console.log(e);
+			    };
         	},
 
         	enterRoom: function(id) {
