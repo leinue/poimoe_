@@ -57,7 +57,7 @@
 								<div id="cursor" v-bind:style="paintUI.colorPickerCursorPosition" v-show="paint.isColorPicker == true"></div>
 							</div>
 		        		</div>
-		        		<div class="col-md-3" style="padding-left:0px;padding-right:0px;height:500px">
+		        		<div class="col-md-3" style="padding-left:0px;padding-right:0px;">
 		        			<div class="zoom-well">
 			        			<div class="kaku-map">
 			        				<canvas></canvas>
@@ -304,7 +304,7 @@
 
         		thisPaintLayer[currentLayerIndex].active = false;
 
-        		var layerId = 'layer-' + util.randomString(8);
+        		var layerId = 'LAYER' + util.randomString(8);
         		var layerCount = thisPaintLayer.length;
         		var layer = {
 					name: '背景' + layerCount,
@@ -345,11 +345,27 @@
         		if(typeof unactiveIndex != 'undefined') {
 	        		thisPaintLayer[unactiveIndex].active = false;        			
         		}
+        		this.initPaintInterval(activeId);
         	},
 
-        	initPaint: function() {
+        	initPaintInterval: function(activeId) {
+        		var _this = this;
+    			var canvasInitInterval = setInterval(function() {
+    				var canvas = document.getElementById(activeId);
+	        		if(canvas == null) {
+	        			console.log('初始化canvas失败,正在尝试重新初始化...');
+	        		}else {
+	        			clearInterval(canvasInitInterval);
+		        		_this.initPaint(canvas);	        			
+	        		}
+    			}, 100);
+        	},
+
+        	initPaint: function(canvas) {
         		
-        		this.paint.canvas = document.getElementById(this.paint.currentLayer.id);
+        		this.paint.canvas = canvas || document.getElementById(this.paint.currentLayer.id);
+
+        		console.log(this.paint.currentLayer.id, this.paint.canvas);
 
         		if(!this.paint.canvas.getContext) {
         			util.messageBox('对不起，您的浏览器暂不支持canvas');
