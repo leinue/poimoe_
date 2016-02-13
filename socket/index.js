@@ -153,6 +153,98 @@ chat.on('connection', function(socket){
 
 	});
 
+	socket.on('new layer', function(msg) {
+
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		if (roomInfo[roomId].indexOfA(user) === -1) {  
+	      return false;
+	    }
+
+	    chat.to(roomId).emit('get new layer', msg);
+
+	});
+
+	socket.on('modify layer', function(msg) {
+
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		if (roomInfo[roomId].indexOfA(user) === -1) {  
+	      return false;
+	    }
+
+	    chat.to(roomId).emit('get modify layer', msg);
+
+	});
+
+	socket.on('remove layer', function(msg) {
+
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		if (roomInfo[roomId].indexOfA(user) === -1) {  
+	      return false;
+	    }
+
+	    chat.to(roomId).emit('get remove layer', msg);
+
+	});
+
+	socket.on('hide layer', function(msg) {
+
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		if (roomInfo[roomId].indexOfA(user) === -1) {  
+	      return false;
+	    }
+
+	    chat.to(roomId).emit('get hide layer', msg);
+
+	});
+
+	socket.on('show layer', function(msg) {
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		if (roomInfo[roomId].indexOfA(user) === -1) {  
+	      return false;
+	    }
+
+	    chat.to(roomId).emit('get show layer', msg);		
+	});
+
+	socket.on('toggle layer', function(msg) {
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		if (roomInfo[roomId].indexOfA(user) === -1) {  
+	      return false;
+	    }
+
+	    chat.to(roomId).emit('get toggle layer', msg);		
+	});
+
+	socket.on('clear layer', function(msg) {
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		if (roomInfo[roomId].indexOfA(user) === -1) {  
+	      return false;
+	    }
+
+	    chat.to(roomId).emit('get clear layer', msg);		
+	});
+
 	var leaveThisRoom = function(msg) {
 
 	}

@@ -255,6 +255,7 @@
             			editable: false,
             			marginTop: 0
             		}],
+
             		currentLayer: {
             			id: 'layer-bg',
             			index: 0
@@ -306,7 +307,9 @@
         		chatSocket.emit('chat message', chatMessage);
         	},
 
-        	addNewLayer: function() {
+        	addNewLayer: function(layer, noSocket) {
+        		noSocket = noSocket || false;
+
         		var thisPaint = this.paint;
         		var thisPaintLayer = thisPaint.layer;
 
@@ -317,7 +320,7 @@
 
         		var layerId = 'LAYER' + util.randomString(8);
         		var layerCount = thisPaintLayer.length;
-        		var layer = {
+        		var layer = layer || {
 					name: '背景' + layerCount,
         			opacity: 100,
         			display: 'block',
@@ -330,27 +333,47 @@
         		thisPaintLayer.push(layer);
 
         		this.toggleLayer(layerCount, layerId, currentLayerIndex);
+
+        		layer.people = localStorage._id;
+
+        		if(!noSocket) {
+	        		chatSocket.emit('new layer', layer);        			
+        		}
         	},
 
-        	removeThisLayer: function() {
+        	removeThisLayer: function(index, noSocket) {
+        		noSocket = noSocket || false;
+
         		var thisPaint = this.paint;
         		var thisPaintLayer = thisPaint.layer;
         		var currentLayer = thisPaint.currentLayer;
 
-        		if(currentLayer.index === 0) {
+        		var currentLayerIndex = index || currentLayer.index;
+        		var tmpIndex = currentLayerIndex;
+
+        		if(currentLayerIndex === 0) {
         			util.messageBox('不允许删除的图层');
         			return false;
         		}
 
-        		thisPaintLayer.splice(currentLayer.index);
+        		thisPaintLayer.splice(currentLayerIndex);
 
-        		this.toggleLayer(currentLayer.index - 1, thisPaintLayer[currentLayer.index - 1].id);
+        		this.toggleLayer(currentLayerIndex - 1, thisPaintLayer[currentLayerIndex - 1].id);
+
+        		if(!noSocket) {
+		    		chatSocket.emit('remove layer', {
+		    			index: tmpIndex,
+		    			people: localStorage._id
+		    		});        			
+        		}
         	},
 
-        	toggleLayer: function(activeIndex, activeId, unactiveIndex) {
+        	toggleLayer: function(activeIndex, activeId, unactiveIndex, noSocket) {
         		if(activeIndex == unactiveIndex) {
         			return false;
         		}
+
+        		noSocket = noSocket || false;
 
         		var thisPaint = this.paint;
         		var thisPaintLayer = thisPaint.layer;
@@ -365,14 +388,36 @@
 	        		thisPaintLayer[unactiveIndex].zindex = -1;  			
         		}
         		this.initPaintInterval(activeId);
+        		if(!noSocket) {
+        			chatSocket.emit('toggle layer', {
+        				activeIndex: activeIndex,
+        				activeId: activeId,
+        				unactiveIndex: unactiveIndex,
+        				people: localStorage._id
+        			});
+        		}
         	},
 
-        	showThisLayer: function(id) {
+        	showThisLayer: function(id, noSocket) {
+        		noSocket = noSocket || false;
         		this.paint.layer[id].display = 'block';
+        		if(!noSocket) {
+		    		chatSocket.emit('show layer', {
+		    			index: id,
+		    			people: localStorage._id
+		    		});        			
+        		}
         	},
 
-        	hideThisLayer: function(id) {
+        	hideThisLayer: function(id, noSocket) {
+        		noSocket = noSocket || false;
         		this.paint.layer[id].display = 'none';
+        		if(!noSocket) {
+		    		chatSocket.emit('hide layer', {
+		    			index: id,
+		    			people: localStorage._id
+		    		});        			
+        		}
         	},
 
         	makeThisLayerEditable: function(id, makeFalse) {
@@ -388,6 +433,10 @@
 
         	confirmEditThisLayerName: function(index, name) {
         		this.paint.layer[index].editable = false;
+        		var layer = this.paint.layer[index];
+        		layer.people = localStorage._id;
+        		layer.index = index;
+        		chatSocket.emit('modify layer', layer);
         	},
 
         	initPaintInterval: function(activeId) {
@@ -536,9 +585,15 @@
         		this.colorPicker.setThumbnailSwatchColor(color);
         	},
 
-        	clearCanvas: function() {
+        	clearCanvas: function(noSocket) {
+        		noSocket = noSocket || false;
 	            this.paint.cxt.clearRect(0, 0, this.paint.width, this.paint.height);//清除画布，左上角为起点
-	            this.paint.baseCxt.clearRect(0, 0, this.paint.width, this.paint.height);//清除画布，左上角为起点	            
+	            this.paint.baseCxt.clearRect(0, 0, this.paint.width, this.paint.height);//清除画布，左上角为起点
+	            if(!noSocket) {
+	            	chatSocket('clear layer', {
+	            		people: localStorage._id
+	            	});
+	            }        
         	},
 
         	resetErase: function(_x, _y, touch) {
@@ -650,6 +705,7 @@
 	        		image.src = this.result;
 	        		image.onload = function() {
 		        		_this.paint.cxt.drawImage(image, 0, 0);
+		        		_this.paint.baseCxt.drawImage(image, 0, 0);
 	        		};
 			    };
 
@@ -731,6 +787,12 @@
 					_this.message = '';
 				});
 
+				this.initKakuMQSocket();
+
+        	},
+
+        	initKakuMQSocket: function() {
+
 				chatSocket.on('get kaku path', function(data) {
 
 					if(!(data.people.toString() == localStorage._id)) {
@@ -742,6 +804,71 @@
 						_this.paint.eraserRadius = data.eraserRadius;
 						_this.drawPoint();
 						_this.drawPoint(false, _this.paint.baseCxt);
+					}
+				});
+
+				chatSocket.on('get new layer', function(data) {
+
+					console.log(data);
+
+					if(!(data.people.toString() == localStorage._id)) {
+						_this.addNewLayer(data, true);
+					}
+				});
+
+				chatSocket.on('get modify layer', function(data) {
+
+					console.log(data);
+
+					if(!(data.people.toString() == localStorage._id)) {
+
+					}
+				});
+
+				chatSocket.on('get remove layer', function(data) {
+
+					console.log(data);
+
+					if(!(data.people.toString() == localStorage._id)) {
+						var i = data.index;
+						data.index = null;
+						this.paint.layer[i] = data;
+					}
+				});
+
+				chatSocket.on('get show layer', function(data) {
+
+					console.log(data);
+
+					if(!(data.people.toString() == localStorage._id)) {
+						_this.showThisLayer(data.index, true);
+					}
+				});
+
+				chatSocket.on('get hide layer', function(data) {
+
+					console.log(data);
+
+					if(!(data.people.toString() == localStorage._id)) {
+						_this.hideThisLayer(data.index, true);
+					}
+				});
+
+				chatSocket.on('get toggle layer', function(data) {
+
+					console.log(data);
+
+					if(!(data.people.toString() == localStorage._id)) {
+						_this.toggleLayer(data.activeIndex, data.activeId, data.unactiveIndex, true);
+					}
+				});
+
+				chatSocket.on('get clear layer', function(data) {
+
+					console.log(data);
+
+					if(!(data.people.toString() == localStorage._id)) {
+						_this.clearCanvas(true);
 					}
 				});
 
