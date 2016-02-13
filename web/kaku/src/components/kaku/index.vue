@@ -53,7 +53,8 @@
 	        		<div class="row" style="border-bottom: 1px solid #d8d8d8;">
 		        		<div class="col-md-9" style="padding:0px;">
 							<div class="main-canvas">
-								<canvas v-bind:style="{zIndex: layer.zindex, display: layer.display}" width="300" height="800" id="{{layer.id}}" v-for="layer in paint.layer"></canvas>
+								<canvas width="800" height="800" id="base-canvas"></canvas>
+								<canvas v-bind:style="{zIndex: layer.zindex, display: layer.display, opacity: layer.opacity, marginTop: layer.marginTop}" width="800" height="800" id="{{layer.id}}" v-for="layer in paint.layer"></canvas>
 								<div id="cursor" v-bind:style="paintUI.colorPickerCursorPosition" v-show="paint.isColorPicker == true"></div>
 							</div>
 		        		</div>
@@ -73,8 +74,8 @@
 		        			<div class="layer-well">
 		        				<div class="layer-content">
 		        					<ul class="layer-list">
-		        						<li @click="toggleLayer(key, layer.id, paint.currentLayer.index)" v-bind:class="{'active': layer.active == true , 'noactivelayer': layer.active == false}" v-for="(key, layer) in paint.layer">
-		        							<input type="text" class="name-input">
+		        						<li v-on:dblClick="makeThisLayerEditable(key)" @click="toggleLayer(key, layer.id, paint.currentLayer.index)" v-bind:class="{'active': layer.active == true , 'noactivelayer': layer.active == false, 'edit-status': layer.editable == true}" v-for="(key, layer) in paint.layer">
+		        							<input v-model="layer.name" v-on:dblClick="makeThisLayerEditable(key, false)" @keyup.enter="confirmEditThisLayerName(key, layer.name)" type="text" class="name-input">
 		        							<span class="layer-name">{{layer.name}}</span>
 		        							<div class="eye-button">
 		        								 <span @click="hideThisLayer(key)" v-show="layer.display == 'block'" class="glyphicon glyphicon-eye-open"></span>
@@ -92,10 +93,10 @@
 				        					<span class="label">透明度</span>
 			        					</div>
 			        					<div class="col-md-8">
-				        					<input class="opacity-slider" type="range">		        						
+				        					<input v-model="paint.layer[paint.currentLayer.index].opacity" class="opacity-slider" type="range">	
 			        					</div>
 			        					<div class="col-md-2" style="padding:0px;">
-			        						<span class="label">100%</span>
+			        						<span class="label">{{paint.layer[paint.currentLayer.index].opacity}}%</span>
 			        					</div>
 		        					</div>
 		        				</div>
@@ -227,8 +228,10 @@
             		color: ["#000000","#FF0000","#80FF00","#00FFFF","#808080","#FF8000","#408080","#8000FF","#CCCC00"],
             		canvas: '',
             		cxt: '',
+            		baseCanvas: '',
+            		baseCxt: '',
             		lineWidth: 5,
-            		strokeStyle: 'rgb(0, 0, 0)',
+            		strokeStyle: 'rgba(0, 0, 0, 0)',
             		width: 0,
             		height: 0,
 
@@ -245,7 +248,9 @@
             			display: 'block',
             			zindex: 1,
             			id: 'layer-bg',
-            			active: true
+            			active: true,
+            			editable: false,
+            			marginTop: 0
             		}],
             		currentLayer: {
             			id: 'layer-bg',
@@ -313,7 +318,9 @@
         			display: 'block',
         			zindex: 1,
         			id: layerId,
-        			active: true
+        			active: true,
+        			editable: false,
+        			marginTop: '-800px'
         		};
         		thisPaintLayer.push(layer);
 
@@ -360,8 +367,22 @@
         	},
 
         	hideThisLayer: function(id) {
-        		// console.log(this.paint.layer[id]);
         		this.paint.layer[id].display = 'none';
+        	},
+
+        	makeThisLayerEditable: function(id, makeFalse) {
+        		makeFalse = makeFalse || true;
+        		this.paint.layer[id].editable = !this.paint.layer[id].editable;
+        		console.log(makeFalse);
+        		if(!makeFalse) {
+        			setTimeout(function() {
+	        			this.paint.layer[id].editable = false;        				
+        			}, 10);
+        		}
+        	},
+
+        	confirmEditThisLayerName: function(index, name) {
+        		this.paint.layer[index].editable = false;
         	},
 
         	initPaintInterval: function(activeId) {
@@ -375,6 +396,18 @@
 		        		_this.initPaint(canvas);	        			
 	        		}
     			}, 100);
+        	},
+
+        	initBasePaint: function() {
+        		this.paint.baseCanvas = document.getElementById('base-canvas');
+        		this.paint.baseCxt = this.paint.baseCanvas.getContext('2d');
+
+        		this.paint.baseCxt.lineJoin = 'round';//两条线段连接方式
+        		this.paint.baseCxt.lineWidth = this.paint.lineWidth;//线条宽度
+        		this.paint.baseCxt.globalCompositeOperation = "source-over";
+
+        		this.paint.baseCxt.fillStyle = 'rgba(255, 255, 255, 100)';
+        		this.paint.baseCxt.fillRect(0,0,this.paint.width,this.paint.height);
         	},
 
         	initPaint: function(canvas) {
@@ -408,13 +441,17 @@
         		this.bindCanvas();
         	},
 
-        	bindCanvas: function() {
+        	bindCanvas: function(canvas) {
         		var _this = this;
         		var t = _this.paint;
+
+        		canvas = canvas || t.canvas;
 	            /*鼠标按下事件，记录鼠标位置，并绘制，解锁lock，打开mousemove事件*/
-        		t.canvas['on' + t.startEvent] = function(e) {
+        		canvas['on' + t.startEvent] = function(e) {
 	        		t.cxt.lineWidth = t.lineWidth;//线条宽度
 	        		t.cxt.strokeStyle = t.strokeStyle;//线条颜色
+	        		t.baseCxt.lineWidth = t.lineWidth;
+	        		t.baseCxt.strokeStyle = t.strokeStyle;
 	                var touch = t.touch ? e.touches[0] : e;
 	                var mp = _this.getMousePos(touch);
 	                var _x = mp.x;
@@ -431,11 +468,12 @@
                     	}else {
 	                        _this.movePoint(_x, _y, true);//记录鼠标位置
 	                        _this.drawPoint(true);//绘制路线
+	                        _this.drawPoint(true, t.baseCxt);//绘制路线
                     	}
                     }
         		};
         		/*鼠标移动事件*/
-	            t.canvas['on' + t.moveEvent] = function(e) {
+	            canvas['on' + t.moveEvent] = function(e) {
 	                var touch = t.touch ? e.touches[0] : e;
 	                if(t.lock) {
     	                var mp = _this.getMousePos(touch);
@@ -446,6 +484,7 @@
 	                    }else {
 	                        _this.movePoint(_x, _y, true);//记录鼠标位置
 	                        _this.drawPoint(true);//绘制路线
+	                        _this.drawPoint(true, t.baseCxt);//绘制路线
 	                    }
 	                }else {
 	                	if(t.isColorPicker) {
@@ -455,7 +494,7 @@
 	                }
 	            };
 	            /*鼠标弹起事件*/
-	            t.canvas['on' + t.endEvent] = function(e) {
+	            canvas['on' + t.endEvent] = function(e) {
 	                /*重置数据*/
 	                t.lock = false;
 	                t.x = [];
@@ -491,16 +530,23 @@
 
         	clearCanvas: function() {
 	            this.paint.cxt.clearRect(0, 0, this.paint.width, this.paint.height);//清除画布，左上角为起点
+	            this.paint.baseCxt.clearRect(0, 0, this.paint.width, this.paint.height);//清除画布，左上角为起点	            
         	},
 
         	resetErase: function(_x, _y, touch) {
         		var t = this.paint;
-        		t.cxt.globalCompositeOperation = "destination-out";
-	            t.cxt.beginPath();
-	            t.cxt.arc(_x, _y, t.eraserRadius, 0, Math.PI * 2);
-	            t.cxt.strokeStyle = "rgba(250,250,250,0)";
-	            t.cxt.fill();
-	            t.cxt.globalCompositeOperation = "source-over";
+        		var cxt = t.cxt;
+        		for (var i = 0; i < 2; i++) {
+        			if(i === 1) {
+        				cxt = t.baseCxt;
+        			}
+	        		cxt.globalCompositeOperation = "destination-out";
+		            cxt.beginPath();
+		            cxt.arc(_x, _y, t.eraserRadius, 0, Math.PI * 2);
+		            cxt.strokeStyle = "rgba(250,250,250,0)";
+		            cxt.fill();
+		            cxt.globalCompositeOperation = "source-over";
+        		};
         	},
 
         	resetBrush: function() {
@@ -514,12 +560,13 @@
 	            t.clickDrag.push(y);
         	},
 
-        	drawPoint: function(sendSocket) {
+        	drawPoint: function(sendSocket, cxt) {
 
         		sendSocket = sendSocket || false;
 
         		var t = this.paint;
-        		t.cxt.fillStyle = "#000000";
+        		var cxt = cxt || t.cxt;
+        		cxt.fillStyle = "#000000";
 
         		if(sendSocket) {
 	        		chatSocket.emit('start draw kaku', {
@@ -534,19 +581,19 @@
         		}
 
 				for(var i=0; i < t.x.length; i++) {   
-	                t.cxt.beginPath();//context.beginPath() , 准备绘制一条路径	                
+	                cxt.beginPath();//context.beginPath() , 准备绘制一条路径	                
 	                if(t.clickDrag[i] && i){//当是拖动而且i!=0时，从上一个点开始画线。
-	                    t.cxt.moveTo(t.x[i-1], t.y[i-1]);//context.moveTo(x, y) , 新开一个路径，并指定路径的起点
+	                    cxt.moveTo(t.x[i-1], t.y[i-1]);//context.moveTo(x, y) , 新开一个路径，并指定路径的起点
 	                }else{
-	                    t.cxt.moveTo(t.x[i] - 1, t.y[i]);
+	                    cxt.moveTo(t.x[i] - 1, t.y[i]);
 	                }
 
-	                t.cxt.lineTo(t.x[i], t.y[i]);//context.lineTo(x, y) , 将当前点与指定的点用一条笔直的路径连接起来
-	                t.cxt.closePath();//context.closePath() , 如果当前路径是打开的则关闭它
-	                t.cxt.stroke();//context.stroke() , 绘制当前路径
+	                cxt.lineTo(t.x[i], t.y[i]);//context.lineTo(x, y) , 将当前点与指定的点用一条笔直的路径连接起来
+	                cxt.closePath();//context.closePath() , 如果当前路径是打开的则关闭它
+	                cxt.stroke();//context.stroke() , 绘制当前路径
 	            }
 
-	            t.cxt.save();
+	            cxt.save();
         	},
 
         	reDraw: function() {
@@ -574,7 +621,7 @@
         	},
 
         	getImgUrl: function() {
-        		window.open(this.paint.canvas.toDataURL());
+        		window.open(this.paint.baseCanvas.toDataURL());
         	},
 
         	enterRoom: function(id) {
@@ -609,6 +656,7 @@
                     _this.room.chatting.reverse();
 
                     _this.initPaint();
+                    _this.initBasePaint();
 
                     // _this.initKakuSocket(id);
 
@@ -655,6 +703,7 @@
 						_this.paint.clickDrag = data.clickDrag;
 						_this.paint.eraserRadius = data.eraserRadius;
 						_this.drawPoint();
+						_this.drawPoint(false, _this.paint.baseCxt);
 					}
 				});
 
@@ -712,7 +761,7 @@
 <style>
 
 	canvas {
-		background: rgb(255, 255, 255);		
+		background: rgba(255, 255, 255, 0);		
 	}
 
 	.main-canvas {
@@ -723,10 +772,15 @@
 		border-left: none;
 		height: 74vh;
 		overflow: scroll;
+		background: rgba(0, 0, 0, 0);
 	}
 
 	.main-canvas canvas {
-		position: absolute;
+		/*position: absolute;*/
+	}
+
+	.main-canvas canvas#base-canvas {
+		display: none;
 	}
 
 	.kaku-map {
