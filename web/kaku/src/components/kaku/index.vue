@@ -53,7 +53,7 @@
 	        		<div class="row" style="border-bottom: 1px solid #d8d8d8;">
 		        		<div class="col-md-9" style="padding:0px;">
 							<div class="main-canvas">
-								<canvas width="740" height="800" id="kakuCanvas"></canvas>
+								<canvas width="740" height="800" id="{{layer.id}}" v-for="layer in paint.layer"></canvas>
 								<div id="cursor" v-bind:style="paintUI.colorPickerCursorPosition" v-show="paint.isColorPicker == true"></div>
 							</div>
 		        		</div>
@@ -73,44 +73,15 @@
 		        			<div class="layer-well">
 		        				<div class="layer-content">
 		        					<ul class="layer-list">
-		        						<li class="active">
+		        						<li @click="toggleLayer(key, layer.id, paint.currentLayer.index)" v-bind:class="{'active': layer.active == true , 'noactivelayer': layer.active == false}" v-for="(key, layer) in paint.layer">
 		        							<input type="text" class="name-input">
-		        							<span class="layer-name">layer name</span>
+		        							<span class="layer-name">{{layer.name}}</span>
 		        							<div class="eye-button">
-		        								 <span class="glyphicon glyphicon-eye-open"></span>
+		        								 <span v-show="layer.visible == true" class="glyphicon glyphicon-eye-open"></span>
+		        								 <span v-show="layer.visible == false" class="glyphicon glyphicon-eye-close"></span>
 		        							</div>
 		        							<div class="opacity-rate">
-		        								<span>100</span>
-		        							</div>
-		        						</li>
-		        						<li>
-		        							<input type="text" class="name-input">
-		        							<span class="layer-name">layer name</span>
-		        							<div class="eye-button">
-		        								 <span class="glyphicon glyphicon-eye-open"></span>
-		        							</div>
-		        							<div class="opacity-rate">
-		        								<span>100</span>
-		        							</div>
-		        						</li>
-		        						<li>
-		        							<input type="text" class="name-input">
-		        							<span class="layer-name">layer name</span>
-		        							<div class="eye-button">
-		        								 <span class="glyphicon glyphicon-eye-open"></span>
-		        							</div>
-		        							<div class="opacity-rate">
-		        								<span>100</span>
-		        							</div>
-		        						</li>
-		        						<li>
-		        							<input type="text" class="name-input">
-		        							<span class="layer-name">layer name</span>
-		        							<div class="eye-button">
-		        								 <span class="glyphicon glyphicon-eye-open"></span>
-		        							</div>
-		        							<div class="opacity-rate">
-		        								<span>100</span>
+		        								<span>{{layer.opacity}}</span>
 		        							</div>
 		        						</li>
 		        					</ul>
@@ -129,8 +100,8 @@
 		        					</div>
 		        				</div>
 		        				<div class="layer-controls">
-									<div class="zoom-button"><span class="glyphicon glyphicon-plus"></span></div>
-									<div class="zoom-button"><span class="glyphicon glyphicon-minus"></span></div>
+									<div @click="addNewLayer()" class="zoom-button"><span class="glyphicon glyphicon-plus"></span></div>
+									<div @click="removeThisLayer()" class="zoom-button"><span class="glyphicon glyphicon-minus"></span></div>
 		        				</div>
 		        			</div>
 		        		</div>   			
@@ -266,7 +237,20 @@
             		touch: ('createTouch' in document),
             		startEvent: this.touch ? 'touchstart' : 'mousedown',
             		moveEvent: this.touch ? 'touchmove' : 'mousemove',
-            		endEvent: this.touch ? 'touchend' : 'mouseup'
+            		endEvent: this.touch ? 'touchend' : 'mouseup',
+
+            		layer: [{
+            			name: '背景',
+            			opacity: 100,
+            			visible: true,
+            			zindex: 1,
+            			id: 'layer-bg',
+            			active: true
+            		}],
+            		currentLayer: {
+            			id: 'layer-bg',
+            			index: 0
+            		}
             	},
 
             	paintUI: {
@@ -312,9 +296,60 @@
         		chatSocket.emit('chat message', chatMessage);
         	},
 
+        	addNewLayer: function() {
+        		var thisPaint = this.paint;
+        		var thisPaintLayer = thisPaint.layer;
+
+        		var currentLayerIndex = thisPaint.currentLayer.index;
+
+        		thisPaintLayer[currentLayerIndex].active = false;
+
+        		var layerId = 'layer-' + util.randomString(8);
+        		var layerCount = thisPaintLayer.length;
+        		var layer = {
+					name: '背景' + layerCount,
+        			opacity: 100,
+        			visible: true,
+        			zindex: 1,
+        			id: layerId,
+        			active: true
+        		};
+        		thisPaintLayer.push(layer);
+
+        		this.toggleLayer(layerCount, layerId, currentLayerIndex);
+        	},
+
+        	removeThisLayer: function() {
+        		var thisPaint = this.paint;
+        		var thisPaintLayer = thisPaint.layer;
+        		var currentLayer = thisPaint.currentLayer;
+
+        		if(currentLayer.index === 0) {
+        			util.messageBox('不允许删除的图层');
+        			return false;
+        		}
+
+        		thisPaintLayer.splice(currentLayer.index);
+
+        		this.toggleLayer(currentLayer.index - 1, thisPaintLayer[currentLayer.index - 1].id);
+        	},
+
+        	toggleLayer: function(activeIndex, activeId, unactiveIndex) {
+        		var thisPaint = this.paint;
+        		var thisPaintLayer = thisPaint.layer;
+        		var currentLayer = thisPaint.currentLayer;
+
+        		currentLayer.index = activeIndex;
+        		currentLayer.id = activeId;
+        		thisPaintLayer[activeIndex].active = true;
+        		if(typeof unactiveIndex != 'undefined') {
+	        		thisPaintLayer[unactiveIndex].active = false;        			
+        		}
+        	},
+
         	initPaint: function() {
         		
-        		this.paint.canvas = document.getElementById('kakuCanvas');
+        		this.paint.canvas = document.getElementById(this.paint.currentLayer.id);
 
         		if(!this.paint.canvas.getContext) {
         			util.messageBox('对不起，您的浏览器暂不支持canvas');
@@ -613,19 +648,7 @@
         	},
 
         	leaveThisRoom: function() {
-        		// var _this = this;
-        		// chatSocket.emit('leave', {
-        		// 	leaver: localStorage._id,
-        		// 	roomId: _this.room._id
-        		// });
-
-        		router.go('/index');
-        		
-    //     		chatSocket.on('leave room succeed', function(msg) {
-				// 	console.log(msg);
-				// });
-
-				// chatSocket = undefined;
+        		router.go('/index');        		
         	},
 
         	viewProfile: function(id) {
