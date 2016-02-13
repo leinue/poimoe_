@@ -393,7 +393,7 @@
 	        			console.log('初始化canvas失败,正在尝试重新初始化...');
 	        		}else {
 	        			clearInterval(canvasInitInterval);
-		        		_this.initPaint(canvas);	        			
+		        		_this.initPaint(canvas, true);	        			
 	        		}
     			}, 100);
         	},
@@ -405,14 +405,12 @@
         		this.paint.baseCxt.lineJoin = 'round';//两条线段连接方式
         		this.paint.baseCxt.lineWidth = this.paint.lineWidth;//线条宽度
         		this.paint.baseCxt.globalCompositeOperation = "source-over";
-
-        		this.paint.baseCxt.fillStyle = 'rgba(255, 255, 255, 100)';
-        		this.paint.baseCxt.fillRect(0,0,this.paint.width,this.paint.height);
         	},
 
-        	initPaint: function(canvas) {
+        	initPaint: function(canvas, nofill) {
         		
         		this.paint.canvas = canvas || document.getElementById(this.paint.currentLayer.id);
+        		nofill = nofill || false;
 
         		if(!this.paint.canvas.getContext) {
         			util.messageBox('对不起，您的浏览器暂不支持canvas');
@@ -426,6 +424,11 @@
 
         		this.paint.width = this.paint.canvas.width;
         		this.paint.height = this.paint.canvas.height;
+
+        		if(!nofill) {
+	        		this.paint.cxt.fillStyle = 'rgba(255, 255, 255, 100)';
+	        		this.paint.cxt.fillRect(0,0,this.paint.width,this.paint.height);
+        		}
 
         		var _this = this;
 
