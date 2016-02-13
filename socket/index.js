@@ -245,6 +245,18 @@ chat.on('connection', function(socket){
 	    chat.to(roomId).emit('get clear layer', msg);		
 	});
 
+	socket.on('draw image', function(msg) {
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		if (roomInfo[roomId].indexOfA(user) === -1) {  
+	      return false;
+	    }
+
+	    chat.to(roomId).emit('get draw image', msg);		
+	});
+
 	var leaveThisRoom = function(msg) {
 
 	}

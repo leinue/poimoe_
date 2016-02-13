@@ -701,12 +701,7 @@
 
 			    reader.readAsDataURL(file.files[0]);  
 			    reader.onload = function(e){
-	        		var image = new Image();
-	        		image.src = this.result;
-	        		image.onload = function() {
-		        		_this.paint.cxt.drawImage(image, 0, 0);
-		        		_this.paint.baseCxt.drawImage(image, 0, 0);
-	        		};
+			    	_this.drawImage(this.result);
 			    };
 
 			    reader.onerror = function(e) {
@@ -716,6 +711,28 @@
 			    reader.onabort = function(e) {
 			    	console.log(e);
 			    };
+        	},
+
+        	drawImage: function(src, noSocket) {
+
+        		noSocket = noSocket || false;
+
+    			var image = new Image();
+        		image.src = src;
+
+        		var _this = this;
+        		image.onload = function() {
+	        		_this.paint.cxt.drawImage(image, 0, 0);
+	        		_this.paint.baseCxt.drawImage(image, 0, 0);
+
+	        		if(!noSocket) {
+	        			chatSocket.emit('draw image', {
+	        				image: src,
+	        				people: localStorage._id
+	        			});	        			
+	        		}
+        		};
+
         	},
 
         	enterRoom: function(id) {
@@ -793,6 +810,8 @@
 
         	initKakuMQSocket: function() {
 
+        		var _this = this;
+
 				chatSocket.on('get kaku path', function(data) {
 
 					if(!(data.people.toString() == localStorage._id)) {
@@ -869,6 +888,16 @@
 
 					if(!(data.people.toString() == localStorage._id)) {
 						_this.clearCanvas(true);
+					}
+				});
+
+				chatSocket.on('get draw image', function(data) {
+
+					console.log(data);
+						_this.drawImage(data.image, true);
+
+					if(!(data.people.toString() == localStorage._id)) {
+						_this.drawImage(data.image, true);
 					}
 				});
 
