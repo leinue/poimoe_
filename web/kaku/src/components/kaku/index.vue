@@ -253,7 +253,8 @@
             			id: 'layer-bg',
             			active: true,
             			editable: false,
-            			marginTop: 0
+            			marginTop: 0,
+            			dataURL: ''
             		}],
 
             		currentLayer: {
@@ -328,7 +329,8 @@
         			id: layerId,
         			active: true,
         			editable: false,
-        			marginTop: '-800px'
+        			marginTop: '-800px',
+        			dataURL: ''
         		};
         		thisPaintLayer.push(layer);
 

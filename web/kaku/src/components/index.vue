@@ -15,7 +15,7 @@
                             <span style="margin-left:15px;" class="glyphicon glyphicon-flag"> {{room.people.length}}/{{room.peopleLimit}}</span>
                             <div class="room-member">
                                 <div class="row">
-                                    <div class="col-md-2" style="padding:0px;height:30px;padding-top:5px;">
+                                    <div class="col-md-2" style="padding: 0px;height:30px;padding-top:5px;">
                                         <span>成员：</span>                                    
                                     </div>
                                     <div class="col-md-10" style="padding:0px;">
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
+                <div @click="loadMoreRooms()" class="col-md-12">
                     <div class="load-more">
                         加载更多
                     </div>
@@ -45,7 +45,9 @@
     export default {
         data() {
             return {
-                kakuRoomList: []
+                kakuRoomList: [],
+
+                currentPage: 1
             }
         },
 
@@ -70,7 +72,7 @@
 
                 var _this = this;
 
-                window.services.KakuService.indexAll(1, 10).then(function(res) {
+                window.services.KakuService.indexAll(this.currentPage, 10).then(function(res) {
 
                     var code = res.data.code;
                     var data = res.data.message;
@@ -80,9 +82,15 @@
                         return false;
                     }
 
-                    _this.kakuRoomList = data;
-
-                    console.log(_this.kakuRoomList);
+                    if(_this.currentPage === 1) {
+                        _this.kakuRoomList = data;                        
+                    }else {
+                        if(data.length === 0) {
+                            util.messageBox('没有更多房间了');
+                        }else {
+                            _this.kakuRoomList.push(data);                            
+                        }
+                    }
 
                 }, function(err) {
                     util.handleError(err);
@@ -91,6 +99,11 @@
 
             viewProfile: function(id) {
                 window.location.href = 'http://poi.poimoe.com/#!/profile/' + id;
+            },
+
+            loadMoreRooms: function() {
+                this.currentPage = this.currentPage + 1;
+                this.loadKakuRoom();
             }
 
         },
