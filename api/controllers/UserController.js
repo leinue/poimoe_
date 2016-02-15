@@ -258,6 +258,10 @@ var index = {
         res.send(util.retMsg(400, err.toString()));
       }
 
+      if(f.length === 0) {
+        res.send(util.retMsg(200, []));        
+      }
+
       util.seekFavourited(req, res, f[0].favourites);
 
       // res.send(util.retMsg(200, f));

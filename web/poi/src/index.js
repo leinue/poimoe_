@@ -81,12 +81,15 @@ new vue({
 });
 
 window.Vue = vue;
+window.timer = 0;
 
 //每次路由之前请求该方法
 router.beforeEach(function () {
 	console.log('before each');
 
 	var prevPath = router._currentRoute.path;
+
+	window.onscroll = null;
 
 	//带有CometService服务的页面，每次离开页面要向服务器请求，以便释放服务器端的CometService资源
 	var cometServicePage = ['/timeline', '/timeline/public', '/timeline/personal'];

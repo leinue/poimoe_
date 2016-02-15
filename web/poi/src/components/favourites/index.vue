@@ -85,7 +85,9 @@
 			return {
 				favouritesList: {},
 
-				myUid: localStorage._id
+				myUid: localStorage._id,
+
+				currentPage: 1
 			}
 
 		},
@@ -106,6 +108,45 @@
             		
             	});
 
+            },
+
+            loadMyFavourites: function(more) {
+
+            	more = more || false;
+
+            	var _this = this;
+
+            	if(more) {
+            		this.currentPage ++;
+            	}
+
+            	window.services.UserService.getFavouritesList(localStorage._id, this.currentPage, 10).then(function(res) {
+
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data);
+						return false;
+					}
+
+					if(!more) {
+						_this.favouritesList = data;
+					}else {
+						console.log(data, data.length);
+						if(data.length === 0) {
+							util.messageBox('没有更多内容了');
+						}else {
+							for (var i = 0; i < data.length; i++) {
+								var curr = data[i];
+								_this.favouritesList.push(curr);
+							};
+						}
+					}
+
+				}, function(err) {
+					util.handleError(err);
+				});
             }
 
 		},
@@ -122,25 +163,23 @@
 
 					clearInterval(servicesInterval);
 
-					window.services.UserService.getFavouritesList(localStorage._id, 1, 10).then(function(res) {
-
-						var code = res.data.code;
-						var data = res.data.message;
-
-						if(code != 200) {
-							util.messageBox(data);
-							return false;
-						}
-
-						_this.$set('favouritesList', data);
-
-					}, function(err) {
-						util.handleError(err);
-					});
+					_this.$get('loadMyFavourites')();
 
 				}
 
 			}, 1);
+
+			var throldHold = 400; //两次scroll事件触发之间最小的事件间隔
+			window.onscroll = function () {
+        		if(timer) {
+        			clearTimeout(timer);
+        		}
+        		timer = setTimeout(function() {
+					if(util.scrollToBottom()) {
+						_this.loadMyFavourites(true);
+					}
+        		}, throldHold);
+    		}
 
 		}
 	}

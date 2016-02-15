@@ -100,7 +100,9 @@
 				myPhoto: 'background-image: url(' + localStorage.photo + ')!important;',
 				username: localStorage.username,
 				publishTime: 'null',
-				myTimeline: {}
+				myTimeline: [],
+
+				currentPage: 1
 			}
 		},
 
@@ -110,21 +112,47 @@
 				router.go('/cg/new');
 			},
 
-			loadMyTimeline: function() {
+			loadMyTimeline: function(more) {
+
+				more = more || false;
 
 				var _this = this;
 
-				services.CGService.getByUid(localStorage._id, 1, 10).then(function(res) {
+				if(more) {
+					this.currentPage += 1;
+				}
+
+    			var pageCnt = this.currentPage === 1 ? 10 : 5;
+
+				services.CGService.getByUid(localStorage._id, this.currentPage, pageCnt).then(function(res) {
 				
 					var data = res.data.message;
 
-					_this.myTimeline = data;
+					if(_this.currentPage === 1) {
+						_this.myTimeline = data;
+					}else {
+						if(data.length === 0) {
+							util.messageBox('没有更多内容了');
+							return false;
+						}
+						for (var i = 0; i < data.length; i++) {
+							var curr = data[i];
+							_this.myTimeline.push(curr);
+						};
 
-					console.log(data);
+						sessionStorage.turnOnscroll = 'false';
+
+						console.log(_this.myTimeline.length);
+
+						// console.log();
+					}
+
+					// console.log(data);
 
 				}, function(err) {
 					util.handleError(err);
 				});
+
 			},
 
 			likeThis: function(tid, favourited, key) {
@@ -155,7 +183,23 @@
 
 		created() {
 
+		},
 
+		ready() {
+
+			var _this = this;
+
+			var throldHold = 400; //两次scroll事件触发之间最小的事件间隔
+			window.onscroll = function () {
+        		if(timer) {
+        			clearTimeout(timer);
+        		}
+        		timer = setTimeout(function() {
+					if(util.scrollToBottom()) {
+						_this.loadMyTimeline(true);
+					}
+        		}, throldHold);
+    		}
 		}
 	};
 

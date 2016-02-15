@@ -107,7 +107,9 @@
 				publishTime: 'null',
 				myTimeline: {},
 				myUid: localStorage._id,
-				indexMesssageCount: 0
+				indexMesssageCount: 0,
+
+				currentPage: 1
 			}
 		},
 
@@ -117,20 +119,39 @@
 				router.go('/cg/new');
 			},
 
-			loadMyTimeline: function() {
+			loadMyTimeline: function(more) {
+
+				more = more || false;
 
 				var _this = this;
 
-				services.UserService.loadTimeline(1, 10).then(function(res) {
+				if(more) {
+					this.currentPage ++;
+				}
+
+				services.UserService.loadTimeline(this.currentPage, 10).then(function(res) {
 
 	        		var code = res.data.code;
 	        		var data = res.data.message;
 
 	        		if(code != 200) {
 	        			util.messageBox(data);
+	        			return false;
 	        		}
 
-					_this.myTimeline = data;
+	        		if(!more) {
+	        			_this.myTimeline = data;
+	        		}else {
+	        			if(data.length === 0) {
+	        				util.messageBox('没有更多内容了');
+	        				return false;
+	        			}else {
+	        				for (var i = 0; i < data.length; i++) {
+	        					var curr = data[i];
+	        					_this.myTimeline.push(curr);
+	        				};
+	        			}
+	        		}
 
 	        	}, function(err) {
 	        		util.handleError(err);

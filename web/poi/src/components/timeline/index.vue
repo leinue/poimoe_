@@ -51,11 +51,15 @@
 				if(scrollTop > 94) {
 					_public.setAttribute('style','top:70px;width:40px;height:40px;line-height:40px;');
 					_personal.setAttribute('style', 'top:120px;width:40px;height:40px;line-height:40px;');
-					_refresh.setAttribute('style', 'top:70px!important;width:40px;height:40px;line-height:40px;');
+					if(_refresh) {
+						_refresh.setAttribute('style', 'top:70px!important;width:40px;height:40px;line-height:40px;');	
+					}
 				}else {
 					_public.setAttribute('style','top:110px;');
 					_personal.setAttribute('style', 'top:180px;');
-					_refresh.setAttribute('style', 'top:110px;');	
+					if(_refresh) {
+						_refresh.setAttribute('style', 'top:110px;');							
+					}
 				}
 
 			}
