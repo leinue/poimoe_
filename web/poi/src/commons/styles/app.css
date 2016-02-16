@@ -367,7 +367,7 @@ button.navbar-toggle.collapsed {
 
 .a-bouncein {
 	z-index: 4000;
-	display: block;
+	display: block!important;
 	opacity: 1!important;
 	animation: bouncein .8s linear 0s 1 alternate;
 	-moz-animation: bouncein .8s linear 0s 1 alternate;

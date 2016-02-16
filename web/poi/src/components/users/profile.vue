@@ -20,17 +20,21 @@
 		    <div class="side-profile-footer">
 			    <div class="col-md-6 col-md-offset-3">
 					<div class="side-profile-footer-content">
-						<div @click="loadUserDrafts()" class="col-xs-4 block">
+						<div @click="loadUserDrafts()" class="col-xs-3 block">
 							<p>{{draftsCount}}</p>
 							<span>投稿</span>
 						</div>
-						<div @click="loadUserFavourites()" class="col-xs-4 block">
+						<div @click="loadUserFavourites()" class="col-xs-3 block">
 							<p>{{favouritesCount}}</p>
 							<span>收藏</span>
 						</div>
-						<div @click="loadUserTransfer()" class="col-xs-4 block">
-							<p>{{deletedCount}}</p>
+						<div @click="loadUserTransfer()" class="col-xs-3 block">
+							<p>{{transferCount}}</p>
 							<span>转发</span>
+						</div>
+						<div class="col-xs-3 block">
+							<p>{{deletedCount}}</p>
+							<span>删除</span>
 						</div>
 					</div>			    	
 			    </div>
@@ -120,6 +124,7 @@
 				draftsCount: 0,
 				favouritesCount: 0,
 				deletedCount: 0,
+				transferCount: 0,
 
 				followingCount: 0,
 				followerCount: 0,
@@ -182,6 +187,7 @@
 							_this.$set('followedByMe', data.followedByMe);
 
 							_this.$get('loadUserDrafts')();
+							_this.$get('loadUserTransferCount')();
 
 						}, function(err) {
 							console.log(err);
@@ -319,6 +325,26 @@
 					}
 
 					_this.userItems = data;
+
+				}, function(err) {
+					util.handleError(err);
+				});				
+			},
+
+			loadUserTransferCount: function() {
+				var _this = this;
+
+				services.CGService.getUserTransferCountByUid(this.uid).then(function(res) {
+
+					var code = res.data.code;
+					var data = res.data.message;
+
+					if(code != 200) {
+						util.messageBox(data, true);
+						return false;
+					}
+
+					_this.transferCount = data;
 
 				}, function(err) {
 					util.handleError(err);

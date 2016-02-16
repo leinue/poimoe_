@@ -692,11 +692,12 @@
 		margin-bottom: 10px;
 	}
 
-	.side-profile-footer-content div.col-xs-4.block {
+	.side-profile-footer-content div.col-xs-3.block {
 		transition: all .2s ease;
+		cursor: pointer!important;
 	}
 
-	.side-profile-footer-content div.col-xs-4.block:hover {
+	.side-profile-footer-content div.col-xs-3.block:hover {
 		color: rgb(0, 149, 219)!important;
 		cursor: pointer;
 		transform: scale(1.1);
@@ -769,6 +770,7 @@
 		z-index: 3000;
 		box-shadow: 0 0 15px rgba(99, 75, 37, 0.1);
 		opacity: 0;
+		display: none;
 	}
 
 	.notification-center ul {

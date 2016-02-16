@@ -45,6 +45,10 @@ module.exports = {
 
 			getUserTransferByUid: function(uid, page, count) {
 				return _this.$http.get(baseUrl + 'themes/query/transfer/' + uid + '/' + page + '/' + count);
+			},
+
+			getUserTransferCountByUid: function(uid) {
+				return _this.$http.get(baseUrl + 'themes/query/transfer/count/' + uid);
 			}
 
 		}
