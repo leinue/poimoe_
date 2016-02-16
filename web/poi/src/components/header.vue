@@ -188,7 +188,9 @@
 
 				boncein: '',
 
-				notificationsList: []
+				notificationsList: [],
+
+				newPhoto: false
 			};
 		},
 
@@ -317,7 +319,7 @@
 						var data = res.data.message;
 
 						if(code != 200) {
-							util.messageBox(data);
+							util.messageBox(data, true);
 							return false;
 						}
 
@@ -334,9 +336,18 @@
 			},
 
 			uploadPhoto: function(cb) {
-				util.syncUploadPic('submit-photo-btn', 'photo-ifr', function(picJSON) {
-					cb(picJSON);
-	        	});
+				if(this.newPhoto) {
+					util.syncUploadPic('submit-photo-btn', 'photo-ifr', function(picJSON) {
+						cb(picJSON);
+		        	});
+				}else {
+					cb({
+						code: 200,
+						message: {
+							preview: localStorage.photo
+						}
+					});
+				}
 			},
 
 			syncProfile: function() {
@@ -445,6 +456,7 @@
 
 	        uploadMyPhoto: function() {
 	        	this.editable = true;
+	        	this.newPhoto = true;
 	        	document.getElementById("imgbtn-source").click();	        		
 	        },
 
