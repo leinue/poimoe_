@@ -97,6 +97,8 @@
 								return false;
 							}
 
+							console.log(data);
+
 							var profile = data.user;
 
 							_this.$set('draftsCount', data.draftCount);
@@ -111,6 +113,7 @@
 							_this.$set('followedByMe', data.followedByMe);
 
 						}, function(err) {
+							console.log(err);
 							util.handleError(err);
 						});
 					}

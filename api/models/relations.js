@@ -32,7 +32,8 @@ module.exports = {
         populate: {
           path: 'posts',
           match: {
-            isDeleted: false
+            isDeleted: false,
+            limit: 3
           }
         },
         select: '_id username photo posts'
@@ -95,10 +96,18 @@ module.exports = {
 
     relationsSchema.statics.followHasId = function(uid, id_find, cb) {
 
-      if(typeof id_find === 'object') {
-        id_find = id_find;
-      }else {
+      if(typeof id_find == 'string') {
         id_find = [id_find];
+      }else {
+        if(typeof id_find.length !== 'undefined') {
+          id_find = id_find;
+        }else {
+          id_find = [id_find];
+        }
+      }
+
+      if(uid === id_find[0]) {
+        cb(false, [], false);
       }
 
       this.findOne({
@@ -129,16 +138,24 @@ module.exports = {
 
     relationsSchema.statics.followerHasId = function(uid, id_find, cb) {
 
-      if(typeof id_find === 'object') {
-        id_find = id_find;
-      }else {
+      if(typeof id_find == 'string') {
         id_find = [id_find];
+      }else {
+        if(typeof id_find.length !== 'undefined') {
+          id_find = id_find;
+        }else {
+          id_find = [id_find];
+        }
+      }
+
+      if(uid === id_find[0]) {
+        cb(false, [], false);
       }
 
       this.findOne({
         user_id: uid,
         follower: {
-          '$in': [id_find]
+          '$in': id_find
         }
       }, function(err, u) {
 

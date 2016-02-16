@@ -120,18 +120,17 @@ module.exports = {
 	},
 
 	handleError: function(err) {
-		this.messageBox('Error status: ' + err.status + '\r\nError text: ' + err.statusText + '\r\nError data:\r\n' + JSON.stringify(err.data), true);
+		err = typeof err == 'object' ? JSON.stringify(err) : err;
+		this.messageBox(err, true);
 	},
 
 	session: function(key, val) {
-
 		if(key == null) {
 			return false;
 		}
 
 		localStorage[key] = val;
 		return localStorage[key];
-
 	},
 
 	pathToSearch: function(name) {

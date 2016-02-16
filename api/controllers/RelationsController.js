@@ -372,7 +372,13 @@ var index = {
 				var folen = followList.length - 1;
 				var forlen = followerList.length - 1;
 
+				folen = folen < 0 ? 0 : folen;
+				forlen = forlen < 0 ? 0 : forlen;
+
 				var result = r[0];
+
+				followerList = followerList.length === 0 ? [{_id: uid}] : followerList;
+				followList = followList.length === 0 ? [{_id: uid}] : followList
 
 				followerList.forEach(function(val, key) {
 
@@ -382,8 +388,10 @@ var index = {
 		                  res.send(util.retMsg(401, err.toString()));
 		                }
 
-		                result.follower[key].followedByMe = followedByMe;
-	                  	result.follower[key].followedMe = true;
+		                if(result.follower.length > 0) {
+			                result.follower[key].followedByMe = followedByMe;
+		                  	result.follower[key].followedMe = true;
+		                }
 
 		                if(key == forlen) {
 
@@ -391,16 +399,18 @@ var index = {
 
 		                		Relations.followHasId(v.id, uid, function(err, r2, followedMe) {
 
-				                  if(err) {
-				                    res.send(util.retMsg(401, err.toString()));
-				                  }
+				                  	if(err) {
+				                    	res.send(util.retMsg(401, err.toString()));
+				                  	}
 
-				                  result.follow[k].followedMe = followedMe;
-				                  result.follow[k].followedByMe = true;
+				                  	if(result.follow.length > 0) {
+					                  	result.follow[k].followedMe = followedMe;
+					                  	result.follow[k].followedByMe = true;
+				                  	}
 
-				                  if(k == forlen) {
-					                  res.send(util.retMsg(200, [result]));
-				                  }
+				                  	if(k == forlen) {
+					                  	res.send(util.retMsg(200, [result]));
+				                  	}
 
 				                });
 
