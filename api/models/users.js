@@ -572,6 +572,39 @@ module.exports = {
       return this.findOneAndUpdate(query, update, options, cb);
     };
 
+    themesSchema.statics.findUserTransfer = function(uid, page, count, cb) {
+      page = page || 1;
+      count = count || 20;
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+        user_id: uid,
+        isDeleted: false,
+        isRepost: true
+      }).populate({
+        path: 'user_id',
+        select: '-accessToken -password'
+      }).populate('tag_list').populate({
+        path: 'reposter',
+        select: '-accessToken -password',
+        match: {
+          isDeleted: false
+        }
+      }).populate({
+        path: 'repost'
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
+    };
+
+    themesSchema.statics.findUserTransferCount = function(uid, cb) {
+      return this.where({
+        user_id: uid,
+        isDeleted: false,
+        isRepost: true
+      }).count(cb);
+    };
+
     var tagsSchema = tagsModel.init(mongoose);
     var relationsSchema = relationsModel.init(mongoose);
     var timelineSchema = timelineModel.init(mongoose);

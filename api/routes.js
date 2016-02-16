@@ -87,6 +87,8 @@ module.exports = {
     server.get('/themes/hot', ctrl.themesCtrl.getHotThemes);
     server.get('/themes/select/:tid', ctrl.themesCtrl.selectOneTheme);
     server.get('/themes/repost/:uid/:tid', ctrl.themesCtrl.repostTheme);
+    server.get('/themes/query/transfer/:uid/:page/:count', ctrl.themesCtrl.getUserTransferByUid);
+    server.get('/themes/query/transfer/count/:uid', ctrl.themesCtrl.getUserTransferCountByUid);
 
     server.get('/replys/select/all/:page/:count', ctrl.replysCtrl.getAll);
     server.get('/replys/select/removed/:page/:count', ctrl.replysCtrl.getAllRemoved);

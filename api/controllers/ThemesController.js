@@ -369,6 +369,48 @@ var index = {
 
 	},
 
+	getUserTransferByUid: function(req, res, next) {
+
+		var uid = req.params.uid;
+		var page = req.params.page || 1;
+		var count = req.params.count || 10;
+
+		if(uid =='' || uid == undefined) {
+			res.send(util.retMsg(401, '用户id不能为空'));
+		}
+
+		var Themes = ctrlInitial.models.Themes();
+
+		Themes.findUserTransfer(uid, page, count, function(err, themes) {
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+	      	util.seekFavourited(req, res, themes);
+		});
+
+	},
+
+	getUserTransferCountByUid: function(req, res, next) {
+
+		var uid = req.params.uid;
+
+		if(uid =='' || uid == undefined) {
+			res.send(util.retMsg(401, '用户id不能为空'));
+		}
+
+		var Themes = ctrlInitial.models.Themes();
+
+		Themes.findUserTransferCount(uid, function(err, count) {
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+			res.send(util.retMsg(200, count));
+
+		});
+	},
+
 	repostTheme: function(req, res, next) {
 
 		var tid = req.params.tid;
@@ -449,7 +491,7 @@ var index = {
 						}, function(err, tl) {
 
 							if(err) {
-								res.send('转发成功，推送到时间线失败');
+								res.send(util.retMsg(200, '转发成功，推送到时间线失败'));
 							}
 
 			                Timeline.updatePersonalMessageQueue({
@@ -463,7 +505,7 @@ var index = {
 			                }, function(err, tl) {
 
 			                  if(err) {
-			                    res.send('转发成功，推送消息给作者失败');
+			                    res.send(util.retMsg(200, '转发成功，推送消息给作者失败'));
 			                  }
 
 			                  res.send(util.retMsg(200, '转发成功'));

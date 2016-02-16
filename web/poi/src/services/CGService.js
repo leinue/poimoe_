@@ -41,6 +41,10 @@ module.exports = {
 
 			repost: function(uid, tid) {
 				return _this.$http.get(baseUrl + 'themes/repost/' + uid + '/' + tid);
+			},
+
+			getUserTransferByUid: function(uid, page, count) {
+				return _this.$http.get(baseUrl + 'themes/query/transfer/' + uid + '/' + page + '/' + count);
 			}
 
 		}

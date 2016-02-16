@@ -9,11 +9,11 @@
 		</div>
 		<div class="col-xs-10" style="padding-bottom:18px;">
 			<div class="timeline-new">
-				<div @click="toNewCGPage()" class="new-timeline">
+				<div @click="drawYourWorld()" class="new-timeline">
 					<span class="glyphicon glyphicon-pencil"></span><span> 描绘你的世界</span>
 				</div>
 				<span class="normal">或</span>
-				<div class="new-timeline">
+				<div @click="toNewCGPage()" class="new-timeline">
 					<span> 分享你的世界</span>					
 				</div>
 			</div>
@@ -176,6 +176,10 @@
 
 			removeThisCG: function(id) {
 				util.removeThisCG(id, function(data) {});
+			},
+
+			drawYourWorld: function() {
+				window.location.href="http://kaku.poimoe.com";
 			}
 		},
 

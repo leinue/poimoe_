@@ -9,7 +9,7 @@
 
 	<div id="alert-danger" role="alert" class="alert alert-danger top displaynone" style="width: 400px;"><button @click="hideThisDangerAlert()" type="button" class="close"><span>×</span></button><span class="glyphicon glyphicon-info-sign"></span>
 		  <strong>服务器提了一个问题</strong>
-		  <p id="danger-tips"></p>
+		  <p id="danger-tips" style="margin-left: 47px;"></p>
 	</div>
 
     <div @click="pathTo('/index')" id="main-page" class="type-circle header-circle active" v-bind:class="currentPage == 'public' ? 'active' : ''">
@@ -669,7 +669,7 @@
 	.side-profile-footer {
 		height: 100%;
 		padding-top: 20px;
-		padding-bottom: 20px;
+		/*padding-bottom: 20px;*/
 	}
 
 	.aside .aside-dialog .aside-body {

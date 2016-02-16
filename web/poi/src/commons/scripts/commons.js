@@ -120,8 +120,17 @@ module.exports = {
 	},
 
 	handleError: function(err) {
-		err = typeof err == 'object' ? JSON.stringify(err) : err;
-		this.messageBox(err, true);
+		var result = '';
+		console.log(err);
+		if(typeof err === 'object') {
+			result += '<p>Status: ' + err.status + '</p>';
+			result += '<p>Status Text: ' + err.statusText + '</p>';
+			result += '<p>Data Code: ' + err.data.code + '</p>';
+			result += '<p>Data Message: ' + err.data.message + '</p>';
+		}else {
+			result = err;
+		}
+		this.messageBox(result, true);
 	},
 
 	session: function(key, val) {
