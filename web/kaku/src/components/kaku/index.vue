@@ -298,6 +298,12 @@
 
         	confirmToSendChattingMessage: function() {
         		var _this = this;
+
+        		if(_this.message == '') {
+        			util.messageBox('请输入发送内容');
+        			return false;
+        		}
+
         		var chatMessage = {
         			sender: localStorage._id,
         			roomId: _this.room._id,

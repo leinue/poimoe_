@@ -3,7 +3,7 @@
 	{{init()}}
 
 	<div id="alert-success" role="alert" class="alert alert-success top displaynone" style="width: 400px;"><button @click="hideThisSuccessAlert()" type="button" class="close"><span>×</span></button><span class="glyphicon glyphicon-ok-sign"></span>
-		  <strong>操作成功{{alert.fadeLeave}}</strong>
+		  <strong>提示信息</strong>
 		  <p id="success-tips"></p>
 	</div>
 

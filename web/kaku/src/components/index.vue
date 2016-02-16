@@ -60,6 +60,9 @@
             toSkecthRoom: function(id, isLocked) {
                 if(isLocked) {
                     var pw = prompt('请输入房间密码');
+                    if(!pw) {
+                        return false;
+                    }
                     sessionStorage[id] = pw;
                     router.go('/sketch/' + id);
                 }else {

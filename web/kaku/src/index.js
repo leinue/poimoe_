@@ -8,8 +8,28 @@ var services = require('./services/index.js');
 var io = require("../node_modules/socket.io-client/lib/index.js");//init socket.io client
 var util = require('./commons/scripts/commons.js');
 
-// document.domain = 'poimoe.com';
+if(document.domain === 'localhost') {
+	window.debug = true;
+}else {
+	document.domain = 'poimoe.com';
+	window.debug = false;
+}
+
 var userData = util.getCookie('userData');
+
+if(userData) {
+	localStorage.userData = userData;
+	userData = JSON.parse(userData);
+	localStorage._id = userData._id;
+	localStorage.username = userData.username;
+	localStorage.accessToken = userData.accessToken;
+	localStorage.photo = userData.photo;
+	localStorage.login = true;
+}else {
+	if(!window.debug) {
+		window.location.href = "http://poi.poimoe.com/login";
+	}
+}
 
 window.io = io;
 

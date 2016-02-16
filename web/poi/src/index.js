@@ -6,7 +6,12 @@ var vueStrap = require('../node_modules/vue-strap/dist/vue-strap.min.js');
 var config = require('./config.js');
 var services = require('./services/index.js');
 
-// document.domain = 'poimoe.com';
+if(document.domain == 'localhost') {
+	window.debug = true;
+}else {
+	document.domain = 'poimoe.com';
+	window.debug = false;
+}
 
 //初始化用户登录状态
 localStorage.login = typeof localStorage.login == 'undefined' ? 'false' : localStorage.login;

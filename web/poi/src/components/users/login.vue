@@ -112,20 +112,17 @@
 				services.UserService.login(this.email, this.password).then(function(res) {
 
 					var data = res.data;
-					util.messageBox(data.message);
 
 					if(data.code === 200) {
-
+						util.messageBox(data.message);
 						var real = data.data;
-						
 						util.login(real);
-
 						router.go('/index');
-						
+
+						window.location.reload();
 					}else {
-
 						localStorage.login = 'false';
-
+						util.messageBox(data.message, true);
 					}
 
 				}, function(err) {
