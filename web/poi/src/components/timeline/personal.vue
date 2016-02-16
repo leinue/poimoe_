@@ -63,7 +63,7 @@
 					<div class="timeline-content">
 						<span>{{item.content || item.repost.content}}</span>
 						<div class="timeline-tags">
-							<span v-for="tag in item.tag_list">#{{tag.name}}</span>
+							<span @click="pathToSearch(tag.name)" v-for="tag in item.tag_list">#{{tag.name}}</span>
 						</div>
 					</div>
 					<div class="timeline-real-footer">
@@ -178,6 +178,10 @@
 				util.removeThisCG(id, function(data) {});
 			},
 
+			pathToSearch: function(name) {
+				util.pathToSearch(name);
+			},
+
 			startIndexTimelineComet: function() {
 				var _this = this;
 
@@ -216,11 +220,18 @@
 
 		ready() {
 
-			// var _this = this;
-
-			// loadEnd(function() {
-			// 	_this.$get('loadMyTimeline')();
-			// });
+			var _this = this;
+			var throldHold = 400; //两次scroll事件触发之间最小的事件间隔
+			window.onscroll = function () {
+        		if(timer) {
+        			clearTimeout(timer);
+        		}
+        		timer = setTimeout(function() {
+					if(util.scrollToBottom()) {
+						_this.loadMyTimeline(true);
+					}
+        		}, throldHold);
+    		}
 
 		}
 	};

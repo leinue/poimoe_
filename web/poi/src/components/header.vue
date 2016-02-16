@@ -2,11 +2,21 @@
 
 	{{init()}}
 
-    <div @click="pathTo('public')" id="main-page" class="type-circle header-circle active" v-bind:class="currentPage == 'public' ? 'active' : ''">
+	<div id="alert-success" role="alert" class="alert alert-success top displaynone" style="width: 400px;"><button @click="hideThisSuccessAlert()" type="button" class="close"><span>×</span></button><span class="glyphicon glyphicon-ok-sign"></span>
+		  <strong>操作成功{{alert.fadeLeave}}</strong>
+		  <p id="success-tips"></p>
+	</div>
+
+	<div id="alert-danger" role="alert" class="alert alert-danger top displaynone" style="width: 400px;"><button @click="hideThisDangerAlert()" type="button" class="close"><span>×</span></button><span class="glyphicon glyphicon-info-sign"></span>
+		  <strong>服务器提了一个问题</strong>
+		  <p id="danger-tips"></p>
+	</div>
+
+    <div @click="pathTo('/index')" id="main-page" class="type-circle header-circle active" v-bind:class="currentPage == 'public' ? 'active' : ''">
         <span class="glyphicon glyphicon-home"></span>
     </div>
 
-    <div @click="pathTo('personal')" id="search-button" class="type-circle header-circle">
+    <div @click="pathTo('/search')" id="search-button" class="type-circle header-circle">
         <span class="glyphicon glyphicon-search"></span>
     </div>
 
@@ -186,6 +196,26 @@
 			init: function() {
 				this.isLogin = localStorage.login;
 				this.startNotificationComet();
+			},
+
+			hideThisDangerAlert: function() {
+				var alertDanger = document.getElementById('alert-danger');
+				var cls = alertDanger.getAttribute('class');
+				var cls = cls.split(' ');
+				var i = cls.indexOf('fade-enter');
+				cls.splice(i, 1);
+				cls.push('fade-leave');
+				alertDanger.setAttribute('class', cls.join(' '));
+			},
+
+			hideThisSuccessAlert: function() {
+				var alertSuccess = document.getElementById('alert-success');
+				var cls = alertSuccess.getAttribute('class');
+				var cls = cls.split(' ');
+				var i = cls.indexOf('fade-enter');
+				cls.splice(i, 1);
+				cls.push('fade-leave');
+				alertSuccess.setAttribute('class', cls.join(' '));
 			},
 
 			pathTo: function(path){

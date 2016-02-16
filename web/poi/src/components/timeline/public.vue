@@ -63,7 +63,7 @@
 					<div class="timeline-content">
 						<span>{{item.content}}</span>
 						<div class="timeline-tags">
-							<span v-for="tag in item.tag_list">#{{tag.name}}</span>
+							<span  @click="pathToSearch(tag.name)" v-for="tag in item.tag_list">#{{tag.name}}</span>
 						</div>
 					</div>
 					<div class="timeline-real-footer">
@@ -105,7 +105,9 @@
 
 				myUid: localStorage._id,
 
-				publicMessageCount: 0
+				publicMessageCount: 0,
+
+				currentPage: 1
 			}
 		},
 		components: {
@@ -117,11 +119,17 @@
 				router.go('/cg/new');
 			},
 
-			loadPublicTimeline: function() {
+			loadPublicTimeline: function(more) {
 
 				var _this = this;
 
-				services.CGService.getAll(1, 10).then(function(res) {
+				more = more || false;
+
+				if(more) {
+					this.currentPage ++;
+				}
+
+				services.CGService.getAll(this.currentPage, 10).then(function(res) {
 				
 					var data = res.data.message;
 					var code = res.data.code;
@@ -131,12 +139,23 @@
 						return false;
 					}
 
-					_this.publicTimeline = data;
+					if(!more) {
+						_this.publicTimeline = data;
+					} else {
+						for (var i = 0; i < data.length; i++) {
+							var curr = data[i];
+							_this.publicTimeline.push(curr);
+						};
+					}
 
 				}, function(err) {
 					util.handleError(err);
 				});
 
+			},
+
+			pathToSearch: function(name) {
+				util.pathToSearch(name);
 			},
 
 			likeThis: function(tid, favourited, key) {
@@ -158,6 +177,23 @@
 			removeThisCG: function(id) {
 				util.removeThisCG(id, function(data) {});
 			}
+		},
+
+		ready() {
+
+			var _this = this;
+			var throldHold = 400; //两次scroll事件触发之间最小的事件间隔
+			window.onscroll = function () {
+        		if(timer) {
+        			clearTimeout(timer);
+        		}
+        		timer = setTimeout(function() {
+					if(util.scrollToBottom()) {
+						_this.loadPublicTimeline(true);
+					}
+        		}, throldHold);
+    		}
+
 		}
 	};
 

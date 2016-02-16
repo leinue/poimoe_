@@ -126,6 +126,8 @@
 
 					localStorage.draftsCount = parseInt(localStorage.draftsCount) + 1;
 
+					router.go('/works');
+
 				}, function(err) {
 					util.handleError(err);
 				});

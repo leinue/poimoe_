@@ -93,7 +93,7 @@
 							var data = res.data.message;
 
 							if(code != 200) {
-								util.messageBox(data);
+								util.handleError(data);
 								return false;
 							}
 
