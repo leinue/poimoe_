@@ -117,7 +117,7 @@
 				var cls = cls.split(' ');
 				var i = cls.indexOf('fade-enter');
 				cls.splice(i, 1);
-				cls.push('fade-leave');
+				cls.push('fade-leave');//123
 				alertDanger.setAttribute('class', cls.join(' '));
 			},
 
