@@ -198,7 +198,9 @@
 		methods: {
 			init: function() {
 				this.isLogin = localStorage.login;
-				this.startNotificationComet();
+				if(this.isLogin == 'true') {
+					this.startNotificationComet();					
+				}
 			},
 
 			hideThisDangerAlert: function() {
