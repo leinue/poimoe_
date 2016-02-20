@@ -150,6 +150,19 @@ button.navbar-toggle.collapsed {
 	padding-bottom: 15px;
 }
 
+.search-area .form-control {
+	height: 40px;
+	border-radius: 4px;
+	border: 1px solid rgb(0, 147, 222);
+}
+
+.search-area .input-group-btn button {
+	height: 40px;
+	background: rgb(0, 147, 222);
+	border: none;
+	color: rgb(255, 255, 255);
+}
+
 .input-group .form-control:first-child {
 	box-shadow: none;
 }

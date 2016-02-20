@@ -88,6 +88,7 @@
   		<div class="side-profile">
   			<span title="修改资料" v-show="!editable" class="glyphicon glyphicon-pencil" @click="modifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
   			<span title="同步资料" class="glyphicon glyphicon-refresh" @click="syncProfile()" style="padding-left:15px;" id="modify-pencil"></span>
+  			<span title="详细资料" class="glyphicon glyphicon-home" @click="toDetailProfile()" id="modify-pencil" style="padding-left:15px;"></span>
   		  	<span title="确认修改" v-show="editable" class="glyphicon glyphicon-ok" @click="confirmToModifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
 		  	<span title="取消修改" v-show="editable" class="glyphicon glyphicon-remove" @click="cancelModifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
 			<form style="display:none" enctype="multipart/form-data" method="post" target="pupload" action="http://image.poimoe.com/upload.php?uid=1&cors=true&corsurl=http://localhost:8080/upload.html" > 
@@ -428,6 +429,10 @@
 				}, function(err) {
 					util.handleError(err);
 				});
+			},
+
+			toDetailProfile: function() {
+				this.pathToAndCloseThis('/profile/' + localStorage._id);
 			},
 
 			showMyProfile: function() {
