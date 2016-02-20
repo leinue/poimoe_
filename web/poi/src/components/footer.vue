@@ -1,6 +1,9 @@
 <template>
 
 	<div>
+		<di v-show="showScroolToTop == true" transition="footer" @click="scrollToTop()" class="scroll-top">
+			<a><span class="glyphicon glyphicon-eject"></span></a>
+		</div>
 		<div  @click="showFooter" class="footer">
 			<span class="glyphicon glyphicon-exclamation-sign"></span>
 		</div>
@@ -15,13 +18,17 @@
 </template>
 
 <script>
+
+	var util = require('../commons/scripts/commons.js');
 	
 	export default {
 		data() {
 			return {
 				footer: {
 					show: false
-				}
+				},
+
+				showScroolToTop: false
 			};
 		},
 
@@ -29,9 +36,30 @@
 			showFooter: function(){
 				this.footer.show = true;
 			},
+
 			hideFooter: function() {
 				this.footer.show = false;
+			},
+
+			scrollToTop: function() {
+				util.scrollToTop();
 			}
+		},
+
+		ready() {
+
+			var _this = this;
+
+			var currentRoute = router._currentRoute.path;
+
+			setInterval(function() {
+				if(util.getScrollTop() > 50 && currentRoute != '/index') {
+					_this.$set('showScroolToTop', true);
+				}else {
+					_this.$set('showScroolToTop', false);
+				}
+			}, 500);
+
 		}
 	};
 
@@ -104,6 +132,34 @@
 	.realfooter-enter, .realfooter-leave {
 		padding: 0 10px;
 		opacity: 0;
+	}
+
+	.scroll-top {
+		position: fixed;
+		bottom: 14px;
+		right: 220px;
+		z-index: 1000;
+	}
+
+	.scroll-top a {
+		display: block;
+		width: 60px;
+		height: 60px;
+		border: 1px solid #DDDFE1;
+		text-align: center;
+		line-height: 60px;
+		font-size: 30px;
+		margin-top: -1px;
+		color: rgb(255, 255, 255);
+		background-color: rgb(220, 215, 215);
+		border-radius: 4px;
+		transition: all 0.5s ease 0s;
+		cursor: pointer;
+	}
+
+	.scroll-top a:hover {
+		background: rgb(55, 62, 82);
+		transform: scale(1.2);
 	}
 
 </style>
