@@ -399,6 +399,40 @@ var index = {
 
 		});
 
+	},
+
+	savePainting: function(req, res, next) {
+		var room = req.params.id;
+		var paint = req.params.paint;
+		var paintUI = req.params.paintUI;
+
+		if(room == undefined || room == '') {
+			res.send(util.retMsg(401, '缺少参数：房间id'));
+		}
+
+		if(paint == undefined || paint == '') {
+			res.send(util.retMsg(401, '缺少参数：绘画状态'));
+		}
+
+		if(paintUI == undefined || paintUI == '') {
+			res.send(util.retMsg(401, '缺少参数：房间UI状态'));
+		}
+
+		var kaku = ctrlInitial.models.Kaku();
+
+		Kaku.savePainting({
+			room: room,
+			paint: paint,
+			paintUI: paintUI
+		}, function(err, newPaintint) {
+
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+			res.send(util.retMsg(200, '保存成功'));
+
+		});
 	}
 
 };

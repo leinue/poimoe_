@@ -43,6 +43,14 @@ module.exports = {
           default: Date.now
         }
       }],
+      paint: {
+        type: Object,
+        default: {}
+      },
+      paintUI: {
+        type: Object,
+        default: {}
+      },
       isDeleted: {
         type: Boolean,
         default: false
@@ -305,6 +313,20 @@ module.exports = {
           select: '_id username photo'
         }
       }).exec(cb);
+
+    };
+
+    kakuSchema.statics.savePainting =  function(data, cb) {
+
+      return this.findOneAndUpdate({
+        _id: data.room,
+        isDeleted: false
+      }, {
+        paint: data.paint,
+        paintUI: data.paintUI
+      }, {
+        new: true
+      }, cb);
 
     };
 

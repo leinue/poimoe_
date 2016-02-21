@@ -72,7 +72,7 @@ chat.on('connection', function(socket){
 						roomInfo[roomId] = [];
 					}
 
-					console.log(body);
+					// console.log(body);
 
 					var data = body.message[0] || body.message;
 
@@ -257,9 +257,18 @@ chat.on('connection', function(socket){
 	    chat.to(roomId).emit('get draw image', msg);		
 	});
 
-	var leaveThisRoom = function(msg) {
+	socket.on('save image', function(msg) {
 
-	}
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		if (roomInfo[roomId].indexOfA(user) === -1) {  
+	      return false;
+	    }
+
+	    chat.to(roomId).emit('get save image', msg);			
+	});
 
 	socket.on('leave', function(msg) {
 		if(!roomInfo[roomId]) {
@@ -302,7 +311,7 @@ chat.on('connection', function(socket){
 		);	});
 
 	socket.on('disconnect', function (msg) {
-		leaveThisRoom(msg);
+		// leaveThisRoom(msg);
 	});
 
 });

@@ -8,8 +8,6 @@ var models = require('./models/index');
 //连接mongodb
 mongoose.connect('mongodb://' + dbconf.mongo.host + '/' + dbconf.mongo.database);
 
-console.log(mongoose);
-
 var db = mongoose.connection;
 var Schema = mongoose.Schema;
 

@@ -131,13 +131,15 @@
 					return false;
 				}
 
+				var _this = this;
+
 				services.UserService.register(this.email, this.password).then(function(res) {
 
 					var data = res.data;
 
 					if(data.code === 200) {
-						util.messageBox(data.message);
-						this.toLogin();
+						util.messageBox(data.message + '，请登录');
+						_this.toLogin();
 						return false;
 					}
 

@@ -6,6 +6,8 @@
             <span class="glyphicon glyphicon-arrow-left"></span>
         </div>
 
+        <button @click="sync">test</button>
+
         <div class="row a-bounceinT">
 
         	<div class="col-md-12" style="padding:0px;border-top:1px solid rgb(217, 217, 217)">
@@ -813,8 +815,56 @@
 				});
 
 				this.initKakuMQSocket();
+				this.initKakuInstantSavingThread();
 
         	},
+
+        	sync: function() {
+				var _this = this;
+
+				var cxtList = ['baseCanvas', 'baseCxt', 'cxt', 'canvas'];
+
+				var tmpPaint = util.cloneObject(_this.paint, cxtList);
+				var tmpPaintUI = util.cloneObject(_this.paintUI);
+
+				chatSocket.emit('save image', {
+					people: localStorage._id,
+					paint: tmpPaint,
+					paintUI: tmpPaintUI
+				});
+        	},
+
+			initKakuInstantSavingThread: function() {
+
+				var _this = this;
+
+				setInterval(function() {
+
+					// chatSocket.emit('save image', {
+					// 	people: localStorage._id,
+					// 	paint: _this.paint,
+					// 	paintUI: _this.paintUI
+					// });
+
+				// console.log({
+				// 		people: localStorage._id,
+				// 		paint: _this.paint,
+				// 		paintUI: _this.paintUI
+				// 	});
+
+				}, 5000);
+
+				chatSocket.on('get save image', function(data) {
+
+					console.log(data);
+
+					if(!(data.people.toString() == localStorage._id)) {
+
+					}
+
+				});
+
+			},
 
         	initKakuMQSocket: function() {
 

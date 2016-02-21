@@ -113,8 +113,10 @@ router.beforeEach(function () {
 
 	var prevPath = router._currentRoute.path;
 
+	console.log(prevPath);
+
 	if(prevPath == undefined) {
-		return;
+		return false;
 	}
 
 	if(prevPath.indexOf('sketch') != -1) {

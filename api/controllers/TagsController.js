@@ -183,6 +183,10 @@ var index = {
 				res.send(util.retMsg(401, err.toString()));
 			}
 
+			if(tags.length === 0) {
+				res.send(util.retMsg(200, tags));
+			}
+
 			var Themes = ctrlInitial.models.Themes();
 
 			Themes.getHotThemesByTagId(tags, function(err, themes) {

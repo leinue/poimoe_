@@ -123,10 +123,12 @@ module.exports = {
 		var result = '';
 		console.log(err);
 		if(typeof err === 'object') {
+			var requestUrl = err.request.url || '';
 			result += '<p>Status: ' + err.status + '</p>';
 			result += '<p>Status Text: ' + err.statusText + '</p>';
 			result += '<p>Data Code: ' + err.data.code + '</p>';
 			result += '<p>Data Message: ' + err.data.message + '</p>';
+			result += '<p>Request URL: ' + requestUrl + '</p>';
 		}else {
 			result = err;
 		}

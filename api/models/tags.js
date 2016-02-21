@@ -166,7 +166,7 @@ module.exports = {
     };
 
     tagsSchema.statics.getHotTags = function(cb) {
-      this.find({
+      return this.find({
         isDeleted: false
       }).sort({
         citeCount: -1

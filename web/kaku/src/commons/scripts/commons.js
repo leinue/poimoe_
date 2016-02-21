@@ -270,6 +270,26 @@ module.exports = {
 	　　　　pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
 	　　}
 	　　return pwd;
+	},
+
+	cloneObject: function(original, ignoreList) {
+
+		ignoreList = ignoreList || false;
+
+		var tmp = {};
+
+		for(var key in original) {
+			if(ignoreList) {
+				if(ignoreList.indexOf(key) === -1) {
+					tmp[key] = original[key];
+				}
+			}else {
+				tmp[key] = original[key];
+			}
+		}
+
+		return tmp;
+
 	}
 	
 };
