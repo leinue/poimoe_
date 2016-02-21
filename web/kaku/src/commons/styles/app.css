@@ -24,12 +24,11 @@ ul {
 
 .fade-leave {
 	animation: bouncein .6s linear 0s 1 alternate;
-	display: none;
 }
 
 .fade-enter {
-	animation: bounceinT 1.2s linear 0s 1 alternate;
 	opacity: 1;
+	animation: bounceinT 1.2s linear 0s 1 alternate;
 }
 
 .alert {

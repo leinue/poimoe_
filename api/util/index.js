@@ -149,7 +149,13 @@ var util = {
   seekFavourited: function(req, res, themes) {
     themes = this.getIsFavourited(req, res, themes);
     res.send(util.retMsg(200, themes));
+  },
+
+  formatDate: function(strTime) {
+    var date = new Date(strTime);
+    return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
   }
+
 
 };
 

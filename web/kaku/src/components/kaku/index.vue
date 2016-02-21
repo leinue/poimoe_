@@ -854,14 +854,8 @@
 				}, 5000);
 
 				chatSocket.on('get save image succeed', function(data) {
-
 					console.log(data);
 					util.messageBox(data.message);
-
-					if(!(data.people.toString() == localStorage._id)) {
-
-					}
-
 				});
 
 				chatSocket.on('get save image failed', function(data) {

@@ -204,23 +204,11 @@
 			},
 
 			hideThisDangerAlert: function() {
-				var alertDanger = document.getElementById('alert-danger');
-				var cls = alertDanger.getAttribute('class');
-				var cls = cls.split(' ');
-				var i = cls.indexOf('fade-enter');
-				cls.splice(i, 1);
-				cls.push('fade-leave');
-				alertDanger.setAttribute('class', cls.join(' '));
+				util.hideMessageBox('alert-danger');
 			},
 
 			hideThisSuccessAlert: function() {
-				var alertSuccess = document.getElementById('alert-success');
-				var cls = alertSuccess.getAttribute('class');
-				var cls = cls.split(' ');
-				var i = cls.indexOf('fade-enter');
-				cls.splice(i, 1);
-				cls.push('fade-leave');
-				alertSuccess.setAttribute('class', cls.join(' '));
+				util.hideMessageBox('alert-success');
 			},
 
 			pathTo: function(path){

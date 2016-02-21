@@ -51,6 +51,10 @@ module.exports = {
         type: Object,
         default: {}
       },
+      paintUpdatedAt: {
+        type: Date,
+        default: Date.now
+      },
       isDeleted: {
         type: Boolean,
         default: false
@@ -316,14 +320,15 @@ module.exports = {
 
     };
 
-    kakuSchema.statics.savePainting =  function(data, cb) {
+    kakuSchema.statics.savePainting = function(data, cb) {
 
       return this.findOneAndUpdate({
         _id: data.room,
         isDeleted: false
       }, {
         paint: data.paint,
-        paintUI: data.paintUI
+        paintUI: data.paintUI,
+        paintUpdatedAt: Date.now()
       }, {
         new: true
       }, cb);

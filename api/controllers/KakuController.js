@@ -410,27 +410,27 @@ var index = {
 			res.send(util.retMsg(401, '缺少参数：房间id'));
 		}
 
-		if(paint == undefined || paint == '') {
+		if(paint == undefined) {
 			res.send(util.retMsg(401, '缺少参数：绘画状态'));
 		}
 
-		if(paintUI == undefined || paintUI == '') {
+		if(paintUI == undefined) {
 			res.send(util.retMsg(401, '缺少参数：房间UI状态'));
 		}
 
-		var kaku = ctrlInitial.models.Kaku();
+		var Kaku = ctrlInitial.models.Kaku();
 
 		Kaku.savePainting({
 			room: room,
 			paint: paint,
 			paintUI: paintUI
-		}, function(err, newPaintint) {
+		}, function(err, newPainting) {
 
 			if(err) {
 				res.send(util.retMsg(401, err.toString()));
 			}
 
-			res.send(util.retMsg(200, '保存成功'));
+			res.send(util.retMsg(200, util.formatDate(newPainting.paintUpdatedAt) + ' 保存成功'));
 
 		});
 	}

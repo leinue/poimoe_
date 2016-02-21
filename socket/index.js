@@ -278,6 +278,7 @@ chat.on('connection', function(socket){
 	    function(error, response, body){
 	        if(!error && response.statusCode == 200){
 	        	body = JSON.parse(body);
+	        	body.people = msg.people
 			    chat.to(roomId).emit('get save image succeed', body);
 	        }else{
         	    socket.emit('get save image failed', {

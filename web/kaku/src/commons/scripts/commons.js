@@ -99,7 +99,10 @@ module.exports = {
 		return true;
 	},
 
-	messageBox: function(message, danger) {
+	messageBox: function(message, danger, right) {
+
+		var _this = this;
+
 		var boxId = danger ? 'alert-danger' : 'alert-success';
 		var tipsId = danger ? 'danger-tips' : 'success-tips';
 
@@ -113,6 +116,20 @@ module.exports = {
 		alertSuccess.setAttribute('class', cls);
 		var tips = document.getElementById(tipsId);
 		tips.innerHTML = message;
+
+		setTimeout(function() {
+			_this.hideMessageBox(boxId);
+		}, 3000);
+	},
+
+	hideMessageBox: function(id) {
+		var alertSuccess = document.getElementById(id);
+		var cls = alertSuccess.getAttribute('class');
+		var cls = cls.split(' ');
+		var i = cls.indexOf('fade-enter');
+		cls.splice(i, 1);
+		cls.push('fade-leave');
+		alertSuccess.setAttribute('class', cls.join(' '));
 	},
 
 	confirm: function(content) {
@@ -323,6 +340,11 @@ module.exports = {
 
 		return tmp;
 
+	},
+
+	formatDate: function(strTime) {
+	    var date = new Date(strTime);
+	    return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
 	}
 	
 };

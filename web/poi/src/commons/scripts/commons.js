@@ -115,6 +115,16 @@ module.exports = {
 		tips.innerHTML = message;
 	},
 
+	hideMessageBox: function(id) {
+		var alertSuccess = document.getElementById(id);
+		var cls = alertSuccess.getAttribute('class');
+		var cls = cls.split(' ');
+		var i = cls.indexOf('fade-enter');
+		cls.splice(i, 1);
+		cls.push('fade-leave');
+		alertSuccess.setAttribute('class', cls.join(' '));
+	},
+
 	confirm: function(content) {
 		return confirm(content);
 	},
