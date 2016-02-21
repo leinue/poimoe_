@@ -4,11 +4,12 @@
         <div class="row a-bounceinT">
             <div class="col-md-8 col-md-offset-2">
                 <div class="col-md-12">
-                    <div class="col-md-6" v-for="room in kakuRoomList">
+                    <div class="col-md-6" v-for="(key, room) in kakuRoomList">
                         <div class="room-rect">
                             <h2 style="cursor:pointer" @click="toSkecthRoom(room._id, room.isLocked)">{{room.name | nullRoomNameFilter}}</h2>
-                            <div class="room-enter" @click="toSkecthRoom(room._id)">
+                            <div class="room-enter">
                                 <span v-show="room.isLocked == false" class="glyphicon glyphicon-hand-up"></span>
+                                <span @click="removeThisRoom(room._id, key)" v-show="room.creator._id == myId" class="glyphicon glyphicon-trash"></span>
                                 <span v-show="room.isLocked == true" class="glyphicon glyphicon-lock"></span>
                             </div>
                             <span class="glyphicon glyphicon-user"> {{room.creator.username}}</span>
@@ -16,11 +17,11 @@
                             <div class="room-member">
                                 <div class="row">
                                     <div class="col-md-2" style="padding: 0px;height:30px;padding-top:5px;">
-                                        <span>成员：</span>                                    
+                                        <span>成员：</span>                    
                                     </div>
                                     <div class="col-md-10" style="padding:0px;">
                                         <div @click="viewProfile(people._id)" class="room-photo" v-for="people in room.people" style="background-image: url({{people.photo}});"></div>                              
-                                        <div class="room-photo more" v-show="room.people.length > 5">7+</div>
+                                        <div class="room-photo more" v-show="room.people.length > 5">{{room.people.length - 5}}+</div>
                                     </div>
                                 </div>
                             </div>
@@ -47,7 +48,9 @@
             return {
                 kakuRoomList: [],
 
-                currentPage: 1
+                currentPage: 1,
+
+                myId: localStorage._id
             }
         },
 
@@ -72,7 +75,6 @@
             },
 
             loadKakuRoom: function() {
-
                 var _this = this;
 
                 window.services.KakuService.indexAll(this.currentPage, 10).then(function(res) {
@@ -107,6 +109,35 @@
             loadMoreRooms: function() {
                 this.currentPage = this.currentPage + 1;
                 this.loadKakuRoom();
+            },
+
+            removeThisRoom: function(id, index) {
+                var _this = this;
+
+                var confirm_ = confirm('你确定要删除此房间吗？');
+                if(!confirm_) {
+                    return false;
+                }
+
+                window.services.KakuService.remove({
+                    roomId: id
+                }).then(function(res) {
+
+                    var code = res.data.code;
+                    var data = res.data.message;
+
+                    if(code != 200) {
+                        util.messageBox(data, true);
+                        return false;
+                    }
+
+                    util.messageBox(data);
+
+                    _this.kakuRoomList.splice(index, 1);
+
+                }, function(err) {
+                    util.handleError(err);
+                });
             }
 
         },

@@ -89,7 +89,7 @@ module.exports = {
           path: 'sender',
           select: '_id username photo'
         }
-      }).exec(cb);
+      }).select('-paint -paintUI -paintUpdatedAt').exec(cb);
     };
 
     kakuSchema.statics.findPeopleByRoomId = function(id, cb) {

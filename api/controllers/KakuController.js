@@ -264,7 +264,7 @@ var index = {
 
 		var Kaku = ctrlInitial.models.Kaku();
 
-		kaku.abort(roomId, function(err, newRoom) {
+		Kaku.abort(roomId, function(err, newRoom) {
    	 		if(err) {
    	 			res.send(util.retMsg(401, err.toString()));
    	 		}

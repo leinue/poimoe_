@@ -832,7 +832,7 @@
 	                    	console.log(currentLayer.id);
 	                    	var tmpCxt = document.getElementById(currentLayer.id).getContext('2d');
 	                    	if(currentLayer.dataURL != '') {
-		                    	_this.drawImageOnCanvas(currentLayer.dataURL, tmpCxt);	                    		
+		                    	_this.drawImageOnCanvas(currentLayer.dataURL, tmpCxt);                    		
 	                    	}
 	                    };
 
@@ -891,7 +891,9 @@
 				for (var i = 0; i < this.paint.layer.length; i++) {
 					var currentLayer = this.paint.layer[i];
 					tmpCanvas = document.getElementById(currentLayer.id);
-					currentLayer.dataURL = tmpCanvas.toDataURL();
+					if(tmpCanvas != null) {
+						currentLayer.dataURL = tmpCanvas.toDataURL();
+					}
 				};
 
 				var tmpPaint = util.cloneObject(_this.paint, cxtList);
@@ -916,7 +918,7 @@
 
 				setInterval(function() {
 					_this.syncPaintingStatus();
-				}, 5000);
+				}, 10000);
 
 				chatSocket.on('get save image succeed', function(data) {
 					console.log(data);
@@ -1092,7 +1094,7 @@
 	}
 
 	.main-canvas canvas {
-		/*position: absolute;*/
+		position: relative;
 	}
 
 	.main-canvas canvas#base-canvas {
