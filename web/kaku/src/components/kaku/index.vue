@@ -265,7 +265,8 @@
             			index: 0
             		},
 
-            		picData: ''
+            		picData: '',
+            		dataURL: ''
             	},
 
             	paintUI: {
@@ -746,6 +747,17 @@
 
         	},
 
+        	drawImageOnCanvas: function(src, canvas, cb) {
+    			var image = new Image();
+        		image.src = src;
+        		image.onload = function() {
+	        		canvas.drawImage(image, 0, 0);
+	        		if(cb) {
+	        			cb(this);
+	        		}
+        		};        		
+        	},
+
         	enterRoom: function(id) {
 
         		var _this = this;
@@ -809,6 +821,21 @@
                     setTimeout(function() {
 	                    _this.initPaint();
 	                    _this.initBasePaint();
+
+	                    // 初始化用户图像
+
+	                    _this.drawImageOnCanvas(_this.paint.dataURL, _this.paint.baseCxt);
+	                    _this.drawImageOnCanvas(_this.paint.dataURL, _this.paint.cxt);
+
+	                    for (var i = 0; i < _this.paint.layer.length; i++) {
+	                    	var currentLayer = _this.paint.layer[i];
+	                    	console.log(currentLayer.id);
+	                    	var tmpCxt = document.getElementById(currentLayer.id).getContext('2d');
+	                    	if(currentLayer.dataURL != '') {
+		                    	_this.drawImageOnCanvas(currentLayer.dataURL, tmpCxt);	                    		
+	                    	}
+	                    };
+
                     }, 10);
 
                     // _this.initKakuSocket(id);
@@ -857,6 +884,15 @@
         		isLeave = isLeave || false;
 
 				var cxtList = ['baseCanvas', 'baseCxt', 'cxt', 'canvas'];
+
+				this.paint.dataURL = this.paint.baseCanvas.toDataURL();
+				var tmpCanvas = {};
+
+				for (var i = 0; i < this.paint.layer.length; i++) {
+					var currentLayer = this.paint.layer[i];
+					tmpCanvas = document.getElementById(currentLayer.id);
+					currentLayer.dataURL = tmpCanvas.toDataURL();
+				};
 
 				var tmpPaint = util.cloneObject(_this.paint, cxtList);
 				var tmpPaintUI = util.cloneObject(_this.paintUI);
