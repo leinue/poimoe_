@@ -402,7 +402,7 @@ var index = {
 	},
 
 	savePainting: function(req, res, next) {
-		var room = req.params.id;
+		var room = req.params.roomId;
 		var paint = req.params.paint;
 		var paintUI = req.params.paintUI;
 

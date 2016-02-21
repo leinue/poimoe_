@@ -2,11 +2,13 @@
    
     <div style="margin-top:-21px;z-index:3000">
 
-        <div @click="leaveThisRoom()" class="type-circle header-circle" style="left: 65px;">
+        <div @click="leaveThisRoom()" title="退出当前房间" class="type-circle header-circle" style="left: 65px;">
             <span class="glyphicon glyphicon-arrow-left"></span>
         </div>
 
-        <button @click="sync">test</button>
+        <div @click="syncPaintingStatus()" title="保存当前绘画/UI状态" class="type-circle header-circle" style="left: 115px;">
+            <span class="glyphicon glyphicon-ok"></span>
+        </div>
 
         <div class="row a-bounceinT">
 
@@ -819,19 +821,28 @@
 
         	},
 
-        	sync: function() {
-				var _this = this;
+        	syncPaintingStatus: function(isLeave) {
+
+        		var _this = this;
+
+        		isLeave = isLeave || false;
 
 				var cxtList = ['baseCanvas', 'baseCxt', 'cxt', 'canvas'];
 
 				var tmpPaint = util.cloneObject(_this.paint, cxtList);
 				var tmpPaintUI = util.cloneObject(_this.paintUI);
 
-				chatSocket.emit('save image', {
+				var data = {
+					roomId: _this.room._id,
 					people: localStorage._id,
 					paint: tmpPaint,
-					paintUI: tmpPaintUI
-				});
+					paintUI: tmpPaintUI,
+					accessToken: localStorage.accessToken
+				};
+
+				localStorage.roomStatus = JSON.stringify(data);
+
+				chatSocket.emit('save image', data);
         	},
 
 			initKakuInstantSavingThread: function() {
@@ -839,29 +850,22 @@
 				var _this = this;
 
 				setInterval(function() {
-
-					// chatSocket.emit('save image', {
-					// 	people: localStorage._id,
-					// 	paint: _this.paint,
-					// 	paintUI: _this.paintUI
-					// });
-
-				// console.log({
-				// 		people: localStorage._id,
-				// 		paint: _this.paint,
-				// 		paintUI: _this.paintUI
-				// 	});
-
+					_this.syncPaintingStatus();
 				}, 5000);
 
-				chatSocket.on('get save image', function(data) {
+				chatSocket.on('get save image succeed', function(data) {
 
 					console.log(data);
+					util.messageBox(data.message);
 
 					if(!(data.people.toString() == localStorage._id)) {
 
 					}
 
+				});
+
+				chatSocket.on('get save image failed', function(data) {
+					util.handleError(data, 'socket');
 				});
 
 			},
@@ -980,7 +984,8 @@
         	},
 
         	leaveThisRoom: function() {
-        		router.go('/index');        		
+        		this.syncPaintingStatus(true);
+        		router.go('/index');     		
         	},
 
         	viewProfile: function(id) {

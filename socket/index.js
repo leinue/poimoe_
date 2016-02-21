@@ -267,7 +267,29 @@ chat.on('connection', function(socket){
 	      return false;
 	    }
 
-	    chat.to(roomId).emit('get save image', msg);			
+	    request.post({
+			url: 'http://api.poimoe.com/kaku/room/save/painting',
+	        encoding: 'utf8',
+	        headers: {
+	        	'Authorization': 'Basic ' + msg.accessToken 
+	        },
+	        form: msg
+		},
+	    function(error, response, body){
+	        if(!error && response.statusCode == 200){
+	        	body = JSON.parse(body);
+			    chat.to(roomId).emit('get save image succeed', body);
+	        }else{
+        	    socket.emit('get save image failed', {
+        	    	code: response.statusCode,
+        	    	message: response.body,
+        	    	error: error,
+        	    	headers: response.headers,
+        	    	request: response.request
+        	    });
+	        }
+	    });
+
 	});
 
 	socket.on('leave', function(msg) {

@@ -7,13 +7,13 @@
 
 	<div id="alert-danger" role="alert" class="alert alert-danger top displaynone" style="width: 400px;"><button @click="hideThisDangerAlert()" type="button" class="close"><span>×</span></button><span class="glyphicon glyphicon-info-sign"></span>
 		  <strong>服务器提了一个问题</strong>
-		  <p id="danger-tips"></p>
+		  <p id="danger-tips" style="margin-left: 47px;"></p>
 	</div>
 
     <div class="notification-center {{boncein}}">
     </div>
 
-	<div @click="pathToNewRoomPage()" class="type-circle header-circle">
+	<div title="新建房间" @click="pathToNewRoomPage()" class="type-circle header-circle">
         <span class="glyphicon glyphicon-plus"></span>
     </div>
 

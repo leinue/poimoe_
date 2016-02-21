@@ -119,8 +119,41 @@ module.exports = {
 		return confirm(content);
 	},
 
-	handleError: function(err) {
-		this.messageBox('Error status: ' + err.status + '\r\nError text: ' + err.statusText + '\r\nError data:\r\n' + JSON.stringify(err.data), true);
+	handleError: function(err, type) {
+		var _this = this;
+
+		console.log(err);
+
+		type = type || 'common';
+
+		var result = '';
+
+		var msgType = {
+			common: function() {
+				console.log(err);
+				if(typeof err === 'object') {
+					var requestUrl = err.request.url || '';
+					result += '<p>Status: ' + err.status + '</p>';
+					result += '<p>Status Text: ' + err.statusText + '</p>';
+					result += '<p>Data Code: ' + err.data.code + '</p>';
+					result += '<p>Data Message: ' + err.data.message + '</p>';
+					result += '<p>Request URL: ' + requestUrl + '</p>';
+				}else {
+					result = err;
+				}
+				_this.messageBox(result, true);
+			},
+
+			socket: function() {
+				var requestUrl = err.request.url || '';
+				result += '<p>Code: ' + err.code + '</p>';
+				result += '<p>Detail: ' + err.message + '</p>';
+				result += '<p>Error: ' + err.error + '</p>';
+				_this.messageBox(result, true);
+			}
+		};
+
+		msgType[type]();
 	},
 
 	session: function(key, val) {
