@@ -232,7 +232,6 @@
             		isEraser: false,
             		eraserRadius: 15,
             		isColorPicker: false,
-            		color: ["#000000","#FF0000","#80FF00","#00FFFF","#808080","#FF8000","#408080","#8000FF","#CCCC00"],
             		canvas: '',
             		cxt: '',
             		baseCanvas: '',
@@ -474,7 +473,7 @@
         	},
 
         	initPaint: function(canvas, nofill) {
-        		
+        		console.log(this.paint);
         		this.paint.canvas = canvas || document.getElementById(this.paint.currentLayer.id);
         		nofill = nofill || false;
 
@@ -778,8 +777,39 @@
 
                     _this.room.chatting.reverse();
 
-                    _this.initPaint();
-                    _this.initBasePaint();
+                    if(_this.room.paint != null) {
+	                    _this.paint = _this.room.paint;
+
+	                    // 将字符串的false或true转换为真实的false或true
+	                    for(var key in _this.paint) {
+
+	                    	_this.paint[key] = _this.paint[key] == 'false' ? false : (_this.paint[key] == 'true' ? true : _this.paint[key]);
+
+	                    	if(key == 'layer' || key == 'currentLayer') {
+                    			if(typeof _this.paint[key].length == 'number') {
+
+                    				for (var i = 0; i < _this.paint[key].length; i++) {
+                    					var curr = _this.paint[key][i];
+                    					for(var k in curr) {
+                    						_this.paint[key][i][k] = _this.paint[key][i] == 'false' ? false : ( _this.paint[key][i][k] == 'true' ? true : _this.paint[key][i][k] );
+                    					}
+                    				};
+
+                    			}
+	                    	}
+
+	                    }
+
+	                    _this.paint.x = [];
+	                    _this.paint.y = [];
+	                    _this.paint.clickDrag = [];
+                    }
+                    // _this.paintUI = _this.room.paintUI;
+
+                    setTimeout(function() {
+	                    _this.initPaint();
+	                    _this.initBasePaint();
+                    }, 10);
 
                     // _this.initKakuSocket(id);
 
@@ -818,7 +848,6 @@
 
 				this.initKakuMQSocket();
 				this.initKakuInstantSavingThread();
-
         	},
 
         	syncPaintingStatus: function(isLeave) {

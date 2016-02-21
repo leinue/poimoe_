@@ -345,6 +345,34 @@ module.exports = {
 	formatDate: function(strTime) {
 	    var date = new Date(strTime);
 	    return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+	},
+
+	turnToRealBoolean: function(obj, result, key) {
+
+		// 字符串
+		if(typeof obj == 'string') {
+			obj = obj == 'false' ? false : ( obj == 'true' ? true : obj );
+			if(key) {
+				result[key] = obj;
+			}
+		}
+
+		// 数组
+		if(typeof obj.length == 'number' && typeof obj == 'object') {
+			for (var i = 0; i < obj.length; i++) {
+				var currentElement = obj[i];
+				this.turnToRealBoolean(currentElement);
+			};
+		}
+
+		// 对象
+		if(typeof obj == 'object') {
+			for(var key in obj) {
+				var c = obj[key];
+				this.turnToRealBoolean(c, result, key);
+			}
+		}
+
 	}
 	
 };
