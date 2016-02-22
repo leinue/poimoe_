@@ -22,6 +22,8 @@ var server = restify.createServer({
 	name: 'poimoe'
 });
 
+restify.CORS.ALLOW_HEADERS.push('authorization');
+
 server.use(restify.authorizationParser());
 server.use(restify.bodyParser());
 server.use(restify.queryParser());
