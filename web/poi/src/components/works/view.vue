@@ -9,7 +9,7 @@
 
 		    <div class="timeline" v-for="item in cg">
 				<div class="col-xs-2" style="padding-right:0px">
-					<div class="timeline-author">
+					<div @click="toProfile(item.user_id._id)" class="timeline-author">
 						<div style="background-image:url({{item.user_id.photo | photoNullToVision}})" class="imgdiv"></div>
 					</div>
 				</div>
@@ -112,6 +112,10 @@
 
 			removeThisCG: function(id) {
 				util.removeThisCG(id, function(data) {});
+			},
+
+			toProfile: function(id) {
+				util.toProfile(id);
 			}
 
 		},

@@ -83,7 +83,44 @@ var index = {
 						        res.send(util.retMsg(401, err.toString()));
 					      	}
 
-						    res.send(util.retMsg(200, r));
+					      	//更新user表中的统计字段
+					      	user.findOneAndUpdate({
+					      		_id: following[0]._id,
+					      		isDeleted: false,
+					      		isBlocked: false
+					      	}, {
+					      		$inc: {
+					      			followerCount: 1
+					      		}
+					      	}, {
+					      		new: true
+					      	}, function(err, a) {
+
+					      		if(err) {
+					      			res.send(util.retMsg(401, err.toString()));
+					      		}
+
+						      	user.findOneAndUpdate({
+						      		_id: follower[0]._id,
+						      		isDeleted: false,
+						      		isBlocked: false
+						      	}, {
+						      		$inc: {
+						      			followingCount: 1
+						      		}
+						      	}, {
+						      		new: true
+						      	}, function(err, a) {
+
+						      		if(err) {
+						      			res.send(util.retMsg(401, err.toString()));
+						      		}
+
+								    res.send(util.retMsg(200, '关注成功'));
+
+						      	});
+
+					      	});
 
 					      });
 
@@ -143,7 +180,44 @@ var index = {
 										        res.send(util.retMsg(401, err.toString()));					      		
 									      	}
 
-										    res.send(util.retMsg(200, '关注成功'));
+									      	//更新user表中的统计字段
+									      	user.findOneAndUpdate({
+									      		_id: following[0]._id,
+									      		isDeleted: false,
+									      		isBlocked: false
+									      	}, {
+									      		$inc: {
+									      			followerCount: 1
+									      		}
+									      	}, {
+									      		new: true
+									      	}, function(err, a) {
+
+									      		if(err) {
+									      			res.send(util.retMsg(401, err.toString()));
+									      		}
+
+										      	user.findOneAndUpdate({
+										      		_id: followerNew,
+										      		isDeleted: false,
+										      		isBlocked: false
+										      	}, {
+										      		$inc: {
+										      			followingCount: 1
+										      		}
+										      	}, {
+										      		new: true
+										      	}, function(err, a) {
+
+										      		if(err) {
+										      			res.send(util.retMsg(401, err.toString()));
+										      		}
+
+												    res.send(util.retMsg(200, '关注成功'));
+
+										      	});
+
+									      	});
 
 									    });
 
@@ -190,15 +264,15 @@ var index = {
 			}
 
 			if(unfollower.length === 0) {
-				res.send(util.retMsg(401, "该关注者ID不存在"));
+				res.send(util.retMsg(401, "该取消关注者ID不存在"));
 			}
 
 			if(unfollower[0].isBlocked === true) {
-				res.send(util.retMsg(401, "该关注者已被锁定，无权操作"));
+				res.send(util.retMsg(401, "该取消关注者已被锁定，无权操作"));
 			}
 
 			if(unfollower[0].isDeleted === true) {
-				res.send(util.retMsg(401, "该关注者已被删除，无权操作"));
+				res.send(util.retMsg(401, "该取消关注者已被删除，无权操作"));
 			}
 
 			user.findById(unfollowingId, function(err, unfollowing) {
@@ -207,15 +281,15 @@ var index = {
 				}
 
 				if(unfollowing.length === 0) {
-					res.send(util.retMsg(401, "该被关注者ID不存在"));
+					res.send(util.retMsg(401, "该被取消关注者ID不存在"));
 				}
 
 				if(unfollowing[0].isBlocked === true) {
-					res.send(util.retMsg(401, "该被关注者已被锁定，无权操作"));
+					res.send(util.retMsg(401, "该被取消关注者已被锁定，无权操作"));
 				}
 
 				if(unfollowing[0].isDeleted === true) {
-					res.send(util.retMsg(401, "该被关注者已被删除，无权操作"));
+					res.send(util.retMsg(401, "该被取消关注者已被删除，无权操作"));
 				}
 
 				relations.find({
@@ -299,7 +373,39 @@ var index = {
 				      					res.send(util.retMsg(401, err.toString()));
 				      				}
 
-					      			res.send(util.retMsg(200, '取消关注成功'));
+									user.findOneAndUpdate({
+							      		_id: unfollowerId,
+							      		isDeleted: false,
+							      		isBlocked: false
+							      	}, {
+						      			followingCount: unfollower[0].followingCount - 1
+							      	}, {
+							      		new: true
+							      	}, function(err, a) {
+
+							      		if(err) {
+							      			res.send(util.retMsg(401, err.toString()));
+							      		}
+
+							      		user.findOneAndUpdate({
+								      		_id: unfollowingId,
+								      		isDeleted: false,
+								      		isBlocked: false
+								      	}, {
+							      			followerCount: unfollowing[0].followerCount - 1
+								      	}, {
+								      		new: true
+								      	}, function(err, a) {
+
+								      		if(err) {
+								      			res.send(util.retMsg(401, err.toString()));
+								      		}
+
+										    res.send(util.retMsg(200, '取消关注成功'));
+
+								      	});
+
+							      	});
 
 				      			});
 

@@ -190,6 +190,9 @@
 							_this.$set('followedMe', data.followedMe);
 							_this.$set('followedByMe', data.followedByMe);
 
+							_this.$set('followerCount', data.user.followerCount);
+							_this.$set('followingCount', data.user.followingCount);
+
 							_this.$get('loadUserDrafts')();
 							_this.$get('loadUserTransferCount')();
 
@@ -233,6 +236,7 @@
 					util.messageBox(data);
 					localStorage.followingCount = parseInt(localStorage.followingCount) + 1;
 					_this.followedByMe = true;
+					_this.followerCount ++;
 
 				}, function(err) {
 					util.handleError(err);
@@ -257,6 +261,10 @@
 					util.messageBox(data);
 					localStorage.followingCount = parseInt(localStorage.followingCount) - 1;
 					_this.followedByMe = false;
+					_this.followerCount --;
+					if(_this.followerCount < 0) {
+						_this.followerCount = 0;
+					}
 
 				}, function(err) {
 					util.handleError(err);

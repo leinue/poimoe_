@@ -279,7 +279,7 @@ var index = {
         res.send(util.retMsg(200, []));        
       }
 
-      util.seekFavourited(req, res, f[0].favourites);
+      util.seekFavourited(req, res, f[0].favourites, ctrlInitial.models);
 
       // res.send(util.retMsg(200, f));
 
@@ -711,7 +711,7 @@ var index = {
     User.find({
       _id: uid,
       isDeleted: false
-    }).select('_id photo intro username sex region email favourites').exec(function(err, user) {
+    }).select('_id photo intro username sex region email favourites followingCount followerCount').exec(function(err, user) {
 
       if(err) {
         res.send(util.retMsg(401, err.toString()));
@@ -904,12 +904,12 @@ var index = {
                   res.send(util.retMsg(401, err.toString()));
                 }
 
-                util.seekFavourited(req, res, timeline);
+                util.seekFavourited(req, res, timeline, ctrlInitial.models);
 
               });
 
             }else {
-                util.seekFavourited(req, res, timeline);
+                util.seekFavourited(req, res, timeline, ctrlInitial.models);
             }
 
           });

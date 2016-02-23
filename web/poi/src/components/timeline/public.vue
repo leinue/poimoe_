@@ -3,7 +3,7 @@
 <div class="col-md-6 col-md-offset-3">
 	<div class="timeline" style="padding-top:12px;">
 		<div class="col-xs-2" style="padding-right:0px">
-			<div class="timeline-author">
+			<div @click="toProfile()" class="timeline-author">
 				<div style="{{myPhoto}}" class="imgdiv"></div>
 			</div>
 		</div>
@@ -33,7 +33,7 @@
 
 	<div class="timeline a-bounceinB" v-for="item in publicTimeline">
 		<div class="col-xs-2" style="padding-right:0px">
-			<div class="timeline-author">
+			<div @click="toProfile(item.user_id._id)" class="timeline-author">
 				<div style="background-image: url({{item.user_id.photo | photoNullToVision}})" class="imgdiv"></div>
 			</div>
 		</div>
@@ -117,6 +117,10 @@
 			toNewCGPage: function() {
 				util.cancelActiveMenu();
 				router.go('/cg/new');
+			},
+
+			toProfile: function(id) {
+				util.toProfile(id);
 			},
 
 			loadPublicTimeline: function(more) {

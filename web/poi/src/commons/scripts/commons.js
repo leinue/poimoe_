@@ -225,6 +225,12 @@ module.exports = {
 		setCookie('userData', localStorage.userData, 15);
 	},
 
+	toProfile: function(id) {
+		id = localStorage._id || id;
+		this.cancelActiveMenu();
+		router.go('/profile/' + id);
+	},
+
 	unlikeThisTheme: function(tid, cb) {
 
 		var _this = this;

@@ -59,6 +59,14 @@ module.exports = {
         type: Boolean,
         default: false
       },
+      followingCount: {
+        type: Number,
+        default: 0
+      },
+      followerCount: {
+        type: Number,
+        default: 0
+      },
       accessToken: {
         type: String,
         default: 'undefined'
@@ -487,9 +495,6 @@ module.exports = {
           tmp.names = name;
           tmp.themes = themes;
           result.push(tmp);
-
-          console.log(key);
-          console.log(tagCnt);
 
           if(key === tagCnt) {
             cb(err, result);
