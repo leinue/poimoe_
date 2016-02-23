@@ -437,9 +437,10 @@
 				var _this = this;
 				_this.showRight = true;
 
-				if(typeof localStorage.draftsCount == 'undefined' || typeof localStorage.followingCount == 'undefined') {
+				if(typeof localStorage.draftsCount == 'undefined' || typeof localStorage.followingCount == 'undefined' || localStorage.reLogin == 'true') {
 
 					_this.syncProfile();
+					localStorage.reLogin = false;
 
 				}else {
 

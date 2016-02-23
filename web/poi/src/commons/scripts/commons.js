@@ -200,6 +200,7 @@ module.exports = {
 		localStorage.username = '';
 		localStorage.photo = '';
 		localStorage.introduction = '';
+		localStorage.reLogin = false;
 		//将http header Authorization头重新设置为匿名者
 		Vue.http.headers.common['Authorization'] = 'Basic YW5vbnltb3Vz==';
 		setCookie('userData', localStorage.userData, 0);
@@ -212,6 +213,7 @@ module.exports = {
 		localStorage.userData = JSON.stringify(real);
 		localStorage.username = real.username;
 		localStorage.photo = real.photo;
+		localStorage.reLogin = true;
 		if(localStorage.photo == '') {
 			localStorage.photo = 'https://pic1.zhimg.com/da8e974dc_l.jpg';
 		}
