@@ -151,7 +151,11 @@
 
 			var _this = this;
 
-			nodata.props.content.default = "该用户没有内容:)";
+			if(localStorage.login == 'false') {
+				nodata.props.content.default = "您还没有登录，暂时无法查看数据:)";
+			}else {
+				nodata.props.content.default = "该用户没有内容:)";
+			}
 
 			if(uid != '') {
 

@@ -30,16 +30,35 @@ var index = {
   auth: function(req, res, next) {
 
     var reqRoute = req.route.path;
+    var routesNoneAuth = [
+      '/themes/hot', '/tags/select/hotTags', 
+      '/user/recommended', '/user/register/:email/:password', 
+      '/user/login/:email/:password', '/themes/select/:tid', 
+      '/user/profile/get/:uid', '/site/search/:val/:page/:count'
+    ];
 
     if(req.username == 'anonymous') {
 
       var reqRouteList = reqRoute.split('/');
 
-      //只有登录和注册api不需要验证权限
-      if((reqRouteList[1] == 'user' && reqRouteList[2] == 'register') || (reqRouteList[1] == 'user' && reqRouteList[2] == 'login' )) {
-        return next();
+      console.log('=======');
+      console.log(reqRoute);
+      console.log('=======');
+
+      var isHasNoneAuthRoute = false;
+
+      for (var i = routesNoneAuth.length - 1; i >= 0; i--) {
+        var currRoute = routesNoneAuth[i];
+        if(currRoute == reqRoute) {
+          isHasNoneAuthRoute = true;
+          break;
+        }
+      };
+
+      if(!isHasNoneAuthRoute) {
+          res.send(util.retMsg(4001, "用户未登录或无权限"));
       }else {
-        res.send(util.retMsg(401, "用户未登录或无权限"));
+        return next();
       }
 
     }else {
@@ -51,16 +70,16 @@ var index = {
         }
 
         if(u.length === 0) {
-          res.send(util.retMsg(401, "access_token非法"));
+          res.send(util.retMsg(4001, "access_token非法"));
         }
 
         if(u[0].tokenCreatedAt == undefined || u[0].tokenDestoriedAt == undefined) {
-          res.send(util.retMsg(401, "access_token非法或用户登录已失效"));
+          res.send(util.retMsg(4001, "access_token非法或用户登录已失效"));
         }
 
         var currentTimestamp = Date.now();
         if(currentTimestamp > u[0].tokenDestoriedAt) {
-          res.send(util.retMsg(401, "access_token已过期"));
+          res.send(util.retMsg(4001, "access_token已过期"));
         }
 
         if(u[0].isBlocked === true) {

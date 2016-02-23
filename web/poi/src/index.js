@@ -116,7 +116,7 @@ router.afterEach(function() {
 
 	//路由权限控制
 
-	var accessDenied = ['/cg/new', '/timeline/personal', '/works', '/favourites'];
+	var accessDenied = ['/cg/new', '/timeline/personal', '/works', '/favourites', '/timeline', '/timeline/public'];
 
 	for (var i = 0; i < accessDenied.length; i++) {
 		var curr = accessDenied[i];

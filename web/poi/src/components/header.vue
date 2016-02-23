@@ -20,7 +20,7 @@
         <span class="glyphicon glyphicon-search"></span>
     </div>
 
-	<div v-show="isLogin == 'true'" @click="pathToNewCGPage()" id="newcg-button" class="type-circle header-circle right">
+	<div v-show="isLogin == 'true'" title="发布CG" @click="pathToNewCGPage()" id="newcg-button" class="type-circle header-circle right">
         <span class="glyphicon glyphicon-plus"></span>
     </div>
 
@@ -37,6 +37,14 @@
 
 	<div v-show="isLogin == 'true'" @click="logout()" id="exit-button" class="type-circle header-circle right">
         <span class="glyphicon glyphicon-log-out"></span>
+    </div>
+
+    <div v-show="isLogin == 'false'" title="登录" @click="toLogin()" id="usernoti-button" class="type-circle header-circle right">
+    	<span class="glyphicon glyphicon-log-in"></span>
+    </div>
+
+	<div v-show="isLogin == 'false'" title="注册" @click="toRegister()" id="exit-button" class="type-circle header-circle right">
+        <span class="glyphicon glyphicon-plus"></span>
     </div>
 
     <div class="notification-center {{boncein}}">
@@ -70,11 +78,11 @@
 
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav navbar-right" id="profile-menu">
-	        <!-- <li @click="pathToNewCGPage()"><a>投稿</a></li> -->
-	        <!-- <li v-show="isLogin == 'true'"><a @click="showMyProfile()">个人中心</a></li> -->
+	        <!-- <li @click="pathToNewCGPage()"><a>投稿</a></li>
+	        <li v-show="isLogin == 'true'"><a @click="showMyProfile()">个人中心</a></li> 
 	       	<li v-show="isLogin == 'false'" @click="toLogin()"><a>登录</a></li>
 	       	<li v-show="isLogin == 'false'" @click="toRegister()"><a>注册</a></li>
-	       	<!-- <li v-show="isLogin == 'true'" @click="logout()"><a>退出</a></li> -->
+	       	<li v-show="isLogin == 'true'" @click="logout()"><a>退出</a></li> -->
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
@@ -265,7 +273,7 @@
 
 					util.messageBox(data.message);
 
-					if(data.code == 200) {
+					if(data.code == 200 || data.code == 4001) {
 						util.logout();
 						_this.isLogin = 'false';
 						_this.pathToAndCloseThis('/index');
