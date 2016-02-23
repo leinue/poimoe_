@@ -113,18 +113,16 @@ router.beforeEach(function () {
 
 	var prevPath = router._currentRoute.path;
 
-	if(prevPath == undefined) {
-		return false;
-	}
-
-	if(prevPath.indexOf('sketch') != -1) {
-		chatSocket.emit('leave', {
-			leaver: localStorage._id,
-			roomId: router._currentRoute.params.id
-		});
-		if(localStorage.roomStatus != 'undefined' || typeof localStorage.roomStatus != 'undefined') {
-			chatSocket.emit('save image', JSON.parse(localStorage.roomStatus));
-			localStorage.roomStatus = 'undefined';
+	if(prevPath != undefined) {
+		if(prevPath.indexOf('sketch') != -1) {
+			chatSocket.emit('leave', {
+				leaver: localStorage._id,
+				roomId: router._currentRoute.params.id
+			});
+			if(localStorage.roomStatus != 'undefined' || typeof localStorage.roomStatus != 'undefined') {
+				chatSocket.emit('save image', JSON.parse(localStorage.roomStatus));
+				localStorage.roomStatus = 'undefined';
+			}
 		}
 	}
 

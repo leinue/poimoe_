@@ -43,10 +43,6 @@ var index = {
 
       var reqRouteList = reqRoute.split('/');
 
-      console.log('=======');
-      console.log(reqRoute);
-      console.log('=======');
-
       var isHasNoneAuthRoute = false;
 
       for (var i = routesNoneAuth.length - 1; i >= 0; i--) {
@@ -58,7 +54,7 @@ var index = {
       };
 
       if(!isHasNoneAuthRoute) {
-          res.send(util.retMsg(4001, "用户未登录或无权限"));
+          res.send(util.retMsg(4001, "用户未登录或无权限，请重新登录"));
       }else {
         return next();
       }
@@ -72,16 +68,16 @@ var index = {
         }
 
         if(u.length === 0) {
-          res.send(util.retMsg(4001, "access_token非法"));
+          res.send(util.retMsg(4001, "access_token非法，请重新登录"));
         }
 
         if(u[0].tokenCreatedAt == undefined || u[0].tokenDestoriedAt == undefined) {
-          res.send(util.retMsg(4001, "access_token非法或用户登录已失效"));
+          res.send(util.retMsg(4001, "access_token非法或用户登录已失效，请重新登录"));
         }
 
         var currentTimestamp = Date.now();
         if(currentTimestamp > u[0].tokenDestoriedAt) {
-          res.send(util.retMsg(4001, "access_token已过期"));
+          res.send(util.retMsg(4001, "access_token已过期，请重新登录"));
         }
 
         if(u[0].isBlocked === true) {

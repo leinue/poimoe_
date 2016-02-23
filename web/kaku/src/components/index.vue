@@ -142,10 +142,11 @@
 
         },
 
-        created() {
+        ready() {
             var _this = this;
 
             var servicesInterval = setInterval(function() {
+                console.log('sss')
                 if(typeof window.services != 'undefined') {
 
                     _this.$get('loadKakuRoom')();
