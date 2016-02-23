@@ -93,7 +93,7 @@
 
 				notificationsList: [],
 
-				myTitle: 'kaku poimoe'
+				myTitle: 'kaku Poimoe'
 			};
 		},
 

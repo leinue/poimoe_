@@ -171,10 +171,12 @@
     }
 
     .room-rect {
-        background: rgb(255, 255, 255);
         padding: 15px;
         border-top: 2px solid rgb(0, 149, 219);
         margin-bottom: 15px;
+        background-color: rgba(255, 255, 255, .5);
+        position: relative;
+        box-shadow: rgba(0, 0, 0, .0470588) 0 2px 3px 0;
     }
 
     .room-rect.grey {
@@ -232,7 +234,16 @@
         cursor: pointer;
         margin-left: 15px;
         margin-right: 15px;
-        background: rgb(255, 255, 255);
+        background-color: rgba(255, 255, 255, .5);
+        position: relative;
+        box-shadow: rgba(0, 0, 0, .0470588) 0 2px 3px 0;
+        border-bottom: 2px solid rgb(0, 149, 219);
+        color: rgb(209, 209, 209);
+        border-radius: 4px;
+    }
+
+    .load-more:hover {
+        color: rgb(0, 149, 219);
     }
 
 </style>
