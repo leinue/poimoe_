@@ -461,7 +461,7 @@ var index = {
                 var Timeline = ctrlInitial.models.Timeline();
 
                 Timeline.updatePersonalMessageQueue({
-                  uid: uid,
+                  uid: themeAuthor.user_id,
                   pmq: {
                     operator: uid,
                     targetUser: themeAuthor.user_id,

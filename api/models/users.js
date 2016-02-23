@@ -146,9 +146,7 @@ module.exports = {
       return this.find({
         accessToken: at,
         isDeleted:false
-      }).select({
-        favourites: 1
-      }).exec(cb);
+      }).select('favourites').exec(cb);
     }
 
     userSchema.statics.findFavouritesByUid = function(uid, page, count, cb) {
@@ -159,6 +157,27 @@ module.exports = {
       return this.find({
         isDeleted: false,
         _id: uid
+      }).select({
+        favourites: 1
+      }).populate({
+        path: 'favourites',
+        populate: {
+          path: 'user_id tag_list',
+          select: '_id email username photo favourites'
+        }
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
+    };
+
+    userSchema.statics.findFavouritesByAccessToken_ = function(at, page, count, cb) {
+      page = page || 1;
+      count = count || 10;
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+        isDeleted: false,
+        accessToken: at
       }).select({
         favourites: 1
       }).populate({

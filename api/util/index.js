@@ -110,45 +110,64 @@ var util = {
     return v;
   },
 
-  getIsFavourited: function(req, res, themes) {
+  getIsFavourited: function(req, res, themes, models) {
+    var themesLength = themes.length;
 
     themes.forEach(function(currentTheme, i) {
 
       var currentThemeId = currentTheme._id;
-      var favourites = currentTheme.user_id.favourites;
-      var reposter = currentTheme.reposter;
 
-      favourites.forEach(function(currentLike, j) {
-        if(currentThemeId.toString() == currentLike.toString()){
-          themes[i].favourited = true;
-          return true;
+      var User = models.User();
+
+      User.findFavouritesByAccessToken(req.authorization.credentials, function(err, favourites) {
+
+        if(err) {
+          res.send(util.retMsg(401, err.toString()));
         }
+
+        var reposter = currentTheme.reposter;
+
+        if(favourites.length > 0) {
+          favourites = favourites[0].favourites;
+          favourites.forEach(function(currentLike, j) {
+            if(currentThemeId.toString() == currentLike.toString()){
+              themes[i].favourited = true;
+              return true;
+            }
+          });
+        }
+
+        for (var k = 0; k < reposter.length; k++) {
+          var currentReposter = reposter[k];
+          //这里表示有的地方没有进行populate，所以有的直接就是id
+          if(typeof currentReposter._id != 'undefined') {
+            if(currentReposter._id.toString() == global.currentUserId.toString()) {
+              themes[i].reposted = true;
+              break;
+            }
+          }else {
+            if(currentReposter.toString() == global.currentUserId.toString()) {
+              themes[i].reposted = true;
+              break;
+            }
+          }
+        };
+
+        if(themesLength -1 == i) {
+          res.send(util.retMsg(200, themes));
+        }
+
       });
 
-      for (var k = 0; k < reposter.length; k++) {
-        var currentReposter = reposter[k];
-        //这里表示有的地方没有进行populate，所以有的直接就是id
-        if(typeof currentReposter._id != 'undefined') {
-          if(currentReposter._id.toString() == currentTheme.user_id._id.toString()) {
-            themes[i].reposted = true;
-            break;
-          }
-        }else {
-          if(currentReposter.toString() == currentTheme.user_id._id.toString()) {
-            themes[i].reposted = true;
-            break;
-          }
-        }
-      };
-
     });
-
-    return themes;
   },
 
-  seekFavourited: function(req, res, themes) {
-    themes = this.getIsFavourited(req, res, themes);
-    res.send(util.retMsg(200, themes));
+  seekFavourited: function(req, res, themes, models) {
+    if(req.authorization.credentials != undefined) {
+      themes = this.getIsFavourited(req, res, themes, models);      
+    }else {
+      res.send(util.retMsg(200, themes));   
+    }
   },
 
   formatDate: function(strTime) {

@@ -264,7 +264,7 @@ var index = {
 	        	res.send(util.retMsg(401, err.toString()));
 	      	}
 
-	      	util.seekFavourited(req, res, themes);
+	      	util.seekFavourited(req, res, themes, ctrlInitial.models);
 
 		});
 
@@ -300,7 +300,7 @@ var index = {
    		 			res.send(util.retMsg(401, err.toString()));
 	   	 		}
 
-		      	util.seekFavourited(req, res, themes);
+		      	util.seekFavourited(req, res, themes, ctrlInitial.models);
 
 			});
 
@@ -320,7 +320,7 @@ var index = {
 	        	res.send(util.retMsg(401, err.toString()));
 	      	}
 
-	      	util.seekFavourited(req, res, themes);
+	      	util.seekFavourited(req, res, themes, ctrlInitial.models);
 
 		});
 
@@ -361,9 +361,7 @@ var index = {
 				res.send(util.retMsg(401, err.toString()));
 			}
 
-	      	util.seekFavourited(req, res, theme);
-
-  	      	// res.send(util.retMsg(200, theme));
+	      	util.seekFavourited(req, res, theme, ctrlInitial.models);
 
 		});
 
@@ -386,7 +384,7 @@ var index = {
 				res.send(util.retMsg(401, err.toString()));
 			}
 
-	      	util.seekFavourited(req, res, themes);
+	      	util.seekFavourited(req, res, themes, ctrlInitial.models);
 		});
 
 	},
@@ -495,7 +493,7 @@ var index = {
 							}
 
 			                Timeline.updatePersonalMessageQueue({
-			                  uid: uid,
+			                  uid: theme_new.user_id,
 			                  pmq: {
 			                    operator: uid,
 			                    targetUser: theme_new.user_id,
