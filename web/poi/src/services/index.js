@@ -14,7 +14,9 @@ module.exports = {
 
 	init: function(obj) {
 		model.instance = obj;
-		
+
+		var tmpHttpGET = model.instance.$http.get;
+
 		return {
 			UserService: UserService.init(model.instance, model.baseUrl),
 

@@ -153,7 +153,7 @@
                     clearInterval(servicesInterval);
 
                 }
-            }, 1);
+            }, 10);
         }
 
     };

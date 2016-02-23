@@ -836,9 +836,12 @@
 	                    	console.log(currentLayer.id);
 	                    	var tmpCxt = document.getElementById(currentLayer.id).getContext('2d');
 	                    	if(currentLayer.dataURL != '') {
-		                    	_this.drawImageOnCanvas(currentLayer.dataURL, tmpCxt);                    		
+		                    	_this.drawImageOnCanvas(currentLayer.dataURL, tmpCxt);   		
 	                    	}
 	                    };
+
+        				this.initKakuMQSocket();
+						this.initKakuInstantSavingThread();
 
                     }, 10);
 
@@ -876,9 +879,6 @@
 					_this.room.chatting.push(data.chatting[0]);
 					_this.message = '';
 				});
-
-				this.initKakuMQSocket();
-				this.initKakuInstantSavingThread();
         	},
 
         	syncPaintingStatus: function(isLeave) {

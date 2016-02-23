@@ -27,7 +27,7 @@ if(userData) {
 	localStorage.login = true;
 }else {
 	if(!window.debug) {
-		window.location.href = "http://poi.poimoe.com/login";
+		window.location.href = "http://poi.poimoe.com/#!/login";
 	}
 }
 
@@ -112,8 +112,6 @@ router.beforeEach(function () {
 	console.log('before each');
 
 	var prevPath = router._currentRoute.path;
-
-	console.log(prevPath);
 
 	if(prevPath == undefined) {
 		return false;

@@ -34,7 +34,9 @@ var index = {
       '/themes/hot', '/tags/select/hotTags', 
       '/user/recommended', '/user/register/:email/:password', 
       '/user/login/:email/:password', '/themes/select/:tid', 
-      '/user/profile/get/:uid', '/site/search/:val/:page/:count'
+      '/user/profile/get/:uid', '/site/search/:val/:page/:count', '/timeline/message/personal/count/:uid',
+      '/timeline/message/index/count/:uid', '/timeline/message/index/count/:uid',
+      '/kaku/room/all/:page/:count'
     ];
 
     if(req.username == 'anonymous') {
