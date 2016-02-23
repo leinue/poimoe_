@@ -1,5 +1,5 @@
 body {
-	background: rgb(238, 238, 238);
+	/*background: rgb(238, 238, 238);*/
 }
 
 button.btn {
@@ -24,6 +24,7 @@ ul {
 
 .fade-leave {
 	animation: bouncein .6s linear 0s 1 alternate;
+	display: none;
 }
 
 .fade-enter {

@@ -24,6 +24,7 @@ ul {
 
 .fade-leave {
 	animation: bouncein .6s linear 0s 1 alternate;
+	display: none;
 }
 
 .fade-enter {

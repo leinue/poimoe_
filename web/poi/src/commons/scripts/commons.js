@@ -100,6 +100,9 @@ module.exports = {
 	},
 
 	messageBox: function(message, danger) {
+
+		var _this = this;
+
 		var boxId = danger ? 'alert-danger' : 'alert-success';
 		var tipsId = danger ? 'danger-tips' : 'success-tips';
 
@@ -113,6 +116,10 @@ module.exports = {
 		alertSuccess.setAttribute('class', cls);
 		var tips = document.getElementById(tipsId);
 		tips.innerHTML = message;
+
+		setTimeout(function() {
+			_this.hideMessageBox(boxId);
+		}, 3000);
 	},
 
 	hideMessageBox: function(id) {

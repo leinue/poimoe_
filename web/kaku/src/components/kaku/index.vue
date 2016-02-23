@@ -13,7 +13,7 @@
         <div class="row a-bounceinT">
 
         	<div class="col-md-12" style="padding:0px;border-top:1px solid rgb(217, 217, 217)">
-        		<div class="col-md-3" style="padding-left:0px;padding-right:0px;border-bottom:1px solid rgb(217, 217, 217);height:90vh;border-right:1px solid rgb(217, 217, 217)">
+        		<div class="col-md-3" style="padding-left:0px;padding-right:0px;border-bottom:1px solid rgb(217, 217, 217);height:90vh;border-right:1px solid rgb(217, 217, 217);background: rgb(238, 238, 238)">
 	        		<div class="chatting-section" style="text-align:center">
 	        		<span>房间名称：{{room.name}}</span>
 	        			<div class="kaku-member">
@@ -492,20 +492,24 @@
         		this.paint.height = this.paint.canvas.height;
 
         		if(!nofill) {
-	        		this.paint.cxt.fillStyle = 'rgba(255, 255, 255, 100)';
-	        		this.paint.cxt.fillRect(0,0,this.paint.width,this.paint.height);
+	        		// this.paint.cxt.fillStyle = 'rgba(255, 255, 255, 100)';
+	        		// this.paint.cxt.fillRect(0,0,this.paint.width,this.paint.height);
         		}
 
         		var _this = this;
 
-    		    _this.colorPicker = ColorPicker.init({
-        			onColorChange: function(color) {
-        				_this.paint.strokeStyle = color;
-        			},
-        			defaultColor: 'rgba(0, 0, 0, 255)'
-        		});
-			    var panel = _this.colorPicker.getPanel();
-			    document.getElementById('color-picker-area').appendChild(panel);
+        		if(!_this.colorPicker) {
+
+	    		    _this.colorPicker = ColorPicker.init({
+	        			onColorChange: function(color) {
+	        				_this.paint.strokeStyle = color;
+	        			},
+	        			defaultColor: 'rgba(0, 0, 0, 255)'
+	        		});
+				    var panel = _this.colorPicker.getPanel();
+				    document.getElementById('color-picker-area').appendChild(panel);
+
+        		}
 
         		this.bindCanvas();
         	},
@@ -1215,7 +1219,7 @@
 	}
 
 	.layer-list li.active {
-		background: rgb(255, 255, 255);
+		background: rgb(238, 238, 238);
 	}
 
 	.layer-list li.active .layer-name {
