@@ -317,6 +317,8 @@ var index = {
 						}
 					};
 
+					//fuck
+
 					if(!flag) {
 						res.send(util.retMsg(401, "取消关注失败"));
 					}else {

@@ -103,7 +103,12 @@
 			var uid = router._currentRoute.params.uid;
 			var _this = this;
 
-			nofo.props.content.default = "您暂时没有关注用户";
+			if(uid == localStorage._id) {
+				nofo.props.content.default = "您暂时没有关注用户";
+			}else {
+				nofo.props.content.default = "该用户暂时没有关注用户";
+			}
+
 
 			var serviceInterval = setInterval(function() {
 

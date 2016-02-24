@@ -129,7 +129,11 @@
 			var uid = router._currentRoute.params.uid;
 			var _this = this;
 
-			nodata.props.content.default = "您暂时没有粉丝";
+			if(uid == localStorage._id) {
+				nodata.props.content.default = "您暂时没有粉丝";
+			}else {
+				nodata.props.content.default = "该用户暂时没有粉丝";				
+			}
 
 			var serviceInterval = setInterval(function() {
 

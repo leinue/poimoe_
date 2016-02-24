@@ -12,8 +12,8 @@
 					<button v-show="uid != myUid && followedByMe == true" @click="unFollowThisUser(uid)" v-show="uid != myUid" style="margin-top:-4px;" class="btn btn-default outline"><span class="glyphicon glyphicon-minus"></span> 取消关注</button>
 		    	</div>
 		    	<p class="relations">
-			    	<span @click="toFollowing()">{{followingCount}} 关注</span>
-			    	<span @click="toFollower()">{{followerCount}} 粉丝</span>
+			    	<span @click="toFollowing(uid)">{{followingCount}} 关注</span>
+			    	<span @click="toFollower(uid)">{{followerCount}} 粉丝</span>
 		    	</p>
 		    </div>
 
@@ -242,6 +242,14 @@
 					util.handleError(err);
 				});
 
+			},
+
+			toFollowing: function(id) {
+				router.go('/relations/following/' + id);
+			},
+
+			toFollower: function(id) {
+				router.go('/relations/follower/' + id);
 			},
 
 			unFollowThisUser: function(uid) {
