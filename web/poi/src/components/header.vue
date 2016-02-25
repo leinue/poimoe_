@@ -50,7 +50,7 @@
     <div class="notification-center {{boncein}}">
     	<ul>
     		<li v-for="noti in notificationsList">
-    			<div @click="pathToProfile(noti.operator._id)" class="avatar" style="background-image: url({{noti.targetUser.photo}});"></div>
+    			<div @click="pathToProfile(noti.operator._id)" class="avatar" style="background-image: url({{noti.operator.photo}});"></div>
     			<div class="body">
     				<span><a @click="pathToProfile(noti.operator._id)">{{noti.operator.username}}</a> {{noti.did | notificationActionFilter}}了您的分享 </span>
     				<span class="time">{{noti.createdAt}}</span>
