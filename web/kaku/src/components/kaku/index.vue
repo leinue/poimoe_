@@ -771,7 +771,8 @@
         			people: localStorage._id,
         			roomId: id,
         			passport: sessionStorage[id],
-        			username: localStorage.username
+        			username: localStorage.username,
+        			accessToken: localStorage.accessToken
         		});
 
 				window.chatSocket = chatSocket;
@@ -840,8 +841,8 @@
 	                    	}
 	                    };
 
-        				this.initKakuMQSocket();
-						this.initKakuInstantSavingThread();
+        				_this.initKakuMQSocket();
+						_this.initKakuInstantSavingThread();
 
                     }, 10);
 
@@ -850,16 +851,15 @@
 				});
 
 				chatSocket.on('enter chatting room failed', function(msg) {
-					console.log(msg);
+					util.handleError(msg, 'socket');
 				});
 
 				chatSocket.on('leave room failed', function(msg) {
-					console.log(msg);
-					util.handleError(msg);
+					util.handleError(msg, 'socket');
 				});
 
 				chatSocket.on('sys', function(msg) {
-					console.log(msg);
+					util.handleError(msg, 'socket');
 				});
 
                 chatSocket.on('chat message', function(msg) {

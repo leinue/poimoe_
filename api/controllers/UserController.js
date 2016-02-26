@@ -36,7 +36,7 @@ var index = {
       '/user/login/:email/:password', '/themes/select/:tid', 
       '/user/profile/get/:uid', '/site/search/:val/:page/:count', '/timeline/message/personal/count/:uid',
       '/timeline/message/index/count/:uid', '/timeline/message/index/count/:uid',
-      '/kaku/room/all/:page/:count'
+      '/kaku/room/all/:page/:count', '/kaku/room/enter', '/kaku/room/leave'
     ];
 
     if(req.username == 'anonymous') {
@@ -54,7 +54,7 @@ var index = {
       };
 
       if(!isHasNoneAuthRoute) {
-          res.send(util.retMsg(4001, "用户未登录或无权限，请重新登录"));
+        res.send(util.retMsg(4001, "用户未登录或无权限，请重新登录"));            
       }else {
         return next();
       }
@@ -66,6 +66,9 @@ var index = {
         if(err) {
           res.send(util.retMsg(400, err.toString()));
         }
+
+        console.log(req.authorization.credentials);
+        console.log(u);
 
         if(u.length === 0) {
           res.send(util.retMsg(4001, "access_token非法，请重新登录"));

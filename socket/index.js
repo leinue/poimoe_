@@ -54,6 +54,17 @@ chat.on('connection', function(socket){
 
 		roomId = msg.roomId;
 
+		if(typeof msg.accessToken == 'undefined') {
+			socket.emit('enter chatting room failed', {
+    	    	code: 500,
+    	    	message: '缺少accessToken',
+    	    	error: '缺少参数',
+    	    	headers: 'no header',
+    	    	request: 'no request'
+    	    });
+    	    return false;
+		}
+
 		request.post({
 			url: 'http://api.poimoe.com/kaku/room/enter',
 	        encoding: 'utf8',

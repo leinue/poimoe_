@@ -150,10 +150,12 @@ module.exports = {
 				console.log(err);
 				if(typeof err === 'object') {
 					var requestUrl = err.request.url || '';
+					var dataCode = typeof err.data == 'undefined' ? '' : err.data.code;
+					var dataMessage = typeof err.data == 'undefined' ? '' : err.data.message;
 					result += '<p>Status: ' + err.status + '</p>';
 					result += '<p>Status Text: ' + err.statusText + '</p>';
-					result += '<p>Data Code: ' + err.data.code + '</p>';
-					result += '<p>Data Message: ' + err.data.message + '</p>';
+					result += '<p>Data Code: ' + dataCode + '</p>';
+					result += '<p>Data Message: ' + dataMessage + '</p>';
 					result += '<p>Request URL: ' + requestUrl + '</p>';
 				}else {
 					result = err;
@@ -162,11 +164,15 @@ module.exports = {
 			},
 
 			socket: function() {
-				var requestUrl = err.request.url || '';
-				result += '<p>Code: ' + err.code + '</p>';
-				result += '<p>Detail: ' + err.message + '</p>';
-				result += '<p>Error: ' + err.error + '</p>';
-				_this.messageBox(result, true);
+				if(typeof err == 'string') {
+					_this.messageBox(err);
+				} else {
+					var requestUrl = err.request.url || '';
+					result += '<p>Code: ' + err.code + '</p>';
+					result += '<p>Detail: ' + err.message + '</p>';
+					result += '<p>Error: ' + err.error + '</p>';
+					_this.messageBox(result, true);					
+				}
 			}
 		};
 
