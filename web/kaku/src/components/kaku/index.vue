@@ -10,7 +10,9 @@
             <span class="glyphicon glyphicon-ok"></span>
         </div>
 
-        <div class="row a-bounceinT">
+        <loading v-show="isLoaded == false"></loading>
+
+        <div v-show="isLoaded == true" class="row a-bounceinT">
 
         	<div class="col-md-12" style="padding:0px;border-top:1px solid rgb(217, 217, 217)">
         		<div class="col-md-3" style="padding-left:0px;padding-right:0px;border-bottom:1px solid rgb(217, 217, 217);height:90vh;border-right:1px solid rgb(217, 217, 217);background: rgb(238, 238, 238)">
@@ -182,6 +184,7 @@
     import util from '../../commons/scripts/commons.js';
     import colorPickerCursor from '../../commons/images/cursor.png';
     import ColorPicker from '../../commons/scripts/ColorPicker.js';
+    import loading from '../loading/loading.vue';
 
     var common = {
 
@@ -224,6 +227,8 @@
 
             	room: {},
             	message: '',
+
+            	isLoaded: false,
 
             	paint: {
             		x: [], //鼠标移动时x坐标
@@ -277,7 +282,7 @@
         },
 
         components: {
-
+        	'loading': loading
         },
 
         methods: {
@@ -840,6 +845,8 @@
 		                    	_this.drawImageOnCanvas(currentLayer.dataURL, tmpCxt);
 	                    	}
 	                    };
+
+	                    _this.isLoaded = true;
 
         				_this.initKakuMQSocket();
 						_this.initKakuInstantSavingThread();

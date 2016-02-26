@@ -1,6 +1,7 @@
 <template>
     
     <div style="">
+
         <div class="row a-bounceinT">
             <div class="col-md-8 col-md-offset-2">
                 <div class="col-md-12">
@@ -28,6 +29,9 @@
                         </div>
                     </div>
                 </div>
+
+                <loading v-show="isLoaded == false"></loading>
+
                 <div @click="loadMoreRooms()" class="col-md-12">
                     <div class="load-more">
                         加载更多
@@ -42,6 +46,7 @@
 <script>
 
     import util from '../commons/scripts/commons.js';
+    import loading from  './loading/loading.vue';
 
     export default {
         data() {
@@ -50,12 +55,14 @@
 
                 currentPage: 1,
 
-                myId: localStorage._id
+                myId: localStorage._id,
+
+                isLoaded: false
             }
         },
 
         components: {
-
+            'loading': loading
         },
 
         methods: {
@@ -96,6 +103,8 @@
                             _this.kakuRoomList.push(data);                            
                         }
                     }
+
+                    _this.isLoaded = true;
 
                 }, function(err) {
                     util.handleError(err);
@@ -149,14 +158,10 @@
 
                 if(typeof window.services != 'undefined') {
 
-                    console.log(localStorage.roomStatus);
-
                     if(localStorage.roomStatus == 'undefined') {
-                        console.log('ddd');
                         setTimeout(function() {
-                            console.log('ssssss');
                             _this.$get('loadKakuRoom')();
-                        }, 500);
+                        }, 1000);
                     }else {
                         _this.$get('loadKakuRoom')();                        
                     }
