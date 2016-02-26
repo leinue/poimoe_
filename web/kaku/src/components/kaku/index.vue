@@ -837,7 +837,7 @@
 	                    	console.log(currentLayer.id);
 	                    	var tmpCxt = document.getElementById(currentLayer.id).getContext('2d');
 	                    	if(currentLayer.dataURL != '') {
-		                    	_this.drawImageOnCanvas(currentLayer.dataURL, tmpCxt);   		
+		                    	_this.drawImageOnCanvas(currentLayer.dataURL, tmpCxt);
 	                    	}
 	                    };
 
@@ -856,6 +856,10 @@
 
 				chatSocket.on('leave room failed', function(msg) {
 					util.handleError(msg, 'socket');
+				});
+
+				chatSocket.on('leave room succeed', function(msg) {
+					console.log(msg);
 				});
 
 				chatSocket.on('sys', function(msg) {

@@ -36,7 +36,7 @@ var index = {
       '/user/login/:email/:password', '/themes/select/:tid', 
       '/user/profile/get/:uid', '/site/search/:val/:page/:count', '/timeline/message/personal/count/:uid',
       '/timeline/message/index/count/:uid', '/timeline/message/index/count/:uid',
-      '/kaku/room/all/:page/:count', '/kaku/room/enter', '/kaku/room/leave'
+      '/kaku/room/all/:page/:count'
     ];
 
     if(req.username == 'anonymous') {

@@ -146,10 +146,20 @@
             var _this = this;
 
             var servicesInterval = setInterval(function() {
-                console.log('sss')
+
                 if(typeof window.services != 'undefined') {
 
-                    _this.$get('loadKakuRoom')();
+                    console.log(localStorage.roomStatus);
+
+                    if(localStorage.roomStatus == 'undefined') {
+                        console.log('ddd');
+                        setTimeout(function() {
+                            console.log('ssssss');
+                            _this.$get('loadKakuRoom')();
+                        }, 500);
+                    }else {
+                        _this.$get('loadKakuRoom')();                        
+                    }
 
                     clearInterval(servicesInterval);
 

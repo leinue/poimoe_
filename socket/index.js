@@ -329,7 +329,6 @@ chat.on('connection', function(socket){
 		        if(!error && response.statusCode == 200){
 	        	    roomInfo[roomId].splice(index, 1);
 	        	    socket.leave(roomId);// 退出房间
-		            console.log(body);
 				    chat.to(roomId).emit('sys', username + '退出了房间');
 				    chat.to(roomId).emit('leave room succeed', body);
 		        }else{
