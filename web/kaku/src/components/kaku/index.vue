@@ -848,6 +848,10 @@
 
 	                    _this.isLoaded = true;
 
+	                    setTimeout(function() {
+	    		        	common.adjustUI();
+	                    }, 400);
+
         				_this.initKakuMQSocket();
 						_this.initKakuInstantSavingThread();
 
@@ -1071,7 +1075,6 @@
         },
 
         ready() {
-        	common.adjustUI();
 			var id = router._currentRoute.params.id;
 
 			var _this = this;

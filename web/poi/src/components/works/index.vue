@@ -171,7 +171,6 @@
 			},
 
 			likeThis: function(tid, favourited, key) {
-				console.log(favourited);
 				if(!favourited) {
 					util.likeThisTheme(tid, function(data) {});
 				}else {
