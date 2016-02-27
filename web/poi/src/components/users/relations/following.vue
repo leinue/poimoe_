@@ -7,6 +7,7 @@
 				
 			</div>
 
+			<loading v-show="isLoaded == false"></loading>
 			<nofo v-show="following.length === 0"></nofo>
 
 			<div class="timeline a-bounceinB" v-for="user in following">
@@ -52,13 +53,16 @@
 
 	var util = require('../../../commons/scripts/commons.js');
 	var nofo = require('../../error/nodata.vue');
+	var loading = require('../../loading/loading.vue');
 
 	export default {
 
 		data() {
 
 			return {
-				following: []
+				following: [],
+
+				isLoaded: false
 			}
 
 		},
@@ -95,7 +99,8 @@
 		},
 
 		components: {
-			'nofo': nofo
+			'nofo': nofo,
+			'loading': loading
 		},
 
 		created() {
@@ -127,7 +132,7 @@
 						}
 
 						_this.$set('following', data[0].follow);
-						console.log(_this.$get('following'));
+						_this.$set('isLoaded', true);
 
 					}, function(err) {
 						util.handleError(err);

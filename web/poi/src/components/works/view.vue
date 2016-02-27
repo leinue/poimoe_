@@ -7,6 +7,8 @@
 				
 			</div>
 
+			<loading v-show="isLoaded == false"></loading>
+
 		    <div class="timeline" v-for="item in cg">
 				<div class="col-xs-2" style="padding-right:0px">
 					<div @click="toProfile(item.user_id._id)" class="timeline-author">
@@ -75,6 +77,7 @@
 <script>
 
 	var util = require('../../commons/scripts/commons.js');
+	var loading = require('../loading/loading.vue');
 
 	export default {
 
@@ -83,10 +86,16 @@
 			return {
 				cg: [],
 
-				myUid: localStorage._id
+				myUid: localStorage._id,
+
+				isLoaded: false
 			}
 
 		},
+
+        components: {
+        	'loading': loading
+        },
 
 		methods: {
 
@@ -147,6 +156,7 @@
 							console.log(data);
 
 							_this.$set('cg', data);
+							_this.$set('isLoaded', true);
 
 						}, function(err) {
 							util.handleError(err);

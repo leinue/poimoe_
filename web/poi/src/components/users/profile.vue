@@ -39,6 +39,7 @@
 					</div>			    	
 			    </div>
 		    </div>
+		    
 			<div class="col-md-6 col-md-offset-3" style="margin-top:25px;">
 			    <nodata v-show="userItems.length === 0"></nodata>
 				<div class="timeline a-bounceinB" v-for="item in userItems">

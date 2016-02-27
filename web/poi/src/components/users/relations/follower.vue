@@ -7,6 +7,7 @@
 				
 			</div>
 
+			<loading v-show="isLoaded == false"></loading>
 			<nodata v-show="fans.length === 0"></nodata>
 
 			<div class="timeline a-bounceinB" v-for="(key, fan) in fans">
@@ -53,6 +54,7 @@
 
 	var util = require('../../../commons/scripts/commons.js');
 	var nodata = require('../../error/nodata.vue');
+	var loading = require('../../loading/loading.vue');
 
 	export default {
 
@@ -60,7 +62,9 @@
 
 			return {
 
-				fans: []
+				fans: [],
+
+				isLoaded: false
 
 			}
 
@@ -152,6 +156,7 @@
 						}
 
 						_this.$set('fans', data[0].follower);
+						_this.$set('isLoaded', true);
 
 					}, function(err) {
 						util.handleError(err);

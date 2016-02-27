@@ -29,14 +29,15 @@ module.exports = {
         user_id: uid
       }).populate({
         path: 'user_id follow follower',
+        select: '_id username photo posts',
         populate: {
           path: 'posts',
+          select: '_id image',
           match: {
             isDeleted: false,
             limit: 3
           }
-        },
-        select: '_id username photo posts'
+        }
       }).exec(cb);
 
     };

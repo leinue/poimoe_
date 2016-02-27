@@ -1,7 +1,10 @@
 <template>
     
     <div style="">
-        <div class="row a-bounceinT" style="border-bottom: 1px solid rgb(220, 220, 220)">
+
+        <loading v-show="isHotTagsLoaded == false && isRecomendedLoaded == false && isHotThemesLoaded == false"></loading>
+
+        <div v-show="isHotTagsLoaded == true && isRecomendedLoaded == true && isHotThemesLoaded == true" class="row a-bounceinT" style="border-bottom: 1px solid rgb(220, 220, 220)">
 
             <div class="col-md-10 col-md-offset-1" style="padding-top:15px;padding-bottom:15px;">
 
@@ -105,6 +108,7 @@
     import util from '../commons/scripts/commons.js';
     import search from './search/search.vue';
     import us from '../services/UserService.js';
+    import loading from './loading/loading.vue';
 
     export default {
         data() {
@@ -123,12 +127,18 @@
                 top5Users: [],
                 bottom5Users: [],
 
-                hotTags: []
+                hotTags: [],
+
+                isHotThemesLoaded: false,
+                isHotTagsLoaded: false,
+                isRecomendedLoaded: false
+
             }
         },
 
         components: {
-            'search': search
+            'search': search,
+            'loading': loading
         },
 
         methods: {
@@ -198,6 +208,7 @@
                     }
 
                     _this.hotThemes = data;
+                    _this.isHotThemesLoaded = true;
 
                 }, function(err) {
                     util.handleError(err);
@@ -230,6 +241,8 @@
                         _this.bottom5Users.push(user);
                     };
 
+                    _this.isRecomendedLoaded = true;
+
                 }, function(err) {
                     util.handleError(err);
                 });
@@ -251,6 +264,8 @@
                     }
 
                     _this.hotTags = data;
+
+                    _this.isHotTagsLoaded = true;
 
                     search.props.hotTags.default = data;
 

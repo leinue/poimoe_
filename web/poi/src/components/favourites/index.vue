@@ -9,6 +9,8 @@
 
 		<no-favourites v-show="favouritesList.length === 0"></no-favourites>
 
+		<loading v-show="isLoaded == false"></loading>
+
 	    <div class="timeline a-bouncein" v-for="(index, item) in favouritesList">
 			<div class="col-xs-2" style="padding-right:0px">
 				<div @click="toProfile(item.user_id._id)" class="timeline-author">
@@ -78,6 +80,7 @@
 
 	import util from '../../commons/scripts/commons.js';
 	import noFavourites from '../error/nodata.vue';
+	import loading from '../loading/loading.vue';
 
 	export default {
 		data() {
@@ -87,13 +90,16 @@
 
 				myUid: localStorage._id,
 
-				currentPage: 1
+				currentPage: 1,
+
+				isLoaded: false
 			}
 
 		},
 
 		components: {
-			'noFavourites': noFavourites
+			'noFavourites': noFavourites,
+			'loading': loading
 		},
 
 		methods: {
@@ -147,6 +153,8 @@
 							};
 						}
 					}
+
+					_this.isLoaded = true;
 
 				}, function(err) {
 					util.handleError(err);

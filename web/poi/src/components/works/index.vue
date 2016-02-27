@@ -22,7 +22,7 @@
 			</div>
 		</div>
 
-		{{loadMyTimeline()}}
+		<!-- {{loadMyTimeline()}} -->
 
 		<div class="timeline a-bounceinB" v-for="item in myTimeline">
 			<div class="col-xs-2" style="padding-right:0px">
@@ -82,6 +82,8 @@
 			</div>
 		</div>
 
+		<loading v-show="isLoaded == false"></loading>
+
 	</div>
 	
 </div>
@@ -91,6 +93,7 @@
 <script>
 
 	var util = require('../../commons/scripts/commons.js');
+	var loading = require('../loading/loading.vue');
 
 	export default {
 		data() {
@@ -102,8 +105,14 @@
 				publishTime: 'null',
 				myTimeline: [],
 
-				currentPage: 1
+				currentPage: 1,
+
+				isLoaded: false
 			}
+		},
+
+		components: {
+			'loading': loading
 		},
 
 		methods: {
@@ -150,6 +159,8 @@
 
 						// console.log();
 					}
+
+					_this.isLoaded = true;
 
 					// console.log(data);
 
@@ -208,6 +219,18 @@
 					}
         		}, throldHold);
     		}
+
+			var servicesInterval = setInterval(function() {
+
+				if(typeof window.services != 'undefined') {
+
+					clearInterval(servicesInterval);
+
+					_this.$get('loadMyTimeline')();
+
+				}
+
+			}, 1);
 		}
 	};
 
