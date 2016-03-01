@@ -307,7 +307,13 @@
                     var slider = document.getElementById('slider');
 
                     if(slider != null) {
-                        var sliderInner = slider.childNodes.item(1).getElementsByTagName('div');
+
+                        var sliderChildNodesItem = slider.childNodes.item(1).toString() == '[object Text]' ? slider.childNodes.item(0) : slider.childNodes.item(1);
+
+                        console.log(slider.childNodes.item(1).toString(), slider.childNodes.item(1).toString() == '[object Text]');
+                        console.log(sliderChildNodesItem);
+
+                        var sliderInner = sliderChildNodesItem.getElementsByTagName('div');
                         var sliderItem = sliderInner[0].getElementsByTagName('div');
                         sliderItem[0].setAttribute('class', sliderItem[0].getAttribute('class') + ' active');
                     }

@@ -540,7 +540,12 @@
 
 					var poiHeader = document.getElementById('poi-header');
 					var ul = poiHeader.childNodes;
-					var lis = ul.item(1).getElementsByTagName('li');
+					
+					if(ul.item(1) != null){
+						var lis = ul.item(1).getElementsByTagName('li');
+					}else {
+						var lis = ul.item(0).getElementsByTagName('li');
+					}
 
 					for (var i = 0; i < lis.length; i++) {
 						var li = lis[i];

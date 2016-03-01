@@ -1,3 +1,5 @@
+var webpack = require('webpack');
+
 module.exports = {
     entry: './src/index.js',
     output: {
@@ -26,7 +28,8 @@ module.exports = {
         extensions: ['', '.js', '.json', '.css'],
         //模块别名定义，方便后续直接引用别名，无须多写长长的地址
         alias: {
-            'vue-strap': './node_modules/vue-strap/dist/vue-strap.min.js'
+            vueStrap: './node_modules/vue-strap/dist/vue-strap.min.js',
+            bootstrap: './node_modules/bootstrap/dist/css/bootstrap.min.css'
         }
     }
 }
