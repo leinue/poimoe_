@@ -1,7 +1,7 @@
 <template>
 
 <div style="background: rgb(249, 245, 239);" id="new-cg-container">
-
+	{{init()}}
 	<div class="col-md-6 col-md-offset-3 a-bounceinB" style="padding-top:12px;">
 		<div class="timeline">
 			<div class="col-xs-10" style="padding-bottom:12px;width:100%;">
@@ -20,7 +20,7 @@
 							<div id="cg-outer">
 	    						<img style="display:none" class="cg-viewer" width="100" height="100" border="0">
 							</div>
-							<form style="display:none" enctype="multipart/form-data" method="post" target="upload" action="http://image.poimoe.com/upload.php?uid=1&cors=true&corsurl=http://localhost:8080/upload.html" > 
+							<form style="display:none" enctype="multipart/form-data" method="post" target="upload" v-bind:action="cgUploadAction" > 
 								<input type="file" id="cg-source" name="upfile" v-on:change="previewImage()"/>
 								<input id="submit-cg-btn" type="submit" /> 
 							</form>
@@ -95,7 +95,9 @@
 
 				keyExistsInTagsSearched: true,
 
-				isCGShow: false
+				isCGShow: false,
+
+				cgUploadAction: ''
 
 			}
 		},
@@ -103,6 +105,14 @@
 		methods: {
 			back: function() {
 				window.history.go(-1);
+			},
+
+			init: function() {
+				if(document.domain == 'localhost') {
+					this.cgUploadAction = 'http://image.poimoe.com/upload.php?uid=' + localStorage._id + '/cgs/' + util.curentTime() + '&cors=true&corsurl=http://localhost:8080/upload.html';					
+				}else {
+					this.cgUploadAction = 'http://image.poimoe.com/upload.php?uid=' + localStorage._id + '/cgs/' + util.curentTime() + '&cors=true&corsurl=http://poi.poimoe.com/upload.html';
+				}
 			},
 
 			publishNewCG: function() {

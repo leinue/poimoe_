@@ -99,7 +99,7 @@
   			<span title="详细资料" class="glyphicon glyphicon-home" @click="toDetailProfile()" id="modify-pencil" style="padding-left:15px;"></span>
   		  	<span title="确认修改" v-show="editable" class="glyphicon glyphicon-ok" @click="confirmToModifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
 		  	<span title="取消修改" v-show="editable" class="glyphicon glyphicon-remove" @click="cancelModifyProfile()" id="modify-pencil" style="padding-left:15px"></span>
-			<form style="display:none" enctype="multipart/form-data" method="post" target="pupload" action="http://image.poimoe.com/upload.php?uid=1&cors=true&corsurl=http://localhost:8080/upload.html" > 
+			<form style="display:none" enctype="multipart/form-data" method="post" target="pupload" v-bind:action="photoUploadAction" > 
 	    		<input type="file" id="imgbtn-source" name="upfile" v-on:change="previewImage()" />
 				<input id="submit-photo-btn" type="submit" /> 
 			</form>
@@ -199,15 +199,24 @@
 
 				notificationsList: [],
 
-				newPhoto: false
+				newPhoto: false,
+
+				photoUploadAction: ''
 			};
 		},
 
 		methods: {
 			init: function() {
 				this.isLogin = localStorage.login;
+				
 				if(this.isLogin == 'true') {
 					this.startNotificationComet();					
+				}
+
+				if(document.domain == 'localhost') {
+					this.photoUploadAction = 'http://image.poimoe.com/upload.php?uid=' + localStorage._id + '/photo&cors=true&corsurl=http://localhost:8080/upload.html';					
+				}else {
+					this.photoUploadAction = 'http://image.poimoe.com/upload.php?uid=' + localStorage._id + '/photo&cors=true&corsurl=http://poi.poimoe.com/upload.html';
 				}
 			},
 
@@ -540,7 +549,7 @@
 
 					var poiHeader = document.getElementById('poi-header');
 					var ul = poiHeader.childNodes;
-					
+
 					if(ul.item(1) != null){
 						var lis = ul.item(1).getElementsByTagName('li');
 					}else {

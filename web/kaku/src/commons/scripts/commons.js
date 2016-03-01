@@ -53,7 +53,7 @@ module.exports = {
 			span.setAttribute('class', '');
 		};
     },
-    
+
     tologin: function() {
     	router.go('/login');
     	localStorage.logPrev = router.path;
@@ -125,6 +125,20 @@ module.exports = {
 		setTimeout(function() {
 			_this.hideMessageBox(boxId);
 		}, 3000);
+
+		var loginFailedList = [
+			'access_token非法或用户登录已失效，请重新登录',
+			'access_token已过期，请重新登录',
+			'access_token非法，请重新登录',
+			'用户未登录或无权限，请重新登录'
+		];
+
+		if(loginFailedList.indexOf(message) != -1) {
+			setTimeout(function() {
+				window.location.href = 'http://poi.poimoe.com/#!/login';
+			},1000);
+		}
+
 	},
 
 	hideMessageBox: function(id) {

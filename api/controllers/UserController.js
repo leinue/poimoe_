@@ -130,12 +130,10 @@ var index = {
       }
 
       var thisPwd = util.sha1Pwd(thisPwd);
-
-      var randomNumer = Math.random(0,100).toString();
-
+      
       var user = new User({
         email: thisEmail,
-        username: thisEmail + randomNumer,
+        username: util.randomString(6),
         password: thisPwd
       });
 
