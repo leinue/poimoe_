@@ -19,7 +19,7 @@
 
 	<body>
 
-		<form enctype="multipart/form-data" method="post" action="upload.php?uid=1" name="upform">
+		<form enctype="multipart/form-data" method="post" action="upload.php?uid=56d52b5ee97d424535f9be2e/photo/" name="upform">
 		  上传文件:
 		  <input name="upfile" type="file">
 		  <input type="submit" value="上传"><br>

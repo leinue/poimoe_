@@ -208,13 +208,13 @@
 		methods: {
 			init: function() {
 				this.isLogin = localStorage.login;
-				
+
 				if(this.isLogin == 'true') {
 					this.startNotificationComet();					
 				}
 
 				if(document.domain == 'localhost') {
-					this.photoUploadAction = 'http://image.poimoe.com/upload.php?uid=' + localStorage._id + '/photo&cors=true&corsurl=http://localhost:8080/upload.html';					
+					this.photoUploadAction = 'http://image.poimoe.com/upload.php?uid=' + localStorage._id + '/photo&cors=true&corsurl=http://localhost:8080/upload.html';
 				}else {
 					this.photoUploadAction = 'http://image.poimoe.com/upload.php?uid=' + localStorage._id + '/photo&cors=true&corsurl=http://poi.poimoe.com/upload.html';
 				}
@@ -596,6 +596,7 @@
 				// 	};
 
 				// }
+				//
 
 			}, 1000);
 		}

@@ -99,10 +99,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             header('Location:'.$corsurl.'?data='.returnMessage(401, "文件类型不符，".$file["type"], true));
         }
     }
-
     if(!file_exists($destination_folder))
     {
-        mkdir($destination_folder);
+        $mkdirResult = mkdir($destination_folder);
+        returnMessage(401, $mkdirResult);        
         chmod($destination_folder, 0777);
     }
 
