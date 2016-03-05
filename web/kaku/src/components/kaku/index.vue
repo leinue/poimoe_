@@ -292,9 +292,32 @@
         methods: {
 
         	shareThisCG: function() {
+        		//上传图片
         		//存到cookie
         		//加载poi新增CG页面
-        		util.setCookie('shareCG', 'this.paint.baseCanvas.toDataURL()', 2);
+        		var base64 = this.paint.baseCanvas.toDataURL();
+        		services.KakuService.uploadBase64ToServer(localStorage._id + '/roomCG/' + this.room._id, {
+        			base64Image: base64
+        		}).then(function(data) {
+
+	                var code = res.data.code;
+                    var data = res.data.message;
+
+                    if(code != 200) {
+                        util.messageBox(data, true);
+                        return false;
+                    }
+
+                    var imageUrl = data.origin;
+                    util.setCookie('shareCG', imageUrl, 1);
+
+                    console.log(imageUrl);
+
+                    // window.location.href = 'http://poi.poimoe.com/#!/cg/new';
+
+        		}, function(err) {
+        			util.handleError(err);
+        		});
         	},
 
         	showFullSendForm: function() {

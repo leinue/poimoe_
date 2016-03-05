@@ -67,6 +67,41 @@ $waterimg = "xplore.gif";    //水印图片
 $imgpreview = 1;      //是否生成预览图(1为生成,其他为不生成);
 $imgpreviewsize= 1/2;    //缩略图比例
 
+if(isset($_GET['json'])) {
+
+    $data = file_get_contents('php://input');
+
+    $data = json_decode($data);
+
+    if(isset($data->base64Image)) {
+        //以base64方式存储图片
+
+        $base64_image_content = $data->base64Image;
+         
+        //保存base64字符串为图片
+        //匹配出图片的格式
+        if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_image_content, $result)){
+          $type = $result[2];
+          $new_file = $destination_folder.time().'.'.$type;
+          if (file_put_contents($new_file, base64_decode(str_replace($result[1], '', $base64_image_content)))){
+            if(!$cors) {
+                returnMessage(200, array('origin' => 'http://image.poimoe.com/'.$new_file, 'preview' => 'http://image.poimoe.com/'.$new_file));
+            }else {
+                header('Location:'.$corsurl.'?data='.returnMessage(200, array('origin' => 'http://image.poimoe.com/'.$new_file, 'preview' => 'http://image.poimoe.com/'.$new_file), true));
+            }
+          }else {
+            if(!$cors) {
+                returnMessage(401, '保存图片失败');            
+            }else {
+                header('Location:'.$corsurl.'?data='.returnMessage(401, '保存图片失败', true));
+            }
+          }
+         
+        }
+    }
+
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
     if (!is_uploaded_file($_FILES["upfile"][tmp_name]))

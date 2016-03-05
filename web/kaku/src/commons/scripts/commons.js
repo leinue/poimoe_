@@ -67,7 +67,6 @@ module.exports = {
 	setCookie: function(c_name, value, expiredays) {  
 		var exdate=new Date();
 		exdate.setDate(exdate.getDate()+expiredays);
-		console.log(value);
 		document.cookie=c_name+ "=" +escape(value)+((expiredays==null) ? "" : ";expires="+exdate.toGMTString())+";path=/;domain=poimoe.com";
 	},
 

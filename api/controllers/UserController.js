@@ -278,6 +278,10 @@ var index = {
 
       if(f.length === 0) {
         res.send(util.retMsg(200, []));        
+      }else {
+        if(f[0].favourites.length === 0) {
+          res.send(util.retMsg(200, []));          
+        }
       }
 
       util.seekFavourited(req, res, f[0].favourites, ctrlInitial.models);
