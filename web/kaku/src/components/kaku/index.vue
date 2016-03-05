@@ -2,12 +2,16 @@
    
     <div style="margin-top:-21px;z-index:3000">
 
-        <div @click="leaveThisRoom()" title="退出当前房间" class="type-circle header-circle" style="left: 65px;">
+        <div @click="leaveThisRoom()" title="退出当前房间" class="type-circle header-circle" style="left: 115px;">
             <span class="glyphicon glyphicon-arrow-left"></span>
         </div>
 
-        <div @click="syncPaintingStatus()" title="保存当前绘画/UI状态" class="type-circle header-circle" style="left: 115px;">
+        <div @click="syncPaintingStatus()" title="保存当前绘画/UI状态" class="type-circle header-circle" style="left: 165px;">
             <span class="glyphicon glyphicon-ok"></span>
+        </div>
+
+        <div @click="shareThisCG()" title="分享绘画" class="type-circle header-circle" style="left: 215px;">
+            <span class="glyphicon glyphicon-share-alt"></span>
         </div>
 
         <loading v-show="isLoaded == false"></loading>
@@ -286,6 +290,12 @@
         },
 
         methods: {
+
+        	shareThisCG: function() {
+        		//存到cookie
+        		//加载poi新增CG页面
+        		util.setCookie('shareCG', 'this.paint.baseCanvas.toDataURL()', 2);
+        	},
 
         	showFullSendForm: function() {
         		if(!this.sendFormClicked) {

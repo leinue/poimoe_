@@ -13,8 +13,12 @@
     <div class="notification-center {{boncein}}">
     </div>
 
-	<div title="新建房间" @click="pathToNewRoomPage()" class="type-circle header-circle">
+	<div title="新建房间" id="pathToPoi" @click="pathToNewRoomPage()" class="type-circle header-circle">
         <span class="glyphicon glyphicon-plus"></span>
+    </div>
+
+	<div title="返回社区" @click="pathToPoi()" class="type-circle header-circle">
+        <span class="glyphicon glyphicon-home"></span>
     </div>
 
 	<nav class="navbar navbar-default" style="">
@@ -117,6 +121,10 @@
 
 			hideThisSuccessAlert: function() {
 				util.hideMessageBox('alert-success');
+			},
+
+			pathToPoi: function() {
+				window.location.href = "http://poi.poimoe.com";
 			}
 
 		},
@@ -142,6 +150,10 @@
 		width: 40px!important;
 		height: 40px!important;
 		line-height: 40px!important;
+	}
+
+	#pathToPoi {
+		left: 65px;
 	}
 
 	.menu-header {
