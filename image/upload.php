@@ -78,6 +78,10 @@ if(isset($_GET['json'])) {
 
         $base64_image_content = $data->base64Image;
          
+        if(!file_exists($destination_folder)){
+            $mkdirResult = mkdir($destination_folder, 0777, true);
+        }
+
         //保存base64字符串为图片
         //匹配出图片的格式
         if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_image_content, $result)){
@@ -136,9 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     }
     if(!file_exists($destination_folder))
     {
-        $mkdirResult = mkdir($destination_folder);
-        returnMessage(401, $mkdirResult);        
-        chmod($destination_folder, 0777);
+        $mkdirResult = mkdir($destination_folder, 0777, true);
     }
 
     $filename=$file["tmp_name"];

@@ -298,9 +298,9 @@
         		var base64 = this.paint.baseCanvas.toDataURL();
         		services.KakuService.uploadBase64ToServer(localStorage._id + '/roomCG/' + this.room._id, {
         			base64Image: base64
-        		}).then(function(data) {
+        		}).then(function(res) {
 
-	                var code = res.data.code;
+	                var code = res.data.status;
                     var data = res.data.message;
 
                     if(code != 200) {
