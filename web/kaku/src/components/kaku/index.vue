@@ -807,8 +807,10 @@
 
     			console.log(src);
 
-        		image.crossOrigin = "Anonymous";
+        		image.crossOrigin = "anonymous";
         		image.src = src;
+
+        		console.log(image);
 
         		image.onload = function() {
 	        		canvas.drawImage(image, 0, 0);
