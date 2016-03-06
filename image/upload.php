@@ -11,6 +11,8 @@ $watermark   : 是否附加水印(1为加水印,其他为不加水印);
 2. 将extension_dir =改为你的php_gd2.dll所在目录;
 ******************************************************************************/
 
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Api-Version, Authorization');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
@@ -67,6 +69,21 @@ $waterimg = "xplore.gif";    //水印图片
 $imgpreview = 1;      //是否生成预览图(1为生成,其他为不生成);
 $imgpreviewsize= 1/2;    //缩略图比例
 
+function delFileUnderDir($dirName) {
+    if($handle = opendir($dirName)) {
+        while (false != ($item = readdir($handle))) {
+            if($item != '.' && $item != '..') {
+                if(is_dir("$dirName/$item")) {
+                    delFileUnderDir("$dirName/$item");
+                }else {
+                    unlink("$dirName/$item");
+                }
+            }
+        }
+        closedir($handle);
+    }
+}
+
 if(isset($_GET['json'])) {
 
     $data = file_get_contents('php://input');
@@ -81,6 +98,10 @@ if(isset($_GET['json'])) {
         if(!file_exists($destination_folder)){
             $mkdirResult = mkdir($destination_folder, 0777, true);
         }
+
+        //先删除目录下所有文件
+
+        delFileUnderDir($destination_folder);
 
         //保存base64字符串为图片
         //匹配出图片的格式

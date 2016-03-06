@@ -296,7 +296,7 @@
         		//存到cookie
         		//加载poi新增CG页面
         		var base64 = this.paint.baseCanvas.toDataURL();
-        		services.KakuService.uploadBase64ToServer(localStorage._id + '/roomCG/' + this.room._id, {
+        		services.KakuService.uploadBase64ToServer(localStorage._id + '/roomCG/sharing/' + this.room._id, {
         			base64Image: base64
         		}).then(function(res) {
 
