@@ -112,6 +112,10 @@
 					this.cgUploadAction = 'http://image.poimoe.com/upload.php?uid=' + localStorage._id + '/cgs/' + util.curentTime() + '&cors=true&corsurl=http://localhost:8080/upload.html';					
 				}else {
 					this.cgUploadAction = 'http://image.poimoe.com/upload.php?uid=' + localStorage._id + '/cgs/' + util.curentTime() + '&cors=true&corsurl=http://poi.poimoe.com/upload.html';
+
+					if(typeof util.getCookie('shareCG') != 'undefined') {
+						this.cg.image = util.getCookie('shareCG');
+					}
 				}
 			},
 

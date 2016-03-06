@@ -313,7 +313,7 @@
 
                     console.log(imageUrl);
 
-                    // window.location.href = 'http://poi.poimoe.com/#!/cg/new';
+                    window.location.href = 'http://poi.poimoe.com/#!/cg/new';
 
         		}, function(err) {
         			util.handleError(err);
