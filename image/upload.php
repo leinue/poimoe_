@@ -101,7 +101,13 @@ if(isset($_GET['json'])) {
 
         //先删除目录下所有文件
 
-        delFileUnderDir($destination_folder);
+        if(isset($_GET['nodel'])) {
+            if($_GET['nodel'] == 'no') {
+                delFileUnderDir($destination_folder);                
+            }
+        }else {
+            delFileUnderDir($destination_folder);            
+        }
 
         //保存base64字符串为图片
         //匹配出图片的格式
@@ -116,7 +122,7 @@ if(isset($_GET['json'])) {
             }
           }else {
             if(!$cors) {
-                returnMessage(401, '保存图片失败');            
+                returnMessage(401, '保存图片失败');       
             }else {
                 header('Location:'.$corsurl.'?data='.returnMessage(401, '保存图片失败', true));
             }

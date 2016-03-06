@@ -291,12 +291,23 @@
 
         methods: {
 
-        	shareThisCG: function() {
+        	shareThisCG: function(obj, cb) {
+
+        		var navToPoi = obj.navToPoi == false ? obj.navToPoi : true;
+
         		//上传图片
         		//存到cookie
         		//加载poi新增CG页面
-        		var base64 = this.paint.baseCanvas.toDataURL();
-        		services.KakuService.uploadBase64ToServer(localStorage._id + '/roomCG/sharing/' + this.room._id, {
+        		var base64 = obj.base64 || this.paint.baseCanvas.toDataURL();
+
+        		var requestParams = navToPoi ? localStorage._id + '/roomCG/' + this.room._id + '/sharing' : localStorage._id + '/roomCG/' + this.room._id + '/painting';
+
+        		requestParams = obj.isLayer ? requestParams + '/layers' : requestParams;
+
+        		services.KakuService.uploadBase64ToServer({
+        			uid: requestParams,
+        			nodel: obj.nodel || 'no'
+        		}, {
         			base64Image: base64
         		}).then(function(res) {
 
@@ -309,11 +320,13 @@
                     }
 
                     var imageUrl = data.origin;
-                    util.setCookie('shareCG', imageUrl, 1);
 
-                    console.log(imageUrl);
-
-                    window.location.href = 'http://poi.poimoe.com/#!/cg/new';
+                    if(navToPoi) {
+	                    util.setCookie('shareCG', imageUrl, 1);
+	                    window.location.href = 'http://poi.poimoe.com/#!/cg/new';
+                    }else {
+                    	cb(imageUrl);
+                    }
 
         		}, function(err) {
         			util.handleError(err);
@@ -791,7 +804,12 @@
 
         	drawImageOnCanvas: function(src, canvas, cb) {
     			var image = new Image();
+
+    			console.log(src);
+
+        		image.crossOrigin = "Anonymous";
         		image.src = src;
+
         		image.onload = function() {
 	        		canvas.drawImage(image, 0, 0);
 	        		if(cb) {
@@ -865,7 +883,9 @@
 	                    _this.initPaint();
 	                    _this.initBasePaint();
 
-	                    // 初始化用户图像
+	                    //初始化用户图像
+
+	                    //先将图片转换为dataURL，否则在使用toDataURL时会产生跨域问题
 
 	                    _this.drawImageOnCanvas(_this.paint.dataURL, _this.paint.baseCxt);
 	                    _this.drawImageOnCanvas(_this.paint.dataURL, _this.paint.cxt);
@@ -937,31 +957,72 @@
 
 				var cxtList = ['baseCanvas', 'baseCxt', 'cxt', 'canvas'];
 
-				this.paint.dataURL = this.paint.baseCanvas.toDataURL();
-				var tmpCanvas = {};
+				var img = new Image;
 
-				for (var i = 0; i < this.paint.layer.length; i++) {
-					var currentLayer = this.paint.layer[i];
-					tmpCanvas = document.getElementById(currentLayer.id);
-					if(tmpCanvas != null) {
-						currentLayer.dataURL = tmpCanvas.toDataURL();
-					}
+				img.crossOrigin = '*';
+				img.src = '';
+				
+				img.onload = function() {
+
 				};
 
-				var tmpPaint = util.cloneObject(_this.paint, cxtList);
-				var tmpPaintUI = util.cloneObject(_this.paintUI);
+				var dataURL = this.paint.baseCanvas.toDataURL();
 
-				var data = {
-					roomId: _this.room._id,
-					people: localStorage._id,
-					paint: tmpPaint,
-					paintUI: tmpPaintUI,
-					accessToken: localStorage.accessToken
-				};
+				_this.shareThisCG({
+					base64: dataURL,
+					navToPoi: false,
+					nodel: 'no'
+				}, function(imageUrl) {
 
-				localStorage.roomStatus = JSON.stringify(data);
+					_this.paint.dataURL = imageUrl;
+					var tmpCanvas = {};
 
-				chatSocket.emit('save image', data);
+					var paintLayerLength = _this.paint.layer.length;
+
+					_this.paint.layer.forEach(function(currentLayer, i) {
+						tmpCanvas = document.getElementById(currentLayer.id);
+						if(tmpCanvas != null) {
+							_this.shareThisCG({
+								base64: tmpCanvas.toDataURL(),
+								navToPoi: false,
+								nodel: 'no',
+								isLayer: true
+							}, function(layerImg) {
+								_this.paint.layer[i].dataURL = layerImg;
+
+								if(i == paintLayerLength - 1) {
+
+									var tmpPaint = util.cloneObject(_this.paint, cxtList);
+									var tmpPaintUI = util.cloneObject(_this.paintUI);
+
+									var data = {
+										roomId: _this.room._id,
+										people: localStorage._id,
+										paint: tmpPaint,
+										paintUI: tmpPaintUI,
+										accessToken: localStorage.accessToken
+									};
+
+									localStorage.roomStatus = JSON.stringify(data);
+
+									chatSocket.emit('save image', data);
+
+								}
+
+							});
+						}
+					});
+
+					// for (var i = 0; i < _this.paint.layer.length; i++) {
+					// 	var currentLayer = _this.paint.layer[i];
+					// 	tmpCanvas = document.getElementById(currentLayer.id);
+					// 	if(tmpCanvas != null) {
+					// 		currentLayer.dataURL = tmpCanvas.toDataURL();
+					// 	}
+					// };
+
+				});
+
         	},
 
 			initKakuInstantSavingThread: function() {

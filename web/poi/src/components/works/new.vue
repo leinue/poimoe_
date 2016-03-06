@@ -67,10 +67,25 @@
 
 	export default {
 		created() {
+
+			var _this = this;
+
 			setTimeout(function() {
 				var newCGContainer = document.getElementById('new-cg-container');
 				newCGContainer.setAttribute('style', newCGContainer.getAttribute('style') + 'height:' + document.height + 'px');
-			},1);
+
+				var shareCG = getCookie('shareCG');
+
+				console.log(shareCG);
+
+				_this.$set('cg.image', shareCG);
+				if(shareCG != '') {
+					_this.$set('isCGShow', true);
+				}
+
+				console.log(_this.$get('cg.image'));
+
+			}, 1);
 		},
 
 		data() {
@@ -108,14 +123,11 @@
 			},
 
 			init: function() {
+
 				if(document.domain == 'localhost') {
 					this.cgUploadAction = 'http://image.poimoe.com/upload.php?uid=' + localStorage._id + '/cgs/' + util.curentTime() + '&cors=true&corsurl=http://localhost:8080/upload.html';					
 				}else {
 					this.cgUploadAction = 'http://image.poimoe.com/upload.php?uid=' + localStorage._id + '/cgs/' + util.curentTime() + '&cors=true&corsurl=http://poi.poimoe.com/upload.html';
-
-					if(typeof util.getCookie('shareCG') != 'undefined') {
-						this.cg.image = util.getCookie('shareCG');
-					}
 				}
 			},
 

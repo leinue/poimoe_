@@ -47,8 +47,9 @@ module.exports = {
 				return _this.$http.get('kaku/room/chat/get/' + room + '/' + page + '/' + count);
 			},
 
-			uploadBase64ToServer: function(uid, base64) {
-				return _this.$http.post('http://image.poimoe.com/upload.php?json=true&uid=' + uid, base64);
+			uploadBase64ToServer: function(obj, base64) {
+				obj.nodel = obj.nodel || 'no';
+				return _this.$http.post('http://image.poimoe.com/upload.php?json=true&uid=' + obj.uid + '&nodel=' + obj.nodel, base64);
 			}
 
 		}

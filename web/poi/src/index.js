@@ -5,6 +5,7 @@ var filter = require('./filters/index.js');
 var vueStrap = require('../node_modules/vue-strap/dist/vue-strap.min.js');
 var config = require('./config.js');
 var services = require('./services/index.js');
+var util = require('./commons/scripts/commons.js');
 
 if(document.domain == 'localhost') {
 	window.debug = true;
@@ -26,6 +27,10 @@ vue.http.headers.withCredentials = true;
 if(localStorage.login == 'true') {
 	vue.http.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;	
 }
+
+var shareCG = util.getCookie('shareCG');
+sessionStorage.shareCG = shareCG
+console.log(sessionStorage.shareCG);
 
 //初始化全局css
 require('../node_modules/bootstrap/dist/css/bootstrap.min.css');
