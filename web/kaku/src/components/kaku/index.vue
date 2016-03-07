@@ -991,45 +991,9 @@
 
 					var paintLayerLength = _this.paint.layer.length;
 
-					console.log('sdfghj');
-
-					// _this.paint.layer.forEach(function(currentLayer, i) {
-					// 	tmpCanvas = document.getElementById(currentLayer.id);
-					// 	if(tmpCanvas != null) {
-					// 		_this.shareThisCG({
-					// 			base64: tmpCanvas.toDataURL(),
-					// 			navToPoi: false,
-					// 			nodel: true,
-					// 			isLayer: true
-					// 		}, function(layerImg) {
-					// 			_this.paint.layer[i].dataURL = layerImg;
-
-					// 			console.log(layerImg, i);
-
-					// 			if(i == paintLayerLength - 1) {
-
-					// 				var tmpPaint = util.cloneObject(_this.paint, cxtList);
-					// 				var tmpPaintUI = util.cloneObject(_this.paintUI);
-
-					// 				var data = {
-					// 					roomId: _this.room._id,
-					// 					people: localStorage._id,
-					// 					paint: tmpPaint,
-					// 					paintUI: tmpPaintUI,
-					// 					accessToken: localStorage.accessToken
-					// 				};
-
-					// 				localStorage.roomStatus = JSON.stringify(data);
-
-					// 				chatSocket.emit('save image', data);
-					// 			}
-
-					// 		});
-					// 	}
-					// });
-
 					var tmpLayerDataURL = [];
 
+					//将各个图层的dataURL集合到一个数组里
 					for (var i = 0; i < _this.paint.layer.length; i++) {
 						var currentLayer = _this.paint.layer[i];
 						tmpCanvas = document.getElementById(currentLayer.id);
@@ -1040,8 +1004,7 @@
 
 					var requestParams = localStorage._id + '/roomCG/' + _this.room._id + '/painting/layers';
 
-					console.log(requestParams);
-
+					//上传数组到服务器，服务器转为图片存到硬盘
 	        		services.KakuService.uploadBase64ToServer({
 	        			uid: requestParams,
 	        			nodel: 'no'
@@ -1052,12 +1015,36 @@
 		                var code = res.data.status;
 	                    var data = res.data.message;
 
-	                    console.log(data);
+	                    console.log(data);	                    
 
 	                    if(code != 200) {
 	                        util.messageBox(data, true);
 	                        return false;
 	                    }
+
+	                    var layerImageUrl = data.origin;
+
+	                    //将新地址填充到dataURL中
+						for (var i = 0; i < _this.paint.layer.length; i++) {
+							_this.paint.layer[i].dataURL = layerImageUrl[i];
+						};
+
+						//复制对象，非引用
+						var tmpPaint = util.cloneObject(_this.paint, cxtList);
+						var tmpPaintUI = util.cloneObject(_this.paintUI);
+
+						var data = {
+							roomId: _this.room._id,
+							people: localStorage._id,
+							paint: tmpPaint,
+							paintUI: tmpPaintUI,
+							accessToken: localStorage.accessToken
+						};
+
+						localStorage.roomStatus = JSON.stringify(data);
+
+						chatSocket.emit('save image', data);
+
 
 	        		}, function(err) {
 	        			util.handleError(err);
