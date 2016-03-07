@@ -152,6 +152,15 @@
 		line-height: 40px!important;
 	}
 
+	.type-circle.active {
+		background: #0095db;
+		color: #fff;
+	}
+
+	.header-circle.sync span:hover {
+		animation: circle 1.2s linear 0s 1 alternate;
+	}
+
 	#pathToPoi {
 		left: 65px;
 	}

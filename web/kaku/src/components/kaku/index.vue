@@ -14,6 +14,10 @@
             <span class="glyphicon glyphicon-share-alt"></span>
         </div>
 
+        <div @click="toggleSyncPaintingStatus()" v-bind:class="{'active': instantSaving.startInstantSavingThread == true, 'noactive': instantSaving.startInstantSavingThread == false}" title="{{instantSaving.tips}}" class="type-circle header-circle sync" style="left: 265px;">
+            <span class="glyphicon glyphicon-refresh"></span>
+        </div>
+
         <loading v-show="isLoaded == false"></loading>
 
         <div v-show="isLoaded == true" class="row a-bounceinT">
@@ -281,6 +285,12 @@
             	paintUI: {
             		colorPickerCursorPosition: '',
             		colorPicker: {}
+            	},
+
+            	instantSaving: {
+            		instantSavingThreadFlag: 0,
+            		startInstantSavingThread: false,
+            		tips: '关闭自动保存'
             	}
             }
         },
@@ -987,10 +997,12 @@
 							_this.shareThisCG({
 								base64: tmpCanvas.toDataURL(),
 								navToPoi: false,
-								nodel: 'no',
+								nodel: true,
 								isLayer: true
 							}, function(layerImg) {
 								_this.paint.layer[i].dataURL = layerImg;
+
+								console.log(layerImg, i);
 
 								if(i == paintLayerLength - 1) {
 
@@ -1008,7 +1020,6 @@
 									localStorage.roomStatus = JSON.stringify(data);
 
 									chatSocket.emit('save image', data);
-
 								}
 
 							});
@@ -1027,11 +1038,26 @@
 
         	},
 
+        	toggleSyncPaintingStatus: function() {
+        		if(this.instantSaving.startInstantSavingThread) {
+        			clearInterval(this.instantSaving.instantSavingThreadFlag);
+        			this.instantSaving.tips = '开启自动保存';
+        			util.messageBox('关闭自动保存成功');
+        			this.instantSaving.startInstantSavingThread = false;
+        		}else {
+        			this.initKakuInstantSavingThread();
+        			util.messageBox('开启自动保存成功');
+        		}
+        	},
+
 			initKakuInstantSavingThread: function() {
 
 				var _this = this;
 
-				setInterval(function() {
+				_this.instantSaving.startInstantSavingThread = true;
+    			_this.instantSaving.tips = '关闭自动保存';
+
+				_this.instantSaving.instantSavingThreadFlag = setInterval(function() {
 					_this.syncPaintingStatus();
 				}, 10000);
 
