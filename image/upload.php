@@ -103,10 +103,10 @@ if(isset($_GET['json'])) {
 
         if(isset($_GET['nodel'])) {
             if($_GET['nodel'] == 'no') {
-                delFileUnderDir($destination_folder);                
+                delFileUnderDir($destination_folder);
             }
         }else {
-            delFileUnderDir($destination_folder);            
+            delFileUnderDir($destination_folder);         
         }
 
         //保存base64字符串为图片
@@ -129,6 +129,50 @@ if(isset($_GET['json'])) {
           }
          
         }
+    }
+
+    if(isset($data->layersList)) {
+
+        $layersList = $data->layersList;
+
+        if(!file_exists($destination_folder)){
+            $mkdirResult = mkdir($destination_folder, 0777, true);
+        }
+
+        delFileUnderDir($destination_folder);       
+
+        $savingFlag = 0;
+        $layersCnt = count($layersList);
+
+        $tmpImageUrlList = array();
+
+        for ($i=0; $i < $layersCnt; $i++) {
+            $currLayerBase64Content = $layersList[$i];
+            if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $currLayerBase64Content, $result)){
+              $type = $result[2];
+              $new_file = $destination_folder.$i.'.'.$type;
+              if (file_put_contents($new_file, base64_decode(str_replace($result[1], '', $currLayerBase64Content)))){
+                $savingFlag ++;
+                array_push($tmpImageUrlList, 'http://image.poimoe.com/'.$new_file);
+              }
+            }
+        }
+
+        if($savingFlag === $layersCnt) {
+            if(!$cors) {
+                returnMessage(200, array('origin' => $tmpImageUrlList));
+            }else {
+                header('Location:'.$corsurl.'?data='.returnMessage(200, array('origin' => $tmpImageUrlList), true));
+            }
+        }else {
+            if(!$cors) {
+                returnMessage(401, '保存图片失败');       
+            }else {
+                header('Location:'.$corsurl.'?data='.returnMessage(401, '保存图片失败', true));
+            }
+        }
+
+
     }
 
 }

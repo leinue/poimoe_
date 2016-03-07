@@ -991,48 +991,77 @@
 
 					var paintLayerLength = _this.paint.layer.length;
 
-					_this.paint.layer.forEach(function(currentLayer, i) {
-						tmpCanvas = document.getElementById(currentLayer.id);
-						if(tmpCanvas != null) {
-							_this.shareThisCG({
-								base64: tmpCanvas.toDataURL(),
-								navToPoi: false,
-								nodel: true,
-								isLayer: true
-							}, function(layerImg) {
-								_this.paint.layer[i].dataURL = layerImg;
+					console.log('sdfghj');
 
-								console.log(layerImg, i);
-
-								if(i == paintLayerLength - 1) {
-
-									var tmpPaint = util.cloneObject(_this.paint, cxtList);
-									var tmpPaintUI = util.cloneObject(_this.paintUI);
-
-									var data = {
-										roomId: _this.room._id,
-										people: localStorage._id,
-										paint: tmpPaint,
-										paintUI: tmpPaintUI,
-										accessToken: localStorage.accessToken
-									};
-
-									localStorage.roomStatus = JSON.stringify(data);
-
-									chatSocket.emit('save image', data);
-								}
-
-							});
-						}
-					});
-
-					// for (var i = 0; i < _this.paint.layer.length; i++) {
-					// 	var currentLayer = _this.paint.layer[i];
+					// _this.paint.layer.forEach(function(currentLayer, i) {
 					// 	tmpCanvas = document.getElementById(currentLayer.id);
 					// 	if(tmpCanvas != null) {
-					// 		currentLayer.dataURL = tmpCanvas.toDataURL();
+					// 		_this.shareThisCG({
+					// 			base64: tmpCanvas.toDataURL(),
+					// 			navToPoi: false,
+					// 			nodel: true,
+					// 			isLayer: true
+					// 		}, function(layerImg) {
+					// 			_this.paint.layer[i].dataURL = layerImg;
+
+					// 			console.log(layerImg, i);
+
+					// 			if(i == paintLayerLength - 1) {
+
+					// 				var tmpPaint = util.cloneObject(_this.paint, cxtList);
+					// 				var tmpPaintUI = util.cloneObject(_this.paintUI);
+
+					// 				var data = {
+					// 					roomId: _this.room._id,
+					// 					people: localStorage._id,
+					// 					paint: tmpPaint,
+					// 					paintUI: tmpPaintUI,
+					// 					accessToken: localStorage.accessToken
+					// 				};
+
+					// 				localStorage.roomStatus = JSON.stringify(data);
+
+					// 				chatSocket.emit('save image', data);
+					// 			}
+
+					// 		});
 					// 	}
-					// };
+					// });
+
+					var tmpLayerDataURL = [];
+
+					for (var i = 0; i < _this.paint.layer.length; i++) {
+						var currentLayer = _this.paint.layer[i];
+						tmpCanvas = document.getElementById(currentLayer.id);
+						if(tmpCanvas != null) {
+							tmpLayerDataURL.push(tmpCanvas.toDataURL());
+						}
+					};
+
+					var requestParams = localStorage._id + '/roomCG/' + _this.room._id + '/painting/layers';
+
+					console.log(requestParams);
+
+	        		services.KakuService.uploadBase64ToServer({
+	        			uid: requestParams,
+	        			nodel: 'no'
+	        		}, {
+	        			layersList: tmpLayerDataURL
+	        		}).then(function(res) {
+
+		                var code = res.data.status;
+	                    var data = res.data.message;
+
+	                    console.log(data);
+
+	                    if(code != 200) {
+	                        util.messageBox(data, true);
+	                        return false;
+	                    }
+
+	        		}, function(err) {
+	        			util.handleError(err);
+	        		});
 
 				});
 
