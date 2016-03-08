@@ -32,6 +32,9 @@ module.exports = function(router){
 		'/cg/new':{
 			component: require('./components/works/new.vue')
 		},
+		'/cg/new/:roomId/:imgName':{
+			component: require('./components/works/new.vue')
+		},
 		'/login': {
 			name: 'login',
 			component: require('./components/users/login.vue')

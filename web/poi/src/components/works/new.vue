@@ -18,7 +18,7 @@
 						<div @click="uploadCG()" class="timeline-new-section-outer" id="my-cg-viewer">
 							<h1 v-show="isCGShow === false" style="line-height: 14">上传CG</h1>
 							<div id="cg-outer">
-	    						<img style="display:none" class="cg-viewer" width="100" height="100" border="0">
+	    						<img style="display:none" id="sharing-viewer" class="cg-viewer" width="100" height="100" border="0">
 							</div>
 							<form style="display:none" enctype="multipart/form-data" method="post" target="upload" v-bind:action="cgUploadAction" > 
 								<input type="file" id="cg-source" name="upfile" v-on:change="previewImage()"/>
@@ -70,20 +70,27 @@
 
 			var _this = this;
 
+			var roomId = router._currentRoute.params.roomId;
+			var imgName = router._currentRoute.params.imgName;
+
+			var isSharing = false;
+
+			if(roomId != undefined && imgName != undefined) {
+				var imageUrl = 'http://image.poimoe.com/upload/' + localStorage._id + '/roomCG/' + roomId + '/sharing/' + imgName;
+				isSharing = true;
+			}
+
 			setTimeout(function() {
 				var newCGContainer = document.getElementById('new-cg-container');
 				newCGContainer.setAttribute('style', newCGContainer.getAttribute('style') + 'height:' + document.height + 'px');
 
-				var shareCG = getCookie('shareCG');
-
-				console.log(shareCG);
-
-				_this.$set('cg.image', shareCG);
-				if(shareCG != '') {
+				if(isSharing) {
+					_this.$set('cg.image', imageUrl);
+					var sharingViewer = document.getElementById('sharing-viewer')
+					sharingViewer.setAttribute('src', imageUrl);
+					sharingViewer.setAttribute('style', 'display: block;width:100%;height:100%;');			
 					_this.$set('isCGShow', true);
 				}
-
-				console.log(_this.$get('cg.image'));
 
 			}, 1);
 		},

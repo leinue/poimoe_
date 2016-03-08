@@ -312,7 +312,20 @@
 
         	shareThisCG: function(obj, cb) {
 
-        		var navToPoi = obj.navToPoi == false ? obj.navToPoi : true;
+        		var navToPoi;
+
+        		if(obj != undefined) {
+	        		navToPoi = obj.navToPoi == false ? obj.navToPoi : true;
+        		}else {
+        			navToPoi = true;
+        			obj = {
+        				isLayer: false,
+        				nodel: 'no'
+        			}
+        		}
+
+        		var _this = this;
+
         		//上传图片
         		//存到cookie
         		//加载poi新增CG页面
@@ -340,8 +353,9 @@
                     var imageUrl = data.origin;
 
                     if(navToPoi) {
-	                    util.setCookie('shareCG', imageUrl, 1);
-	                    window.location.href = 'http://poi.poimoe.com/#!/cg/new';
+                    	var split = imageUrl.split('/');
+                    	var name = split[split.length - 1];
+	                    window.location.href = 'http://poi.poimoe.com/#!/cg/new/' + _this.room._id + '/' + name;
                     }else {
                     	cb(imageUrl);
                     }
