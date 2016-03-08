@@ -123,8 +123,8 @@ router.beforeEach(function () {
 			});
 
 			if(localStorage.roomStatus != 'undefined' || typeof localStorage.roomStatus != 'undefined') {
-				chatSocket.emit('save image', JSON.parse(localStorage.roomStatus));
-				localStorage.roomStatus = 'undefined';
+				// chatSocket.emit('save image', JSON.parse(localStorage.roomStatus));
+				// localStorage.roomStatus = 'undefined';
 			}
 		}
 	}

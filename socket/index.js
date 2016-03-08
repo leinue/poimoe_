@@ -256,6 +256,30 @@ chat.on('connection', function(socket){
 	    chat.to(roomId).emit('get clear layer', msg);		
 	});
 
+	socket.on('use something', function(msg) {
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		if (roomInfo[roomId].indexOfA(user) === -1) {  
+	      return false;
+	    }
+
+	    chat.to(roomId).emit('get use something', msg);		
+	});
+
+	socket.on('color change', function(msg) {
+		if(!roomInfo[roomId]) {
+			roomInfo[roomId] = [];
+		}
+
+		if (roomInfo[roomId].indexOfA(user) === -1) {  
+	      return false;
+	    }
+
+	    chat.to(roomId).emit('get color change', msg);		
+	});	
+
 	socket.on('draw image', function(msg) {
 		if(!roomInfo[roomId]) {
 			roomInfo[roomId] = [];

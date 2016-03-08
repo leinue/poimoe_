@@ -26,7 +26,7 @@
         		<div class="col-md-3" style="padding-left:0px;padding-right:0px;border-bottom:1px solid rgb(217, 217, 217);height:90vh;border-right:1px solid rgb(217, 217, 217);background: rgb(238, 238, 238)">
 	        		<div class="chatting-section" style="text-align:center">
 	        		<span>房间名称：{{room.name}}</span>
-	        		<button @click="layerTest()">test layer</button>
+	        		<button v-show="false" @click="layerTest()">test layer</button>
 	        			<div class="kaku-member">
                             <div title="{{people.username}}" @click="viewProfile(people._id)" class="room-photo" v-for="people in room.people" style="background-image: url({{people.photo}});"></div>
 	        			</div>
@@ -135,7 +135,7 @@
 			        					<input id="upfile" v-on:change="getPicFile()" type="file" style="display:none" v-model="paint.picData">
 			        				</a>
 			        				<a @click="getImgUrl()" class="tool-button"><span class="glyphicon glyphicon-download-alt"></span></a>
-			        				<a @click="clearCanvas()" class="tool-button"><span class="glyphicon glyphicon-trash"></span></a>
+			        				<a @click="clearCanvas(false, paint.currentLayer.index)" class="tool-button"><span class="glyphicon glyphicon-trash"></span></a>
 			        			</div>
 			        		</div>
 	        			</div>
@@ -291,7 +291,7 @@
             	instantSaving: {
             		instantSavingThreadFlag: 0,
             		startInstantSavingThread: false,
-            		tips: '关闭自动保存'
+            		tips: '开启自动保存'
             	}
             }
         },
@@ -307,6 +307,7 @@
         		// console.log(canvas.toDataURL());
         		var data = util.getLayerDataURL(canvas);
         		console.log(data);
+        		console.log(this.paint.layer[this.paint.currentLayer.index]);
         	},
 
         	shareThisCG: function(obj, cb) {
@@ -382,7 +383,6 @@
         			message: _this.message,
         			accessToken: localStorage.accessToken
         		};
-        		console.log(chatMessage);
         		chatSocket.emit('chat message', chatMessage);
         	},
 
@@ -503,7 +503,6 @@
         	makeThisLayerEditable: function(id, makeFalse) {
         		makeFalse = makeFalse || true;
         		this.paint.layer[id].editable = !this.paint.layer[id].editable;
-        		console.log(makeFalse);
         		if(!makeFalse) {
         			setTimeout(function() {
 	        			this.paint.layer[id].editable = false;        				
@@ -542,7 +541,6 @@
         	},
 
         	initPaint: function(canvas, nofill) {
-        		console.log(this.paint);
         		this.paint.canvas = canvas || document.getElementById(this.paint.currentLayer.id);
         		nofill = nofill || false;
 
@@ -571,6 +569,12 @@
 	    		    _this.colorPicker = ColorPicker.init({
 	        			onColorChange: function(color) {
 	        				_this.paint.strokeStyle = color;
+
+	        				chatSocket.emit('color change', {
+	        					people: localStorage._id,
+	        					color: _this.paint.strokeStyle
+	        				});
+
 	        			},
 	        			defaultColor: 'rgba(0, 0, 0, 255)'
 	        		});
@@ -669,15 +673,23 @@
         		this.colorPicker.setThumbnailSwatchColor(color);
         	},
 
-        	clearCanvas: function(noSocket) {
+        	clearCanvas: function(noSocket, currentLayerIndex) {
         		noSocket = noSocket || false;
 	            this.paint.cxt.clearRect(0, 0, this.paint.width, this.paint.height);//清除画布，左上角为起点
 	            this.paint.baseCxt.clearRect(0, 0, this.paint.width, this.paint.height);//清除画布，左上角为起点
+        		var _this = this;
+	            //baseCanvas重画
+	            for (var i = 0; i < this.paint.layer.length - 1; i++) {
+            		var currentLayer = this.paint.layer[i];
+	            	var canvas = document.getElementById(currentLayer.id);
+	            	canvas.getContext('2d').clearRect(0, 0, this.paint.width, this.paint.height);
+	            };
+
 	            if(!noSocket) {
-	            	chatSocket('clear layer', {
+	            	chatSocket.emit('clear layer', {
 	            		people: localStorage._id
 	            	});
-	            }        
+	            }
         	},
 
         	resetErase: function(_x, _y, touch) {
@@ -750,17 +762,29 @@
         	useEraser: function() {
         		this.paint.isEraser = true;
         		this.paint.isColorPicker = false;
+        		chatSocket.emit('use something', {
+        			something: 'Eraser',
+        			people: localStorage._id
+        		});
         	},
 
         	useBrush: function() {
         		this.paint.isEraser = false;
         		this.paint.isColorPicker = false;
         		this.paint.cxt.strokeStyle = this.paint.strokeStyle;
+        		chatSocket.emit('use something', {
+        			something: 'Brush',
+        			people: localStorage._id
+        		});
         	},
 
         	useColorPicker: function() {
         		this.paint.isEraser = false;
         		this.paint.isColorPicker = true;
+        		chatSocket.emit('use something', {
+        			something: 'ColorPicker',
+        			people: localStorage._id
+        		});
         	},
 
         	toggleBtnStatus: function() {
@@ -822,12 +846,8 @@
         	drawImageOnCanvas: function(src, canvas, cb) {
     			var image = new Image();
 
-    			console.log(src);
-
         		image.crossOrigin = "anonymous";
         		image.src = src;
-
-        		console.log(image);
 
         		image.onload = function() {
 	        		canvas.drawImage(image, 0, 0);
@@ -863,8 +883,6 @@
                         return false;
                     }
 
-                    console.log(res);
-
                     _this.room = data[0];
 
                     _this.room.chatting.reverse();
@@ -892,6 +910,9 @@
 
 	                    }
 
+	                    //初始化
+	                    // toggleLayer(key, layer.id, paint.currentLayer.index);
+
 	                    _this.paint.x = [];
 	                    _this.paint.y = [];
 	                    _this.paint.clickDrag = [];
@@ -909,14 +930,29 @@
 	                    _this.drawImageOnCanvas(_this.paint.dataURL, _this.paint.baseCxt);
 	                    _this.drawImageOnCanvas(_this.paint.dataURL, _this.paint.cxt);
 
+	                    var activeLayerIndex = _this.paint.currentLayer.index;
+	                    var activeLayerId = _this.paint.layer[activeLayerIndex].id;
+	                    var activeLayer = {
+	                    	cxt: '',
+	                    	url: ''
+	                    };
+
 	                    for (var i = 0; i < _this.paint.layer.length; i++) {
 	                    	var currentLayer = _this.paint.layer[i];
-	                    	console.log(currentLayer.id);
 	                    	var tmpCxt = document.getElementById(currentLayer.id).getContext('2d');
 	                    	if(currentLayer.dataURL != '') {
+	                    		console.log(currentLayer.dataURL);
 		                    	_this.drawImageOnCanvas(currentLayer.dataURL, tmpCxt);
+		                    	if(activeLayerId == currentLayer.id) {
+		                    		activeLayer.cxt = tmpCxt;
+		                    		activeLayer.url = currentLayer.dataURL;
+		                    	}
 	                    	}
 	                    };
+
+	                    // //重新设置当前活跃图层的dataURL
+	                    // console.log(activeLayer);
+                    	// _this.drawImageOnCanvas(activeLayer.url, activeLayer.cxt);
 
 	                    _this.isLoaded = true;
 
@@ -968,7 +1004,7 @@
 				});
         	},
 
-        	syncPaintingStatus: function(isLeave) {
+        	syncPaintingStatus: function(isLeave, cb) {
 
         		var _this = this;
 
@@ -994,6 +1030,7 @@
 				}, function(imageUrl) {
 
 					_this.paint.dataURL = imageUrl;
+
 					var tmpCanvas = {};
 
 					var paintLayerLength = _this.paint.layer.length;
@@ -1005,7 +1042,7 @@
 						var currentLayer = _this.paint.layer[i];
 						tmpCanvas = document.getElementById(currentLayer.id);
 						if(tmpCanvas != null) {
-							//隐藏其它图层，只显示当前图层
+							//获得单个图层数据
 							tmpLayerDataURL.push(util.getLayerDataURL(tmpCanvas));
 						}
 					};
@@ -1023,7 +1060,7 @@
 		                var code = res.data.status;
 	                    var data = res.data.message;
 
-	                    console.log(data);	                    
+	                    console.log(res);	                    
 
 	                    if(code != 200) {
 	                        util.messageBox(data, true);
@@ -1053,6 +1090,9 @@
 
 						chatSocket.emit('save image', data);
 
+						if(isLeave) {
+							cb();
+						}
 
 	        		}, function(err) {
 	        			util.handleError(err);
@@ -1069,8 +1109,10 @@
         			util.messageBox('关闭自动保存成功');
         			this.instantSaving.startInstantSavingThread = false;
         		}else {
-        			this.initKakuInstantSavingThread();
         			util.messageBox('开启自动保存成功');
+	    			_this.instantSaving.tips = '关闭自动保存';
+        			this.instantSaving.startInstantSavingThread = true;
+        			this.initKakuInstantSavingThread();
         		}
         	},
 
@@ -1078,12 +1120,11 @@
 
 				var _this = this;
 
-				_this.instantSaving.startInstantSavingThread = true;
-    			_this.instantSaving.tips = '关闭自动保存';
-
-				_this.instantSaving.instantSavingThreadFlag = setInterval(function() {
-					_this.syncPaintingStatus();
-				}, 10000);
+				if(this.instantSaving.startInstantSavingThread) {
+					_this.instantSaving.instantSavingThreadFlag = setInterval(function() {
+						_this.syncPaintingStatus();
+					}, 10000);					
+				}
 
 				chatSocket.on('get save image succeed', function(data) {
 					console.log(data);
@@ -1189,6 +1230,23 @@
 					}
 				});
 
+				chatSocket.on('get use something', function(data) {
+
+					console.log(data);
+
+					if(!(data.people.toString() == localStorage._id)) {
+						_this['use' + data.something]();
+					}
+				});
+
+				chatSocket.on('get color change', function(data) {
+
+					console.log(data);
+
+					if(!(data.people.toString() == localStorage._id)) {
+        				_this.paint.strokeStyle = data.color;
+					}
+				});
         	},
 
         	initKakuSocket: function(id) {
@@ -1210,7 +1268,7 @@
         	},
 
         	leaveThisRoom: function() {
-        		this.syncPaintingStatus(true);
+        		// this.syncPaintingStatus();
         		router.go('/index');     		
         	},
 
