@@ -11,8 +11,6 @@ $watermark   : 是否附加水印(1为加水印,其他为不加水印);
 2. 将extension_dir =改为你的php_gd2.dll所在目录;
 ******************************************************************************/
 
-error_reporting(E_ERROR | E_WARNING | E_PARSE);
-
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Api-Version, Authorization');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
@@ -209,6 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             header('Location:'.$corsurl.'?data='.returnMessage(401, "文件类型不符，".$file["type"], true));
         }
     }
+
     if(!file_exists($destination_folder))
     {
         $mkdirResult = mkdir($destination_folder, 0777, true);
@@ -219,6 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $pinfo=pathinfo($file["name"]);
     $ftype=$pinfo['extension'];
     $destination = $destination_folder.time().".".$ftype;
+
     if (file_exists($destination) && $overwrite != true)
     {
         if(!$cors) {
@@ -240,17 +240,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $pinfo=pathinfo($destination);
     $fname=$pinfo[basename];
 
-
-    if($watermark==1)
-    {
+    if($watermark==1){
         $iinfo=getimagesize($destination,$iinfo);
         $nimage=imagecreatetruecolor($image_size[0],$image_size[1]);
         $white=imagecolorallocate($nimage,255,255,255);
         $black=imagecolorallocate($nimage,0,0,0);
         $red=imagecolorallocate($nimage,255,0,0);
         imagefill($nimage,0,0,$white);
-        switch ($iinfo[2])
-        {
+        switch ($iinfo[2]){
             case 1:
             $simage =imagecreatefromgif($destination);
             break;
@@ -271,8 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         imagecopy($nimage,$simage,0,0,0,0,$image_size[0],$image_size[1]);
         imagefilledrectangle($nimage,1,$image_size[1]-15,80,$image_size[1],$white);
 
-        switch($watertype)
-        {
+        switch($watertype){
             case 1:   //加水印字符串
             imagestring($nimage,2,3,$image_size[1]-15,$waterstring,$black);
             break;
@@ -283,8 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             break;
         }
 
-        switch ($iinfo[2])
-        {
+        switch ($iinfo[2]){
             case 1:
             //imagegif($nimage, $destination);
             imagejpeg($nimage, $destination);
@@ -318,4 +313,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         header('Location:'.$corsurl.'?data='.returnMessage(200, array('origin' => 'http://image.poimoe.com/'.$destination_folder.$fname, 'preview' => 'http://image.poimoe.com/'.$destination), true));
     }
 }
+
 ?>
