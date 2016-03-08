@@ -398,6 +398,21 @@ module.exports = {
 			}
 		}
 
+	},
+
+	getLayerDataURL: function(canvas) {
+		var cxt = canvas.getContext('2d');
+		var oldData = cxt.getImageData(0, 0, canvas.width, canvas.height);
+		var newCanvas = document.createElement("canvas");
+		newCanvas.width = canvas.width;
+		newCanvas.height = canvas.height;
+		newCanvas.id = "tmpLayer";
+		document.body.appendChild(newCanvas);
+		var newCxt = newCanvas.getContext("2d");
+		newCxt.putImageData(oldData, 0 ,0);
+		var data = newCanvas.toDataURL();
+		newCanvas.parentNode.removeChild(newCanvas);
+		return data;
 	}
 	
 };

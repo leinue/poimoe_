@@ -26,6 +26,7 @@
         		<div class="col-md-3" style="padding-left:0px;padding-right:0px;border-bottom:1px solid rgb(217, 217, 217);height:90vh;border-right:1px solid rgb(217, 217, 217);background: rgb(238, 238, 238)">
 	        		<div class="chatting-section" style="text-align:center">
 	        		<span>房间名称：{{room.name}}</span>
+	        		<button @click="layerTest()">test layer</button>
 	        			<div class="kaku-member">
                             <div title="{{people.username}}" @click="viewProfile(people._id)" class="room-photo" v-for="people in room.people" style="background-image: url({{people.photo}});"></div>
 	        			</div>
@@ -301,10 +302,16 @@
 
         methods: {
 
+        	layerTest: function() {
+        		var canvas = document.getElementById(this.paint.layer[this.paint.currentLayer.index].id);
+        		// console.log(canvas.toDataURL());
+        		var data = util.getLayerDataURL(canvas);
+        		console.log(data);
+        	},
+
         	shareThisCG: function(obj, cb) {
 
         		var navToPoi = obj.navToPoi == false ? obj.navToPoi : true;
-
         		//上传图片
         		//存到cookie
         		//加载poi新增CG页面
@@ -998,7 +1005,8 @@
 						var currentLayer = _this.paint.layer[i];
 						tmpCanvas = document.getElementById(currentLayer.id);
 						if(tmpCanvas != null) {
-							tmpLayerDataURL.push(tmpCanvas.toDataURL());
+							//隐藏其它图层，只显示当前图层
+							tmpLayerDataURL.push(util.getLayerDataURL(tmpCanvas));
 						}
 					};
 
