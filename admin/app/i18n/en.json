@@ -1,16 +1,17 @@
 {
   "dashboard": {
-    "WELCOME": "Welcome to {{appName}}"
+    "WELCOME": "欢迎您, {{appName}}"
   },
   "topbar": {
     "search": {
-      "PLACEHOLDER": "Type and hit enter.."
+      "PLACEHOLDER": "输入之后按回车搜索 ..."
     }
   },
   "sidebar": {
-    "WELCOME": "Welcome",
+    "WELCOME": "欢迎您",
     "heading": {
-      "HEADER": "Main Navigation"
+      "HEADER": "欢迎",
+      "MANAGER_LIST": "管理列表"
     },
     "nav": {
       "SINGLEVIEW": "Single View",

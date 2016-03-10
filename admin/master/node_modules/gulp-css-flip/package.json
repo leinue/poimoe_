@@ -1,0 +1,74 @@
+{
+  "name": "gulp-css-flip",
+  "version": "0.4.0",
+  "description": "A CSS BiDi flipper gulpjs plugin based on css-flip package",
+  "main": "index.js",
+  "bin": {
+    "gulp-css-flip": "bin/gulp-css-flip"
+  },
+  "files": [
+    "index.js",
+    "bin",
+    "lib"
+  ],
+  "dependencies": {
+    "css": "~1.6.0",
+    "commander": "~2.1.0",
+    "event-stream": "~3.1.0",
+    "clone": "~0.1.11",
+    "bufferstreams": "0.0.1",
+    "gulp-util": "~2.2.13"
+  },
+  "devDependencies": {
+    "mocha": "~1.17.1",
+    "jshint": "~2.4.3",
+    "gulp": "~3.5.0",
+    "gulp-rename": "~1.2.0"
+  },
+  "scripts": {
+    "lint": "jshint --show-non-errors bin/gulp-css-flip **/*.js",
+    "test": "npm run lint & npm run unit",
+    "unit": "mocha --reporter spec",
+    "watch": "mocha --reporter min --watch"
+  },
+  "keywords": [
+    "css",
+    "ltr",
+    "rtl",
+    "bidi",
+    "flip",
+    "gulpplugin"
+  ],
+  "author": {
+    "name": "Itay Raz",
+    "email": "itay@studioraz.co.il"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itaymesh/gulp-css-flip.git"
+  },
+  "bugs": {
+    "url": "https://github.com/itaymesh/gulp-css-flip/issues"
+  },
+  "homepage": "https://github.com/itaymesh/gulp-css-flip",
+  "_id": "gulp-css-flip@0.4.0",
+  "_shasum": "e1d5c0682cda87af504e1494ca3b8a782538f12e",
+  "_from": "gulp-css-flip@>=0.4.0 <0.5.0",
+  "_npmVersion": "1.4.7",
+  "_npmUser": {
+    "name": "itaymesh",
+    "email": "itay@studioraz.co.il"
+  },
+  "maintainers": [
+    {
+      "name": "itaymesh",
+      "email": "itay@studioraz.co.il"
+    }
+  ],
+  "dist": {
+    "shasum": "e1d5c0682cda87af504e1494ca3b8a782538f12e",
+    "tarball": "http://registry.npmjs.org/gulp-css-flip/-/gulp-css-flip-0.4.0.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/gulp-css-flip/-/gulp-css-flip-0.4.0.tgz"
+}

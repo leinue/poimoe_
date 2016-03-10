@@ -13,6 +13,7 @@
     "gulp-changed": "^1.1.0",
     "gulp-compass": "2.0.4",
     "gulp-concat": "^2.4.1",
+    "gulp-connect": "^3.1.0",
     "gulp-css-flip": "^0.4.0",
     "gulp-expect-file": "0.0.7",
     "gulp-filter": "^1.0.2",

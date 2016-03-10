@@ -1,0 +1,57 @@
+{
+  "name": "gulp-html-prettify",
+  "version": "0.0.1",
+  "description": "HTML Prettify Plugin for Gulp",
+  "keywords": [
+    "gulpplugin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/colynb/gulp-html-prettify"
+  },
+  "author": {
+    "name": "Colyn Brown",
+    "email": "colyn.brown@gmail.com"
+  },
+  "dependencies": {
+    "event-stream": "~3.0.16",
+    "clone": "~0.1.11",
+    "gulp-util": "0.0.1",
+    "html": "git://github.com/colynb/commonjs-html-prettyprinter.git"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">= 0.8"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "mocha": "~1.14.0",
+    "chai": "~1.8.1",
+    "gulp": "~2.4.1"
+  },
+  "bugs": {
+    "url": "https://github.com/colynb/gulp-html-prettify/issues"
+  },
+  "_id": "gulp-html-prettify@0.0.1",
+  "dist": {
+    "shasum": "37926366e71a1f869b4ef518d0e3a0d6580fc5af",
+    "tarball": "http://registry.npmjs.org/gulp-html-prettify/-/gulp-html-prettify-0.0.1.tgz"
+  },
+  "_from": "gulp-html-prettify@0.0.1",
+  "_npmVersion": "1.3.11",
+  "_npmUser": {
+    "name": "colynb",
+    "email": "colyn.brown@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "colynb",
+      "email": "colyn.brown@gmail.com"
+    }
+  ],
+  "directories": {},
+  "_shasum": "37926366e71a1f869b4ef518d0e3a0d6580fc5af",
+  "_resolved": "https://registry.npmjs.org/gulp-html-prettify/-/gulp-html-prettify-0.0.1.tgz"
+}

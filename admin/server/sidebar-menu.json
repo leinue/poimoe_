@@ -1,18 +1,28 @@
 [
   {
-    "text": "Main Navigation",
+    "text": "欢迎",
     "heading": "true",
     "translate": "sidebar.heading.HEADER"
   },
   {
-    "text": "Welcome",
+    "text": "欢迎页面",
     "sref": "app.welcome",
     "icon": "icon-tag"
   },
   {
-    "text": "Material",
+    "text": "控制面板",
+    "sref": "app.dashboard",
+    "icon": "icon-speedometer"
+  },
+  {
+    "text": "管理列表",
+    "heading": "true",
+    "translate": "sidebar.heading.MANAGER_LIST"
+  },
+  {
+    "text": "数据管理",
     "sref": "#",
-    "icon": "fa fa-shield",
+    "icon": "fa fa-sitemap",
     "submenu": [
       {"text": "Widgets",     "sref": "app.matwidgets"},
       {"text": "Cards",       "sref": "app.cards"},
@@ -21,9 +31,18 @@
       {"text": "Lists",       "sref": "app.lists"},
       {"text": "Whiteframe",  "sref": "app.whiteframe"},
       {"text": "Colors",      "sref": "app.matcolors"},
-      {"text": "ngMaterial",  "sref": "app.ngmaterial"}
-    ],
-    "alert": "new",
-    "label": "label label-primary"
-  }
-]
+      {"text": "ngMaterial",  "sref": "app.ngmaterial"},
+      {"text": "用户管理",     "sref": "app.usersmgr"},
+      {"text": "主题管理",     "sref": "app.themesmgr"},
+      {"text": "标签管理",     "sref": "app.tagsmgr"}
+    ]
+  },
+  {
+    "text": "权限管理",
+    "sref": "#",
+    "icon": "fa fa-shield",
+    "submenu": [
+      {"text": "角色管理",     "sref": "app.rolesmgr"},
+      {"text": "权限分配",     "sref": "app.rightsmgr"}
+    ]
+  }]

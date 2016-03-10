@@ -6,7 +6,8 @@ var args        = require('yargs').argv,
     $           = require('gulp-load-plugins')(),
     gulpsync    = $.sync(gulp),
     PluginError = $.util.PluginError,
-    del         = require('del');
+    del         = require('del'),
+    connect     = require('gulp-connect');
 
 // production mode (see build task)
 var isProduction = false;
@@ -357,13 +358,22 @@ gulp.task('usesources', function(){ useSourceMaps = true; });
 gulp.task('default', gulpsync.sync([
           'vendor',
           'assets',
-          'watch'
+          'serve'
+          // 'watch'
         ]), function(){
 
   log('************');
   log('* All Done * You can start editing your code, LiveReload will update your browser after any change..');
   log('************');
 
+});
+
+gulp.task('serve', function () {
+  connect.server({
+    root: '../',
+    livereload: true,
+    port: 8888
+  });
 });
 
 gulp.task('assets',[
