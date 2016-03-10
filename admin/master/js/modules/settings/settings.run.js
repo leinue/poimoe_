@@ -12,8 +12,8 @@
       // Global Settings
       // ----------------------------------- 
       $rootScope.app = {
-        name: 'Angle',
-        description: 'Angular Bootstrap Admin Template',
+        name: 'Poimoe',
+        description: 'Poimoe - 管理后台',
         year: ((new Date()).getFullYear()),
         layout: {
           isFixed: true,
