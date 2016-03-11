@@ -33,6 +33,8 @@ module.exports = {
     server.get('/user/login/:email/:password', ctrl.userCtrl.login);
     server.get('/user/logout', ctrl.userCtrl.logout);
     server.get('/user/select/all/:page/:count', ctrl.userCtrl.findAll);
+    server.get('/user/select/deleted/:page/:count', ctrl.userCtrl.findAllDeleted);
+    server.get('/user/select/blocked/:page/:count', ctrl.userCtrl.findAllBlocked);
     server.get('/user/favourites/select/:id/:page/:count', ctrl.userCtrl.getFavourites);
     server.get('/user/favourites/remove/:uid/:tid', ctrl.userCtrl.removeFavourites);
     server.get('/user/favourites/add/:uid/:tid', ctrl.userCtrl.addFavourite);

@@ -47,6 +47,12 @@
     'use strict';
 
     angular
+        .module('app.dashboard', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.core', [
             'ngRoute',
             'ngAnimate',
@@ -69,12 +75,6 @@
 
     angular
         .module('app.lazyload', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard', []);
 })();
 (function() {
     'use strict';
@@ -106,18 +106,18 @@
     'use strict';
 
     angular
-        .module('app.routes', [
-            'app.lazyload'
-        ]);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.preloader', []);
 })();
 
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.routes', [
+            'app.lazyload'
+        ]);
+})();
 (function() {
     'use strict';
 
@@ -128,13 +128,13 @@
     'use strict';
 
     angular
-        .module('app.sidebar', []);
+        .module('app.translate', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.translate', []);
+        .module('app.sidebar', []);
 })();
 (function() {
     'use strict';
@@ -195,6 +195,121 @@
 
 })();
 
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .config(['$controllerProvider', function($controllerProvider) {
+          // this option might be handy for migrating old apps, but please don't use it
+          // in new ones!
+          $controllerProvider.allowGlobals();
+        }])
+        .controller('DashboardController', DashboardController);
+
+    DashboardController.$inject = ['$scope', '$timeout'];
+    function DashboardController($scope, $timeout) {
+        var vm = this;
+
+        activate();
+
+        //////////////
+
+        function activate() {
+
+          // SPLINE
+          // ----------------------------------- 
+          // vm.splineData = ChartData.load('server/chart/spline.json');
+          vm.splineOptions = {
+              series: {
+                  lines: {
+                      show: false
+                  },
+                  points: {
+                      show: true,
+                      radius: 4
+                  },
+                  splines: {
+                      show: true,
+                      tension: 0.4,
+                      lineWidth: 1,
+                      fill: 0.5
+                  }
+              },
+              grid: {
+                  borderColor: '#eee',
+                  borderWidth: 1,
+                  hoverable: true,
+                  backgroundColor: '#fcfcfc'
+              },
+              tooltip: true,
+              tooltipOpts: {
+                  content: function (label, x, y) { return x + ' : ' + y; }
+              },
+              xaxis: {
+                  tickColor: '#fcfcfc',
+                  mode: 'categories'
+              },
+              yaxis: {
+                  min: 0,
+                  max: 150, // optional: use it for a clear represetation
+                  tickColor: '#eee',
+                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
+                  tickFormatter: function (v) {
+                      return v/* + ' visitors'*/;
+                  }
+              },
+              shadowSize: 0
+          };
+
+
+          // PANEL REFRESH EVENTS
+          // ----------------------------------- 
+
+          $scope.$on('panel-refresh', function(event, id) {
+            
+            console.log('Simulating chart refresh during 3s on #'+id);
+
+            // Instead of timeout you can request a chart data
+            $timeout(function(){
+              
+              // directive listen for to remove the spinner 
+              // after we end up to perform own operations
+              $scope.$broadcast('removeSpinner', id);
+              
+              console.log('Refreshed #' + id);
+
+            }, 3000);
+
+          });
+
+
+          // PANEL DISMISS EVENTS
+          // ----------------------------------- 
+
+          // Before remove panel
+          $scope.$on('panel-remove', function(event, id, deferred){
+            
+            console.log('Panel #' + id + ' removing');
+            
+            // Here is obligatory to call the resolve() if we pretend to remove the panel finally
+            // Not calling resolve() will NOT remove the panel
+            // It's up to your app to decide if panel should be removed or not
+            deferred.resolve();
+          
+          });
+
+          // Panel removed ( only if above was resolved() )
+          $scope.$on('panel-removed', function(event, id){
+
+            console.log('Panel #' + id + ' removed');
+
+          });
+
+        }
+    }
+})();
 (function() {
     'use strict';
 
@@ -355,121 +470,6 @@
 
 })();
 
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .config(['$controllerProvider', function($controllerProvider) {
-          // this option might be handy for migrating old apps, but please don't use it
-          // in new ones!
-          $controllerProvider.allowGlobals();
-        }])
-        .controller('DashboardController', DashboardController);
-
-    DashboardController.$inject = ['$scope', '$timeout'];
-    function DashboardController($scope, $timeout) {
-        var vm = this;
-
-        activate();
-
-        //////////////
-
-        function activate() {
-
-          // SPLINE
-          // ----------------------------------- 
-          // vm.splineData = ChartData.load('server/chart/spline.json');
-          vm.splineOptions = {
-              series: {
-                  lines: {
-                      show: false
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.5
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 150, // optional: use it for a clear represetation
-                  tickColor: '#eee',
-                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v/* + ' visitors'*/;
-                  }
-              },
-              shadowSize: 0
-          };
-
-
-          // PANEL REFRESH EVENTS
-          // ----------------------------------- 
-
-          $scope.$on('panel-refresh', function(event, id) {
-            
-            console.log('Simulating chart refresh during 3s on #'+id);
-
-            // Instead of timeout you can request a chart data
-            $timeout(function(){
-              
-              // directive listen for to remove the spinner 
-              // after we end up to perform own operations
-              $scope.$broadcast('removeSpinner', id);
-              
-              console.log('Refreshed #' + id);
-
-            }, 3000);
-
-          });
-
-
-          // PANEL DISMISS EVENTS
-          // ----------------------------------- 
-
-          // Before remove panel
-          $scope.$on('panel-remove', function(event, id, deferred){
-            
-            console.log('Panel #' + id + ' removing');
-            
-            // Here is obligatory to call the resolve() if we pretend to remove the panel finally
-            // Not calling resolve() will NOT remove the panel
-            // It's up to your app to decide if panel should be removed or not
-            deferred.resolve();
-          
-          });
-
-          // Panel removed ( only if above was resolved() )
-          $scope.$on('panel-removed', function(event, id){
-
-            console.log('Panel #' + id + ' removed');
-
-          });
-
-        }
-    }
-})();
 (function() {
     'use strict';
 
@@ -1518,6 +1518,99 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.preloader')
+        .directive('preloader', preloader);
+
+    preloader.$inject = ['$animate', '$timeout', '$q'];
+    function preloader ($animate, $timeout, $q) {
+
+        var directive = {
+            restrict: 'EAC',
+            template: 
+              '<div class="preloader-progress">' +
+                  '<div class="preloader-progress-bar" ' +
+                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
+              '</div>'
+            ,
+            link: link
+        };
+        return directive;
+
+        ///////
+
+        function link(scope, el) {
+
+          scope.loadCounter = 0;
+
+          var counter  = 0,
+              timeout;
+
+          // disables scrollbar
+          angular.element('body').css('overflow', 'hidden');
+          // ensure class is present for styling
+          el.addClass('preloader');
+
+          appReady().then(endCounter);
+
+          timeout = $timeout(startCounter);
+
+          ///////
+
+          function startCounter() {
+
+            var remaining = 100 - counter;
+            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
+
+            scope.loadCounter = parseInt(counter, 10);
+
+            timeout = $timeout(startCounter, 20);
+          }
+
+          function endCounter() {
+
+            $timeout.cancel(timeout);
+
+            scope.loadCounter = 100;
+
+            $timeout(function(){
+              // animate preloader hiding
+              $animate.addClass(el, 'preloader-hidden');
+              // retore scrollbar
+              angular.element('body').css('overflow', '');
+            }, 300);
+          }
+
+          function appReady() {
+            var deferred = $q.defer();
+            var viewsLoaded = 0;
+            // if this doesn't sync with the real app ready
+            // a custom event must be used instead
+            var off = scope.$on('$viewContentLoaded', function () {
+              viewsLoaded ++;
+              // we know there are at least two views to be loaded 
+              // before the app is ready (1-index.html 2-app*.html)
+              if ( viewsLoaded === 2) {
+                // with resolve this fires only once
+                $timeout(function(){
+                  deferred.resolve();
+                }, 1);
+
+                off();
+              }
+
+            });
+
+            return deferred.promise;
+          }
+
+        } //link
+    }
+
+})();
 /**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
@@ -1735,99 +1828,6 @@
     'use strict';
 
     angular
-        .module('app.preloader')
-        .directive('preloader', preloader);
-
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
-
-        var directive = {
-            restrict: 'EAC',
-            template: 
-              '<div class="preloader-progress">' +
-                  '<div class="preloader-progress-bar" ' +
-                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
-              '</div>'
-            ,
-            link: link
-        };
-        return directive;
-
-        ///////
-
-        function link(scope, el) {
-
-          scope.loadCounter = 0;
-
-          var counter  = 0,
-              timeout;
-
-          // disables scrollbar
-          angular.element('body').css('overflow', 'hidden');
-          // ensure class is present for styling
-          el.addClass('preloader');
-
-          appReady().then(endCounter);
-
-          timeout = $timeout(startCounter);
-
-          ///////
-
-          function startCounter() {
-
-            var remaining = 100 - counter;
-            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
-
-            scope.loadCounter = parseInt(counter, 10);
-
-            timeout = $timeout(startCounter, 20);
-          }
-
-          function endCounter() {
-
-            $timeout.cancel(timeout);
-
-            scope.loadCounter = 100;
-
-            $timeout(function(){
-              // animate preloader hiding
-              $animate.addClass(el, 'preloader-hidden');
-              // retore scrollbar
-              angular.element('body').css('overflow', '');
-            }, 300);
-          }
-
-          function appReady() {
-            var deferred = $q.defer();
-            var viewsLoaded = 0;
-            // if this doesn't sync with the real app ready
-            // a custom event must be used instead
-            var off = scope.$on('$viewContentLoaded', function () {
-              viewsLoaded ++;
-              // we know there are at least two views to be loaded 
-              // before the app is ready (1-index.html 2-app*.html)
-              if ( viewsLoaded === 2) {
-                // with resolve this fires only once
-                $timeout(function(){
-                  deferred.resolve();
-                }, 1);
-
-                off();
-              }
-
-            });
-
-            return deferred.promise;
-          }
-
-        } //link
-    }
-
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.settings')
         .run(settingsRun);
 
@@ -1855,7 +1855,8 @@
         hiddenFooter: false,
         offsidebarOpen: false,
         asideToggled: false,
-        viewAnimation: 'ng-fadeInUp'
+        viewAnimation: 'ng-fadeInUp',
+        baseUrl: 'http://api.poimoe.com/'
       };
 
       // Setup the layout mode
@@ -1881,6 +1882,68 @@
 
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .config(translateConfig)
+        ;
+    translateConfig.$inject = ['$translateProvider'];
+    function translateConfig($translateProvider){
+  
+      $translateProvider.useStaticFilesLoader({
+          prefix : 'app/i18n/',
+          suffix : '.json'
+      });
+      $translateProvider.preferredLanguage('en');
+      $translateProvider.useLocalStorage();
+      $translateProvider.usePostCompiling(true);
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .run(translateRun)
+        ;
+    translateRun.$inject = ['$rootScope', '$translate'];
+    
+    function translateRun($rootScope, $translate){
+
+      // Internationalization
+      // ----------------------
+
+      $rootScope.language = {
+        // Handles language dropdown
+        listIsOpen: false,
+        // list of available languages
+        available: {
+          'en':       '中文'
+          // 'es_AR':    '英文'
+        },
+        // display always the current ui language
+        init: function () {
+          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
+          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
+          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
+        },
+        set: function (localeId) {
+          // Set the new idiom
+          $translate.use(localeId);
+          // save a reference for the current language
+          $rootScope.language.selected = $rootScope.language.available[localeId];
+          // finally toggle dropdown
+          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
+        }
+      };
+
+      $rootScope.language.init();
+
+    }
+})();
 /**=========================================================
  * Module: sidebar-menu.js
  * Handle sidebar collapsible elements
@@ -2234,68 +2297,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .config(translateConfig)
-        ;
-    translateConfig.$inject = ['$translateProvider'];
-    function translateConfig($translateProvider){
-  
-      $translateProvider.useStaticFilesLoader({
-          prefix : 'app/i18n/',
-          suffix : '.json'
-      });
-      $translateProvider.preferredLanguage('en');
-      $translateProvider.useLocalStorage();
-      $translateProvider.usePostCompiling(true);
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .run(translateRun)
-        ;
-    translateRun.$inject = ['$rootScope', '$translate'];
-    
-    function translateRun($rootScope, $translate){
-
-      // Internationalization
-      // ----------------------
-
-      $rootScope.language = {
-        // Handles language dropdown
-        listIsOpen: false,
-        // list of available languages
-        available: {
-          'en':       '中文'
-          // 'es_AR':    '英文'
-        },
-        // display always the current ui language
-        init: function () {
-          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
-          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
-          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
-        },
-        set: function (localeId) {
-          // Set the new idiom
-          $translate.use(localeId);
-          // save a reference for the current language
-          $rootScope.language.selected = $rootScope.language.available[localeId];
-          // finally toggle dropdown
-          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
-        }
-      };
-
-      $rootScope.language.init();
-
-    }
-})();
 /**=========================================================
  * Module: animate-enabled.js
  * Enable or disables ngAnimate for element with directive
@@ -2980,13 +2981,24 @@
         .module('app.users')
         .service('UserService', UserService);
 
-    UserService.$inject = ['$http'];
-    function UserService($http) {
+    UserService.$inject = ['$http', '$rootScope'];
+
+    function UserService($http, $rootScope) {
 
       return {
+
         getAll: function(page, count) {
-          return $http('http://api.poimoe.com/user/select/all/1/10');
+          return $http($rootScope.baseUrl + 'user/select/all/' + page + '/' + count);
+        },
+
+        getUserDeleted: function(page, count) {
+          return $http($rootScope.baseUrl + '');
+        },
+
+        getUserBlocked: function(page, couny) {
+          return $http($rootScope.baseUrl + '');
         }
+
       }
 
     }

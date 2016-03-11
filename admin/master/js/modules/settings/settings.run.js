@@ -29,7 +29,8 @@
         hiddenFooter: false,
         offsidebarOpen: false,
         asideToggled: false,
-        viewAnimation: 'ng-fadeInUp'
+        viewAnimation: 'ng-fadeInUp',
+        baseUrl: 'http://api.poimoe.com/'
       };
 
       // Setup the layout mode

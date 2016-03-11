@@ -122,6 +122,37 @@ module.exports = {
       }).skip(skipFrom).limit(count).exec(cb);
     };
 
+    userSchema.statics.findAllDeleted = function(page, count, cb) {
+
+      page = page || 10;
+      count = count || 20;
+
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+        isDeleted: true
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
+
+    };
+
+    userSchema.statics.findAllBlocked = function(page, count, cb) {
+
+      page = page || 10;
+      count = count || 20;
+
+      var skipFrom = (page * count) - count;
+
+      return this.find({
+        isDeleted: false,
+        isBlocked: true
+      }).sort({
+        createdAt: -1
+      }).skip(skipFrom).limit(count).exec(cb);
+
+    };
+
     userSchema.statics.findById = function(id, cb) {
       return this.find({
         _id: id,

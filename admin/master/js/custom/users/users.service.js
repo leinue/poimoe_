@@ -6,13 +6,24 @@
         .module('app.users')
         .service('UserService', UserService);
 
-    UserService.$inject = ['$http'];
-    function UserService($http) {
+    UserService.$inject = ['$http', '$rootScope'];
+
+    function UserService($http, $rootScope) {
 
       return {
+
         getAll: function(page, count) {
-          return $http('http://api.poimoe.com/user/select/all/1/10');
+          return $http($rootScope.baseUrl + 'user/select/all/' + page + '/' + count);
+        },
+
+        getUserDeleted: function(page, count) {
+          return $http($rootScope.baseUrl + '');
+        },
+
+        getUserBlocked: function(page, couny) {
+          return $http($rootScope.baseUrl + '');
         }
+
       }
 
     }

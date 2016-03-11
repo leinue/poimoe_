@@ -258,6 +258,44 @@ var index = {
 
   },
 
+  findAllDeleted: function(req, res, next) {
+
+    var page = req.params.page;
+    var count = req.params.count;
+
+    var User = ctrlInitial.models.User();
+
+    User.findAllDeleted(page, count, function(err, u) {
+
+      if(err) {
+        res.send(util.retMsg(400, err.toString()));
+      }
+
+      res.send(util.retMsg(200, u));
+
+    });
+
+  },
+
+  findAllBlocked: function(req, res, next) {
+
+    var page = req.params.page;
+    var count = req.params.count;
+
+    var User = ctrlInitial.models.User();
+
+    User.findAllBlocked(page, count, function(err, u) {
+
+      if(err) {
+        res.send(util.retMsg(400, err.toString()));
+      }
+
+      res.send(util.retMsg(200, u));
+
+    });
+
+  },
+
   getFavourites: function(req, res, next) {
 
     var page = req.params.page;
