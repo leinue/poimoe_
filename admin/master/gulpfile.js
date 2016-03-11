@@ -358,8 +358,8 @@ gulp.task('usesources', function(){ useSourceMaps = true; });
 gulp.task('default', gulpsync.sync([
           'vendor',
           'assets',
-          'serve'
-          // 'watch'
+          'serve',
+          'watch'
         ]), function(){
 
   log('************');
@@ -371,19 +371,19 @@ gulp.task('default', gulpsync.sync([
 gulp.task('serve', function () {
   connect.server({
     root: '../',
-    livereload: true,
+    livereload: false,
     port: 8888
   });
 });
 
 gulp.task('assets',[
-          'scripts:app',
-          'styles:app',
-          'styles:app:rtl',
-          'styles:themes',
-          'templates:index',
-          'templates:views'
-        ]);
+  'scripts:app',
+  'styles:app',
+  'styles:app:rtl',
+  'styles:themes',
+  'templates:index',
+  'templates:views'
+]);
 
 
 /////////////////////

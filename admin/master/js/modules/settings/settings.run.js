@@ -13,7 +13,7 @@
       // ----------------------------------- 
       $rootScope.app = {
         name: 'Poimoe',
-        description: 'Poimoe - 管理后台',
+        description: '管理后台',
         year: ((new Date()).getFullYear()),
         layout: {
           isFixed: true,

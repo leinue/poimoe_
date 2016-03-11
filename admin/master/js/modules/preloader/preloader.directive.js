@@ -77,7 +77,7 @@
                 // with resolve this fires only once
                 $timeout(function(){
                   deferred.resolve();
-                }, 3000);
+                }, 1);
 
                 off();
               }

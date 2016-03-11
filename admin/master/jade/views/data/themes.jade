@@ -1,0 +1,164 @@
+h3 投稿管理
+.container-md(style='max-width:100%' ng-controller="UsersController as users")
+  .card(style='box-shadow:none')
+    md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%;padding:0px')
+      md-tabs(md-dynamic-height='', md-border-bottom='')
+        md-tab(label='基本信息')
+          md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;')
+          // START panel
+          .panel.panel-default
+            .panel-heading
+              | 投稿基本信息管理
+            // START table-responsive
+            .table-responsive
+              table#table-ext-1.table.table-bordered.table-hover
+                thead
+                  tr
+                    th UID
+                    th Picture
+                    th Username
+                    th First Name
+                    th Last Name
+                    th Email
+                    th Profile
+                    th Last Login
+                    th(check-all)
+                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
+                tbody
+                  tr
+                    td 1
+                    td
+                      .media
+                        img.img-responsive.img-circle(src="app/img/user/01.jpg", alt="Image")
+                    td @twitter
+                    td Larry
+                    td the Bird
+                    td mail@example.com
+                    td.text-center
+                      .radial-bar.radial-bar-25.radial-bar-xs(data-label="25%")
+                    td 1 week
+                    td
+                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
+                  tr
+                    td 2
+                    td
+                      .media
+                        img.img-responsive.img-circle(src="app/img/user/02.jpg", alt="Image")
+                    td @mdo
+                    td Mark
+                    td Otto
+                    td mail@example.com
+                    td.text-center
+                      .radial-bar.radial-bar-50.radial-bar-xs(data-label="50%")
+                    td 25 minutes
+                    td
+                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
+                  tr
+                    td 3
+                    td
+                      .media
+                        img.img-responsive.img-circle(src="app/img/user/03.jpg", alt="Image")
+                    td @fat
+                    td Jacob
+                    td Thornton
+                    td mail@example.com
+                    td.text-center
+                      .radial-bar.radial-bar-80.radial-bar-xs(data-label="80%")
+                    td 10 hours
+                    td
+                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
+            // END table-responsive
+            .panel-footer
+              .row
+                .col-lg-2
+                  .input-group
+                    input.input-sm.form-control(type='text', placeholder='Search')
+                    span.input-group-btn
+                      button.btn.btn-sm.btn-default(type='button') Search
+                .col-lg-8
+                .col-lg-2
+                  .input-group.pull-right
+                    md-select(ng-model='selectctrl.size', placeholder='操作')
+                      md-option(ng-repeat='size in selectctrl.sizes', value='{{size}}') {{size}}
+                    span.input-group-btn
+                      button.md-primary.md-hue-1.md-button.md-default-theme 应用
+
+        md-tab(label='被删投稿')
+          md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;')
+          // START panel
+          .panel.panel-default
+            .panel-heading
+              | 被删除主题管理
+            // START table-responsive
+            .table-responsive
+              table#table-ext-1.table.table-bordered.table-hover
+                thead
+                  tr
+                    th UID
+                    th Picture
+                    th Username
+                    th First Name
+                    th Last Name
+                    th Email
+                    th Profile
+                    th Last Login
+                    th(check-all)
+                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
+                tbody
+                  tr
+                    td 1
+                    td
+                      .media
+                        img.img-responsive.img-circle(src="app/img/user/01.jpg", alt="Image")
+                    td @twitter
+                    td Larry
+                    td the Bird
+                    td mail@example.com
+                    td.text-center
+                      .radial-bar.radial-bar-25.radial-bar-xs(data-label="25%")
+                    td 1 week
+                    td
+                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
+                  tr
+                    td 2
+                    td
+                      .media
+                        img.img-responsive.img-circle(src="app/img/user/02.jpg", alt="Image")
+                    td @mdo
+                    td Mark
+                    td Otto
+                    td mail@example.com
+                    td.text-center
+                      .radial-bar.radial-bar-50.radial-bar-xs(data-label="50%")
+                    td 25 minutes
+                    td
+                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
+                  tr
+                    td 3
+                    td
+                      .media
+                        img.img-responsive.img-circle(src="app/img/user/03.jpg", alt="Image")
+                    td @fat
+                    td Jacob
+                    td Thornton
+                    td mail@example.com
+                    td.text-center
+                      .radial-bar.radial-bar-80.radial-bar-xs(data-label="80%")
+                    td 10 hours
+                    td
+                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
+            // END table-responsive
+            .panel-footer
+              .row
+                .col-lg-2
+                  .input-group
+                    input.input-sm.form-control(type='text', placeholder='Search')
+                    span.input-group-btn
+                      button.btn.btn-sm.btn-default(type='button') Search
+                .col-lg-8
+                .col-lg-2
+                  .input-group.pull-right
+                    md-select(ng-model='selectctrl.size', placeholder='操作')
+                      md-option(ng-repeat='size in selectctrl.sizes', value='{{size}}') {{size}}
+                    span.input-group-btn
+                      button.md-primary.md-hue-1.md-button.md-default-theme 应用

@@ -1,0 +1,532 @@
+<h3>
+   <!-- START Language list-->
+   <div class="pull-right">
+      <div dropdown="" is-open="language.listIsOpen" class="btn-group">
+         <button type="button" dropdown-toggle="" class="btn btn-default">{{language.selected}}
+            <span class="caret"></span>
+         </button>
+         <ul role="menu" class="dropdown-menu dropdown-menu-right animated fadeInUpShort">
+            <li ng-repeat="(localeId, langName) in language.available"><a ng-click="language.set(localeId, $event)" href="#">{{langName}}</a>
+            </li>
+         </ul>
+      </div>
+   </div>
+   <!-- END Language list    -->
+   控制面板
+   <small>{{ 'dashboard.DASHBOARD_WELCOME' | translate:{ appName: app.name } }} !</small>
+</h3>
+<!-- START widgets box-->
+<div class="row">
+   <div class="col-lg-3 col-sm-6">
+      <!-- START widget-->
+      <div class="panel widget bg-primary">
+         <div class="row row-table">
+            <div class="col-xs-4 text-center bg-primary-dark pv-lg">
+               <em class="icon-user fa-3x"></em>
+            </div>
+            <div class="col-xs-8 pv-lg">
+               <div class="h2 mt0">1700</div>
+               <div class="text-uppercase">今日新增用户</div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="col-lg-3 col-sm-6">
+      <!-- START widget-->
+      <div class="panel widget bg-purple">
+         <div class="row row-table">
+            <div class="col-xs-4 text-center bg-purple-dark pv-lg">
+               <em class="icon-users fa-3x"></em>
+            </div>
+            <div class="col-xs-8 pv-lg">
+               <div class="h2 mt0">700</div>
+               <div class="text-uppercase">总用户数</div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="col-lg-3 col-md-6 col-sm-12">
+      <!-- START widget-->
+      <div class="panel widget bg-green">
+         <div class="row row-table">
+            <div class="col-xs-4 text-center bg-green-dark pv-lg">
+               <em class="icon-bubbles fa-3x"></em>
+            </div>
+            <div class="col-xs-8 pv-lg">
+               <div class="h2 mt0">500</div>
+               <div class="text-uppercase">投稿数</div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="col-lg-3 col-md-6 col-sm-12">
+      <!-- START date widget-->
+      <div class="panel widget">
+         <div class="row row-table">
+            <div class="col-xs-4 text-center bg-green pv-lg">
+               <!-- See formats: https://docs.angularjs.org/api/ng/filter/date-->
+               <em class="icon-tag fa-3x"></em>
+            </div>
+            <div class="col-xs-8 pv-lg">
+               <div class="h2 mt0">500</div>
+               <div class="text-uppercase">标签数</div>
+            </div>
+         </div>
+      </div>
+      <!-- END date widget    -->
+   </div>
+</div>
+<!-- END widgets box-->
+<div class="row">
+   <!-- START dashboard main content-->
+   <div class="col-lg-9">
+      <!-- START chart-->
+      <div class="row">
+         <div class="col-lg-12">
+            <!-- START widget-->
+            <div id="panelChart9" ng-controller="DashboardController as dash" class="panel panel-default">
+               <div class="panel-heading">
+                  <paneltool tool-collapse="tool-collapse" tool-refresh="traditional"></paneltool>
+                  <div class="panel-title">Inbound visitor statistics</div>
+               </div>
+               <div collapse="panelChart9" class="panel-wrapper">
+                  <div class="panel-body">
+                     <flot dataset="dash.splineData" options="dash.splineOptions" height="250px"></flot>
+                  </div>
+               </div>
+            </div>
+            <!-- END widget-->
+         </div>
+      </div>
+      <!-- END chart-->
+      <div class="row">
+         <div class="col-lg-12">
+            <div class="panel widget">
+               <div class="row row-table">
+                  <div class="col-md-2 col-sm-3 hidden-xs pv text-center br">
+                     <div class="text-info text-sm">被锁用户数</div>
+                     <div class="text-muted text-md">
+                        <em class="wi wi-day-cloudy"></em>
+                     </div>
+                     <div class="text-info">
+                        <em class="wi wi-sprinkles"></em>
+                        <span class="text-muted">20</span>
+                     </div>
+                  </div>
+                  <div class="col-md-2 col-sm-3 hidden-xs pv text-center br">
+                     <div class="text-info text-sm">被删用户数</div>
+                     <div class="text-muted text-md">
+                        <em class="wi wi-day-cloudy"></em>
+                     </div>
+                     <div class="text-info">
+                        <em class="wi wi-sprinkles"></em>
+                        <span class="text-muted">20</span>
+                     </div>
+                  </div>
+                  <div class="col-md-2 hidden-sm hidden-xs pv text-center br">
+                     <div class="text-info text-sm">今日新增投稿</div>
+                     <div class="text-muted text-md">
+                        <em class="wi wi-day-sunny-overcast"></em>
+                     </div>
+                     <div class="text-info">
+                        <em class="wi wi-sprinkles"></em>
+                        <span class="text-muted">0</span>
+                     </div>
+                  </div>
+                  <div class="col-md-2 col-sm-3 hidden-xs pv text-center br">
+                     <div class="text-info text-sm">被删投稿数</div>
+                     <div class="text-muted text-md">
+                        <em class="wi wi-day-cloudy"></em>
+                     </div>
+                     <div class="text-info">
+                        <em class="wi wi-sprinkles"></em>
+                        <span class="text-muted">30</span>
+                     </div>
+                  </div>
+                  <div class="col-md-2 col-sm-3 col-xs-6 text-center pv-xl br">
+                     <div class="text-info text-sm">今日新增标签</div>
+                     <div class="text-muted text-md">
+                        <em class="wi wi-day-cloudy"></em>
+                     </div>
+                     <div class="text-info">
+                        <em class="wi wi-sprinkles"></em>
+                        <span class="text-muted">20</span>
+                     </div>
+                  </div>
+                  <div class="col-md-2 hidden-sm hidden-xs pv text-center">
+                     <div class="text-info text-sm">被删标签数</div>
+                     <div class="text-muted text-md">
+                        <em class="wi wi-day-cloudy"></em>
+                     </div>
+                     <div class="text-info">
+                        <em class="wi wi-sprinkles"></em>
+                        <span class="text-muted">20</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-lg-4">
+            <!-- START widget-->
+            <!-- START messages and activity-->
+            <div class="panel panel-default">
+               <div class="panel-heading">
+                  <div class="panel-title">活跃标签</div>
+               </div>
+               <!-- START list group-->
+               <div class="list-group">
+                  <!-- START list group item-->
+                  <div class="list-group-item">
+                     <div class="media-box">
+                        <div class="pull-left">
+                           <span class="fa-stack">
+                              <em class="fa fa-circle fa-stack-2x text-purple"></em>
+                              <em class="fa fa-cloud-upload fa-stack-1x fa-inverse text-white"></em>
+                           </span>
+                        </div>
+                        <div class="media-box-body clearfix">
+                           <small class="text-muted pull-right ml">15m</small>
+                           <div class="media-box-heading"><a href="#" class="text-purple m0">NEW FILE</a>
+                           </div>
+                           <p class="m0">
+                              <small><a href="#">Bootstrap.xls</a>
+                              </small>
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- END list group item-->
+                  <!-- START list group item-->
+                  <div class="list-group-item">
+                     <div class="media-box">
+                        <div class="pull-left">
+                           <span class="fa-stack">
+                              <em class="fa fa-circle fa-stack-2x text-info"></em>
+                              <em class="fa fa-file-text-o fa-stack-1x fa-inverse text-white"></em>
+                           </span>
+                        </div>
+                        <div class="media-box-body clearfix">
+                           <small class="text-muted pull-right ml">2h</small>
+                           <div class="media-box-heading"><a href="#" class="text-info m0">NEW DOCUMENT</a>
+                           </div>
+                           <p class="m0">
+                              <small><a href="#">Bootstrap.doc</a>
+                              </small>
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- END list group item-->
+                  <!-- START list group item-->
+                  <div class="list-group-item">
+                     <div class="media-box">
+                        <div class="pull-left">
+                           <span class="fa-stack">
+                              <em class="fa fa-circle fa-stack-2x text-danger"></em>
+                              <em class="fa fa-exclamation fa-stack-1x fa-inverse text-white"></em>
+                           </span>
+                        </div>
+                        <div class="media-box-body clearfix">
+                           <small class="text-muted pull-right ml">5h</small>
+                           <div class="media-box-heading"><a href="#" class="text-danger m0">BROADCAST</a>
+                           </div>
+                           <p class="m0"><a href="#">Read</a>
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- END list group item-->
+                  <!-- START list group item-->
+                  <div class="list-group-item">
+                     <div class="media-box">
+                        <div class="pull-left">
+                           <span class="fa-stack">
+                              <em class="fa fa-circle fa-stack-2x text-success"></em>
+                              <em class="fa fa-clock-o fa-stack-1x fa-inverse text-white"></em>
+                           </span>
+                        </div>
+                        <div class="media-box-body clearfix">
+                           <small class="text-muted pull-right ml">15h</small>
+                           <div class="media-box-heading"><a href="#" class="text-success m0">NEW MEETING</a>
+                           </div>
+                           <p class="m0">
+                              <small>On
+                                 <em>10/12/2015 09:00 am</em>
+                              </small>
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- END list group item-->
+                  <!-- START list group item-->
+                  <div class="list-group-item">
+                     <div class="media-box">
+                        <div class="pull-left">
+                           <span class="fa-stack">
+                              <em class="fa fa-circle fa-stack-2x text-warning"></em>
+                              <em class="fa fa-tasks fa-stack-1x fa-inverse text-white"></em>
+                           </span>
+                        </div>
+                        <div class="media-box-body clearfix">
+                           <small class="text-muted pull-right ml">1w</small>
+                           <div class="media-box-heading"><a href="#" class="text-warning m0">TASKS COMPLETION</a>
+                           </div>
+                           <progressbar value="22" type="warning" class="progress-xs m0"></progressbar>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- END list group item-->
+               </div>
+               <!-- END list group-->
+               <!-- START panel footer-->
+               <div class="panel-footer clearfix">
+                  <a href="#" class="pull-left">
+                     <small>Load more</small>
+                  </a>
+               </div>
+               <!-- END panel-footer-->
+            </div>
+            <!-- END messages and activity-->
+            <!-- END widget-->
+         </div>
+         <div class="col-lg-8">
+            <div class="panel panel-default">
+               <div class="panel-heading">
+                  <!--.pull-right.label.label-danger 5-->
+                  <!--.pull-right.label.label-success 12-->
+                  <div class="panel-title">活跃用户</div>
+               </div>
+               <!-- START list group-->
+               <scrollable height="180" class="list-group">
+                  <!-- START list group item-->
+                  <a href="#" class="list-group-item">
+                     <div class="media-box">
+                        <div class="pull-left">
+                           <img src="app/img/user/02.jpg" alt="Image" class="media-box-object img-circle thumb32" />
+                        </div>
+                        <div class="media-box-body clearfix">
+                           <small class="pull-right">2h</small>
+                           <strong class="media-box-heading text-primary">
+                              <span class="circle circle-success circle-lg text-left"></span>蛤蛤</strong>
+                           <p class="mb-sm">习习蛤蛤胡搞毛搞是没有江来的</p>
+                        </div>
+                     </div>
+                  </a>
+                  <!-- END list group item-->
+                  <!-- START list group item-->
+                  <a href="#" class="list-group-item">
+                     <div class="media-box">
+                        <div class="pull-left">
+                           <img src="app/img/user/03.jpg" alt="Image" class="media-box-object img-circle thumb32" />
+                        </div>
+                        <div class="media-box-body clearfix">
+                           <small class="pull-right">3h</small>
+                           <strong class="media-box-heading text-primary">
+                              <span class="circle circle-success circle-lg text-left"></span>习近平</strong>
+                           <p class="mb-sm">今天你吃庆丰包子了吗？</p>
+                        </div>
+                     </div>
+                  </a>
+                  <!-- END list group item-->
+                  <!-- START list group item-->
+                  <a href="#" class="list-group-item">
+                     <div class="media-box">
+                        <div class="pull-left">
+                           <img src="app/img/user/09.jpg" alt="Image" class="media-box-object img-circle thumb32" />
+                        </div>
+                        <div class="media-box-body clearfix">
+                           <small class="pull-right">4h</small>
+                           <strong class="media-box-heading text-primary">
+                              <span class="circle circle-danger circle-lg text-left"></span>吾尔开希</strong>
+                           <p class="mb-sm">为了自由</p>
+                        </div>
+                     </div>
+                  </a>
+                  <!-- END list group item-->
+                  <!-- START list group item-->
+                  <a href="#" class="list-group-item">
+                     <div class="media-box">
+                        <div class="pull-left">
+                           <img src="app/img/user/12.jpg" alt="Image" class="media-box-object img-circle thumb32" />
+                        </div>
+                        <div class="media-box-body clearfix">
+                           <small class="pull-right">1d</small>
+                           <strong class="media-box-heading text-primary">
+                              <span class="circle circle-danger circle-lg text-left"></span>柴林</strong>
+                           <p class="mb-sm">为了皿煮</p>
+                        </div>
+                     </div>
+                  </a>
+                  <!-- END list group item-->
+                  <!-- START list group item-->
+                  <a href="#" class="list-group-item">
+                     <div class="media-box">
+                        <div class="pull-left">
+                           <img src="app/img/user/10.jpg" alt="Image" class="media-box-object img-circle thumb32" />
+                        </div>
+                        <div class="media-box-body clearfix">
+                           <small class="pull-right">2d</small>
+                           <strong class="media-box-heading text-primary">
+                              <span class="circle circle-danger circle-lg text-left"></span>蛤丝</strong>
+                           <p class="mb-sm">为了蛤蛤</p>
+                        </div>
+                     </div>
+                  </a>
+                  <!-- END list group item-->
+               </scrollable>
+               <!-- END list group-->
+               <!-- START panel footer-->
+               <div class="panel-footer clearfix">
+                  <div class="input-group">
+                     <input type="text" placeholder="搜索用户" class="form-control input-sm" />
+                     <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i>
+                        </button>
+                     </span>
+                  </div>
+               </div>
+               <!-- END panel-footer-->
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- END dashboard main content-->
+   <!-- START dashboard sidebar-->
+   <aside class="col-lg-3">
+      <!-- START loader widget-->
+      <!--.panel.panel-default-->
+      <!--  .panel-body-->
+      <!--    a.text-muted.pull-right(href="#"): em.fa.fa-arrow-right-->
+      <!--    .text-info Average Monthly Uploads-->
+      <!--    canvas.center-block(classyloader="", data-percentage="70", data-speed="20", data-font-size="40px", data-diameter="70", data-line-color="{{colorByName('info')}}", data-remaining-line-color="rgba(200,200,200,0.4)", data-line-width="10", data-rounded-line="true")-->
+      <!--    .text-center(sparkline="", data-bar-color="{{colorByName('info')}}", data-height="30", data-bar-width="5", data-bar-spacing="2", values="5,4,8,7,8,5,4,6,5,5,9,4,6,3,4,7,5,4,7")-->
+      <!--  .panel-footer-->
+      <!--    p.text-muted-->
+      <!--      em.fa.fa-upload.fa-fw-->
+      <!--      span This Month-->
+      <!--      span.text-dark 1000 Gb-->
+      <!-- END loader widget-->
+      <!-- START messages and activity-->
+      <div class="panel panel-default">
+         <div class="panel-heading">
+            <div class="panel-title">活跃主题</div>
+         </div>
+         <!-- START list group-->
+         <div class="list-group">
+            <!-- START list group item-->
+            <div class="list-group-item">
+               <div class="media-box">
+                  <div class="pull-left">
+                     <span class="fa-stack">
+                        <em class="fa fa-circle fa-stack-2x text-purple"></em>
+                        <em class="fa fa-cloud-upload fa-stack-1x fa-inverse text-white"></em>
+                     </span>
+                  </div>
+                  <div class="media-box-body clearfix">
+                     <small class="text-muted pull-right ml">15m</small>
+                     <div class="media-box-heading"><a href="#" class="text-purple m0">NEW FILE</a>
+                     </div>
+                     <p class="m0">
+                        <small><a href="#">Bootstrap.xls</a>
+                        </small>
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <!-- END list group item-->
+            <!-- START list group item-->
+            <div class="list-group-item">
+               <div class="media-box">
+                  <div class="pull-left">
+                     <span class="fa-stack">
+                        <em class="fa fa-circle fa-stack-2x text-info"></em>
+                        <em class="fa fa-file-text-o fa-stack-1x fa-inverse text-white"></em>
+                     </span>
+                  </div>
+                  <div class="media-box-body clearfix">
+                     <small class="text-muted pull-right ml">2h</small>
+                     <div class="media-box-heading"><a href="#" class="text-info m0">NEW DOCUMENT</a>
+                     </div>
+                     <p class="m0">
+                        <small><a href="#">Bootstrap.doc</a>
+                        </small>
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <!-- END list group item-->
+            <!-- START list group item-->
+            <div class="list-group-item">
+               <div class="media-box">
+                  <div class="pull-left">
+                     <span class="fa-stack">
+                        <em class="fa fa-circle fa-stack-2x text-danger"></em>
+                        <em class="fa fa-exclamation fa-stack-1x fa-inverse text-white"></em>
+                     </span>
+                  </div>
+                  <div class="media-box-body clearfix">
+                     <small class="text-muted pull-right ml">5h</small>
+                     <div class="media-box-heading"><a href="#" class="text-danger m0">BROADCAST</a>
+                     </div>
+                     <p class="m0"><a href="#">Read</a>
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <!-- END list group item-->
+            <!-- START list group item-->
+            <div class="list-group-item">
+               <div class="media-box">
+                  <div class="pull-left">
+                     <span class="fa-stack">
+                        <em class="fa fa-circle fa-stack-2x text-success"></em>
+                        <em class="fa fa-clock-o fa-stack-1x fa-inverse text-white"></em>
+                     </span>
+                  </div>
+                  <div class="media-box-body clearfix">
+                     <small class="text-muted pull-right ml">15h</small>
+                     <div class="media-box-heading"><a href="#" class="text-success m0">NEW MEETING</a>
+                     </div>
+                     <p class="m0">
+                        <small>On
+                           <em>10/12/2015 09:00 am</em>
+                        </small>
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <!-- END list group item-->
+            <!-- START list group item-->
+            <div class="list-group-item">
+               <div class="media-box">
+                  <div class="pull-left">
+                     <span class="fa-stack">
+                        <em class="fa fa-circle fa-stack-2x text-warning"></em>
+                        <em class="fa fa-tasks fa-stack-1x fa-inverse text-white"></em>
+                     </span>
+                  </div>
+                  <div class="media-box-body clearfix">
+                     <small class="text-muted pull-right ml">1w</small>
+                     <div class="media-box-heading"><a href="#" class="text-warning m0">TASKS COMPLETION</a>
+                     </div>
+                     <progressbar value="22" type="warning" class="progress-xs m0"></progressbar>
+                  </div>
+               </div>
+            </div>
+            <!-- END list group item-->
+         </div>
+         <!-- END list group-->
+         <!-- START panel footer-->
+         <div class="panel-footer clearfix">
+            <a href="#" class="pull-left">
+               <small>Load more</small>
+            </a>
+         </div>
+         <!-- END panel-footer-->
+      </div>
+      <!-- END messages and activity-->
+   </aside>
+   <!-- END dashboard sidebar-->
+</div>

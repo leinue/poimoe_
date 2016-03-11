@@ -17,8 +17,8 @@
         listIsOpen: false,
         // list of available languages
         available: {
-          'en':       'English',
-          'es_AR':    'Español'
+          'en':       '中文'
+          // 'es_AR':    '英文'
         },
         // display always the current ui language
         init: function () {

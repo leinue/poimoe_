@@ -9193,3 +9193,68 @@ md-toast {
 md-tooltip {
   z-index: 200;
 }
+
+/* ========================================================================
+     Component: table-extras
+ ========================================================================== */
+
+.table > thead > tr > th {
+  padding: 14px 8px;
+  color: #888;
+}
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+}
+
+.table > tbody > tr > td > .media img {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
+}
+
+.table .checkbox {
+  margin: 0 auto;
+  width: 20px;
+}
+
+.table .progress {
+  margin-bottom: 0;
+}
+
+.table .radial-bar {
+  margin-bottom: 0;
+  margin: 0 auto;
+}
+
+.jqstooltip {
+  box-sizing: content-box;
+}
+
+#table-ext-1 th:nth-child(1) {
+  width: 3%;
+}
+
+#table-ext-1 th:nth-child(2) {
+  width: 5%;
+}
+
+#table-ext-1 th:nth-child(7) {
+  width: 5%;
+}
+
+#table-ext-1 th:nth-child(9) {
+  width: 5%;
+}
+
+#table-ext-2 th:nth-child(1) {
+  width: 5%;
+}
+
+#table-ext-2 th:nth-child(3) {
+  width: 10%;
+}
+
+.panel {
+  box-shadow: 0 0px 1px -1px rgba(0, 0, 0, 0.14), 0 1px 1px 0 rgba(0, 0, 0, 0.098), 0 0px 0px 0 rgba(0, 0, 0, 0.084) !important;
+}

@@ -1,6 +1,7 @@
 {
   "dashboard": {
-    "WELCOME": "欢迎您, {{appName}}"
+    "WELCOME": "欢迎您, {{appName}}",
+    "DASHBOARD_WELCOME": "欢迎您使用, {{appName}}"
   },
   "topbar": {
     "search": {

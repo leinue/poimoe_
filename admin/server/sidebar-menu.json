@@ -20,7 +20,7 @@
     "translate": "sidebar.heading.MANAGER_LIST"
   },
   {
-    "text": "数据管理",
+    "text": "元素",
     "sref": "#",
     "icon": "fa fa-sitemap",
     "submenu": [
@@ -31,9 +31,16 @@
       {"text": "Lists",       "sref": "app.lists"},
       {"text": "Whiteframe",  "sref": "app.whiteframe"},
       {"text": "Colors",      "sref": "app.matcolors"},
-      {"text": "ngMaterial",  "sref": "app.ngmaterial"},
+      {"text": "ngMaterial",  "sref": "app.ngmaterial"}
+    ]
+  },
+  {
+    "text": "信息管理",
+    "sref": "#",
+    "icon": "fa fa-sitemap",
+    "submenu": [
       {"text": "用户管理",     "sref": "app.usersmgr"},
-      {"text": "主题管理",     "sref": "app.themesmgr"},
+      {"text": "投稿管理",     "sref": "app.themesmgr"},
       {"text": "标签管理",     "sref": "app.tagsmgr"}
     ]
   },

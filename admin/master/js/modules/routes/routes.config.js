@@ -18,11 +18,11 @@
         // You may have to set <base> tag in index and a routing configuration in your server
         $locationProvider.html5Mode(false);
 
-        // defaults to dashboard
+        // defaults to welcome
         $urlRouterProvider.otherwise('/app/welcome');
 
         // 
-        // Application Routes
+        // 应用程序欢迎目录
         // -----------------------------------   
         $stateProvider
           .state('app', {
@@ -35,6 +35,11 @@
               url: '/welcome',
               title: 'Welcome',
               templateUrl: helper.basepath('welcome.html')
+          })
+          .state('app.dashboard', {
+              url: '/dashboard',
+              title: '控制面板',
+              templateUrl: helper.basepath('dashboard.html')
           })
           //
           // Material 
@@ -79,8 +84,26 @@
             url: '/ngmaterial',
             title: 'ngMaterial',
             templateUrl: helper.basepath( 'material.ngmaterial.html' )
-          })    
-          // 
+          })
+          //
+          // 数据管理 
+          // -----------------------------------
+          .state('app.usersmgr', {
+            url: '/users',
+            title: '用户数据管理',
+            templateUrl: helper.basepath( 'data/users.html' )
+          })
+          .state('app.themesmgr', {
+            url: '/themes',
+            title: '投稿管理',
+            templateUrl: helper.basepath( 'data/themes.html' )
+          })
+          .state('app.tagsmgr', {
+            url: '/tags',
+            title: '标签管理',
+            templateUrl: helper.basepath( 'data/tags.html' )
+          })
+
           // CUSTOM RESOLVES
           //   Add your own resolves properties
           //   following this object extend

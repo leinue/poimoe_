@@ -27,7 +27,11 @@
             'app.settings',
             'app.maps',
             'app.utils',
-            'app.material'
+            'app.material',
+            'app.dashboard',
+            'app.users',
+            'app.themes',
+            'app.tags'
         ]);
 })();
 

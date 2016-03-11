@@ -14,8 +14,8 @@
 
         function activate() {
           $rootScope.user = {
-            name:     'John',
-            job:      'ng-developer',
+            name:     'Xieyang',
+            job:      'Poimoe 创始人',
             picture:  'app/img/user/02.jpg'
           };
 
