@@ -247,11 +247,11 @@
    </div>
    <!-- Dialog inline template for demo-->
    <script type="text/ng-template" id="dialog1.tmpl.html">
-      <md-dialog aria-label="Mango (Fruit)">
+      <md-dialog aria-label="{{title}}">
       <form>
       <md-toolbar>
       <div class="md-toolbar-tools">
-      <h2>Mango (Fruit)</h2>
+      <h2>{{title}}</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="answer('not applicable')">
       <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>

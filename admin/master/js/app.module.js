@@ -32,6 +32,7 @@
             'app.users',
             'app.themes',
             'app.tags'
+            // 'datatables'
         ]);
 })();
 

@@ -1,4 +1,8 @@
 [
+  "bower_components/datatables/media/css/jquery.dataTables.css",
+  "bower_components/datatables/media/js/jquery.dataTables.js",
+  "bower_components/datatables/media/images/**/*",
+  "bower_components/angular-datatables/dist/angular-datatables.js",
   "bower_components/weather-icons/css/weather-icons.min.css",
   "bower_components/weather-icons/font/*",
   "bower_components/modernizr/modernizr.js",

@@ -7,14 +7,34 @@
         .module('app.users')
         .controller('UsersController', UsersController);
 
-    UsersController.$inject = ['$log', '$mdDialog', '$scope'];
-    function UsersController($log, $mdDialog, $scope) {
+    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http'];
+    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http) {
         // for controllerAs syntax
         var vm = this;
 
         activate();
 
+        activateDataTable();
+
         ////////////////
+
+        function activateDataTable() {
+            vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+            vm.dtColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(0),
+                DTColumnDefBuilder.newColumnDef(1),
+                DTColumnDefBuilder.newColumnDef(2),
+                DTColumnDefBuilder.newColumnDef(3).notSortable()
+            ];
+
+            vm.usersList = [];
+
+            $http.get('http://api.poimoe.com/user/select/all/1/10').success(function(res) {
+                console.log(res);
+                vm.usersList = res.message;
+            });
+
+        }
 
         function activate() {
 
@@ -65,7 +85,7 @@
                 name: '',
                 names: [{
                     val: '详情',
-                    onClicked: function(ev) {
+                    onClicked: function(ev, ur) {
                         $mdDialog.show({
                             controller: DialogController,
                             templateUrl: 'user_detail.tmpl.html',
@@ -79,6 +99,9 @@
 
                         DialogController.$inject = ['$scope', '$mdDialog'];
                         function DialogController($scope, $mdDialog) {
+
+                            $scope.user = ur;
+
                             $scope.hide = function() {
                                 $mdDialog.hide();
                             };
@@ -102,7 +125,7 @@
                     onClicked: function() {
 
                     }
-                }]
+                }]                
             }
 
         }

@@ -47,7 +47,8 @@
     "jquery.browser": "master",
     "angular-material": "0.10.1-rc1",
     "angular-aria": "1.4.2",
-    "angular-messages": "1.4.2"
+    "angular-messages": "1.4.2",
+    "angular-datatables": "^0.5.3"
   },
   "resolutions": {
     "angular": "1.4.2",

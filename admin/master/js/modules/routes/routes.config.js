@@ -91,7 +91,8 @@
           .state('app.usersmgr', {
             url: '/users',
             title: '用户数据管理',
-            templateUrl: helper.basepath( 'data/users.html' )
+            templateUrl: helper.basepath( 'data/users.html' ),
+            resolve: helper.resolveFor('datatables')
           })
           .state('app.themesmgr', {
             url: '/themes',
