@@ -7,8 +7,8 @@
         .module('app.users')
         .controller('UsersController', UsersController);
 
-    UsersController.$inject = ['$log'];
-    function UsersController($log) {
+    UsersController.$inject = ['$log', '$mdDialog', '$scope'];
+    function UsersController($log, $mdDialog, $scope) {
         // for controllerAs syntax
         var vm = this;
 
@@ -22,13 +22,41 @@
                 name: '',
                 names: [{
                     val: '锁定',
-                    onClicked: function() {
-                        console.log('block');
+                    onClicked: function(ev) {
+                        var confirm = $mdDialog.confirm()
+                            .title('锁定确认')
+                            .content('你确定要锁定此用户？')
+                            .ariaLabel('Lucky day')
+                            .ok('确定')
+                            .cancel('取消')
+                            .targetEvent(ev);
+
+                        $mdDialog.show(confirm).then(function() {
+                            //确定
+
+                        }, function() {
+                            //取消
+                            
+                        });
                     }
                 }, {
                     val: '删除',
-                    onClicked: function() {
-                        console.log('delete');
+                    onClicked: function(ev) {
+                        var confirm = $mdDialog.confirm()
+                            .title('删除确认')
+                            .content('你确定要删除此用户？')
+                            .ariaLabel('Lucky day')
+                            .ok('确定')
+                            .cancel('取消')
+                            .targetEvent(ev);
+
+                        $mdDialog.show(confirm).then(function() {
+                            //确定
+
+                        }, function() {
+                            //取消
+
+                        });
                     }
                 }]
             }
@@ -37,8 +65,32 @@
                 name: '',
                 names: [{
                     val: '详情',
-                    onClicked: function() {
+                    onClicked: function(ev) {
+                        $mdDialog.show({
+                            controller: DialogController,
+                            templateUrl: 'user_detail.tmpl.html',
+                            targetEvent: ev,
+                        })
+                        .then(function(answer) {
+                            $scope.alert = 'You said the information was \'' + answer + '\'.';
+                        }, function() {
+                            $scope.alert = 'You cancelled the dialog.';
+                        });
 
+                        DialogController.$inject = ['$scope', '$mdDialog'];
+                        function DialogController($scope, $mdDialog) {
+                            $scope.hide = function() {
+                                $mdDialog.hide();
+                            };
+
+                            $scope.cancel = function() {
+                                $mdDialog.cancel();
+                            };
+
+                            $scope.answer = function(answer) {
+                                $mdDialog.hide(answer);
+                            };
+                        }
                     }
                 }, {
                     val: '关系列表',
@@ -48,7 +100,7 @@
                 }, {
                     val: '投稿列表',
                     onClicked: function() {
-                        
+
                     }
                 }]
             }
