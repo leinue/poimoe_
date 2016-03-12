@@ -289,20 +289,59 @@
                         DialogController.$inject = ['$scope', '$mdDialog'];
                         function DialogController($scope, $mdDialog) {
 
+                            $scope.followList = [];
+                            $scope.folloerList = [];
+
                             $scope.user = ur;
+
+                            UserService.getRelations(ur._id, 1, 10).success(function(res, status, headers, config) {
+
+                                if(res.code != 200) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                }
+
+                                console.log(res.message);
+
+                                if(res.message.length > 0) {
+                                    $scope.followList = res.message[0].follow;
+                                    $scope.followerList = res.message[0].follower;
+                                }
+
+                            }).error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
 
                             $scope.hide = function() {
                                 $mdDialog.hide();
+                                $scope.followList = [];
+                                $scope.folloerList = [];
                             };
 
                             $scope.cancel = function() {
                                 $mdDialog.cancel();
+                                $scope.followList = [];
+                                $scope.folloerList = [];
                             };
 
                             $scope.answer = function(answer) {
                                 $mdDialog.hide(answer);
+                                $scope.followList = [];
+                                $scope.folloerList = [];
                             };
-                        }                    }
+                        }                    
+                    }
                 }, {
                     val: '投稿列表',
                     onClicked: function(ev, ur) {
@@ -321,7 +360,33 @@
                         function DialogController($scope, $mdDialog) {
 
                             $scope.user = ur;
+                            $scope.themesList = [];
 
+                            UserService.getThemes(ur._id, 1, 10).success(function(res, status, headers, config) {
+
+                                if(res.code != 200) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                }
+
+                                console.log($scope.themesList);
+
+                                $scope.themesList = res.message;
+
+                            }).error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
                             $scope.hide = function() {
                                 $mdDialog.hide();
                             };

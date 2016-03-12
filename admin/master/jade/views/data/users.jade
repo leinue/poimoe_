@@ -139,7 +139,7 @@ h3 用户管理
           <form>
             <md-toolbar>
               <div class="md-toolbar-tools">
-                <h2>{{user.username}} 的关系</h2>
+                <h2>{{user.username}} 的关注/粉丝列表</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="answer('not applicable')">
                   <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
@@ -147,60 +147,98 @@ h3 用户管理
               </div>
             </md-toolbar>
             <md-dialog-content>
-              <div class="card-body">
-               <div class="row">
-                  <div class="col-sm-4">
-                     <div class="mda-form-group">
-                        <input ng-model="user.username" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
-                        <label>用户名</label>
-                     </div>
-                  </div>
-                  <div class="col-sm-4">
-                     <div class="mda-form-group">
-                        <input ng-model="user.email" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
-                        <label>邮箱</label>
-                     </div>
-                  </div>
-                  <div class="col-sm-4">
-                     <div class="mda-form-group">
-                        <input ng-model="user.sex" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
-                        <label>性别</label>
-                     </div>
-                  </div>
-                  <div class="col-sm-12">
-                     <div class="mda-form-group">
-                        <input ng-model="user.intro" tabindex="0" aria-invalid="false" class="mda-form-control" />
-                        <label>个人介绍</label>
-                     </div>
-                  </div>
-                  <div class="col-sm-12">
-                     <div class="mda-form-group">
-                        <input ng-model="user.region" tabindex="0" aria-invalid="false" class="mda-form-control" />
-                        <label>地址</label>
-                     </div>
-                  </div>
-               </div>
-               <div class="row">
-                  <div class="col-sm-4">
-                     <div class="mda-form-group">
-                        <input ng-model="user.createdAt" tabindex="0" aria-invalid="false" class="mda-form-control" />
-                        <label>注册时间</label>
-                     </div>
-                  </div>
-                  <div class="col-sm-4">
-                     <div class="mda-form-group">
-                        <input ng-model="user.isBlocked" tabindex="0" aria-invalid="false" class="mda-form-control" />
-                        <label>锁定</label>
-                     </div>
-                  </div>
-                  <div class="col-sm-4">
-                     <div class="mda-form-group">
-                        <input ng-model="user.isDeleted" tabindex="0" aria-invalid="false" class="mda-form-control" />
-                        <label>删除</label>
-                     </div>
-                  </div>
-               </div>
-            </div>
+              <md-tabs md-dynamic-height="" md-border-bottom="">
+                 <md-tab label="关注列表">
+                    <md-content class="md-padding">
+                      <table datatable="ng" class="row-border hover">
+                         <thead>
+                            <tr>
+                               <th>头像</th>
+                               <th>用户名</th>
+                               <th>邮箱</th>
+                               <th>性别</th>
+                               <th>注册时间</th>
+                               <th>操作</th>
+                               <th check-all="check-all">
+                                  <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.isSelectAll" ng-change="users.toggleSelectAll()" class="md-primary"></md-checkbox>
+                               </th>
+                            </tr>
+                         </thead>
+                         <tbody>
+                            <tr ng-repeat="user in followList">
+                               <td>
+                                  <div class="media">
+                                     <img src="{{user.photo}}" alt="Image" style="width:36px;height:36px" class="img-responsive img-circle" />
+                                  </div>
+                               </td>
+                               <td>{{user.username}}</td>
+                               <td>{{user.email}}</td>
+                               <td>{{user.sex}}</td>
+                               <td>{{user.createdAt}}</td>
+                               <td>
+                                  <md-select ng-model="users.userSingleSelectCtrl.name[user._id]" placeholder="操作">
+                                     <md-optgroup label="详情">
+                                        <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                     </md-optgroup>
+                                     <md-optgroup label="安全">
+                                        <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                     </md-optgroup>
+                                  </md-select>
+                               </td>
+                               <td>
+                                  <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.userIsSelected[user._id]" ng-change="users.selectThisUser(user._id)" class="md-primary"></md-checkbox>
+                               </td>
+                            </tr>
+                         </tbody>
+                      </table>
+                    </md-content>
+                 </md-tab>
+                 <md-tab label="粉丝列表">
+                    <md-content class="md-padding">
+                      <table datatable="ng" class="row-border hover">
+                         <thead>
+                            <tr>
+                               <th>头像</th>
+                               <th>用户名</th>
+                               <th>邮箱</th>
+                               <th>性别</th>
+                               <th>注册时间</th>
+                               <th>操作</th>
+                               <th check-all="check-all">
+                                  <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.isSelectAll" ng-change="users.toggleSelectAll()" class="md-primary"></md-checkbox>
+                               </th>
+                            </tr>
+                         </thead>
+                         <tbody>
+                            <tr ng-repeat="user in followerList">
+                               <td>
+                                  <div class="media">
+                                     <img src="{{user.photo}}" alt="Image" style="width:36px;height:36px" class="img-responsive img-circle" />
+                                  </div>
+                               </td>
+                               <td>{{user.username}}</td>
+                               <td>{{user.email}}</td>
+                               <td>{{user.sex}}</td>
+                               <td>{{user.createdAt}}</td>
+                               <td>
+                                  <md-select ng-model="users.userSingleSelectCtrl.name[user._id]" placeholder="操作">
+                                     <md-optgroup label="详情">
+                                        <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                     </md-optgroup>
+                                     <md-optgroup label="安全">
+                                        <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                     </md-optgroup>
+                                  </md-select>
+                               </td>
+                               <td>
+                                  <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.userIsSelected[user._id]" ng-change="users.selectThisUser(user._id)" class="md-primary"></md-checkbox>
+                               </td>
+                            </tr>
+                         </tbody>
+                      </table>
+                    </md-content>
+                 </md-tab>
+              </md-tabs>
             </md-dialog-content>
             <div class="md-actions" layout="row">
               <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" hide show-md>
@@ -232,7 +270,39 @@ h3 用户管理
             </md-toolbar>
             <md-dialog-content>
               <div class="card-body">
-
+                <table datatable="ng" class="row-border hover">
+                   <thead>
+                      <tr>
+                         <th>图像</th>
+                         <th>内容</th>
+                         <th>标签</th>
+                         <th>发布时间</th>
+                         <th>操作</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      <tr ng-repeat="theme in themesList">
+                         <td>
+                            <div class="media">
+                               <img src="{{theme.image}}" alt="Image" style="width:100px;height:100px;border-radius:0" class="img-responsive img-circle" />
+                            </div>
+                         </td>
+                         <td>{{theme.content}}</td>
+                         <td><span ng-repeat="tag in theme.tag_list">{{tag.name}}</span></td>
+                         <td>{{theme.createdAt}}</td>
+                         <td>
+                            <md-select ng-model="users.userSingleSelectCtrl.name[user._id]" placeholder="操作">
+                               <md-optgroup label="详情">
+                                  <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                               </md-optgroup>
+                               <md-optgroup label="安全">
+                                  <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                               </md-optgroup>
+                            </md-select>
+                         </td>
+                      </tr>
+                   </tbody>
+                </table>
               </div>
             </md-dialog-content>
             <div class="md-actions" layout="row">

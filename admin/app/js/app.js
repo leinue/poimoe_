@@ -106,6 +106,14 @@
     'use strict';
 
     angular
+        .module('app.routes', [
+            'app.lazyload'
+        ]);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.preloader', []);
 })();
 
@@ -115,14 +123,6 @@
 
     angular
         .module('app.settings', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.routes', [
-            'app.lazyload'
-        ]);
 })();
 (function() {
     'use strict';
@@ -1613,157 +1613,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.preloader')
-        .directive('preloader', preloader);
-
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
-
-        var directive = {
-            restrict: 'EAC',
-            template: 
-              '<div class="preloader-progress">' +
-                  '<div class="preloader-progress-bar" ' +
-                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
-              '</div>'
-            ,
-            link: link
-        };
-        return directive;
-
-        ///////
-
-        function link(scope, el) {
-
-          scope.loadCounter = 0;
-
-          var counter  = 0,
-              timeout;
-
-          // disables scrollbar
-          angular.element('body').css('overflow', 'hidden');
-          // ensure class is present for styling
-          el.addClass('preloader');
-
-          appReady().then(endCounter);
-
-          timeout = $timeout(startCounter);
-
-          ///////
-
-          function startCounter() {
-
-            var remaining = 100 - counter;
-            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
-
-            scope.loadCounter = parseInt(counter, 10);
-
-            timeout = $timeout(startCounter, 20);
-          }
-
-          function endCounter() {
-
-            $timeout.cancel(timeout);
-
-            scope.loadCounter = 100;
-
-            $timeout(function(){
-              // animate preloader hiding
-              $animate.addClass(el, 'preloader-hidden');
-              // retore scrollbar
-              angular.element('body').css('overflow', '');
-            }, 300);
-          }
-
-          function appReady() {
-            var deferred = $q.defer();
-            var viewsLoaded = 0;
-            // if this doesn't sync with the real app ready
-            // a custom event must be used instead
-            var off = scope.$on('$viewContentLoaded', function () {
-              viewsLoaded ++;
-              // we know there are at least two views to be loaded 
-              // before the app is ready (1-index.html 2-app*.html)
-              if ( viewsLoaded === 2) {
-                // with resolve this fires only once
-                $timeout(function(){
-                  deferred.resolve();
-                }, 1);
-
-                off();
-              }
-
-            });
-
-            return deferred.promise;
-          }
-
-        } //link
-    }
-
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.settings')
-        .run(settingsRun);
-
-    settingsRun.$inject = ['$rootScope', '$localStorage'];
-
-    function settingsRun($rootScope, $localStorage){
-
-      // Global Settings
-      // ----------------------------------- 
-      $rootScope.app = {
-        name: 'Poimoe',
-        description: '管理后台',
-        year: ((new Date()).getFullYear()),
-        layout: {
-          isFixed: true,
-          isCollapsed: false,
-          isBoxed: false,
-          isRTL: false,
-          horizontal: false,
-          isFloat: false,
-          asideHover: false,
-          theme: null
-        },
-        useFullLayout: false,
-        hiddenFooter: false,
-        offsidebarOpen: false,
-        asideToggled: false,
-        viewAnimation: 'ng-fadeInUp',
-        baseUrl: 'http://api.poimoe.com/'
-      };
-
-      // Setup the layout mode
-      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
-
-      // Restore layout settings [*** UNCOMMENT TO ENABLE ***]
-      // if( angular.isDefined($localStorage.layout) )
-      //   $rootScope.app.layout = $localStorage.layout;
-      // else
-      //   $localStorage.layout = $rootScope.app.layout;
-      //
-      // $rootScope.$watch('app.layout', function () {
-      //   $localStorage.layout = $rootScope.app.layout;
-      // }, true);
-
-      // Close submenu when sidebar change from collapsed to normal
-      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
-        if( newValue === false )
-          $rootScope.$broadcast('closeSidebarMenu');
-      });
-
-    }
-
-})();
-
 /**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
@@ -1976,6 +1825,157 @@
 
 })();
 
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.preloader')
+        .directive('preloader', preloader);
+
+    preloader.$inject = ['$animate', '$timeout', '$q'];
+    function preloader ($animate, $timeout, $q) {
+
+        var directive = {
+            restrict: 'EAC',
+            template: 
+              '<div class="preloader-progress">' +
+                  '<div class="preloader-progress-bar" ' +
+                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
+              '</div>'
+            ,
+            link: link
+        };
+        return directive;
+
+        ///////
+
+        function link(scope, el) {
+
+          scope.loadCounter = 0;
+
+          var counter  = 0,
+              timeout;
+
+          // disables scrollbar
+          angular.element('body').css('overflow', 'hidden');
+          // ensure class is present for styling
+          el.addClass('preloader');
+
+          appReady().then(endCounter);
+
+          timeout = $timeout(startCounter);
+
+          ///////
+
+          function startCounter() {
+
+            var remaining = 100 - counter;
+            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
+
+            scope.loadCounter = parseInt(counter, 10);
+
+            timeout = $timeout(startCounter, 20);
+          }
+
+          function endCounter() {
+
+            $timeout.cancel(timeout);
+
+            scope.loadCounter = 100;
+
+            $timeout(function(){
+              // animate preloader hiding
+              $animate.addClass(el, 'preloader-hidden');
+              // retore scrollbar
+              angular.element('body').css('overflow', '');
+            }, 300);
+          }
+
+          function appReady() {
+            var deferred = $q.defer();
+            var viewsLoaded = 0;
+            // if this doesn't sync with the real app ready
+            // a custom event must be used instead
+            var off = scope.$on('$viewContentLoaded', function () {
+              viewsLoaded ++;
+              // we know there are at least two views to be loaded 
+              // before the app is ready (1-index.html 2-app*.html)
+              if ( viewsLoaded === 2) {
+                // with resolve this fires only once
+                $timeout(function(){
+                  deferred.resolve();
+                }, 1);
+
+                off();
+              }
+
+            });
+
+            return deferred.promise;
+          }
+
+        } //link
+    }
+
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.settings')
+        .run(settingsRun);
+
+    settingsRun.$inject = ['$rootScope', '$localStorage'];
+
+    function settingsRun($rootScope, $localStorage){
+
+      // Global Settings
+      // ----------------------------------- 
+      $rootScope.app = {
+        name: 'Poimoe',
+        description: '管理后台',
+        year: ((new Date()).getFullYear()),
+        layout: {
+          isFixed: true,
+          isCollapsed: false,
+          isBoxed: false,
+          isRTL: false,
+          horizontal: false,
+          isFloat: false,
+          asideHover: false,
+          theme: null
+        },
+        useFullLayout: false,
+        hiddenFooter: false,
+        offsidebarOpen: false,
+        asideToggled: false,
+        viewAnimation: 'ng-fadeInUp',
+        baseUrl: 'http://api.poimoe.com/'
+      };
+
+      // Setup the layout mode
+      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
+
+      // Restore layout settings [*** UNCOMMENT TO ENABLE ***]
+      // if( angular.isDefined($localStorage.layout) )
+      //   $rootScope.app.layout = $localStorage.layout;
+      // else
+      //   $localStorage.layout = $rootScope.app.layout;
+      //
+      // $rootScope.$watch('app.layout', function () {
+      //   $localStorage.layout = $rootScope.app.layout;
+      // }, true);
+
+      // Close submenu when sidebar change from collapsed to normal
+      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
+        if( newValue === false )
+          $rootScope.$broadcast('closeSidebarMenu');
+      });
+
+    }
+
+})();
 
 /**=========================================================
  * Module: sidebar-menu.js
@@ -2834,14 +2834,6 @@
     'use strict';
 
     angular
-        .module('app.tags', [
-            'angle'
-        ]);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.themes', [
             'angle'
         ]);
@@ -2851,6 +2843,14 @@
 
     angular
         .module('app.users', [
+            'angle'
+        ]);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.tags', [
             'angle'
         ]);
 })();
@@ -2879,32 +2879,6 @@
           $log.log('I\'m a line from custom.js');
         }
     }
-})();
-
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tags')
-        .controller('TagsController', TagsController);
-
-    TagsController.$inject = ['$log'];
-    function TagsController($log) {
-        // for controllerAs syntax
-        // var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-            
-
-        }
-    }
-
 })();
 
 
@@ -3224,20 +3198,59 @@
                         DialogController.$inject = ['$scope', '$mdDialog'];
                         function DialogController($scope, $mdDialog) {
 
+                            $scope.followList = [];
+                            $scope.folloerList = [];
+
                             $scope.user = ur;
+
+                            UserService.getRelations(ur._id, 1, 10).success(function(res, status, headers, config) {
+
+                                if(res.code != 200) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                }
+
+                                console.log(res.message);
+
+                                if(res.message.length > 0) {
+                                    $scope.followList = res.message[0].follow;
+                                    $scope.followerList = res.message[0].follower;
+                                }
+
+                            }).error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
 
                             $scope.hide = function() {
                                 $mdDialog.hide();
+                                $scope.followList = [];
+                                $scope.folloerList = [];
                             };
 
                             $scope.cancel = function() {
                                 $mdDialog.cancel();
+                                $scope.followList = [];
+                                $scope.folloerList = [];
                             };
 
                             $scope.answer = function(answer) {
                                 $mdDialog.hide(answer);
+                                $scope.followList = [];
+                                $scope.folloerList = [];
                             };
-                        }                    }
+                        }                    
+                    }
                 }, {
                     val: '投稿列表',
                     onClicked: function(ev, ur) {
@@ -3256,7 +3269,33 @@
                         function DialogController($scope, $mdDialog) {
 
                             $scope.user = ur;
+                            $scope.themesList = [];
 
+                            UserService.getThemes(ur._id, 1, 10).success(function(res, status, headers, config) {
+
+                                if(res.code != 200) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                }
+
+                                console.log($scope.themesList);
+
+                                $scope.themesList = res.message;
+
+                            }).error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
                             $scope.hide = function() {
                                 $mdDialog.hide();
                             };
@@ -3374,10 +3413,44 @@
 
         unBlockUser: function(postData) {
           return $http.post($rootScope.app.baseUrl + 'user/unblock', postData, {});
+        },
+
+        getRelations: function(uid, page, count) {
+          return $http.get($rootScope.app.baseUrl + 'relations/select/' + uid + '/' + page + '/' + count);          
+        },
+
+        getThemes: function(uid, page, count) {
+          return $http.get($rootScope.app.baseUrl + 'themes/get/' + uid + '/' + page + '/' + count);          
         }
 
       }
 
+    }
+
+})();
+
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.tags')
+        .controller('TagsController', TagsController);
+
+    TagsController.$inject = ['$log'];
+    function TagsController($log) {
+        // for controllerAs syntax
+        // var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+            
+
+        }
     }
 
 })();

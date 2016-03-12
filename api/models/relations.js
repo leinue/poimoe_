@@ -29,7 +29,7 @@ module.exports = {
         user_id: uid
       }).populate({
         path: 'user_id follow follower',
-        select: '_id username photo posts',
+        select: '_id username photo posts email sex createdAt',
         populate: {
           path: 'posts',
           select: '_id image',

@@ -38,6 +38,14 @@
 
         unBlockUser: function(postData) {
           return $http.post($rootScope.app.baseUrl + 'user/unblock', postData, {});
+        },
+
+        getRelations: function(uid, page, count) {
+          return $http.get($rootScope.app.baseUrl + 'relations/select/' + uid + '/' + page + '/' + count);          
+        },
+
+        getThemes: function(uid, page, count) {
+          return $http.get($rootScope.app.baseUrl + 'themes/get/' + uid + '/' + page + '/' + count);          
         }
 
       }
