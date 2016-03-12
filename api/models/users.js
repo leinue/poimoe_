@@ -122,6 +122,12 @@ module.exports = {
       }).skip(skipFrom).limit(count).exec(cb);
     };
 
+    // userSchema.statics.countUsers = function(cb) {
+    //   return this.find({
+    //     isDeleted: false
+    //   }).count().exec(cb);
+    // }
+
     userSchema.statics.findAllDeleted = function(page, count, cb) {
 
       page = page || 10;

@@ -7,8 +7,8 @@
         .module('app.users')
         .controller('UsersController', UsersController);
 
-    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http'];
-    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http) {
+    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http', 'UserService', '$mdToast'];
+    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http, UserService, $mdToast) {
         // for controllerAs syntax
         var vm = this;
 
@@ -28,11 +28,118 @@
             ];
 
             vm.usersList = [];
+            vm.usersDeletedList = [];
+            vm.usersBlockedList = [];
 
-            $http.get('http://api.poimoe.com/user/select/all/1/10').success(function(res) {
-                console.log(res);
+            vm.uids = {
+              uids: []
+            };
+
+            vm.isSelectAll = false;
+
+            vm.userIsSelected = {};
+
+            UserService.getAll(1, 10)
+            .success(function(res, status, headers, config) {
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                }
                 vm.usersList = res.message;
+                for (var i = vm.usersList.length - 1; i >= 0; i--) {
+                    var currentUser = vm.usersList[i];
+                    var uid = currentUser._id;
+                    vm.userIsSelected[uid] = false;
+                };
+            })
+            .error(function(res, status, headers, config) {
+                var toast = $mdToast.simple()
+                      .content('出错了，错误代码：' + status)
+                      .action('我知道了')
+                      .highlightAction(false)
+                      .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
             });
+
+            UserService.getUserDeleted(1, 10)
+            .success(function(res, status, headers, config) {
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                }
+                vm.usersDeletedList = res.message;
+            })
+            .error(function(res, status, headers, config) {
+                var toast = $mdToast.simple()
+                      .content('出错了，错误代码：' + status)
+                      .action('我知道了')
+                      .highlightAction(false)
+                      .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+
+            UserService.getUserBlocked(1, 10)
+            .success(function(res, status, headers, config) {
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                }
+                vm.usersBlockedList = res.message;
+            })
+            .error(function(res, status, headers, config) {
+                var toast = $mdToast.simple()
+                      .content('出错了，错误代码：' + status)
+                      .action('我知道了')
+                      .highlightAction(false)
+                      .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+
+            vm.selectThisUser = function(uid) {
+                if(!vm.userIsSelected[uid]) {
+                    var key = vm.uids.uids.indexOf(uid);
+                    vm.uids.uids.splice(key, 1);
+                }else {
+                    vm.uids.uids.push(uid);                 
+                }
+            }
+
+            vm.toggleSelectAll = function() {
+
+                if(vm.isSelectAll) {
+                    vm.uids.uids = [];
+                    for(var uid in vm.userIsSelected) {
+                        vm.userIsSelected[uid] = true;
+                        vm.uids.uids.push(uid);
+                    }
+                    vm.isSelectAll = true;
+                }else {
+                    vm.uids.uids = [];
+                    for(var uid in vm.userIsSelected) {
+                        vm.userIsSelected[uid] = false;
+                    }
+                    vm.isSelectAll = false;
+                }
+
+            }
 
         }
 
@@ -42,7 +149,7 @@
                 name: '',
                 names: [{
                     val: '锁定',
-                    onClicked: function(ev) {
+                    onClicked: function(ev, ur) {
                         var confirm = $mdDialog.confirm()
                             .title('锁定确认')
                             .content('你确定要锁定此用户？')
@@ -51,8 +158,33 @@
                             .cancel('取消')
                             .targetEvent(ev);
 
+                        if(ur != undefined) {
+                            vm.uids.uids = [ur._id];
+                        }
+
                         $mdDialog.show(confirm).then(function() {
                             //确定
+                            UserService.blockUser(vm.uids)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+
+                            vm.uids.uids = [];
 
                         }, function() {
                             //取消
@@ -61,7 +193,7 @@
                     }
                 }, {
                     val: '删除',
-                    onClicked: function(ev) {
+                    onClicked: function(ev, ur) {
                         var confirm = $mdDialog.confirm()
                             .title('删除确认')
                             .content('你确定要删除此用户？')
@@ -70,12 +202,36 @@
                             .cancel('取消')
                             .targetEvent(ev);
 
+                        if(ur != undefined) {
+                            vm.uids.uids = [ur._id];
+                        }
+
                         $mdDialog.show(confirm).then(function() {
                             //确定
+                            UserService.deleteUser(vm.uids)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+
+                            vm.uids.uids = [];
 
                         }, function() {
                             //取消
-
                         });
                     }
                 }]
@@ -117,13 +273,66 @@
                     }
                 }, {
                     val: '关系列表',
-                    onClicked: function() {
+                    onClicked: function(ev, ur) {
+                        $mdDialog.show({
+                            controller: DialogController,
+                            templateUrl: 'user_relations.tmpl.html',
+                            targetEvent: ev,
+                        })
+                        .then(function(answer) {
+                            $scope.alert = 'You said the information was \'' + answer + '\'.';
+                        }, function() {
+                            $scope.alert = 'You cancelled the dialog.';
+                        });
 
-                    }
+                        DialogController.$inject = ['$scope', '$mdDialog'];
+                        function DialogController($scope, $mdDialog) {
+
+                            $scope.user = ur;
+
+                            $scope.hide = function() {
+                                $mdDialog.hide();
+                            };
+
+                            $scope.cancel = function() {
+                                $mdDialog.cancel();
+                            };
+
+                            $scope.answer = function(answer) {
+                                $mdDialog.hide(answer);
+                            };
+                        }                    }
                 }, {
                     val: '投稿列表',
-                    onClicked: function() {
+                    onClicked: function(ev, ur) {
+                        $mdDialog.show({
+                            controller: DialogController,
+                            templateUrl: 'user_themes.tmpl.html',
+                            targetEvent: ev,
+                        })
+                        .then(function(answer) {
+                            $scope.alert = 'You said the information was \'' + answer + '\'.';
+                        }, function() {
+                            $scope.alert = 'You cancelled the dialog.';
+                        });
 
+                        DialogController.$inject = ['$scope', '$mdDialog'];
+                        function DialogController($scope, $mdDialog) {
+
+                            $scope.user = ur;
+
+                            $scope.hide = function() {
+                                $mdDialog.hide();
+                            };
+
+                            $scope.cancel = function() {
+                                $mdDialog.cancel();
+                            };
+
+                            $scope.answer = function(answer) {
+                                $mdDialog.hide(answer);
+                            };
+                        }                    
                     }
                 }]                
             }

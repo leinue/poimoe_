@@ -1,1 +1,1324 @@
-"undefined"!=typeof module&&"undefined"!=typeof exports&&module.exports===exports&&(module.exports="datatables"),function(e,n,t,r){"use strict";function a(e,n,t,a,o){function i(e){var n=e[0].innerHTML;return function(e,t,o,i){function s(e,r){e!==r&&i.render(t,i.buildOptionsPromise(),n)}var d=o.dtDisableDeepWatchers?"$watchCollection":"$watch";r.forEach(["dtColumns","dtColumnDefs","dtOptions"],function(n){e[d].call(e,n,s,!0)}),a.showLoading(t,e),i.render(t,i.buildOptionsPromise(),n)}}function s(i){function s(){var t=e.defer();return e.all([e.when(i.dtOptions),e.when(i.dtColumns),e.when(i.dtColumnDefs)]).then(function(t){var a=t[0],i=t[1],s=t[2];o.deleteProperty(a,"$promise"),o.deleteProperty(i,"$promise"),o.deleteProperty(s,"$promise");var d;if(r.isDefined(a)&&(d={},r.extend(d,a),r.isArray(i)&&(d.aoColumns=i),r.isArray(s)&&(d.aoColumnDefs=s),d.language&&d.language.url)){var u=e.defer();n.get(d.language.url).success(function(e){u.resolve(e)}),d.language=u.promise}return o.resolveObjectPromises(d,["data","aaData","fnPromise"])}).then(function(e){t.resolve(e)}),t.promise}function d(e,n,r){n.then(function(n){a.preRender(n);var o=i.datatable&&"ng"===i.datatable;c&&c._renderer?c._renderer.withOptions(n).render(e,i,r).then(function(e){c=e,u(e)}):t.fromOptions(n,o).render(e,i,r).then(function(e){c=e,u(e)})})}function u(e){r.isFunction(i.dtInstance)?i.dtInstance(e):r.isDefined(i.dtInstance)&&(i.dtInstance=e)}var c,l=this;l.buildOptionsPromise=s,l.render=d}return i.$inject=["tElm"],s.$inject=["$scope"],{restrict:"A",scope:{dtOptions:"=",dtColumns:"=",dtColumnDefs:"=",datatable:"@",dtInstance:"="},compile:i,controller:s}}function o(){var e={hasOverrideDom:!1,withOption:function(e,n){return r.isString(e)&&(this[e]=n),this},withSource:function(e){return this.ajax=e,this},withDataProp:function(e){return this.sAjaxDataProp=e,this},withFnServerData:function(e){if(!r.isFunction(e))throw new Error("The parameter must be a function");return this.fnServerData=e,this},withPaginationType:function(e){if(!r.isString(e))throw new Error("The pagination type must be provided");return this.sPaginationType=e,this},withLanguage:function(e){return this.language=e,this},withLanguageSource:function(e){return this.withLanguage({url:e})},withDisplayLength:function(e){return this.iDisplayLength=e,this},withFnPromise:function(e){return this.fnPromise=e,this},withDOM:function(e){return this.dom=e,this}};return{newOptions:function(){return Object.create(e)},fromSource:function(n){var t=Object.create(e);return t.ajax=n,t},fromFnPromise:function(n){var t=Object.create(e);return t.fnPromise=n,t}}}function i(){var e={withOption:function(e,n){return r.isString(e)&&(this[e]=n),this},withTitle:function(e){return this.sTitle=e,this},withClass:function(e){return this.sClass=e,this},notVisible:function(){return this.bVisible=!1,this},notSortable:function(){return this.bSortable=!1,this},renderWith:function(e){return this.mRender=e,this}};return{newColumn:function(n,t){if(r.isUndefined(n))throw new Error('The parameter "mData" is not defined!');var a=Object.create(e);return a.mData=n,r.isDefined(t)&&(a.sTitle=t),a},DTColumn:e}}function s(e){return{newColumnDef:function(n){if(r.isUndefined(n))throw new Error('The parameter "targets" must be defined! See https://datatables.net/reference/option/columnDefs.targets');var t=Object.create(e.DTColumn);return r.isArray(n)?t.aTargets=n:t.aTargets=[n],t}}}function d(e,n,t){return{compileHtml:function(a){return e(r.element('<div class="'+t+'">'+n.loadingTemplate+"</div>"))(a)},isLoading:function(e){return e.hasClass(t)}}}function u(){function e(e){var n=Object.create(o);return n._renderer=e,n}function n(e,n){n.id=e.id,n.DataTable=e.DataTable,n.dataTable=e.dataTable}function t(e,n){this._renderer.reloadData(e,n)}function r(e){this._renderer.changeData(e)}function a(){this._renderer.rerender()}var o={reloadData:t,changeData:r,rerender:a};return{newDTInstance:e,copyDTProperties:n}}function c(){t.fn.DataTable.Api&&t.fn.DataTable.Api.register("ngDestroy()",function(n){return n=n||!1,this.iterator("table",function(r){var a,o=r.nTableWrapper.parentNode,i=r.oClasses,s=r.nTable,d=r.nTBody,u=r.nTHead,c=r.nTFoot,l=t(s),f=t(d),p=t(r.nTableWrapper),h=t.map(r.aoData,function(e){return e.nTr});r.bDestroying=!0,t.fn.DataTable.ext.internal._fnCallbackFire(r,"aoDestroyCallback","destroy",[r]),n||new t.fn.DataTable.Api(r).columns().visible(!0),p.unbind(".DT").find(":not(tbody *)").unbind(".DT"),t(e).unbind(".DT-"+r.sInstance),s!==u.parentNode&&(l.children("thead").detach(),l.append(u)),c&&s!==c.parentNode&&(l.children("tfoot").detach(),l.append(c)),l.detach(),p.detach(),r.aaSorting=[],r.aaSortingFixed=[],t.fn.DataTable.ext.internal._fnSortingClasses(r),t(h).removeClass(r.asStripeClasses.join(" ")),t("th, td",u).removeClass(i.sSortable+" "+i.sSortableAsc+" "+i.sSortableDesc+" "+i.sSortableNone),r.bJUI&&(t("th span."+i.sSortIcon+", td span."+i.sSortIcon,u).detach(),t("th, td",u).each(function(){var e=t("div."+i.sSortJUIWrapper,this);t(this).append(e.contents()),e.detach()})),!n&&o&&(o.contains(r.nTableReinsertBefore)?o.insertBefore(s,r.nTableReinsertBefore):o.appendChild(s)),l.css("width",r.sDestroyWidth).removeClass(i.sTable),a=r.asDestroyStripes.length,a&&f.children().each(function(e){t(this).addClass(r.asDestroyStripes[e%a])});var D=t.inArray(r,t.fn.DataTable.settings);-1!==D&&t.fn.DataTable.settings.splice(D,1)})})}function l(){function e(e){return i.loadingTemplate=e,i}function n(e){return t.ajax({dataType:"json",url:e,success:function(e){t.extend(!0,t.fn.dataTable.defaults,{oLanguage:e})}}),i}function r(e){return t.extend(!0,t.fn.dataTable.defaults,{oLanguage:e}),i}function a(e){return t.extend(t.fn.dataTable.defaults,{iDisplayLength:e}),i}function o(e){return i.bootstrapOptions=e,i}var i={loadingTemplate:"<h3>Loading...</h3>",bootstrapOptions:{},setLoadingTemplate:e,setLanguageSource:n,setLanguage:r,setDisplayLength:a,setBootstrapOptions:o};return i}function f(e){function n(n,t){var a=r.element(e.compileHtml(t));n.after(a),n.hide(),a.show()}function a(n){n.show();var t=n.next();e.isLoading(t)&&t.remove()}function o(e,n){var a="#"+e.attr("id");t.fn.dataTable.isDataTable(a)&&r.isObject(n)&&(n.destroy=!0);var o=e.DataTable(n),i=e.dataTable(),s={id:e.attr("id"),DataTable:o,dataTable:i};return d(n,s),s}function i(e,n){return l.hideLoading(e),l.renderDataTable(e,n)}function s(e){c.push(e)}function d(e,n){r.forEach(c,function(t){r.isFunction(t.postRender)&&t.postRender(e,n)})}function u(e){r.forEach(c,function(n){r.isFunction(n.preRender)&&n.preRender(e)})}var c=[],l={showLoading:n,hideLoading:a,renderDataTable:o,hideLoadingAndRenderDataTable:i,registerPlugin:s,postRender:d,preRender:u};return l}function p(){return{withOptions:function(e){return this.options=e,this}}}function h(e,n,t,r){function a(a){function o(n,a){c=n,l=a;var o=r.newDTInstance(f),i=t.hideLoadingAndRenderDataTable(n,f.options);return u=i.DataTable,r.copyDTProperties(i,o),e.when(o)}function i(){}function s(){}function d(){u.destroy(),t.showLoading(c,l),o(c)}var u,c,l,f=Object.create(n);return f.name="DTDefaultRenderer",f.options=a,f.render=o,f.reloadData=i,f.changeData=s,f.rerender=d,f}return{create:a}}function D(e,n,t,r,a,o,i){function s(s){function d(e,t,a){p=a,D=e,T=t.$parent,b=i.newDTInstance(g);var s=n.defer(),d=e.find("tbody").html(),u=d.match(/^\s*.+?\s+in\s+(\S*)\s*/m);if(!u)throw new Error('Expected expression in form of "_item_ in _collection_[ track by _id_]" but got "{0}".',d);var c=u[1],l=!1;return T.$watchCollection(c,function(){h&&l&&f(),r(function(){l=!0,o.preRender(g.options);var e=o.hideLoadingAndRenderDataTable(D,g.options);h=e.DataTable,i.copyDTProperties(e,b),s.resolve(b)},0,!1)},!0),s.promise}function u(){e.warn("The Angular Renderer does not support reloading data. You need to do it directly on your model")}function c(){e.warn("The Angular Renderer does not support changing the data. You need to change your model directly.")}function l(){f(),o.showLoading(D,T),o.preRender(s),r(function(){var e=o.hideLoadingAndRenderDataTable(D,g.options);h=e.DataTable,i.copyDTProperties(e,b)},0,!1)}function f(){m&&m.$destroy(),h.ngDestroy(),D.html(p),m=T.$new(),t(D.contents())(m)}var p,h,D,T,m,b,g=Object.create(a);return g.name="DTNGRenderer",g.options=s,g.render=d,g.reloadData=u,g.changeData=c,g.rerender=l,g}return{create:s}}function T(e,n,t,a,o,i){function s(s){function d(n,t){var r=e.defer();return g=i.newDTInstance(y),m=n,b=t,f(y.options.fnPromise,o.renderDataTable).then(function(e){T=e.DataTable,i.copyDTProperties(e,g),r.resolve(g)}),r.promise}function u(e,n){var a=T&&T.page()?T.page():0;r.isFunction(y.options.fnPromise)?f(y.options.fnPromise,D).then(function(t){r.isFunction(e)&&e(t.DataTable.data()),n===!1&&t.DataTable.page(a).draw(!1)}):t.warn("In order to use the reloadData functionality with a Promise renderer, you need to provide a function that returns a promise.")}function c(e){y.options.fnPromise=e,b.dtOptions.fnPromise=e,f(y.options.fnPromise,D)}function l(){T.destroy(),o.showLoading(m,b),o.preRender(s),d(m,b)}function f(n,t){var a=e.defer();if(r.isUndefined(n))throw new Error("You must provide a promise or a function that returns a promise!");return v?v.then(function(){a.resolve(p(n,t))}):a.resolve(p(n,t)),a.promise}function p(n,t){var a=e.defer();return v=r.isFunction(n)?n():n,v.then(function(e){var n=e;if(y.options.sAjaxDataProp)for(var r=y.options.sAjaxDataProp.split(".");r.length;){var o=r.shift();o in n&&(n=n[o])}v=null,a.resolve(h(y.options,m,n,t))}),a.promise}function h(t,r,a,i){var s=e.defer();return delete a.$promise,t.aaData=a,n(function(){o.hideLoading(r),t.bDestroy=!0,s.resolve(i(r,t))},0,!1),s.promise}function D(e,n){return T.clear(),T.rows.add(n.aaData).draw(n.redraw),{id:g.id,DataTable:g.DataTable,dataTable:g.dataTable}}var T,m,b,g,v=null,y=Object.create(a);return y.name="DTPromiseRenderer",y.options=s,y.render=d,y.reloadData=u,y.changeData=c,y.rerender=l,y}return{create:s}}function m(e,n,t,a,o,i){function s(s){function d(n,t){D=n,T=t;var a=e.defer(),s=i.newDTInstance(m);return r.isUndefined(m.options.sAjaxDataProp)&&(m.options.sAjaxDataProp=o.sAjaxDataProp),r.isUndefined(m.options.aoColumns)&&(m.options.aoColumns=o.aoColumns),f(m.options,n).then(function(e){h=e.DataTable,i.copyDTProperties(e,s),a.resolve(s)}),a.promise}function u(e,n){h&&h.ajax.reload(e,n)}function c(e){m.options.ajax=e,T.dtOptions.ajax=e}function l(){a.preRender(s),d(D,T)}function f(t,r){var o=e.defer();return t.bDestroy=!0,h&&(h.destroy(),a.showLoading(D,T),r.empty()),a.hideLoading(r),p(t)?n(function(){o.resolve(a.renderDataTable(r,t))},0,!1):o.resolve(a.renderDataTable(r,t)),o.promise}function p(e){return r.isDefined(e)&&r.isDefined(e.dom)?e.dom.indexOf("S")>=0:!1}var h,D,T,m=Object.create(t);return m.name="DTAjaxRenderer",m.options=s,m.render=d,m.reloadData=u,m.changeData=c,m.rerender=l,m}return{create:s}}function b(e,n,t,a){function o(o,i){if(i){if(o&&o.serverSide)throw new Error("You cannot use server side processing along with the Angular renderer!");return n.create(o)}if(r.isDefined(o)){if(r.isDefined(o.fnPromise)&&null!==o.fnPromise){if(o.serverSide)throw new Error("You cannot use server side processing along with the Promise renderer!");return t.create(o)}return r.isDefined(o.ajax)&&null!==o.ajax||r.isDefined(o.ajax)&&null!==o.ajax?a.create(o):e.create(o)}return e.create()}return{fromOptions:o}}function g(e){function n(e,t){var a=r.copy(e);if((r.isUndefined(a)||null===a)&&(a={}),r.isUndefined(t)||null===t)return a;if(r.isObject(t))for(var o in t)t.hasOwnProperty(o)&&(a[o]=n(a[o],t[o]));else a=r.copy(t);return a}function a(e,n){r.isObject(e)&&delete e[n]}function o(n,a){var o=e.defer(),s=[],d={},u=a||[];if(!r.isObject(n)||r.isArray(n))o.resolve(n);else{d=r.extend(d,n);for(var c in d)d.hasOwnProperty(c)&&-1===t.inArray(c,u)&&(r.isArray(d[c])?s.push(i(d[c])):s.push(e.when(d[c])));e.all(s).then(function(e){var n=0;for(var r in d)d.hasOwnProperty(r)&&-1===t.inArray(r,u)&&(d[r]=e[n++]);o.resolve(d)})}return o.promise}function i(n){var t=e.defer(),a=[],i=[];return r.isArray(n)?(r.forEach(n,function(n){r.isObject(n)?a.push(o(n)):a.push(e.when(n))}),e.all(a).then(function(e){r.forEach(e,function(e){i.push(e)}),t.resolve(i)})):t.resolve(n),t.promise}return{overrideProperties:n,deleteProperty:a,resolveObjectPromises:o,resolveArrayPromises:i}}r.module("datatables.directive",["datatables.instances","datatables.renderer","datatables.options","datatables.util"]).directive("datatable",a),a.$inject=["$q","$http","DTRendererFactory","DTRendererService","DTPropertyUtil"],r.module("datatables.factory",[]).factory("DTOptionsBuilder",o).factory("DTColumnBuilder",i).factory("DTColumnDefBuilder",s).factory("DTLoadingTemplate",d),s.$inject=["DTColumnBuilder"],d.$inject=["$compile","DTDefaultOptions","DT_LOADING_CLASS"],r.module("datatables.instances",["datatables.util"]).factory("DTInstanceFactory",u),r.module("datatables",["datatables.directive","datatables.factory"]).run(c),r.module("datatables.options",[]).constant("DT_DEFAULT_OPTIONS",{dom:"lfrtip",sAjaxDataProp:"",aoColumns:[]}).constant("DT_LOADING_CLASS","dt-loading").service("DTDefaultOptions",l),r.module("datatables.renderer",["datatables.instances","datatables.factory","datatables.options","datatables.instances"]).factory("DTRendererService",f).factory("DTRenderer",p).factory("DTDefaultRenderer",h).factory("DTNGRenderer",D).factory("DTPromiseRenderer",T).factory("DTAjaxRenderer",m).factory("DTRendererFactory",b),f.$inject=["DTLoadingTemplate"],h.$inject=["$q","DTRenderer","DTRendererService","DTInstanceFactory"],D.$inject=["$log","$q","$compile","$timeout","DTRenderer","DTRendererService","DTInstanceFactory"],T.$inject=["$q","$timeout","$log","DTRenderer","DTRendererService","DTInstanceFactory"],m.$inject=["$q","$timeout","DTRenderer","DTRendererService","DT_DEFAULT_OPTIONS","DTInstanceFactory"],b.$inject=["DTDefaultRenderer","DTNGRenderer","DTPromiseRenderer","DTAjaxRenderer"],r.module("datatables.util",[]).factory("DTPropertyUtil",g),g.$inject=["$q"]}(window,document,jQuery,angular);
+/*!
+ * angular-datatables - v0.5.3
+ * https://github.com/l-lin/angular-datatables
+ * License: MIT
+ */
+if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports) {
+   module.exports = 'datatables';
+}
+(function (window, document, $, angular) {
+
+'use strict';
+
+angular.module('datatables.directive', ['datatables.instances', 'datatables.renderer', 'datatables.options', 'datatables.util'])
+    .directive('datatable', dataTable);
+
+/* @ngInject */
+function dataTable($q, $http, DTRendererFactory, DTRendererService, DTPropertyUtil) {
+    compileDirective.$inject = ['tElm'];
+    ControllerDirective.$inject = ['$scope'];
+    return {
+        restrict: 'A',
+        scope: {
+            dtOptions: '=',
+            dtColumns: '=',
+            dtColumnDefs: '=',
+            datatable: '@',
+            dtInstance: '='
+        },
+        compile: compileDirective,
+        controller: ControllerDirective
+    };
+
+    /* @ngInject */
+    function compileDirective(tElm) {
+        var _staticHTML = tElm[0].innerHTML;
+
+        return function postLink($scope, $elem, iAttrs, ctrl) {
+            function handleChanges(newVal, oldVal) {
+                if (newVal !== oldVal) {
+                    ctrl.render($elem, ctrl.buildOptionsPromise(), _staticHTML);
+                }
+            }
+
+            // Options can hold heavy data, and other deep/large objects.
+            // watchcollection can improve this by only watching shallowly
+            var watchFunction = iAttrs.dtDisableDeepWatchers ? '$watchCollection' : '$watch';
+            angular.forEach(['dtColumns', 'dtColumnDefs', 'dtOptions'], function(tableDefField) {
+                $scope[watchFunction].call($scope, tableDefField, handleChanges, true);
+            });
+            DTRendererService.showLoading($elem, $scope);
+            ctrl.render($elem, ctrl.buildOptionsPromise(), _staticHTML);
+        };
+    }
+
+    /* @ngInject */
+    function ControllerDirective($scope) {
+        var _dtInstance;
+        var vm = this;
+        vm.buildOptionsPromise = buildOptionsPromise;
+        vm.render = render;
+
+        function buildOptionsPromise() {
+            var defer = $q.defer();
+            // Build options
+            $q.all([
+                $q.when($scope.dtOptions),
+                $q.when($scope.dtColumns),
+                $q.when($scope.dtColumnDefs)
+            ]).then(function(results) {
+                var dtOptions = results[0],
+                    dtColumns = results[1],
+                    dtColumnDefs = results[2];
+                // Since Angular 1.3, the promise throws a "Maximum call stack size exceeded" when cloning
+                // See https://github.com/l-lin/angular-datatables/issues/110
+                DTPropertyUtil.deleteProperty(dtOptions, '$promise');
+                DTPropertyUtil.deleteProperty(dtColumns, '$promise');
+                DTPropertyUtil.deleteProperty(dtColumnDefs, '$promise');
+                var options;
+                if (angular.isDefined(dtOptions)) {
+                    options = {};
+                    angular.extend(options, dtOptions);
+                    // Set the columns
+                    if (angular.isArray(dtColumns)) {
+                        options.aoColumns = dtColumns;
+                    }
+
+                    // Set the column defs
+                    if (angular.isArray(dtColumnDefs)) {
+                        options.aoColumnDefs = dtColumnDefs;
+                    }
+
+                    // HACK to resolve the language source manually instead of DT
+                    // See https://github.com/l-lin/angular-datatables/issues/181
+                    if (options.language && options.language.url) {
+                        var languageDefer = $q.defer();
+                        $http.get(options.language.url).success(function(language) {
+                            languageDefer.resolve(language);
+                        });
+                        options.language = languageDefer.promise;
+                    }
+
+                }
+                return DTPropertyUtil.resolveObjectPromises(options, ['data', 'aaData', 'fnPromise']);
+            }).then(function(options) {
+                defer.resolve(options);
+            });
+            return defer.promise;
+        }
+
+        function render($elem, optionsPromise, staticHTML) {
+            optionsPromise.then(function(options) {
+                DTRendererService.preRender(options);
+
+                var isNgDisplay = $scope.datatable && $scope.datatable === 'ng';
+                // Render dataTable
+                if (_dtInstance && _dtInstance._renderer) {
+                    _dtInstance._renderer.withOptions(options)
+                        .render($elem, $scope, staticHTML).then(function(dtInstance) {
+                            _dtInstance = dtInstance;
+                            _setDTInstance(dtInstance);
+                        });
+                } else {
+                    DTRendererFactory.fromOptions(options, isNgDisplay)
+                        .render($elem, $scope, staticHTML).then(function(dtInstance) {
+                            _dtInstance = dtInstance;
+                            _setDTInstance(dtInstance);
+                        });
+                }
+            });
+        }
+
+        function _setDTInstance(dtInstance) {
+            if (angular.isFunction($scope.dtInstance)) {
+                $scope.dtInstance(dtInstance);
+            } else if (angular.isDefined($scope.dtInstance)) {
+                $scope.dtInstance = dtInstance;
+            }
+        }
+    }
+}
+dataTable.$inject = ['$q', '$http', 'DTRendererFactory', 'DTRendererService', 'DTPropertyUtil'];
+
+'use strict';
+angular.module('datatables.factory', [])
+    .factory('DTOptionsBuilder', dtOptionsBuilder)
+    .factory('DTColumnBuilder', dtColumnBuilder)
+    .factory('DTColumnDefBuilder', dtColumnDefBuilder)
+    .factory('DTLoadingTemplate', dtLoadingTemplate);
+
+/* @ngInject */
+function dtOptionsBuilder() {
+    /**
+     * The wrapped datatables options class
+     * @param sAjaxSource the ajax source to fetch the data
+     * @param fnPromise the function that returns a promise to fetch the data
+     */
+    var DTOptions = {
+        hasOverrideDom: false,
+
+        /**
+         * Add the option to the datatables optoins
+         * @param key the key of the option
+         * @param value an object or a function of the option
+         * @returns {DTOptions} the options
+         */
+        withOption: function(key, value) {
+            if (angular.isString(key)) {
+                this[key] = value;
+            }
+            return this;
+        },
+
+        /**
+         * Add the Ajax source to the options.
+         * This corresponds to the "ajax" option
+         * @param ajax the ajax source
+         * @returns {DTOptions} the options
+         */
+        withSource: function(ajax) {
+            this.ajax = ajax;
+            return this;
+        },
+
+        /**
+         * Add the ajax data properties.
+         * @param sAjaxDataProp the ajax data property
+         * @returns {DTOptions} the options
+         */
+        withDataProp: function(sAjaxDataProp) {
+            this.sAjaxDataProp = sAjaxDataProp;
+            return this;
+        },
+
+        /**
+         * Set the server data function.
+         * @param fn the function of the server retrieval
+         * @returns {DTOptions} the options
+         */
+        withFnServerData: function(fn) {
+            if (!angular.isFunction(fn)) {
+                throw new Error('The parameter must be a function');
+            }
+            this.fnServerData = fn;
+            return this;
+        },
+
+        /**
+         * Set the pagination type.
+         * @param sPaginationType the pagination type
+         * @returns {DTOptions} the options
+         */
+        withPaginationType: function(sPaginationType) {
+            if (angular.isString(sPaginationType)) {
+                this.sPaginationType = sPaginationType;
+            } else {
+                throw new Error('The pagination type must be provided');
+            }
+            return this;
+        },
+
+        /**
+         * Set the language of the datatables
+         * @param language the language
+         * @returns {DTOptions} the options
+         */
+        withLanguage: function(language) {
+            this.language = language;
+            return this;
+        },
+
+        /**
+         * Set the language source
+         * @param languageSource the language source
+         * @returns {DTOptions} the options
+         */
+        withLanguageSource: function(languageSource) {
+            return this.withLanguage({
+                url: languageSource
+            });
+        },
+
+        /**
+         * Set default number of items per page to display
+         * @param iDisplayLength the number of items per page
+         * @returns {DTOptions} the options
+         */
+        withDisplayLength: function(iDisplayLength) {
+            this.iDisplayLength = iDisplayLength;
+            return this;
+        },
+
+        /**
+         * Set the promise to fetch the data
+         * @param fnPromise the function that returns a promise
+         * @returns {DTOptions} the options
+         */
+        withFnPromise: function(fnPromise) {
+            this.fnPromise = fnPromise;
+            return this;
+        },
+
+        /**
+         * Set the Dom of the DataTables.
+         * @param dom the dom
+         * @returns {DTOptions} the options
+         */
+        withDOM: function(dom) {
+            this.dom = dom;
+            return this;
+        }
+    };
+
+    return {
+        /**
+         * Create a wrapped datatables options
+         * @returns {DTOptions} a wrapped datatables option
+         */
+        newOptions: function() {
+            return Object.create(DTOptions);
+        },
+        /**
+         * Create a wrapped datatables options with the ajax source setted
+         * @param ajax the ajax source
+         * @returns {DTOptions} a wrapped datatables option
+         */
+        fromSource: function(ajax) {
+            var options = Object.create(DTOptions);
+            options.ajax = ajax;
+            return options;
+        },
+        /**
+         * Create a wrapped datatables options with the data promise.
+         * @param fnPromise the function that returns a promise to fetch the data
+         * @returns {DTOptions} a wrapped datatables option
+         */
+        fromFnPromise: function(fnPromise) {
+            var options = Object.create(DTOptions);
+            options.fnPromise = fnPromise;
+            return options;
+        }
+    };
+}
+
+function dtColumnBuilder() {
+    /**
+     * The wrapped datatables column
+     * @param mData the data to display of the column
+     * @param sTitle the sTitle of the column title to display in the DOM
+     */
+    var DTColumn = {
+        /**
+         * Add the option of the column
+         * @param key the key of the option
+         * @param value an object or a function of the option
+         * @returns {DTColumn} the wrapped datatables column
+         */
+        withOption: function(key, value) {
+            if (angular.isString(key)) {
+                this[key] = value;
+            }
+            return this;
+        },
+
+        /**
+         * Set the title of the colum
+         * @param sTitle the sTitle of the column
+         * @returns {DTColumn} the wrapped datatables column
+         */
+        withTitle: function(sTitle) {
+            this.sTitle = sTitle;
+            return this;
+        },
+
+        /**
+         * Set the CSS class of the column
+         * @param sClass the CSS class
+         * @returns {DTColumn} the wrapped datatables column
+         */
+        withClass: function(sClass) {
+            this.sClass = sClass;
+            return this;
+        },
+
+        /**
+         * Hide the column
+         * @returns {DTColumn} the wrapped datatables column
+         */
+        notVisible: function() {
+            this.bVisible = false;
+            return this;
+        },
+
+        /**
+         * Set the column as not sortable
+         * @returns {DTColumn} the wrapped datatables column
+         */
+        notSortable: function() {
+            this.bSortable = false;
+            return this;
+        },
+
+        /**
+         * Render each cell with the given parameter
+         * @mRender mRender the function/string to render the data
+         * @returns {DTColumn} the wrapped datatables column
+         */
+        renderWith: function(mRender) {
+            this.mRender = mRender;
+            return this;
+        }
+    };
+
+    return {
+        /**
+         * Create a new wrapped datatables column
+         * @param mData the data of the column to display
+         * @param sTitle the sTitle of the column title to display in the DOM
+         * @returns {DTColumn} the wrapped datatables column
+         */
+        newColumn: function(mData, sTitle) {
+            if (angular.isUndefined(mData)) {
+                throw new Error('The parameter "mData" is not defined!');
+            }
+            var column = Object.create(DTColumn);
+            column.mData = mData;
+            if (angular.isDefined(sTitle)) {
+                column.sTitle = sTitle;
+            }
+            return column;
+        },
+        DTColumn: DTColumn
+    };
+}
+
+/* @ngInject */
+function dtColumnDefBuilder(DTColumnBuilder) {
+    return {
+        newColumnDef: function(targets) {
+            if (angular.isUndefined(targets)) {
+                throw new Error('The parameter "targets" must be defined! See https://datatables.net/reference/option/columnDefs.targets');
+            }
+            var column = Object.create(DTColumnBuilder.DTColumn);
+            if (angular.isArray(targets)) {
+                column.aTargets = targets;
+            } else {
+                column.aTargets = [targets];
+            }
+            return column;
+        }
+    };
+}
+dtColumnDefBuilder.$inject = ['DTColumnBuilder'];
+
+function dtLoadingTemplate($compile, DTDefaultOptions, DT_LOADING_CLASS) {
+    return {
+        compileHtml: function($scope) {
+            return $compile(angular.element('<div class="' + DT_LOADING_CLASS + '">' + DTDefaultOptions.loadingTemplate + '</div>'))($scope);
+        },
+        isLoading: function(elem) {
+            return elem.hasClass(DT_LOADING_CLASS);
+        }
+    };
+}
+dtLoadingTemplate.$inject = ['$compile', 'DTDefaultOptions', 'DT_LOADING_CLASS'];
+
+'use strict';
+
+angular.module('datatables.instances', ['datatables.util'])
+    .factory('DTInstanceFactory', dtInstanceFactory);
+
+function dtInstanceFactory() {
+    var DTInstance = {
+        reloadData: reloadData,
+        changeData: changeData,
+        rerender: rerender
+    };
+    return {
+        newDTInstance: newDTInstance,
+        copyDTProperties: copyDTProperties
+    };
+
+    function newDTInstance(renderer) {
+        var dtInstance = Object.create(DTInstance);
+        dtInstance._renderer = renderer;
+        return dtInstance;
+    }
+
+    function copyDTProperties(result, dtInstance) {
+        dtInstance.id = result.id;
+        dtInstance.DataTable = result.DataTable;
+        dtInstance.dataTable = result.dataTable;
+    }
+
+    function reloadData(callback, resetPaging) {
+        /*jshint validthis:true */
+        this._renderer.reloadData(callback, resetPaging);
+    }
+
+    function changeData(data) {
+        /*jshint validthis:true */
+        this._renderer.changeData(data);
+    }
+
+    function rerender() {
+        /*jshint validthis:true */
+        this._renderer.rerender();
+    }
+}
+
+'use strict';
+
+angular.module('datatables', ['datatables.directive', 'datatables.factory'])
+    .run(initAngularDataTables);
+
+/* @ngInject */
+function initAngularDataTables() {
+    if ($.fn.DataTable.Api) {
+        /**
+         * Register an API to destroy a DataTable without detaching the tbody so that we can add new data
+         * when rendering with the "Angular way".
+         */
+        $.fn.DataTable.Api.register('ngDestroy()', function(remove) {
+            remove = remove || false;
+
+            return this.iterator('table', function(settings) {
+                var orig = settings.nTableWrapper.parentNode;
+                var classes = settings.oClasses;
+                var table = settings.nTable;
+                var tbody = settings.nTBody;
+                var thead = settings.nTHead;
+                var tfoot = settings.nTFoot;
+                var jqTable = $(table);
+                var jqTbody = $(tbody);
+                var jqWrapper = $(settings.nTableWrapper);
+                var rows = $.map(settings.aoData, function(r) {
+                    return r.nTr;
+                });
+                var ien;
+
+                // Flag to note that the table is currently being destroyed - no action
+                // should be taken
+                settings.bDestroying = true;
+
+                // Fire off the destroy callbacks for plug-ins etc
+                $.fn.DataTable.ext.internal._fnCallbackFire(settings, 'aoDestroyCallback', 'destroy', [settings]);
+
+                // If not being removed from the document, make all columns visible
+                if (!remove) {
+                    new $.fn.DataTable.Api(settings).columns().visible(true);
+                }
+
+                // Blitz all `DT` namespaced events (these are internal events, the
+                // lowercase, `dt` events are user subscribed and they are responsible
+                // for removing them
+                jqWrapper.unbind('.DT').find(':not(tbody *)').unbind('.DT');
+                $(window).unbind('.DT-' + settings.sInstance);
+
+                // When scrolling we had to break the table up - restore it
+                if (table !== thead.parentNode) {
+                    jqTable.children('thead').detach();
+                    jqTable.append(thead);
+                }
+
+                if (tfoot && table !== tfoot.parentNode) {
+                    jqTable.children('tfoot').detach();
+                    jqTable.append(tfoot);
+                }
+
+                // Remove the DataTables generated nodes, events and classes
+                jqTable.detach();
+                jqWrapper.detach();
+
+                settings.aaSorting = [];
+                settings.aaSortingFixed = [];
+                $.fn.DataTable.ext.internal._fnSortingClasses(settings);
+
+                $(rows).removeClass(settings.asStripeClasses.join(' '));
+
+                $('th, td', thead).removeClass(classes.sSortable + ' ' +
+                    classes.sSortableAsc + ' ' + classes.sSortableDesc + ' ' + classes.sSortableNone
+                );
+
+                if (settings.bJUI) {
+                    $('th span.' + classes.sSortIcon + ', td span.' + classes.sSortIcon, thead).detach();
+                    $('th, td', thead).each(function() {
+                        var wrapper = $('div.' + classes.sSortJUIWrapper, this);
+                        $(this).append(wrapper.contents());
+                        wrapper.detach();
+                    });
+                }
+
+                // -------------------------------------------------------------------------
+                // This is the only change with the "destroy()" API (with DT v1.10.1)
+                // -------------------------------------------------------------------------
+                if (!remove && orig) {
+                    // insertBefore acts like appendChild if !arg[1]
+                    if (orig.contains(settings.nTableReinsertBefore)) {
+                        orig.insertBefore(table, settings.nTableReinsertBefore);
+                    } else {
+                        orig.appendChild(table);
+                    }
+                }
+                // Add the TR elements back into the table in their original order
+                // jqTbody.children().detach();
+                // jqTbody.append( rows );
+                // -------------------------------------------------------------------------
+
+                // Restore the width of the original table - was read from the style property,
+                // so we can restore directly to that
+                jqTable
+                    .css('width', settings.sDestroyWidth)
+                    .removeClass(classes.sTable);
+
+                // If the were originally stripe classes - then we add them back here.
+                // Note this is not fool proof (for example if not all rows had stripe
+                // classes - but it's a good effort without getting carried away
+                ien = settings.asDestroyStripes.length;
+
+                if (ien) {
+                    jqTbody.children().each(function(i) {
+                        $(this).addClass(settings.asDestroyStripes[i % ien]);
+                    });
+                }
+
+                /* Remove the settings object from the settings array */
+                var idx = $.inArray(settings, $.fn.DataTable.settings);
+                if (idx !== -1) {
+                    $.fn.DataTable.settings.splice(idx, 1);
+                }
+            });
+        });
+    }
+}
+
+'use strict';
+angular.module('datatables.options', [])
+    .constant('DT_DEFAULT_OPTIONS', {
+        // Default dom
+        dom: 'lfrtip',
+        // Default ajax properties. See http://legacy.datatables.net/usage/options#sAjaxDataProp
+        sAjaxDataProp: '',
+        // Set default columns (used when none are provided)
+        aoColumns: []
+    })
+    .constant('DT_LOADING_CLASS', 'dt-loading')
+    .service('DTDefaultOptions', dtDefaultOptions);
+
+function dtDefaultOptions() {
+    var options = {
+        loadingTemplate: '<h3>Loading...</h3>',
+        bootstrapOptions: {},
+        setLoadingTemplate: setLoadingTemplate,
+        setLanguageSource: setLanguageSource,
+        setLanguage: setLanguage,
+        setDisplayLength: setDisplayLength,
+        setBootstrapOptions: setBootstrapOptions
+    };
+
+    return options;
+
+    /**
+     * Set the default loading template
+     * @param loadingTemplate the HTML to display when loading the table
+     * @returns {DTDefaultOptions} the default option config
+     */
+    function setLoadingTemplate(loadingTemplate) {
+        options.loadingTemplate = loadingTemplate;
+        return options;
+    }
+
+    /**
+     * Set the default language source for all datatables
+     * @param sLanguageSource the language source
+     * @returns {DTDefaultOptions} the default option config
+     */
+    function setLanguageSource(sLanguageSource) {
+        // HACK to resolve the language source manually instead of DT
+        // See https://github.com/l-lin/angular-datatables/issues/356
+        $.ajax({
+            dataType: 'json',
+            url: sLanguageSource,
+            success: function(json) {
+                $.extend(true, $.fn.dataTable.defaults, {
+                    oLanguage: json
+                });
+            }
+        });
+        return options;
+    }
+
+    /**
+     * Set the language for all datatables
+     * @param oLanguage the language
+     * @returns {DTDefaultOptions} the default option config
+     */
+    function setLanguage(oLanguage) {
+        $.extend(true, $.fn.dataTable.defaults, {
+            oLanguage: oLanguage
+        });
+        return options;
+    }
+
+    /**
+     * Set the default number of items to display for all datatables
+     * @param iDisplayLength the number of items to display
+     * @returns {DTDefaultOptions} the default option config
+     */
+    function setDisplayLength(iDisplayLength) {
+        $.extend($.fn.dataTable.defaults, {
+            iDisplayLength: iDisplayLength
+        });
+        return options;
+    }
+
+    /**
+     * Set the default options to be use for Bootstrap integration.
+     * See https://github.com/l-lin/angular-datatables/blob/dev/src/angular-datatables.bootstrap.options.js to check
+     * what default options Angular DataTables is using.
+     * @param oBootstrapOptions an object containing the default options for Bootstreap integration
+     * @returns {DTDefaultOptions} the default option config
+     */
+    function setBootstrapOptions(oBootstrapOptions) {
+        options.bootstrapOptions = oBootstrapOptions;
+        return options;
+    }
+}
+
+'use strict';
+angular.module('datatables.renderer', ['datatables.instances', 'datatables.factory', 'datatables.options', 'datatables.instances'])
+    .factory('DTRendererService', dtRendererService)
+    .factory('DTRenderer', dtRenderer)
+    .factory('DTDefaultRenderer', dtDefaultRenderer)
+    .factory('DTNGRenderer', dtNGRenderer)
+    .factory('DTPromiseRenderer', dtPromiseRenderer)
+    .factory('DTAjaxRenderer', dtAjaxRenderer)
+    .factory('DTRendererFactory', dtRendererFactory);
+
+/* @ngInject */
+function dtRendererService(DTLoadingTemplate) {
+    var plugins = [];
+    var rendererService = {
+        showLoading: showLoading,
+        hideLoading: hideLoading,
+        renderDataTable: renderDataTable,
+        hideLoadingAndRenderDataTable: hideLoadingAndRenderDataTable,
+        registerPlugin: registerPlugin,
+        postRender: postRender,
+        preRender: preRender
+    };
+    return rendererService;
+
+    function showLoading($elem, $scope) {
+        var $loading = angular.element(DTLoadingTemplate.compileHtml($scope));
+        $elem.after($loading);
+        $elem.hide();
+        $loading.show();
+    }
+
+    function hideLoading($elem) {
+        $elem.show();
+        var next = $elem.next();
+        if (DTLoadingTemplate.isLoading(next)) {
+            next.remove();
+        }
+    }
+
+    function renderDataTable($elem, options) {
+        var dtId = '#' + $elem.attr('id');
+        if ($.fn.dataTable.isDataTable(dtId) && angular.isObject(options)) {
+            options.destroy = true;
+        }
+        // See http://datatables.net/manual/api#Accessing-the-API to understand the difference between DataTable and dataTable
+        var DT = $elem.DataTable(options);
+        var dt = $elem.dataTable();
+
+        var result = {
+            id: $elem.attr('id'),
+            DataTable: DT,
+            dataTable: dt
+        };
+
+        postRender(options, result);
+
+        return result;
+    }
+
+    function hideLoadingAndRenderDataTable($elem, options) {
+        rendererService.hideLoading($elem);
+        return rendererService.renderDataTable($elem, options);
+    }
+
+    function registerPlugin(plugin) {
+        plugins.push(plugin);
+    }
+
+    function postRender(options, result) {
+        angular.forEach(plugins, function(plugin) {
+            if (angular.isFunction(plugin.postRender)) {
+                plugin.postRender(options, result);
+            }
+        });
+    }
+
+    function preRender(options) {
+        angular.forEach(plugins, function(plugin) {
+            if (angular.isFunction(plugin.preRender)) {
+                plugin.preRender(options);
+            }
+        });
+    }
+}
+dtRendererService.$inject = ['DTLoadingTemplate'];
+
+function dtRenderer() {
+    return {
+        withOptions: function(options) {
+            this.options = options;
+            return this;
+        }
+    };
+}
+
+/* @ngInject */
+function dtDefaultRenderer($q, DTRenderer, DTRendererService, DTInstanceFactory) {
+    return {
+        create: create
+    };
+
+    function create(options) {
+        var _oTable;
+        var _$elem;
+        var _$scope;
+        var renderer = Object.create(DTRenderer);
+        renderer.name = 'DTDefaultRenderer';
+        renderer.options = options;
+        renderer.render = render;
+        renderer.reloadData = reloadData;
+        renderer.changeData = changeData;
+        renderer.rerender = rerender;
+
+        function render($elem, $scope) {
+            _$elem = $elem;
+            _$scope = $scope;
+            var dtInstance = DTInstanceFactory.newDTInstance(renderer);
+            var result = DTRendererService.hideLoadingAndRenderDataTable($elem, renderer.options);
+            _oTable = result.DataTable;
+            DTInstanceFactory.copyDTProperties(result, dtInstance);
+            return $q.when(dtInstance);
+        }
+
+        function reloadData() {
+            // Do nothing
+        }
+
+        function changeData() {
+            // Do nothing
+        }
+
+        function rerender() {
+            _oTable.destroy();
+            DTRendererService.showLoading(_$elem, _$scope);
+            render(_$elem);
+        }
+        return renderer;
+    }
+}
+dtDefaultRenderer.$inject = ['$q', 'DTRenderer', 'DTRendererService', 'DTInstanceFactory'];
+
+/* @ngInject */
+function dtNGRenderer($log, $q, $compile, $timeout, DTRenderer, DTRendererService, DTInstanceFactory) {
+    /**
+     * Renderer for displaying the Angular way
+     * @param options
+     * @returns {{options: *}} the renderer
+     * @constructor
+     */
+    return {
+        create: create
+    };
+
+    function create(options) {
+        var _staticHTML;
+        var _oTable;
+        var _$elem;
+        var _parentScope;
+        var _newParentScope;
+        var dtInstance;
+        var renderer = Object.create(DTRenderer);
+        renderer.name = 'DTNGRenderer';
+        renderer.options = options;
+        renderer.render = render;
+        renderer.reloadData = reloadData;
+        renderer.changeData = changeData;
+        renderer.rerender = rerender;
+        return renderer;
+
+        function render($elem, $scope, staticHTML) {
+            _staticHTML = staticHTML;
+            _$elem = $elem;
+            _parentScope = $scope.$parent;
+            dtInstance = DTInstanceFactory.newDTInstance(renderer);
+
+            var defer = $q.defer();
+            var _expression = $elem.find('tbody').html();
+            // Find the resources from the comment <!-- ngRepeat: item in items --> displayed by angular in the DOM
+            // This regexp is inspired by the one used in the "ngRepeat" directive
+            var _match = _expression.match(/^\s*.+?\s+in\s+(\S*)\s*/m);
+
+            if (!_match) {
+                throw new Error('Expected expression in form of "_item_ in _collection_[ track by _id_]" but got "{0}".', _expression);
+            }
+            var _ngRepeatAttr = _match[1];
+
+            var _alreadyRendered = false;
+
+            _parentScope.$watchCollection(_ngRepeatAttr, function() {
+                if (_oTable && _alreadyRendered) {
+                    _destroyAndCompile();
+                }
+                $timeout(function() {
+                    _alreadyRendered = true;
+                    // Ensure that prerender is called when the collection is updated
+                    // See https://github.com/l-lin/angular-datatables/issues/502
+                    DTRendererService.preRender(renderer.options);
+                    var result = DTRendererService.hideLoadingAndRenderDataTable(_$elem, renderer.options);
+                    _oTable = result.DataTable;
+                    DTInstanceFactory.copyDTProperties(result, dtInstance);
+                    defer.resolve(dtInstance);
+                }, 0, false);
+            }, true);
+            return defer.promise;
+        }
+
+        function reloadData() {
+            $log.warn('The Angular Renderer does not support reloading data. You need to do it directly on your model');
+        }
+
+        function changeData() {
+            $log.warn('The Angular Renderer does not support changing the data. You need to change your model directly.');
+        }
+
+        function rerender() {
+            _destroyAndCompile();
+            DTRendererService.showLoading(_$elem, _parentScope);
+            // Ensure that prerender is called after loadData from promise
+            // See https://github.com/l-lin/angular-datatables/issues/563
+            DTRendererService.preRender(options);
+            $timeout(function() {
+                var result = DTRendererService.hideLoadingAndRenderDataTable(_$elem, renderer.options);
+                _oTable = result.DataTable;
+                DTInstanceFactory.copyDTProperties(result, dtInstance);
+            }, 0, false);
+        }
+
+        function _destroyAndCompile() {
+            if (_newParentScope) {
+                _newParentScope.$destroy();
+            }
+            _oTable.ngDestroy();
+            // Re-compile because we lost the angular binding to the existing data
+            _$elem.html(_staticHTML);
+            _newParentScope = _parentScope.$new();
+            $compile(_$elem.contents())(_newParentScope);
+        }
+    }
+}
+dtNGRenderer.$inject = ['$log', '$q', '$compile', '$timeout', 'DTRenderer', 'DTRendererService', 'DTInstanceFactory'];
+
+/* @ngInject */
+function dtPromiseRenderer($q, $timeout, $log, DTRenderer, DTRendererService, DTInstanceFactory) {
+    /**
+     * Renderer for displaying with a promise
+     * @param options the options
+     * @returns {{options: *}} the renderer
+     * @constructor
+     */
+    return {
+        create: create
+    };
+
+    function create(options) {
+        var _oTable;
+        var _loadedPromise = null;
+        var _$elem;
+        var _$scope;
+
+        var dtInstance;
+        var renderer = Object.create(DTRenderer);
+        renderer.name = 'DTPromiseRenderer';
+        renderer.options = options;
+        renderer.render = render;
+        renderer.reloadData = reloadData;
+        renderer.changeData = changeData;
+        renderer.rerender = rerender;
+        return renderer;
+
+        function render($elem, $scope) {
+            var defer = $q.defer();
+            dtInstance = DTInstanceFactory.newDTInstance(renderer);
+            _$elem = $elem;
+            _$scope = $scope;
+            _resolve(renderer.options.fnPromise, DTRendererService.renderDataTable).then(function(result) {
+                _oTable = result.DataTable;
+                DTInstanceFactory.copyDTProperties(result, dtInstance);
+                defer.resolve(dtInstance);
+            });
+            return defer.promise;
+        }
+
+        function reloadData(callback, resetPaging) {
+            var previousPage = _oTable && _oTable.page() ? _oTable.page() : 0;
+            if (angular.isFunction(renderer.options.fnPromise)) {
+                _resolve(renderer.options.fnPromise, _redrawRows).then(function(result) {
+                    if (angular.isFunction(callback)) {
+                        callback(result.DataTable.data());
+                    }
+                    if (resetPaging === false) {
+                        result.DataTable.page(previousPage).draw(false);
+                    }
+                });
+            } else {
+                $log.warn('In order to use the reloadData functionality with a Promise renderer, you need to provide a function that returns a promise.');
+            }
+        }
+
+        function changeData(fnPromise) {
+            renderer.options.fnPromise = fnPromise;
+            // We also need to set the $scope.dtOptions, otherwise, when we change the columns, it will revert to the old data
+            // See https://github.com/l-lin/angular-datatables/issues/359
+            _$scope.dtOptions.fnPromise = fnPromise;
+            _resolve(renderer.options.fnPromise, _redrawRows);
+        }
+
+        function rerender() {
+            _oTable.destroy();
+            DTRendererService.showLoading(_$elem, _$scope);
+            // Ensure that prerender is called after loadData from promise
+            // See https://github.com/l-lin/angular-datatables/issues/563
+            DTRendererService.preRender(options);
+            render(_$elem, _$scope);
+        }
+
+        function _resolve(fnPromise, callback) {
+            var defer = $q.defer();
+            if (angular.isUndefined(fnPromise)) {
+                throw new Error('You must provide a promise or a function that returns a promise!');
+            }
+            if (_loadedPromise) {
+                _loadedPromise.then(function()  {
+                    defer.resolve(_startLoading(fnPromise, callback));
+                });
+            } else  {
+                defer.resolve(_startLoading(fnPromise, callback));
+            }
+            return defer.promise;
+        }
+
+        function _startLoading(fnPromise, callback) {
+            var defer = $q.defer();
+            if (angular.isFunction(fnPromise)) {
+                _loadedPromise = fnPromise();
+            } else {
+                _loadedPromise = fnPromise;
+            }
+            _loadedPromise.then(function(result) {
+                var data = result;
+                // In case the data is nested in an object
+                if (renderer.options.sAjaxDataProp) {
+                    var properties = renderer.options.sAjaxDataProp.split('.');
+                    while (properties.length) {
+                        var property = properties.shift();
+                        if (property in data) {
+                            data = data[property];
+                        }
+                    }
+                }
+                _loadedPromise = null;
+                defer.resolve(_doRender(renderer.options, _$elem, data, callback));
+            });
+            return defer.promise;
+        }
+
+        function _doRender(options, $elem, data, callback) {
+            var defer = $q.defer();
+            // Since Angular 1.3, the promise renderer is throwing "Maximum call stack size exceeded"
+            // By removing the $promise attribute, we avoid an infinite loop when jquery is cloning the data
+            // See https://github.com/l-lin/angular-datatables/issues/110
+            delete data.$promise;
+            options.aaData = data;
+            // Add $timeout to be sure that angular has finished rendering before calling datatables
+            $timeout(function() {
+                DTRendererService.hideLoading($elem);
+                // Set it to true in order to be able to redraw the dataTable
+                options.bDestroy = true;
+                defer.resolve(callback($elem, options));
+            }, 0, false);
+            return defer.promise;
+        }
+
+        function _redrawRows($elem, options) {
+            _oTable.clear();
+            _oTable.rows.add(options.aaData).draw(options.redraw);
+            return {
+                id: dtInstance.id,
+                DataTable: dtInstance.DataTable,
+                dataTable: dtInstance.dataTable
+            };
+        }
+    }
+}
+dtPromiseRenderer.$inject = ['$q', '$timeout', '$log', 'DTRenderer', 'DTRendererService', 'DTInstanceFactory'];
+
+/* @ngInject */
+function dtAjaxRenderer($q, $timeout, DTRenderer, DTRendererService, DT_DEFAULT_OPTIONS, DTInstanceFactory) {
+    /**
+     * Renderer for displaying with Ajax
+     * @param options the options
+     * @returns {{options: *}} the renderer
+     * @constructor
+     */
+    return {
+        create: create
+    };
+
+    function create(options) {
+        var _oTable;
+        var _$elem;
+        var _$scope;
+        var renderer = Object.create(DTRenderer);
+        renderer.name = 'DTAjaxRenderer';
+        renderer.options = options;
+        renderer.render = render;
+        renderer.reloadData = reloadData;
+        renderer.changeData = changeData;
+        renderer.rerender = rerender;
+        return renderer;
+
+        function render($elem, $scope) {
+            _$elem = $elem;
+            _$scope = $scope;
+            var defer = $q.defer();
+            var dtInstance = DTInstanceFactory.newDTInstance(renderer);
+            // Define default values in case it is an ajax datatables
+            if (angular.isUndefined(renderer.options.sAjaxDataProp)) {
+                renderer.options.sAjaxDataProp = DT_DEFAULT_OPTIONS.sAjaxDataProp;
+            }
+            if (angular.isUndefined(renderer.options.aoColumns)) {
+                renderer.options.aoColumns = DT_DEFAULT_OPTIONS.aoColumns;
+            }
+            _doRender(renderer.options, $elem).then(function(result) {
+                _oTable = result.DataTable;
+                DTInstanceFactory.copyDTProperties(result, dtInstance);
+                defer.resolve(dtInstance);
+            });
+            return defer.promise;
+        }
+
+        function reloadData(callback, resetPaging) {
+            if (_oTable) {
+                _oTable.ajax.reload(callback, resetPaging);
+            }
+        }
+
+        function changeData(ajax) {
+            renderer.options.ajax = ajax;
+            // We also need to set the $scope.dtOptions, otherwise, when we change the columns, it will revert to the old data
+            // See https://github.com/l-lin/angular-datatables/issues/359
+            _$scope.dtOptions.ajax = ajax;
+        }
+
+        function rerender() {
+            // Ensure that prerender is called after loadData from promise
+            // See https://github.com/l-lin/angular-datatables/issues/563
+            DTRendererService.preRender(options);
+            render(_$elem, _$scope);
+        }
+
+        function _doRender(options, $elem) {
+                var defer = $q.defer();
+                // Destroy the table if it exists in order to be able to redraw the dataTable
+                options.bDestroy = true;
+                if (_oTable) {
+                    _oTable.destroy();
+                    DTRendererService.showLoading(_$elem, _$scope);
+                    // Empty in case of columns change
+                    $elem.empty();
+                }
+                DTRendererService.hideLoading($elem);
+                // Condition to refresh the dataTable
+                if (_shouldDeferRender(options)) {
+                    $timeout(function() {
+                        defer.resolve(DTRendererService.renderDataTable($elem, options));
+                    }, 0, false);
+                } else {
+                    defer.resolve(DTRendererService.renderDataTable($elem, options));
+                }
+                return defer.promise;
+            }
+            // See https://github.com/l-lin/angular-datatables/issues/147
+        function _shouldDeferRender(options) {
+            if (angular.isDefined(options) && angular.isDefined(options.dom)) {
+                // S for scroller plugin
+                return options.dom.indexOf('S') >= 0;
+            }
+            return false;
+        }
+    }
+}
+dtAjaxRenderer.$inject = ['$q', '$timeout', 'DTRenderer', 'DTRendererService', 'DT_DEFAULT_OPTIONS', 'DTInstanceFactory'];
+
+/* @ngInject */
+function dtRendererFactory(DTDefaultRenderer, DTNGRenderer, DTPromiseRenderer, DTAjaxRenderer) {
+    return {
+        fromOptions: fromOptions
+    };
+
+    function fromOptions(options, isNgDisplay)  {
+        if (isNgDisplay) {
+            if (options && options.serverSide) {
+                throw new Error('You cannot use server side processing along with the Angular renderer!');
+            }
+            return DTNGRenderer.create(options);
+        }
+        if (angular.isDefined(options)) {
+            if (angular.isDefined(options.fnPromise) && options.fnPromise !== null) {
+                if (options.serverSide) {
+                    throw new Error('You cannot use server side processing along with the Promise renderer!');
+                }
+                return DTPromiseRenderer.create(options);
+            }
+            if (angular.isDefined(options.ajax) && options.ajax !== null ||
+                angular.isDefined(options.ajax) && options.ajax !== null) {
+                return DTAjaxRenderer.create(options);
+            }
+            return DTDefaultRenderer.create(options);
+        }
+        return DTDefaultRenderer.create();
+    }
+}
+dtRendererFactory.$inject = ['DTDefaultRenderer', 'DTNGRenderer', 'DTPromiseRenderer', 'DTAjaxRenderer'];
+
+'use strict';
+
+angular.module('datatables.util', [])
+    .factory('DTPropertyUtil', dtPropertyUtil);
+
+/* @ngInject */
+function dtPropertyUtil($q) {
+    return {
+        overrideProperties: overrideProperties,
+        deleteProperty: deleteProperty,
+        resolveObjectPromises: resolveObjectPromises,
+        resolveArrayPromises: resolveArrayPromises
+    };
+
+    /**
+     * Overrides the source property with the given target properties.
+     * Source is not written. It's making a fresh copy of it in order to ensure that we do not change the parameters.
+     * @param source the source properties to override
+     * @param target the target properties
+     * @returns {*} the object overrided
+     */
+    function overrideProperties(source, target) {
+        var result = angular.copy(source);
+
+        if (angular.isUndefined(result) || result === null) {
+            result = {};
+        }
+        if (angular.isUndefined(target) || target === null) {
+            return result;
+        }
+        if (angular.isObject(target)) {
+            for (var prop in target) {
+                if (target.hasOwnProperty(prop)) {
+                    result[prop] = overrideProperties(result[prop], target[prop]);
+                }
+            }
+        } else {
+            result = angular.copy(target);
+        }
+        return result;
+    }
+
+    /**
+     * Delete the property from the given object
+     * @param obj the object
+     * @param propertyName the property name
+     */
+    function deleteProperty(obj, propertyName) {
+        if (angular.isObject(obj)) {
+            delete obj[propertyName];
+        }
+    }
+
+    /**
+     * Resolve any promises from a given object if there are any.
+     * @param obj the object
+     * @param excludedPropertiesName the list of properties to ignore
+     * @returns {promise} the promise that the object attributes promises are all resolved
+     */
+    function resolveObjectPromises(obj, excludedPropertiesName) {
+        var defer = $q.defer(),
+            promises = [],
+            resolvedObj = {},
+            excludedProp = excludedPropertiesName || [];
+        if (!angular.isObject(obj) || angular.isArray(obj)) {
+            defer.resolve(obj);
+        } else {
+            resolvedObj = angular.extend(resolvedObj, obj);
+            for (var prop in resolvedObj) {
+                if (resolvedObj.hasOwnProperty(prop) && $.inArray(prop, excludedProp) === -1) {
+                    if (angular.isArray(resolvedObj[prop])) {
+                        promises.push(resolveArrayPromises(resolvedObj[prop]));
+                    } else {
+                        promises.push($q.when(resolvedObj[prop]));
+                    }
+                }
+            }
+            $q.all(promises).then(function(result) {
+                var index = 0;
+                for (var prop in resolvedObj) {
+                    if (resolvedObj.hasOwnProperty(prop) && $.inArray(prop, excludedProp) === -1) {
+                        resolvedObj[prop] = result[index++];
+                    }
+                }
+                defer.resolve(resolvedObj);
+            });
+        }
+        return defer.promise;
+    }
+
+    /**
+     * Resolve the given array promises
+     * @param array the array containing promise or not
+     * @returns {promise} the promise that the array contains a list of objects/values promises that are resolved
+     */
+    function resolveArrayPromises(array) {
+        var defer = $q.defer(),
+            promises = [],
+            resolveArray = [];
+        if (!angular.isArray(array)) {
+            defer.resolve(array);
+        } else {
+            angular.forEach(array, function(item) {
+                if (angular.isObject(item)) {
+                    promises.push(resolveObjectPromises(item));
+                } else {
+                    promises.push($q.when(item));
+                }
+            });
+            $q.all(promises).then(function(result) {
+                angular.forEach(result, function(item) {
+                    resolveArray.push(item);
+                });
+                defer.resolve(resolveArray);
+            });
+        }
+        return defer.promise;
+    }
+}
+dtPropertyUtil.$inject = ['$q'];
+
+
+})(window, document, jQuery, angular);

@@ -11,8 +11,8 @@
         }])
         .controller('DashboardController', DashboardController);
 
-    DashboardController.$inject = ['$scope', '$timeout'];
-    function DashboardController($scope, $timeout) {
+    DashboardController.$inject = ['$scope', '$timeout', 'DashBoardService', '$mdToast'];
+    function DashboardController($scope, $timeout, DashBoardService, $mdToast) {
         var vm = this;
 
         activate();
@@ -109,6 +109,33 @@
             console.log('Panel #' + id + ' removed');
 
           });
+
+          vm.dashboardInfo = {};
+
+          DashBoardService.dashboardInfo()
+          .success(function(res, status, headers, config) {
+
+            if(res.code != 200) {
+                var toast = $mdToast.simple()
+                      .content(res.message)
+                      .action('我知道了')
+                      .highlightAction(false)
+                      .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            }
+            vm.dashboardInfo = res.message;
+
+          }).error(function(res, status, headers, config) {
+              var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+              $mdToast.show(toast).then(function() {
+              });
+          });
+
 
         }
     }

@@ -5,7 +5,6 @@
          <md-tabs md-dynamic-height="" md-border-bottom="">
             <md-tab label="基本信息">
                <md-content style="background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;" class="md-padding"></md-content>
-               <!-- START panel-->
                <!-- ngRepeat + ngResource-->
                <div class="panel panel-default">
                   <div class="panel-heading">用户管理 |
@@ -23,7 +22,7 @@
                                  <th>注册时间</th>
                                  <th>操作</th>
                                  <th check-all="check-all">
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.isSelectAll" ng-change="users.toggleSelectAll()" class="md-primary"></md-checkbox>
                                  </th>
                               </tr>
                            </thead>
@@ -49,7 +48,7 @@
                                     </md-select>
                                  </td>
                                  <td>
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.userIsSelected[user._id]" ng-change="users.selectThisUser(user._id)" class="md-primary"></md-checkbox>
                                  </td>
                               </tr>
                            </tbody>
@@ -157,106 +156,183 @@
                </form>
                </md-dialog>
             </script>
+            <!-- Dialog inline template for demo-->
+            <script type="text/ng-template" id="user_relations.tmpl.html">
+               <md-dialog aria-label="{{title}}">
+               <form>
+                 <md-toolbar>
+                   <div class="md-toolbar-tools">
+                     <h2>{{user.username}} 的关系</h2>
+                     <span flex></span>
+                     <md-button class="md-icon-button" ng-click="answer('not applicable')">
+                       <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                     </md-button>
+                   </div>
+                 </md-toolbar>
+                 <md-dialog-content>
+                   <div class="card-body">
+                    <div class="row">
+                       <div class="col-sm-4">
+                          <div class="mda-form-group">
+                             <input ng-model="user.username" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
+                             <label>用户名</label>
+                          </div>
+                       </div>
+                       <div class="col-sm-4">
+                          <div class="mda-form-group">
+                             <input ng-model="user.email" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
+                             <label>邮箱</label>
+                          </div>
+                       </div>
+                       <div class="col-sm-4">
+                          <div class="mda-form-group">
+                             <input ng-model="user.sex" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
+                             <label>性别</label>
+                          </div>
+                       </div>
+                       <div class="col-sm-12">
+                          <div class="mda-form-group">
+                             <input ng-model="user.intro" tabindex="0" aria-invalid="false" class="mda-form-control" />
+                             <label>个人介绍</label>
+                          </div>
+                       </div>
+                       <div class="col-sm-12">
+                          <div class="mda-form-group">
+                             <input ng-model="user.region" tabindex="0" aria-invalid="false" class="mda-form-control" />
+                             <label>地址</label>
+                          </div>
+                       </div>
+                    </div>
+                    <div class="row">
+                       <div class="col-sm-4">
+                          <div class="mda-form-group">
+                             <input ng-model="user.createdAt" tabindex="0" aria-invalid="false" class="mda-form-control" />
+                             <label>注册时间</label>
+                          </div>
+                       </div>
+                       <div class="col-sm-4">
+                          <div class="mda-form-group">
+                             <input ng-model="user.isBlocked" tabindex="0" aria-invalid="false" class="mda-form-control" />
+                             <label>锁定</label>
+                          </div>
+                       </div>
+                       <div class="col-sm-4">
+                          <div class="mda-form-group">
+                             <input ng-model="user.isDeleted" tabindex="0" aria-invalid="false" class="mda-form-control" />
+                             <label>删除</label>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+                 </md-dialog-content>
+                 <div class="md-actions" layout="row">
+                   <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" hide show-md>
+                     More on Wikipedia
+                   </md-button>
+                   <span flex></span>
+                   <md-button ng-click="answer('not useful')" class="md-primary">
+                     关闭
+                   </md-button>
+                   <md-button ng-click="answer('useful')" class="md-primary">
+                     保存
+                   </md-button>
+                 </div>
+               </form>
+               </md-dialog>
+            </script>
+            <!-- Dialog inline template for demo-->
+            <script type="text/ng-template" id="user_themes.tmpl.html">
+               <md-dialog aria-label="{{title}}">
+               <form>
+                 <md-toolbar>
+                   <div class="md-toolbar-tools">
+                     <h2>{{user.username}} 的投稿</h2>
+                     <span flex></span>
+                     <md-button class="md-icon-button" ng-click="answer('not applicable')">
+                       <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                     </md-button>
+                   </div>
+                 </md-toolbar>
+                 <md-dialog-content>
+                   <div class="card-body">
+               
+                   </div>
+                 </md-dialog-content>
+                 <div class="md-actions" layout="row">
+                   <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" hide show-md>
+                     More on Wikipedia
+                   </md-button>
+                   <span flex></span>
+                   <md-button ng-click="answer('not useful')" class="md-primary">
+                     关闭
+                   </md-button>
+                   <md-button ng-click="answer('useful')" class="md-primary">
+                     保存
+                   </md-button>
+                 </div>
+               </form>
+               </md-dialog>
+            </script>
             <md-tab label="被删用户">
                <md-content style="background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;" class="md-padding"></md-content>
                <!-- START panel-->
+               <!-- ngRepeat + ngResource-->
                <div class="panel panel-default">
-                  <div class="panel-heading">被删除用户信息管理</div>
-                  <!-- START table-responsive-->
-                  <div class="table-responsive">
-                     <table id="table-ext-1" class="table table-bordered table-hover">
-                        <thead>
-                           <tr>
-                              <th>UID</th>
-                              <th>Picture</th>
-                              <th>Username</th>
-                              <th>First Name</th>
-                              <th>Last Name</th>
-                              <th>Email</th>
-                              <th>Profile</th>
-                              <th>Last Login</th>
-                              <th check-all="check-all">
-                                 <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
-                              </th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           <tr>
-                              <td>1</td>
-                              <td>
-                                 <div class="media">
-                                    <img src="app/img/user/01.jpg" alt="Image" class="img-responsive img-circle" />
-                                 </div>
-                              </td>
-                              <td>@twitter</td>
-                              <td>Larry</td>
-                              <td>the Bird</td>
-                              <td>mail@example.com</td>
-                              <td class="text-center">
-                                 <div data-label="25%" class="radial-bar radial-bar-25 radial-bar-xs"></div>
-                              </td>
-                              <td>1 week</td>
-                              <td>
-                                 <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td>2</td>
-                              <td>
-                                 <div class="media">
-                                    <img src="app/img/user/02.jpg" alt="Image" class="img-responsive img-circle" />
-                                 </div>
-                              </td>
-                              <td>@mdo</td>
-                              <td>Mark</td>
-                              <td>Otto</td>
-                              <td>mail@example.com</td>
-                              <td class="text-center">
-                                 <div data-label="50%" class="radial-bar radial-bar-50 radial-bar-xs"></div>
-                              </td>
-                              <td>25 minutes</td>
-                              <td>
-                                 <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td>3</td>
-                              <td>
-                                 <div class="media">
-                                    <img src="app/img/user/03.jpg" alt="Image" class="img-responsive img-circle" />
-                                 </div>
-                              </td>
-                              <td>@fat</td>
-                              <td>Jacob</td>
-                              <td>Thornton</td>
-                              <td>mail@example.com</td>
-                              <td class="text-center">
-                                 <div data-label="80%" class="radial-bar radial-bar-80 radial-bar-xs"></div>
-                              </td>
-                              <td>10 hours</td>
-                              <td>
-                                 <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
-                              </td>
-                           </tr>
-                        </tbody>
-                     </table>
+                  <div class="panel-heading">用户管理 |
+                     <small>被删除用户信息管理</small>
                   </div>
-                  <!-- END table-responsive-->
+                  <div class="panel-body">
+                     <div>
+                        <table datatable="ng" class="row-border hover">
+                           <thead>
+                              <tr>
+                                 <th>头像</th>
+                                 <th>用户名</th>
+                                 <th>邮箱</th>
+                                 <th>性别</th>
+                                 <th>注册时间</th>
+                                 <th>操作</th>
+                                 <th check-all="check-all">
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr ng-repeat="user in users.usersDeletedList">
+                                 <td>
+                                    <div class="media">
+                                       <img src="{{user.photo}}" alt="Image" style="width:36px;height:36px" class="img-responsive img-circle" />
+                                    </div>
+                                 </td>
+                                 <td>{{user.username}}</td>
+                                 <td>{{user.email}}</td>
+                                 <td>{{user.sex}}</td>
+                                 <td>{{user.createdAt}}</td>
+                                 <td>
+                                    <md-select ng-model="users.userSingleSelectCtrl.name" placeholder="操作">
+                                       <md-optgroup label="详情">
+                                          <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                       </md-optgroup>
+                                       <md-optgroup label="安全">
+                                          <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                       </md-optgroup>
+                                    </md-select>
+                                 </td>
+                                 <td>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
                   <div class="panel-footer">
                      <div class="row">
-                        <div class="col-lg-2">
-                           <div class="input-group">
-                              <input type="text" placeholder="Search" class="input-sm form-control" />
-                              <span class="input-group-btn">
-                                 <button type="button" class="btn btn-sm btn-default">Search</button>
-                              </span>
-                           </div>
-                        </div>
-                        <div class="col-lg-8"></div>
+                        <div class="col-lg-10"></div>
                         <div class="col-lg-2">
                            <div class="input-group pull-right">
-                              <md-select ng-model="selectctrl.size" placeholder="操作">
-                                 <md-option ng-repeat="size in selectctrl.sizes" value="{{size}}">{{size}}</md-option>
+                              <md-select ng-model="users.selectCtrl.name" placeholder="操作">
+                                 <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)">{{name.val}}</md-option>
                               </md-select>
                               <span class="input-group-btn">
                                  <button class="md-primary md-hue-1 md-button md-default-theme">应用</button>
@@ -271,85 +347,68 @@
                <md-content style="background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;" class="md-padding"></md-content>
                <!-- START panel-->
                <div class="panel panel-default">
-                  <div class="panel-heading">被锁定用户信息管理</div>
-                  <!-- START table-responsive-->
-                  <div class="table-responsive">
-                     <table id="table-ext-1" class="table table-bordered table-hover">
-                        <thead>
-                           <tr>
-                              <th>UID</th>
-                              <th>Picture</th>
-                              <th>Username</th>
-                              <th>First Name</th>
-                              <th>Last Name</th>
-                              <th>Email</th>
-                              <th>Profile</th>
-                              <th>Last Login</th>
-                              <th check-all="check-all">
-                                 <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
-                              </th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           <tr>
-                              <td>1</td>
-                              <td>
-                                 <div class="media">
-                                    <img src="app/img/user/01.jpg" alt="Image" class="img-responsive img-circle" />
-                                 </div>
-                              </td>
-                              <td>@twitter</td>
-                              <td>Larry</td>
-                              <td>the Bird</td>
-                              <td>mail@example.com</td>
-                              <td class="text-center">
-                                 <div data-label="25%" class="radial-bar radial-bar-25 radial-bar-xs"></div>
-                              </td>
-                              <td>1 week</td>
-                              <td>
-                                 <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td>2</td>
-                              <td>
-                                 <div class="media">
-                                    <img src="app/img/user/02.jpg" alt="Image" class="img-responsive img-circle" />
-                                 </div>
-                              </td>
-                              <td>@mdo</td>
-                              <td>Mark</td>
-                              <td>Otto</td>
-                              <td>mail@example.com</td>
-                              <td class="text-center">
-                                 <div data-label="50%" class="radial-bar radial-bar-50 radial-bar-xs"></div>
-                              </td>
-                              <td>25 minutes</td>
-                              <td>
-                                 <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td>3</td>
-                              <td>
-                                 <div class="media">
-                                    <img src="app/img/user/03.jpg" alt="Image" class="img-responsive img-circle" />
-                                 </div>
-                              </td>
-                              <td>@fat</td>
-                              <td>Jacob</td>
-                              <td>Thornton</td>
-                              <td>mail@example.com</td>
-                              <td class="text-center">
-                                 <div data-label="80%" class="radial-bar radial-bar-80 radial-bar-xs"></div>
-                              </td>
-                              <td>10 hours</td>
-                              <td>
-                                 <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
-                              </td>
-                           </tr>
-                        </tbody>
-                     </table>
+                  <div class="panel-heading">用户管理 |
+                     <small>被锁定用户信息管理</small>
+                  </div>
+                  <div class="panel-body">
+                     <div>
+                        <table datatable="ng" class="row-border hover">
+                           <thead>
+                              <tr>
+                                 <th>头像</th>
+                                 <th>用户名</th>
+                                 <th>邮箱</th>
+                                 <th>性别</th>
+                                 <th>注册时间</th>
+                                 <th>操作</th>
+                                 <th check-all="check-all">
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr ng-repeat="user in users.usersBlockedList">
+                                 <td>
+                                    <div class="media">
+                                       <img src="{{user.photo}}" alt="Image" style="width:36px;height:36px" class="img-responsive img-circle" />
+                                    </div>
+                                 </td>
+                                 <td>{{user.username}}</td>
+                                 <td>{{user.email}}</td>
+                                 <td>{{user.sex}}</td>
+                                 <td>{{user.createdAt}}</td>
+                                 <td>
+                                    <md-select ng-model="users.userSingleSelectCtrl.name" placeholder="操作">
+                                       <md-optgroup label="详情">
+                                          <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                       </md-optgroup>
+                                       <md-optgroup label="安全">
+                                          <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                       </md-optgroup>
+                                    </md-select>
+                                 </td>
+                                 <td>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+                  <div class="panel-footer">
+                     <div class="row">
+                        <div class="col-lg-10"></div>
+                        <div class="col-lg-2">
+                           <div class="input-group pull-right">
+                              <md-select ng-model="users.selectCtrl.name" placeholder="操作">
+                                 <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)">{{name.val}}</md-option>
+                              </md-select>
+                              <span class="input-group-btn">
+                                 <button class="md-primary md-hue-1 md-button md-default-theme">应用</button>
+                              </span>
+                           </div>
+                        </div>
+                     </div>
                   </div>
                   <!-- END table-responsive-->
                   <div class="panel-footer">

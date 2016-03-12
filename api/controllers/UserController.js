@@ -1218,6 +1218,154 @@ var index = {
     util.turnOffES(currentCountInterval);
     console.log('user exit index message count comet service');
     res.send(util.retMsg(200, '关闭成功'));
+  },
+
+  getDashboardInfo: function(req, res, next) {
+
+    var dashboardInfo = {
+      usersCount: 0,
+      usersAddedToday: 0,
+      themesCount: 0,
+      tagsCount: 0,
+      usersBlockedCount: 0,
+      usersDeletedCount: 0,
+      themesAddedToday: 0,
+      themesDeletedCount: 0,
+      tagsAddedToday: 0,
+      tagsDeletedCount: 0
+    };
+
+    var Themes = ctrlInitial.models.Themes();
+
+    Themes.count({
+      isDeleted: false
+    }, function(err, themesCount) {
+
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
+
+      dashboardInfo.themesCount = themesCount;
+
+      Themes.count({
+        isDeleted: true
+      }, function(err, themesDeletedCount) {
+
+        if(err) {
+          res.send(util.retMsg(401, err.toString()));
+        }
+
+        dashboardInfo.themesDeletedCount = themesDeletedCount;
+
+        Themes.count({
+          isDeleted: false
+        }, function(err, themesAddedToday) {
+
+          if(err) {
+            res.send(util.retMsg(401, err.toString()));
+          }
+
+          dashboardInfo.themesAddedToday = themesAddedToday;
+
+          var User = ctrlInitial.models.User();
+
+          User.count({
+            isDeleted: false
+          }, function(err, usersCount) {
+
+            if(err) {
+              res.send(util.retMsg(401, err.toString()));
+            }
+
+            dashboardInfo.usersCount = usersCount;
+
+            User.count({
+              isDeleted: false
+            }, function(err, usersAddedToday) {
+
+              if(err) {
+                res.send(util.retMsg(401, err.toString()));
+              }
+              
+              dashboardInfo.usersAddedToday = usersAddedToday;
+
+              User.count({
+                isDeleted: true
+              }, function(err, usersDeletedCount) {
+
+                if(err) {
+                  res.send(util.retMsg(401, err.toString()));
+                }
+                
+                dashboardInfo.usersDeletedCount = usersDeletedCount;
+
+                User.count({
+                  isDeleted: false,
+                  isBlocked: true
+                }, function(err, usersBlockedCount) {
+
+                  if(err) {
+                    res.send(util.retMsg(401, err.toString()));
+                  }
+                  
+                  dashboardInfo.usersBlockedCount = usersBlockedCount;
+
+                  var Tags = ctrlInitial.models.Tags();
+
+                  Tags.count({
+                    isDeleted: false
+                  }, function(err, tagsCount) {
+
+                    if(err) {
+                      res.send(util.retMsg(401, err.toString()));
+                    }
+
+                    dashboardInfo.tagsCount = tagsCount;
+
+                    var Tags = ctrlInitial.models.Tags();
+
+                    Tags.count({
+                      isDeleted: true
+                    }, function(err, tagsDeletedCount) {
+
+                      if(err) {
+                        res.send(util.retMsg(401, err.toString()));
+                      }
+
+                      dashboardInfo.tagsDeletedCount = tagsDeletedCount;
+
+                      Tags.count({
+                        isDeleted: false
+                      }, function(err, tagsAddedToday) {
+
+                        if(err) {
+                          res.send(util.retMsg(401, err.toString()));
+                        }
+
+                        dashboardInfo.tagsAddedToday = tagsAddedToday;
+
+                        res.send(util.retMsg(200, dashboardInfo));
+                      });
+
+                    });
+
+                  });
+
+                });
+
+              });
+
+            });
+
+          });
+          
+
+        });
+
+      });
+
+    });
+
   }
 
 };

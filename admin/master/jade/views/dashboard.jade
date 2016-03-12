@@ -14,7 +14,7 @@ h3
   small {{ 'dashboard.DASHBOARD_WELCOME' | translate:{ appName: app.name } }}  !
 
 // START widgets box
-.row
+.row(ng-controller="DashboardController as dash")
   .col-lg-3.col-sm-6
     // START widget
     .panel.widget.bg-primary
@@ -22,7 +22,7 @@ h3
         .col-xs-4.text-center.bg-primary-dark.pv-lg
           em.icon-user.fa-3x
         .col-xs-8.pv-lg
-          .h2.mt0 1700
+          .h2.mt0 {{dash.dashboardInfo.usersAddedToday}}
           .text-uppercase 今日新增用户
   .col-lg-3.col-sm-6
     // START widget
@@ -31,7 +31,7 @@ h3
         .col-xs-4.text-center.bg-purple-dark.pv-lg
           em.icon-users.fa-3x
         .col-xs-8.pv-lg
-          .h2.mt0 700
+          .h2.mt0 {{dash.dashboardInfo.usersCount}}
           .text-uppercase 总用户数
   .col-lg-3.col-md-6.col-sm-12
     // START widget
@@ -40,7 +40,7 @@ h3
         .col-xs-4.text-center.bg-green-dark.pv-lg
           em.icon-bubbles.fa-3x
         .col-xs-8.pv-lg
-          .h2.mt0 500
+          .h2.mt0 {{dash.dashboardInfo.themesCount}}
           .text-uppercase 投稿数
   .col-lg-3.col-md-6.col-sm-12
     // START date widget
@@ -50,19 +50,19 @@ h3
           // See formats: https://docs.angularjs.org/api/ng/filter/date
           em.icon-tag.fa-3x
         .col-xs-8.pv-lg
-          .h2.mt0 500
+          .h2.mt0 {{dash.dashboardInfo.tagsCount}}
           .text-uppercase 标签数
     // END date widget    
 // END widgets box
 
-.row
+.row(ng-controller="DashboardController as dash")
   // START dashboard main content
   .col-lg-9
     // START chart
     .row
       .col-lg-12
         // START widget
-        #panelChart9.panel.panel-default(ng-controller="DashboardController as dash")
+        #panelChart9.panel.panel-default
           .panel-heading
             paneltool(tool-collapse, tool-refresh="traditional")
             .panel-title Inbound visitor statistics
@@ -81,42 +81,42 @@ h3
                 em.wi.wi-day-cloudy
               .text-info
                 em.wi.wi-sprinkles 
-                span.text-muted 20
+                span.text-muted {{dash.dashboardInfo.usersBlockedCount}}
             .col-md-2.col-sm-3.hidden-xs.pv.text-center.br
               .text-info.text-sm 被删用户数
               .text-muted.text-md
                 em.wi.wi-day-cloudy
               .text-info
                 em.wi.wi-sprinkles 
-                span.text-muted 20
+                span.text-muted {{dash.dashboardInfo.usersDeletedCount}}
             .col-md-2.hidden-sm.hidden-xs.pv.text-center.br
               .text-info.text-sm 今日新增投稿
               .text-muted.text-md
                 em.wi.wi-day-sunny-overcast
               .text-info
                 em.wi.wi-sprinkles 
-                span.text-muted 0
+                span.text-muted {{dash.dashboardInfo.themesAddedToday}}
             .col-md-2.col-sm-3.hidden-xs.pv.text-center.br
               .text-info.text-sm 被删投稿数
               .text-muted.text-md
                 em.wi.wi-day-cloudy
               .text-info
                 em.wi.wi-sprinkles 
-                span.text-muted 30
+                span.text-muted {{dash.dashboardInfo.themesDeletedCount}}
             .col-md-2.col-sm-3.col-xs-6.text-center.pv-xl.br
               .text-info.text-sm 今日新增标签
               .text-muted.text-md
                 em.wi.wi-day-cloudy
               .text-info
                 em.wi.wi-sprinkles 
-                span.text-muted 20
+                span.text-muted {{dash.dashboardInfo.tagsAddedToday}}
             .col-md-2.hidden-sm.hidden-xs.pv.text-center
               .text-info.text-sm 被删标签数
               .text-muted.text-md
                 em.wi.wi-day-cloudy
               .text-info
                 em.wi.wi-sprinkles 
-                span.text-muted 20
+                span.text-muted {{dash.dashboardInfo.tagsDeletedCount}}
 
     .row
       .col-lg-4

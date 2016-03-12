@@ -47,12 +47,6 @@
     'use strict';
 
     angular
-        .module('app.dashboard', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.core', [
             'ngRoute',
             'ngAnimate',
@@ -69,6 +63,12 @@
             'ngAria',
             'ngMessages'
         ]);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard', []);
 })();
 (function() {
     'use strict';
@@ -128,13 +128,13 @@
     'use strict';
 
     angular
-        .module('app.translate', []);
+        .module('app.sidebar', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.sidebar', []);
+        .module('app.translate', []);
 })();
 (function() {
     'use strict';
@@ -195,121 +195,6 @@
 
 })();
 
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .config(['$controllerProvider', function($controllerProvider) {
-          // this option might be handy for migrating old apps, but please don't use it
-          // in new ones!
-          $controllerProvider.allowGlobals();
-        }])
-        .controller('DashboardController', DashboardController);
-
-    DashboardController.$inject = ['$scope', '$timeout'];
-    function DashboardController($scope, $timeout) {
-        var vm = this;
-
-        activate();
-
-        //////////////
-
-        function activate() {
-
-          // SPLINE
-          // ----------------------------------- 
-          // vm.splineData = ChartData.load('server/chart/spline.json');
-          vm.splineOptions = {
-              series: {
-                  lines: {
-                      show: false
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.5
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 150, // optional: use it for a clear represetation
-                  tickColor: '#eee',
-                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v/* + ' visitors'*/;
-                  }
-              },
-              shadowSize: 0
-          };
-
-
-          // PANEL REFRESH EVENTS
-          // ----------------------------------- 
-
-          $scope.$on('panel-refresh', function(event, id) {
-            
-            console.log('Simulating chart refresh during 3s on #'+id);
-
-            // Instead of timeout you can request a chart data
-            $timeout(function(){
-              
-              // directive listen for to remove the spinner 
-              // after we end up to perform own operations
-              $scope.$broadcast('removeSpinner', id);
-              
-              console.log('Refreshed #' + id);
-
-            }, 3000);
-
-          });
-
-
-          // PANEL DISMISS EVENTS
-          // ----------------------------------- 
-
-          // Before remove panel
-          $scope.$on('panel-remove', function(event, id, deferred){
-            
-            console.log('Panel #' + id + ' removing');
-            
-            // Here is obligatory to call the resolve() if we pretend to remove the panel finally
-            // Not calling resolve() will NOT remove the panel
-            // It's up to your app to decide if panel should be removed or not
-            deferred.resolve();
-          
-          });
-
-          // Panel removed ( only if above was resolved() )
-          $scope.$on('panel-removed', function(event, id){
-
-            console.log('Panel #' + id + ' removed');
-
-          });
-
-        }
-    }
-})();
 (function() {
     'use strict';
 
@@ -420,6 +305,216 @@
 
 })();
 
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .config(['$controllerProvider', function($controllerProvider) {
+          // this option might be handy for migrating old apps, but please don't use it
+          // in new ones!
+          $controllerProvider.allowGlobals();
+        }])
+        .controller('DashboardController', DashboardController);
+
+    DashboardController.$inject = ['$scope', '$timeout', 'DashBoardService', '$mdToast'];
+    function DashboardController($scope, $timeout, DashBoardService, $mdToast) {
+        var vm = this;
+
+        activate();
+
+        //////////////
+
+        function activate() {
+
+          // SPLINE
+          // ----------------------------------- 
+          // vm.splineData = ChartData.load('server/chart/spline.json');
+          vm.splineOptions = {
+              series: {
+                  lines: {
+                      show: false
+                  },
+                  points: {
+                      show: true,
+                      radius: 4
+                  },
+                  splines: {
+                      show: true,
+                      tension: 0.4,
+                      lineWidth: 1,
+                      fill: 0.5
+                  }
+              },
+              grid: {
+                  borderColor: '#eee',
+                  borderWidth: 1,
+                  hoverable: true,
+                  backgroundColor: '#fcfcfc'
+              },
+              tooltip: true,
+              tooltipOpts: {
+                  content: function (label, x, y) { return x + ' : ' + y; }
+              },
+              xaxis: {
+                  tickColor: '#fcfcfc',
+                  mode: 'categories'
+              },
+              yaxis: {
+                  min: 0,
+                  max: 150, // optional: use it for a clear represetation
+                  tickColor: '#eee',
+                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
+                  tickFormatter: function (v) {
+                      return v/* + ' visitors'*/;
+                  }
+              },
+              shadowSize: 0
+          };
+
+
+          // PANEL REFRESH EVENTS
+          // ----------------------------------- 
+
+          $scope.$on('panel-refresh', function(event, id) {
+            
+            console.log('Simulating chart refresh during 3s on #'+id);
+
+            // Instead of timeout you can request a chart data
+            $timeout(function(){
+              
+              // directive listen for to remove the spinner 
+              // after we end up to perform own operations
+              $scope.$broadcast('removeSpinner', id);
+              
+              console.log('Refreshed #' + id);
+
+            }, 3000);
+
+          });
+
+
+          // PANEL DISMISS EVENTS
+          // ----------------------------------- 
+
+          // Before remove panel
+          $scope.$on('panel-remove', function(event, id, deferred){
+            
+            console.log('Panel #' + id + ' removing');
+            
+            // Here is obligatory to call the resolve() if we pretend to remove the panel finally
+            // Not calling resolve() will NOT remove the panel
+            // It's up to your app to decide if panel should be removed or not
+            deferred.resolve();
+          
+          });
+
+          // Panel removed ( only if above was resolved() )
+          $scope.$on('panel-removed', function(event, id){
+
+            console.log('Panel #' + id + ' removed');
+
+          });
+
+          vm.dashboardInfo = {};
+
+          DashBoardService.dashboardInfo()
+          .success(function(res, status, headers, config) {
+
+            if(res.code != 200) {
+                var toast = $mdToast.simple()
+                      .content(res.message)
+                      .action('我知道了')
+                      .highlightAction(false)
+                      .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            }
+            vm.dashboardInfo = res.message;
+
+          }).error(function(res, status, headers, config) {
+              var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+              $mdToast.show(toast).then(function() {
+              });
+          });
+
+
+        }
+    }
+})();
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .service('DashBoardService', DashBoardService);
+
+    DashBoardService.$inject = ['$http', '$rootScope'];
+
+    function DashBoardService($http, $rootScope) {
+
+      return {
+
+        dashboardInfo: function() {
+          return $http.get($rootScope.app.baseUrl + 'dashboard/info');
+        },
+
+        usersCount: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/select/all/');
+        },
+
+        tagsCount: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/');
+        },
+
+        themesCount: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/');
+        },
+
+        userAddedToday: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/');          
+        },
+
+        usersBlockedCount: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/');          
+        },
+
+        usersBlockedCount: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/');          
+        },
+
+        usersDeletedCount: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/');          
+        },
+
+        themesAddedToday: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/');          
+        },
+
+        themesDeletedCount: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/select/deleted/');          
+        },
+
+        tagsAddedToday: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/');          
+        },
+
+        tagsDeletedCount: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/');          
+        }
+
+      }
+
+    }
+
+})();
 
 (function() {
     'use strict';
@@ -1882,68 +1977,6 @@
 
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .config(translateConfig)
-        ;
-    translateConfig.$inject = ['$translateProvider'];
-    function translateConfig($translateProvider){
-  
-      $translateProvider.useStaticFilesLoader({
-          prefix : 'app/i18n/',
-          suffix : '.json'
-      });
-      $translateProvider.preferredLanguage('en');
-      $translateProvider.useLocalStorage();
-      $translateProvider.usePostCompiling(true);
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .run(translateRun)
-        ;
-    translateRun.$inject = ['$rootScope', '$translate'];
-    
-    function translateRun($rootScope, $translate){
-
-      // Internationalization
-      // ----------------------
-
-      $rootScope.language = {
-        // Handles language dropdown
-        listIsOpen: false,
-        // list of available languages
-        available: {
-          'en':       '中文'
-          // 'es_AR':    '英文'
-        },
-        // display always the current ui language
-        init: function () {
-          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
-          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
-          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
-        },
-        set: function (localeId) {
-          // Set the new idiom
-          $translate.use(localeId);
-          // save a reference for the current language
-          $rootScope.language.selected = $rootScope.language.available[localeId];
-          // finally toggle dropdown
-          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
-        }
-      };
-
-      $rootScope.language.init();
-
-    }
-})();
 /**=========================================================
  * Module: sidebar-menu.js
  * Handle sidebar collapsible elements
@@ -2297,6 +2330,68 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .config(translateConfig)
+        ;
+    translateConfig.$inject = ['$translateProvider'];
+    function translateConfig($translateProvider){
+  
+      $translateProvider.useStaticFilesLoader({
+          prefix : 'app/i18n/',
+          suffix : '.json'
+      });
+      $translateProvider.preferredLanguage('en');
+      $translateProvider.useLocalStorage();
+      $translateProvider.usePostCompiling(true);
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .run(translateRun)
+        ;
+    translateRun.$inject = ['$rootScope', '$translate'];
+    
+    function translateRun($rootScope, $translate){
+
+      // Internationalization
+      // ----------------------
+
+      $rootScope.language = {
+        // Handles language dropdown
+        listIsOpen: false,
+        // list of available languages
+        available: {
+          'en':       '中文'
+          // 'es_AR':    '英文'
+        },
+        // display always the current ui language
+        init: function () {
+          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
+          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
+          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
+        },
+        set: function (localeId) {
+          // Set the new idiom
+          $translate.use(localeId);
+          // save a reference for the current language
+          $rootScope.language.selected = $rootScope.language.available[localeId];
+          // finally toggle dropdown
+          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
+        }
+      };
+
+      $rootScope.language.init();
+
+    }
+})();
 /**=========================================================
  * Module: animate-enabled.js
  * Enable or disables ngAnimate for element with directive
@@ -2847,8 +2942,8 @@
         .module('app.users')
         .controller('UsersController', UsersController);
 
-    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http'];
-    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http) {
+    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http', 'UserService', '$mdToast'];
+    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http, UserService, $mdToast) {
         // for controllerAs syntax
         var vm = this;
 
@@ -2868,11 +2963,118 @@
             ];
 
             vm.usersList = [];
+            vm.usersDeletedList = [];
+            vm.usersBlockedList = [];
 
-            $http.get('http://api.poimoe.com/user/select/all/1/10').success(function(res) {
-                console.log(res);
+            vm.uids = {
+              uids: []
+            };
+
+            vm.isSelectAll = false;
+
+            vm.userIsSelected = {};
+
+            UserService.getAll(1, 10)
+            .success(function(res, status, headers, config) {
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                }
                 vm.usersList = res.message;
+                for (var i = vm.usersList.length - 1; i >= 0; i--) {
+                    var currentUser = vm.usersList[i];
+                    var uid = currentUser._id;
+                    vm.userIsSelected[uid] = false;
+                };
+            })
+            .error(function(res, status, headers, config) {
+                var toast = $mdToast.simple()
+                      .content('出错了，错误代码：' + status)
+                      .action('我知道了')
+                      .highlightAction(false)
+                      .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
             });
+
+            UserService.getUserDeleted(1, 10)
+            .success(function(res, status, headers, config) {
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                }
+                vm.usersDeletedList = res.message;
+            })
+            .error(function(res, status, headers, config) {
+                var toast = $mdToast.simple()
+                      .content('出错了，错误代码：' + status)
+                      .action('我知道了')
+                      .highlightAction(false)
+                      .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+
+            UserService.getUserBlocked(1, 10)
+            .success(function(res, status, headers, config) {
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                }
+                vm.usersBlockedList = res.message;
+            })
+            .error(function(res, status, headers, config) {
+                var toast = $mdToast.simple()
+                      .content('出错了，错误代码：' + status)
+                      .action('我知道了')
+                      .highlightAction(false)
+                      .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+
+            vm.selectThisUser = function(uid) {
+                if(!vm.userIsSelected[uid]) {
+                    var key = vm.uids.uids.indexOf(uid);
+                    vm.uids.uids.splice(key, 1);
+                }else {
+                    vm.uids.uids.push(uid);                 
+                }
+            }
+
+            vm.toggleSelectAll = function() {
+
+                if(vm.isSelectAll) {
+                    vm.uids.uids = [];
+                    for(var uid in vm.userIsSelected) {
+                        vm.userIsSelected[uid] = true;
+                        vm.uids.uids.push(uid);
+                    }
+                    vm.isSelectAll = true;
+                }else {
+                    vm.uids.uids = [];
+                    for(var uid in vm.userIsSelected) {
+                        vm.userIsSelected[uid] = false;
+                    }
+                    vm.isSelectAll = false;
+                }
+
+            }
 
         }
 
@@ -2882,7 +3084,7 @@
                 name: '',
                 names: [{
                     val: '锁定',
-                    onClicked: function(ev) {
+                    onClicked: function(ev, ur) {
                         var confirm = $mdDialog.confirm()
                             .title('锁定确认')
                             .content('你确定要锁定此用户？')
@@ -2891,8 +3093,33 @@
                             .cancel('取消')
                             .targetEvent(ev);
 
+                        if(ur != undefined) {
+                            vm.uids.uids = [ur._id];
+                        }
+
                         $mdDialog.show(confirm).then(function() {
                             //确定
+                            UserService.blockUser(vm.uids)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+
+                            vm.uids.uids = [];
 
                         }, function() {
                             //取消
@@ -2901,7 +3128,7 @@
                     }
                 }, {
                     val: '删除',
-                    onClicked: function(ev) {
+                    onClicked: function(ev, ur) {
                         var confirm = $mdDialog.confirm()
                             .title('删除确认')
                             .content('你确定要删除此用户？')
@@ -2910,12 +3137,36 @@
                             .cancel('取消')
                             .targetEvent(ev);
 
+                        if(ur != undefined) {
+                            vm.uids.uids = [ur._id];
+                        }
+
                         $mdDialog.show(confirm).then(function() {
                             //确定
+                            UserService.deleteUser(vm.uids)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+
+                            vm.uids.uids = [];
 
                         }, function() {
                             //取消
-
                         });
                     }
                 }]
@@ -2957,13 +3208,66 @@
                     }
                 }, {
                     val: '关系列表',
-                    onClicked: function() {
+                    onClicked: function(ev, ur) {
+                        $mdDialog.show({
+                            controller: DialogController,
+                            templateUrl: 'user_relations.tmpl.html',
+                            targetEvent: ev,
+                        })
+                        .then(function(answer) {
+                            $scope.alert = 'You said the information was \'' + answer + '\'.';
+                        }, function() {
+                            $scope.alert = 'You cancelled the dialog.';
+                        });
 
-                    }
+                        DialogController.$inject = ['$scope', '$mdDialog'];
+                        function DialogController($scope, $mdDialog) {
+
+                            $scope.user = ur;
+
+                            $scope.hide = function() {
+                                $mdDialog.hide();
+                            };
+
+                            $scope.cancel = function() {
+                                $mdDialog.cancel();
+                            };
+
+                            $scope.answer = function(answer) {
+                                $mdDialog.hide(answer);
+                            };
+                        }                    }
                 }, {
                     val: '投稿列表',
-                    onClicked: function() {
+                    onClicked: function(ev, ur) {
+                        $mdDialog.show({
+                            controller: DialogController,
+                            templateUrl: 'user_themes.tmpl.html',
+                            targetEvent: ev,
+                        })
+                        .then(function(answer) {
+                            $scope.alert = 'You said the information was \'' + answer + '\'.';
+                        }, function() {
+                            $scope.alert = 'You cancelled the dialog.';
+                        });
 
+                        DialogController.$inject = ['$scope', '$mdDialog'];
+                        function DialogController($scope, $mdDialog) {
+
+                            $scope.user = ur;
+
+                            $scope.hide = function() {
+                                $mdDialog.hide();
+                            };
+
+                            $scope.cancel = function() {
+                                $mdDialog.cancel();
+                            };
+
+                            $scope.answer = function(answer) {
+                                $mdDialog.hide(answer);
+                            };
+                        }                    
                     }
                 }]                
             }
@@ -2988,15 +3292,25 @@
       return {
 
         getAll: function(page, count) {
-          return $http($rootScope.baseUrl + 'user/select/all/' + page + '/' + count);
+          return $http.get($rootScope.app.baseUrl + 'user/select/all/' + page + '/' + count);
         },
 
         getUserDeleted: function(page, count) {
-          return $http($rootScope.baseUrl + '');
+          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/' + page + '/' + count);
         },
 
-        getUserBlocked: function(page, couny) {
-          return $http($rootScope.baseUrl + '');
+        getUserBlocked: function(page, count) {
+          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/' + page + '/' + count);
+        },
+
+        blockUser: function(uid) {
+          var postData = {uids: uid};
+          return $http.post($rootScope.app.baseUrl + 'user/select/blocked/', postData, {});
+        },
+
+        deleteUser: function(uid) {
+          var postData = {uids: uid};
+          return $http.post($rootScope.app.baseUrl + 'user/select/blocked/', postData, {});
         }
 
       }

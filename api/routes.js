@@ -48,6 +48,8 @@ module.exports = {
     server.get('/user/profile/get/:uid', ctrl.userCtrl.getProfileByUid);
     server.get('/user/recommended', ctrl.userCtrl.getRecommended);
 
+    server.get('/dashboard/info', ctrl.userCtrl.getDashboardInfo);    
+
     server.get('/timeline/:page/:count', ctrl.userCtrl.loadTimeline);
     server.get('/timeline/message/index/count/:uid', ctrl.userCtrl.getMessageCount);
     server.get('/timeline/message/index/lastest/:count', ctrl.userCtrl.getLastestMessage);
