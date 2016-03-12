@@ -32,7 +32,7 @@ h3 用户管理
                       td {{user.sex}}
                       td {{user.createdAt}}
                       td
-                        md-select(ng-model='users.userSingleSelectCtrl.name', placeholder='操作')
+                        md-select(ng-model='users.userSingleSelectCtrl.name[user._id]', placeholder='操作')
                           md-optgroup(label='详情')
                             md-option(ng-repeat='name in users.userSingleSelectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user)") {{name.val}}
                           md-optgroup(label='安全')
@@ -211,7 +211,7 @@ h3 用户管理
                 关闭
               </md-button>
               <md-button ng-click="answer('useful')" class="md-primary">
-                保存
+                确定
               </md-button>
             </div>
           </form>
@@ -244,7 +244,7 @@ h3 用户管理
                 关闭
               </md-button>
               <md-button ng-click="answer('useful')" class="md-primary">
-                保存
+                确定
               </md-button>
             </div>
           </form>
@@ -280,11 +280,8 @@ h3 用户管理
                       td {{user.sex}}
                       td {{user.createdAt}}
                       td
-                        md-select(ng-model='users.userSingleSelectCtrl.name', placeholder='操作')
-                          md-optgroup(label='详情')
-                            md-option(ng-repeat='name in users.userSingleSelectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user)") {{name.val}}
-                          md-optgroup(label='安全')
-                            md-option(ng-repeat='name in users.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user)") {{name.val}}                          
+                        md-select(ng-model='users.userDeletedSelectCtrl.name', placeholder='操作')
+                          md-option(ng-repeat='name in users.userDeletedSelectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user)") {{name.val}}                          
                       td
                         md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
             .panel-footer
@@ -330,7 +327,7 @@ h3 用户管理
                           md-optgroup(label='详情')
                             md-option(ng-repeat='name in users.userSingleSelectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user)") {{name.val}}
                           md-optgroup(label='安全')
-                            md-option(ng-repeat='name in users.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user)") {{name.val}}                          
+                            md-option(ng-repeat='name in users.userBlockedSelectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user)") {{name.val}}                          
                       td
                         md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
             .panel-footer

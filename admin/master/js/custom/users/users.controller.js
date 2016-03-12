@@ -164,7 +164,7 @@
 
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            UserService.blockUser(vm.uids)
+                            UserService.blockUser(vm.uids).save()
                             .success(function(res, status, headers, config) {
                                 var toast = $mdToast.simple()
                                       .content(res.message)
@@ -208,7 +208,8 @@
 
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            UserService.deleteUser(vm.uids)
+                            console.log(vm.uids);
+                            UserService.deleteUser(vm.uids).save()
                             .success(function(res, status, headers, config) {
                                 var toast = $mdToast.simple()
                                       .content(res.message)
@@ -335,6 +336,62 @@
                         }                    
                     }
                 }]                
+            }
+
+            vm.userDeletedSelectCtrl = {
+                name: '',
+                names: [{
+                    val: '恢复',
+                    onClicked: function(ev, ur) {
+                        UserService.unDeleteUser(vm.uids).save()
+                        .success(function(res, status, headers, config) {
+                            var toast = $mdToast.simple()
+                                  .content(res.message)
+                                  .action('我知道了')
+                                  .highlightAction(false)
+                                  .position('top right');
+                            $mdToast.show(toast).then(function() {
+                            });
+                        })
+                        .error(function(res, status, headers, config) {
+                            var toast = $mdToast.simple()
+                                  .content('出错了，错误代码：' + status)
+                                  .action('我知道了')
+                                  .highlightAction(false)
+                                  .position('top right');
+                            $mdToast.show(toast).then(function() {
+                            });
+                        });
+                    }
+                }]
+            }
+
+            vm.userBlockedSelectCtrl = {
+                name: '',
+                names: [{
+                    val: '解锁',
+                    onClicked: function(ev, ur) {
+                        UserService.unBlockUser(vm.uids).save()
+                        .success(function(res, status, headers, config) {
+                            var toast = $mdToast.simple()
+                                  .content(res.message)
+                                  .action('我知道了')
+                                  .highlightAction(false)
+                                  .position('top right');
+                            $mdToast.show(toast).then(function() {
+                            });
+                        })
+                        .error(function(res, status, headers, config) {
+                            var toast = $mdToast.simple()
+                                  .content('出错了，错误代码：' + status)
+                                  .action('我知道了')
+                                  .highlightAction(false)
+                                  .position('top right');
+                            $mdToast.show(toast).then(function() {
+                            });
+                        });
+                    }
+                }]
             }
 
         }

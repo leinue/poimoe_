@@ -68,25 +68,25 @@
     'use strict';
 
     angular
-        .module('app.dashboard', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.lazyload', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.loadingbar', []);
+        .module('app.dashboard', []);
 })();
 (function() {
     'use strict';
 
     angular
         .module('app.maps', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar', []);
 })();
 (function() {
     'use strict';
@@ -114,15 +114,15 @@
     'use strict';
 
     angular
-        .module('app.routes', [
-            'app.lazyload'
-        ]);
+        .module('app.settings', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.settings', []);
+        .module('app.routes', [
+            'app.lazyload'
+        ]);
 })();
 (function() {
     'use strict';
@@ -305,6 +305,55 @@
 
 })();
 
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lazyload')
+        .config(lazyloadConfig);
+
+    lazyloadConfig.$inject = ['$ocLazyLoadProvider', 'APP_REQUIRES'];
+    function lazyloadConfig($ocLazyLoadProvider, APP_REQUIRES){
+
+      // Lazy Load modules configuration
+      $ocLazyLoadProvider.config({
+        debug: false,
+        events: true,
+        modules: APP_REQUIRES.modules
+      });
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lazyload')
+        .constant('APP_REQUIRES', {
+          // jQuery based and standalone scripts
+          scripts: {
+            'modernizr':          ['vendor/modernizr/modernizr.js'],
+            'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
+                                   'vendor/simple-line-icons/css/simple-line-icons.css'],
+            'weather-icons':      ['vendor/weather-icons/css/weather-icons.min.css'],
+            'loadGoogleMapsJS':   ['app/vendor/gmap/load-google-maps.js'],
+
+          },
+          // Angular based script (use the right module name)
+          modules: [
+            // {name: 'toaster', files: ['vendor/angularjs-toaster/toaster.js', 'vendor/angularjs-toaster/toaster.css']}
+            {name: 'ui.map',                    files: ['vendor/angular-ui-map/ui-map.js']},
+            
+            {name: 'datatables',                files: ['vendor/datatables/media/css/jquery.dataTables.css',
+                                                        'vendor/datatables/media/js/jquery.dataTables.js',
+                                                        'vendor/angular-datatables/dist/angular-datatables.js'], serie: true},
+
+          ]
+        })
+        ;
+
+})();
 
 
 (function() {
@@ -516,99 +565,6 @@
 
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.lazyload')
-        .config(lazyloadConfig);
-
-    lazyloadConfig.$inject = ['$ocLazyLoadProvider', 'APP_REQUIRES'];
-    function lazyloadConfig($ocLazyLoadProvider, APP_REQUIRES){
-
-      // Lazy Load modules configuration
-      $ocLazyLoadProvider.config({
-        debug: false,
-        events: true,
-        modules: APP_REQUIRES.modules
-      });
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.lazyload')
-        .constant('APP_REQUIRES', {
-          // jQuery based and standalone scripts
-          scripts: {
-            'modernizr':          ['vendor/modernizr/modernizr.js'],
-            'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
-                                   'vendor/simple-line-icons/css/simple-line-icons.css'],
-            'weather-icons':      ['vendor/weather-icons/css/weather-icons.min.css'],
-            'loadGoogleMapsJS':   ['app/vendor/gmap/load-google-maps.js'],
-
-          },
-          // Angular based script (use the right module name)
-          modules: [
-            // {name: 'toaster', files: ['vendor/angularjs-toaster/toaster.js', 'vendor/angularjs-toaster/toaster.css']}
-            {name: 'ui.map',                    files: ['vendor/angular-ui-map/ui-map.js']},
-            
-            {name: 'datatables',                files: ['vendor/datatables/media/css/jquery.dataTables.css',
-                                                        'vendor/datatables/media/js/jquery.dataTables.js',
-                                                        'vendor/angular-datatables/dist/angular-datatables.js'], serie: true},
-
-          ]
-        })
-        ;
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .config(loadingbarConfig)
-        ;
-    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
-    function loadingbarConfig(cfpLoadingBarProvider){
-      cfpLoadingBarProvider.includeBar = true;
-      cfpLoadingBarProvider.includeSpinner = false;
-      cfpLoadingBarProvider.latencyThreshold = 500;
-      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .run(loadingbarRun)
-        ;
-    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
-    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
-
-      // Loading bar transition
-      // ----------------------------------- 
-      var thBar;
-      $rootScope.$on('$stateChangeStart', function() {
-          if($('.wrapper > section').length) // check if bar container exists
-            thBar = $timeout(function() {
-              cfpLoadingBar.start();
-            }, 0); // sets a latency Threshold
-      });
-      $rootScope.$on('$stateChangeSuccess', function(event) {
-          event.targetScope.$watch('$viewContentLoaded', function () {
-            $timeout.cancel(thBar);
-            cfpLoadingBar.complete();
-          });
-      });
-
-    }
-
-})();
 /**=========================================================
  * Module: modals.js
  * Provides a simple way to implement bootstrap modals from templates
@@ -774,6 +730,50 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .config(loadingbarConfig)
+        ;
+    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
+    function loadingbarConfig(cfpLoadingBarProvider){
+      cfpLoadingBarProvider.includeBar = true;
+      cfpLoadingBarProvider.includeSpinner = false;
+      cfpLoadingBarProvider.latencyThreshold = 500;
+      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .run(loadingbarRun)
+        ;
+    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
+    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
+
+      // Loading bar transition
+      // ----------------------------------- 
+      var thBar;
+      $rootScope.$on('$stateChangeStart', function() {
+          if($('.wrapper > section').length) // check if bar container exists
+            thBar = $timeout(function() {
+              cfpLoadingBar.start();
+            }, 0); // sets a latency Threshold
+      });
+      $rootScope.$on('$stateChangeSuccess', function(event) {
+          event.targetScope.$watch('$viewContentLoaded', function () {
+            $timeout.cancel(thBar);
+            cfpLoadingBar.complete();
+          });
+      });
+
+    }
+
+})();
 
 (function() {
     'use strict';
@@ -1706,6 +1706,64 @@
     }
 
 })();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.settings')
+        .run(settingsRun);
+
+    settingsRun.$inject = ['$rootScope', '$localStorage'];
+
+    function settingsRun($rootScope, $localStorage){
+
+      // Global Settings
+      // ----------------------------------- 
+      $rootScope.app = {
+        name: 'Poimoe',
+        description: '管理后台',
+        year: ((new Date()).getFullYear()),
+        layout: {
+          isFixed: true,
+          isCollapsed: false,
+          isBoxed: false,
+          isRTL: false,
+          horizontal: false,
+          isFloat: false,
+          asideHover: false,
+          theme: null
+        },
+        useFullLayout: false,
+        hiddenFooter: false,
+        offsidebarOpen: false,
+        asideToggled: false,
+        viewAnimation: 'ng-fadeInUp',
+        baseUrl: 'http://api.poimoe.com/'
+      };
+
+      // Setup the layout mode
+      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
+
+      // Restore layout settings [*** UNCOMMENT TO ENABLE ***]
+      // if( angular.isDefined($localStorage.layout) )
+      //   $rootScope.app.layout = $localStorage.layout;
+      // else
+      //   $localStorage.layout = $rootScope.app.layout;
+      //
+      // $rootScope.$watch('app.layout', function () {
+      //   $localStorage.layout = $rootScope.app.layout;
+      // }, true);
+
+      // Close submenu when sidebar change from collapsed to normal
+      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
+        if( newValue === false )
+          $rootScope.$broadcast('closeSidebarMenu');
+      });
+
+    }
+
+})();
+
 /**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
@@ -1918,64 +1976,6 @@
 
 })();
 
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.settings')
-        .run(settingsRun);
-
-    settingsRun.$inject = ['$rootScope', '$localStorage'];
-
-    function settingsRun($rootScope, $localStorage){
-
-      // Global Settings
-      // ----------------------------------- 
-      $rootScope.app = {
-        name: 'Poimoe',
-        description: '管理后台',
-        year: ((new Date()).getFullYear()),
-        layout: {
-          isFixed: true,
-          isCollapsed: false,
-          isBoxed: false,
-          isRTL: false,
-          horizontal: false,
-          isFloat: false,
-          asideHover: false,
-          theme: null
-        },
-        useFullLayout: false,
-        hiddenFooter: false,
-        offsidebarOpen: false,
-        asideToggled: false,
-        viewAnimation: 'ng-fadeInUp',
-        baseUrl: 'http://api.poimoe.com/'
-      };
-
-      // Setup the layout mode
-      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
-
-      // Restore layout settings [*** UNCOMMENT TO ENABLE ***]
-      // if( angular.isDefined($localStorage.layout) )
-      //   $rootScope.app.layout = $localStorage.layout;
-      // else
-      //   $localStorage.layout = $rootScope.app.layout;
-      //
-      // $rootScope.$watch('app.layout', function () {
-      //   $localStorage.layout = $rootScope.app.layout;
-      // }, true);
-
-      // Close submenu when sidebar change from collapsed to normal
-      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
-        if( newValue === false )
-          $rootScope.$broadcast('closeSidebarMenu');
-      });
-
-    }
-
-})();
 
 /**=========================================================
  * Module: sidebar-menu.js
@@ -3099,7 +3099,7 @@
 
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            UserService.blockUser(vm.uids)
+                            UserService.blockUser(vm.uids).save()
                             .success(function(res, status, headers, config) {
                                 var toast = $mdToast.simple()
                                       .content(res.message)
@@ -3143,7 +3143,8 @@
 
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            UserService.deleteUser(vm.uids)
+                            console.log(vm.uids);
+                            UserService.deleteUser(vm.uids).save()
                             .success(function(res, status, headers, config) {
                                 var toast = $mdToast.simple()
                                       .content(res.message)
@@ -3272,6 +3273,62 @@
                 }]                
             }
 
+            vm.userDeletedSelectCtrl = {
+                name: '',
+                names: [{
+                    val: '恢复',
+                    onClicked: function(ev, ur) {
+                        UserService.unDeleteUser(vm.uids).save()
+                        .success(function(res, status, headers, config) {
+                            var toast = $mdToast.simple()
+                                  .content(res.message)
+                                  .action('我知道了')
+                                  .highlightAction(false)
+                                  .position('top right');
+                            $mdToast.show(toast).then(function() {
+                            });
+                        })
+                        .error(function(res, status, headers, config) {
+                            var toast = $mdToast.simple()
+                                  .content('出错了，错误代码：' + status)
+                                  .action('我知道了')
+                                  .highlightAction(false)
+                                  .position('top right');
+                            $mdToast.show(toast).then(function() {
+                            });
+                        });
+                    }
+                }]
+            }
+
+            vm.userBlockedSelectCtrl = {
+                name: '',
+                names: [{
+                    val: '解锁',
+                    onClicked: function(ev, ur) {
+                        UserService.unBlockUser(vm.uids).save()
+                        .success(function(res, status, headers, config) {
+                            var toast = $mdToast.simple()
+                                  .content(res.message)
+                                  .action('我知道了')
+                                  .highlightAction(false)
+                                  .position('top right');
+                            $mdToast.show(toast).then(function() {
+                            });
+                        })
+                        .error(function(res, status, headers, config) {
+                            var toast = $mdToast.simple()
+                                  .content('出错了，错误代码：' + status)
+                                  .action('我知道了')
+                                  .highlightAction(false)
+                                  .position('top right');
+                            $mdToast.show(toast).then(function() {
+                            });
+                        });
+                    }
+                }]
+            }
+
         }
     }
 
@@ -3285,9 +3342,9 @@
         .module('app.users')
         .service('UserService', UserService);
 
-    UserService.$inject = ['$http', '$rootScope'];
+    UserService.$inject = ['$http', '$rootScope', '$resource'];
 
-    function UserService($http, $rootScope) {
+    function UserService($http, $rootScope, $resource) {
 
       return {
 
@@ -3296,21 +3353,27 @@
         },
 
         getUserDeleted: function(page, count) {
-          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/' + page + '/' + count);
+          return $http.get($rootScope.app.baseUrl + 'user/select/deleted/' + page + '/' + count);
         },
 
         getUserBlocked: function(page, count) {
           return $http.get($rootScope.app.baseUrl + 'user/select/blocked/' + page + '/' + count);
         },
 
-        blockUser: function(uid) {
-          var postData = {uids: uid};
-          return $http.post($rootScope.app.baseUrl + 'user/select/blocked/', postData, {});
+        blockUser: function(postData) {
+          return $http.post($rootScope.app.baseUrl + 'user/block', postData, {});
         },
 
-        deleteUser: function(uid) {
-          var postData = {uids: uid};
-          return $http.post($rootScope.app.baseUrl + 'user/select/blocked/', postData, {});
+        deleteUser: function(postData) {
+          return $http.post($rootScope.app.baseUrl + 'user/delete', postData, {});
+        },
+
+        unDeleteUser: function(postData) {
+          return $http.post($rootScope.app.baseUrl + 'user/undelete', postData, {});
+        },
+
+        unBlockUser: function(postData) {
+          return $http.post($rootScope.app.baseUrl + 'user/unblock', postData, {});
         }
 
       }

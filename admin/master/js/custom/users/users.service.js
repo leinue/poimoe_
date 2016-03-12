@@ -6,9 +6,9 @@
         .module('app.users')
         .service('UserService', UserService);
 
-    UserService.$inject = ['$http', '$rootScope'];
+    UserService.$inject = ['$http', '$rootScope', '$resource'];
 
-    function UserService($http, $rootScope) {
+    function UserService($http, $rootScope, $resource) {
 
       return {
 
@@ -17,21 +17,27 @@
         },
 
         getUserDeleted: function(page, count) {
-          return $http.get($rootScope.app.baseUrl + 'user/select/blocked/' + page + '/' + count);
+          return $http.get($rootScope.app.baseUrl + 'user/select/deleted/' + page + '/' + count);
         },
 
         getUserBlocked: function(page, count) {
           return $http.get($rootScope.app.baseUrl + 'user/select/blocked/' + page + '/' + count);
         },
 
-        blockUser: function(uid) {
-          var postData = {uids: uid};
-          return $http.post($rootScope.app.baseUrl + 'user/select/blocked/', postData, {});
+        blockUser: function(postData) {
+          return $http.post($rootScope.app.baseUrl + 'user/block', postData, {});
         },
 
-        deleteUser: function(uid) {
-          var postData = {uids: uid};
-          return $http.post($rootScope.app.baseUrl + 'user/select/blocked/', postData, {});
+        deleteUser: function(postData) {
+          return $http.post($rootScope.app.baseUrl + 'user/delete', postData, {});
+        },
+
+        unDeleteUser: function(postData) {
+          return $http.post($rootScope.app.baseUrl + 'user/undelete', postData, {});
+        },
+
+        unBlockUser: function(postData) {
+          return $http.post($rootScope.app.baseUrl + 'user/unblock', postData, {});
         }
 
       }

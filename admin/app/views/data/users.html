@@ -38,7 +38,7 @@
                                  <td>{{user.sex}}</td>
                                  <td>{{user.createdAt}}</td>
                                  <td>
-                                    <md-select ng-model="users.userSingleSelectCtrl.name" placeholder="操作">
+                                    <md-select ng-model="users.userSingleSelectCtrl.name[user._id]" placeholder="操作">
                                        <md-optgroup label="详情">
                                           <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
                                        </md-optgroup>
@@ -234,7 +234,7 @@
                      关闭
                    </md-button>
                    <md-button ng-click="answer('useful')" class="md-primary">
-                     保存
+                     确定
                    </md-button>
                  </div>
                </form>
@@ -267,7 +267,7 @@
                      关闭
                    </md-button>
                    <md-button ng-click="answer('useful')" class="md-primary">
-                     保存
+                     确定
                    </md-button>
                  </div>
                </form>
@@ -309,13 +309,8 @@
                                  <td>{{user.sex}}</td>
                                  <td>{{user.createdAt}}</td>
                                  <td>
-                                    <md-select ng-model="users.userSingleSelectCtrl.name" placeholder="操作">
-                                       <md-optgroup label="详情">
-                                          <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
-                                       </md-optgroup>
-                                       <md-optgroup label="安全">
-                                          <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
-                                       </md-optgroup>
+                                    <md-select ng-model="users.userDeletedSelectCtrl.name" placeholder="操作">
+                                       <md-option ng-repeat="name in users.userDeletedSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
                                     </md-select>
                                  </td>
                                  <td>
@@ -383,7 +378,7 @@
                                           <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
                                        </md-optgroup>
                                        <md-optgroup label="安全">
-                                          <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                          <md-option ng-repeat="name in users.userBlockedSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
                                        </md-optgroup>
                                     </md-select>
                                  </td>

@@ -122,12 +122,6 @@ module.exports = {
       }).skip(skipFrom).limit(count).exec(cb);
     };
 
-    // userSchema.statics.countUsers = function(cb) {
-    //   return this.find({
-    //     isDeleted: false
-    //   }).count().exec(cb);
-    // }
-
     userSchema.statics.findAllDeleted = function(page, count, cb) {
 
       page = page || 10;
@@ -248,6 +242,28 @@ module.exports = {
       }, {
         favourites: obj.fa,
         favouritedCount: obj.faCnt
+      }, {
+        new: true
+      }, cb);
+    };
+
+    userSchema.statics.removeUser = function(uid, cb) {
+      return this.findOneAndUpdate({
+        _id: uid,
+        isDeleted: false
+      }, {
+        isDeleted: true
+      }, {
+        new: true
+      }, cb);
+    };
+
+    userSchema.statics.blockUser = function(uid, cb) {
+      return this.findOneAndUpdate({
+        _id: uid,
+        isDeleted: false
+      }, {
+        isBlocked: true
       }, {
         new: true
       }, cb);
@@ -475,7 +491,8 @@ module.exports = {
       var skipFrom = (page * count) - count;
 
       return this.find({
-       isDeleted: false 
+       isDeleted: false,
+       isBlocked: false
       }).populate('user_id').populate('tag_list').populate({
         path: 'reposter',
         match: {

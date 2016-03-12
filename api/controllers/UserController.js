@@ -1220,6 +1220,54 @@ var index = {
     res.send(util.retMsg(200, '关闭成功'));
   },
 
+  blockUser: function(req, res, next) {
+
+    var uids = req.params.uids;
+
+    var User = ctrlInitial.models.User();
+
+    var uidLength = uids.length;
+
+    uids.forEach(function(uid, key) {
+        User.blockUser(uid, function(err, msg) {
+
+            if(err) {
+              res.send(util.retMsg(401, err.toString()));
+            }
+
+            if(key === uidLength - 1) {
+              res.send(util.retMsg(200, '删除成功'));
+            }
+
+        });
+    });
+
+  },
+
+  deleteUser: function(req, res, next) {
+
+    var uids = req.params.uids;
+
+    var User = ctrlInitial.models.User();
+
+    var uidLength = uids.length;
+
+    uids.forEach(function(uid, key) {
+        User.removeUser(uid, function(err, msg) {
+
+            if(err) {
+              res.send(util.retMsg(401, err.toString()));
+            }
+
+            if(key === uidLength - 1) {
+              res.send(util.retMsg(200, '删除成功'));
+            }
+
+        });
+    });
+
+  },
+
   getDashboardInfo: function(req, res, next) {
 
     var dashboardInfo = {
