@@ -22,23 +22,23 @@ h3 标签管理
                       th(check-all)
                         md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.isSelectAll', ng-change="tags.toggleSelectAll()")
                   tbody
-                    tr(ng-repeat="tag in tags.tagsList")
+                    tr(ng-repeat="(key, tag) in tags.tagsList")
                       td {{tag.name}}
                       td {{tag.description}}
                       td {{tag.citeCount}}
                       td {{tag.createdAt}}
                       td
                         md-select(ng-model='tags.tagsingleSelectCtrl.name[tag._id]', placeholder='操作')
-                          md-option(ng-repeat='name in tags.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, tag, $index)") {{name.val}}                          
+                          md-option(ng-repeat='name in tags.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, tag, key)") {{name.val}}                          
                       td
-                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.tagIsSelected[tag._id]', ng-change="tags.selectThistag(tag._id)")
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.tagsSelected[tag._id]', ng-change="tags.selectThisTag(tag._id)")
             .panel-footer
               .row
                 .col-lg-10
                 .col-lg-2
                   .input-group.pull-right
                     md-select(ng-model='tags.selectCtrl.name', placeholder='操作')
-                      md-option(ng-repeat='name in tags.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)") {{name.val}}
+                      md-option(ng-repeat='name in tags.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)", ng-hide='name.val == "编辑"') {{name.val}}
                     span.input-group-btn
                       button.md-primary.md-hue-1.md-button.md-default-tag 应用
 
@@ -98,10 +98,10 @@ h3 标签管理
                 More on Wikipedia
               </md-button>
               <span flex></span>
-              <md-button ng-click="answer('not useful')" class="md-primary">
+              <md-button ng-click="cancel()" class="md-primary">
                 关闭
               </md-button>
-              <md-button ng-click="answer('useful')" class="md-primary">
+              <md-button ng-click="confirmToModifyThisTag()" class="md-primary">
                 保存
               </md-button>
             </div>
@@ -127,14 +127,14 @@ h3 标签管理
                       th(check-all)
                         md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.isSelectAll', ng-change="tags.toggleSelectAll()")
                   tbody
-                    tr(ng-repeat="tag in tags.tagsDeletedList")
+                    tr(ng-repeat="(key, tag) in tags.tagsDeletedList")
                       td {{tag.name}}
                       td {{tag.description}}
                       td {{tag.citeCount}}
                       td {{tag.createdAt}}
                       td
                         md-select(ng-model='tags.selectDeletedCtrl.name[tag._id]', placeholder='操作')
-                          md-option(ng-repeat='name in tags.selectDeletedCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, tag, $index)") {{name.val}}                          
+                          md-option(ng-repeat='name in tags.selectDeletedCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, tag, key)") {{name.val}}                          
                       td
                         md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.tagIsSelected[tag._id]', ng-change="tags.selectThistag(tag._id)")
             .panel-footer

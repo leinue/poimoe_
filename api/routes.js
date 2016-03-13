@@ -68,6 +68,7 @@ module.exports = {
     server.get('/tags/select/all', ctrl.tagsCtrl.getAll);
     server.get('/tags/select/removed', ctrl.tagsCtrl.getAllRemoved);
     server.get('/tags/remove/:id', ctrl.tagsCtrl.remove);
+    server.get('/tags/unremove/:id', ctrl.tagsCtrl.unRemove);
     server.get('/tags/update/:id/:name/:description', ctrl.tagsCtrl.update);
     server.get('/tags/search/:name/:page/:count', ctrl.tagsCtrl.search);
     server.get('/tags/select/hotTags', ctrl.tagsCtrl.getHotTags)

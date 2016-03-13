@@ -148,7 +148,7 @@
                                 $mdToast.show(toast).then(function() {
                                 });
 
-                                if(res.status === 200) {
+                                if(res.code === 200) {
                                     vm.usersList.splice(index, 1);
                                 }
                             })
@@ -191,7 +191,7 @@
                             $mdToast.show(toast).then(function() {
                             });
 
-                            if(res.status === 200) {
+                            if(res.code === 200) {
                                 vm.usersList.splice(index, 1);
                             }
                         })

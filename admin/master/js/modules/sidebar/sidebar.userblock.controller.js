@@ -16,7 +16,7 @@
           $rootScope.user = {
             name:     'Xieyang',
             job:      'Poimoe 创始人',
-            picture:  'app/img/user/02.jpg'
+            picture:  'http://image.poimoe.com/upload/1/1456214269.jpg'
           };
 
           // Hides/show user avatar on sidebar

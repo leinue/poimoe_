@@ -50,8 +50,8 @@ var index = {
 	      		res.send(util.retMsg(401, '无此标签'));
 	      	}
 
-	      	if(tag[0].isDeleted === false) {
-	      		res.send(util.retMsg(401, '该标签已被删除'));
+	      	if(tag[0].isDeleted === true) {
+	      		res.send(util.retMsg(200, '该标签已被删除'));
 	      	}
 
 			Tags._remove(thisTagId, function(err, tag) {
@@ -60,10 +60,30 @@ var index = {
 		        	res.send(util.retMsg(401, err.toString()));
 		      	}
 
-		      	res.send(util.retMsg(200, "删除标签成功" + tag.toString()));
+		      	res.send(util.retMsg(200, "删除标签成功"));
 
 			});
 
+		});
+
+	},
+
+	unRemove: function(req, res, next) {
+
+		var thisTagId = req.params.id;
+
+		if(thisTagId == undefined || thisTagId == '') {
+			res.send(util.retMsg(401, "缺少参数：标签id"));
+		}
+
+		var Tags = ctrlInitial.models.Tags();
+
+		Tags.unRemove(thisTagId, function(err, tag) {
+			if(err) {
+	        	res.send(util.retMsg(401, err.toString()));
+	      	}
+
+	      	res.send(util.retMsg(200, "撤销删除标签成功"));
 		});
 
 	},

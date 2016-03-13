@@ -26,18 +26,18 @@
                               </tr>
                            </thead>
                            <tbody>
-                              <tr ng-repeat="tag in tags.tagsList">
+                              <tr ng-repeat="(key, tag) in tags.tagsList">
                                  <td>{{tag.name}}</td>
                                  <td>{{tag.description}}</td>
                                  <td>{{tag.citeCount}}</td>
                                  <td>{{tag.createdAt}}</td>
                                  <td>
                                     <md-select ng-model="tags.tagsingleSelectCtrl.name[tag._id]" placeholder="操作">
-                                       <md-option ng-repeat="name in tags.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, tag, $index)">{{name.val}}</md-option>
+                                       <md-option ng-repeat="name in tags.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, tag, key)">{{name.val}}</md-option>
                                     </md-select>
                                  </td>
                                  <td>
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="tags.tagIsSelected[tag._id]" ng-change="tags.selectThistag(tag._id)" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="tags.tagsSelected[tag._id]" ng-change="tags.selectThisTag(tag._id)" class="md-primary"></md-checkbox>
                                  </td>
                               </tr>
                            </tbody>
@@ -50,7 +50,7 @@
                         <div class="col-lg-2">
                            <div class="input-group pull-right">
                               <md-select ng-model="tags.selectCtrl.name" placeholder="操作">
-                                 <md-option ng-repeat="name in tags.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)">{{name.val}}</md-option>
+                                 <md-option ng-repeat="name in tags.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)" ng-hide="name.val == &quot;编辑&quot;">{{name.val}}</md-option>
                               </md-select>
                               <span class="input-group-btn">
                                  <button class="md-primary md-hue-1 md-button md-default-tag">应用</button>
@@ -117,10 +117,10 @@
                      More on Wikipedia
                    </md-button>
                    <span flex></span>
-                   <md-button ng-click="answer('not useful')" class="md-primary">
+                   <md-button ng-click="cancel()" class="md-primary">
                      关闭
                    </md-button>
-                   <md-button ng-click="answer('useful')" class="md-primary">
+                   <md-button ng-click="confirmToModifyThisTag()" class="md-primary">
                      保存
                    </md-button>
                  </div>
@@ -150,14 +150,14 @@
                               </tr>
                            </thead>
                            <tbody>
-                              <tr ng-repeat="tag in tags.tagsDeletedList">
+                              <tr ng-repeat="(key, tag) in tags.tagsDeletedList">
                                  <td>{{tag.name}}</td>
                                  <td>{{tag.description}}</td>
                                  <td>{{tag.citeCount}}</td>
                                  <td>{{tag.createdAt}}</td>
                                  <td>
                                     <md-select ng-model="tags.selectDeletedCtrl.name[tag._id]" placeholder="操作">
-                                       <md-option ng-repeat="name in tags.selectDeletedCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, tag, $index)">{{name.val}}</md-option>
+                                       <md-option ng-repeat="name in tags.selectDeletedCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, tag, key)">{{name.val}}</md-option>
                                     </md-select>
                                  </td>
                                  <td>

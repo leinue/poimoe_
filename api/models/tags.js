@@ -150,6 +150,24 @@ module.exports = {
       return this.findOneAndUpdate(query, update, options, cb);
     };
 
+    tagsSchema.statics.unRemove = function(id, cb) {
+      var query = {
+        _id: id,
+        isDeleted: true
+      };
+
+      var options = {
+        new: true
+      };
+
+      var update = {
+        isDeleted: false,
+        updatedAt: Date.now()
+      };
+
+      return this.findOneAndUpdate(query, update, options, cb);
+    };
+
     tagsSchema.statics.update = function(id, obj, cb) {
       var query = {
         _id: id,

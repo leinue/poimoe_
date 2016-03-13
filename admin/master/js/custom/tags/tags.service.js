@@ -28,8 +28,8 @@
           return $http.get($rootScope.app.baseUrl + 'tags/update/' + id + '/' + name + '/' + description);          
         },
 
-        unRemove: function(postData) {
-          return $http.post($rootScope.app.baseUrl + 'themes/unremove', postData, {});
+        unRemove: function(id) {
+          return $http.get($rootScope.app.baseUrl + 'tags/unremove/' + id);
         }
 
       }
