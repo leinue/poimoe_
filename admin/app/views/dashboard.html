@@ -178,102 +178,22 @@
                <!-- START list group-->
                <div class="list-group">
                   <!-- START list group item-->
-                  <div class="list-group-item">
+                  <div ng-repeat="tag in dash.hotTags" class="list-group-item">
                      <div class="media-box">
                         <div class="pull-left">
                            <span class="fa-stack">
                               <em class="fa fa-circle fa-stack-2x text-purple"></em>
-                              <em class="fa fa-cloud-upload fa-stack-1x fa-inverse text-white"></em>
+                              <em class="fa fa-tag fa-stack-1x fa-inverse text-white"></em>
                            </span>
                         </div>
                         <div class="media-box-body clearfix">
-                           <small class="text-muted pull-right ml">15m</small>
-                           <div class="media-box-heading"><a href="#" class="text-purple m0">NEW FILE</a>
+                           <!--small.text-muted.pull-right.ml 15m-->
+                           <div class="media-box-heading"><a href="#" class="text-purple m0">{{tag.names}}</a>
                            </div>
                            <p class="m0">
-                              <small><a href="#">Bootstrap.xls</a>
+                              <small><a href="#">{{tag.description}}</a>
                               </small>
                            </p>
-                        </div>
-                     </div>
-                  </div>
-                  <!-- END list group item-->
-                  <!-- START list group item-->
-                  <div class="list-group-item">
-                     <div class="media-box">
-                        <div class="pull-left">
-                           <span class="fa-stack">
-                              <em class="fa fa-circle fa-stack-2x text-info"></em>
-                              <em class="fa fa-file-text-o fa-stack-1x fa-inverse text-white"></em>
-                           </span>
-                        </div>
-                        <div class="media-box-body clearfix">
-                           <small class="text-muted pull-right ml">2h</small>
-                           <div class="media-box-heading"><a href="#" class="text-info m0">NEW DOCUMENT</a>
-                           </div>
-                           <p class="m0">
-                              <small><a href="#">Bootstrap.doc</a>
-                              </small>
-                           </p>
-                        </div>
-                     </div>
-                  </div>
-                  <!-- END list group item-->
-                  <!-- START list group item-->
-                  <div class="list-group-item">
-                     <div class="media-box">
-                        <div class="pull-left">
-                           <span class="fa-stack">
-                              <em class="fa fa-circle fa-stack-2x text-danger"></em>
-                              <em class="fa fa-exclamation fa-stack-1x fa-inverse text-white"></em>
-                           </span>
-                        </div>
-                        <div class="media-box-body clearfix">
-                           <small class="text-muted pull-right ml">5h</small>
-                           <div class="media-box-heading"><a href="#" class="text-danger m0">BROADCAST</a>
-                           </div>
-                           <p class="m0"><a href="#">Read</a>
-                           </p>
-                        </div>
-                     </div>
-                  </div>
-                  <!-- END list group item-->
-                  <!-- START list group item-->
-                  <div class="list-group-item">
-                     <div class="media-box">
-                        <div class="pull-left">
-                           <span class="fa-stack">
-                              <em class="fa fa-circle fa-stack-2x text-success"></em>
-                              <em class="fa fa-clock-o fa-stack-1x fa-inverse text-white"></em>
-                           </span>
-                        </div>
-                        <div class="media-box-body clearfix">
-                           <small class="text-muted pull-right ml">15h</small>
-                           <div class="media-box-heading"><a href="#" class="text-success m0">NEW MEETING</a>
-                           </div>
-                           <p class="m0">
-                              <small>On
-                                 <em>10/12/2015 09:00 am</em>
-                              </small>
-                           </p>
-                        </div>
-                     </div>
-                  </div>
-                  <!-- END list group item-->
-                  <!-- START list group item-->
-                  <div class="list-group-item">
-                     <div class="media-box">
-                        <div class="pull-left">
-                           <span class="fa-stack">
-                              <em class="fa fa-circle fa-stack-2x text-warning"></em>
-                              <em class="fa fa-tasks fa-stack-1x fa-inverse text-white"></em>
-                           </span>
-                        </div>
-                        <div class="media-box-body clearfix">
-                           <small class="text-muted pull-right ml">1w</small>
-                           <div class="media-box-heading"><a href="#" class="text-warning m0">TASKS COMPLETION</a>
-                           </div>
-                           <progressbar value="22" type="warning" class="progress-xs m0"></progressbar>
                         </div>
                      </div>
                   </div>
@@ -281,11 +201,9 @@
                </div>
                <!-- END list group-->
                <!-- START panel footer-->
-               <div class="panel-footer clearfix">
-                  <a href="#" class="pull-left">
-                     <small>Load more</small>
-                  </a>
-               </div>
+               <!--.panel-footer.clearfix-->
+               <!--  a(href='#').pull-left-->
+               <!--    small Load more-->
                <!-- END panel-footer-->
             </div>
             <!-- END messages and activity-->
@@ -301,76 +219,16 @@
                <!-- START list group-->
                <scrollable height="180" class="list-group">
                   <!-- START list group item-->
-                  <a href="#" class="list-group-item">
+                  <a href="#" ng-repeat="user in dash.recommended" class="list-group-item">
                      <div class="media-box">
                         <div class="pull-left">
-                           <img src="app/img/user/02.jpg" alt="Image" class="media-box-object img-circle thumb32" />
+                           <img src="{{user.photo}}" alt="Image" class="media-box-object img-circle thumb32" />
                         </div>
                         <div class="media-box-body clearfix">
-                           <small class="pull-right">2h</small>
+                           <!--small.pull-right 2h-->
                            <strong class="media-box-heading text-primary">
-                              <span class="circle circle-success circle-lg text-left"></span>蛤蛤</strong>
-                           <p class="mb-sm">习习蛤蛤胡搞毛搞是没有江来的</p>
-                        </div>
-                     </div>
-                  </a>
-                  <!-- END list group item-->
-                  <!-- START list group item-->
-                  <a href="#" class="list-group-item">
-                     <div class="media-box">
-                        <div class="pull-left">
-                           <img src="app/img/user/03.jpg" alt="Image" class="media-box-object img-circle thumb32" />
-                        </div>
-                        <div class="media-box-body clearfix">
-                           <small class="pull-right">3h</small>
-                           <strong class="media-box-heading text-primary">
-                              <span class="circle circle-success circle-lg text-left"></span>习近平</strong>
-                           <p class="mb-sm">今天你吃庆丰包子了吗？</p>
-                        </div>
-                     </div>
-                  </a>
-                  <!-- END list group item-->
-                  <!-- START list group item-->
-                  <a href="#" class="list-group-item">
-                     <div class="media-box">
-                        <div class="pull-left">
-                           <img src="app/img/user/09.jpg" alt="Image" class="media-box-object img-circle thumb32" />
-                        </div>
-                        <div class="media-box-body clearfix">
-                           <small class="pull-right">4h</small>
-                           <strong class="media-box-heading text-primary">
-                              <span class="circle circle-danger circle-lg text-left"></span>吾尔开希</strong>
-                           <p class="mb-sm">为了自由</p>
-                        </div>
-                     </div>
-                  </a>
-                  <!-- END list group item-->
-                  <!-- START list group item-->
-                  <a href="#" class="list-group-item">
-                     <div class="media-box">
-                        <div class="pull-left">
-                           <img src="app/img/user/12.jpg" alt="Image" class="media-box-object img-circle thumb32" />
-                        </div>
-                        <div class="media-box-body clearfix">
-                           <small class="pull-right">1d</small>
-                           <strong class="media-box-heading text-primary">
-                              <span class="circle circle-danger circle-lg text-left"></span>柴林</strong>
-                           <p class="mb-sm">为了皿煮</p>
-                        </div>
-                     </div>
-                  </a>
-                  <!-- END list group item-->
-                  <!-- START list group item-->
-                  <a href="#" class="list-group-item">
-                     <div class="media-box">
-                        <div class="pull-left">
-                           <img src="app/img/user/10.jpg" alt="Image" class="media-box-object img-circle thumb32" />
-                        </div>
-                        <div class="media-box-body clearfix">
-                           <small class="pull-right">2d</small>
-                           <strong class="media-box-heading text-primary">
-                              <span class="circle circle-danger circle-lg text-left"></span>蛤丝</strong>
-                           <p class="mb-sm">为了蛤蛤</p>
+                              <span class="circle circle-success circle-lg text-left"></span>{{user.username}}</strong>
+                           <p class="mb-sm">{{user.description}}</p>
                         </div>
                      </div>
                   </a>
@@ -416,7 +274,7 @@
          <!-- START list group-->
          <div class="list-group">
             <!-- START list group item-->
-            <div class="list-group-item">
+            <div ng-repeat="theme in dash.hotThemes" class="list-group-item">
                <div class="media-box">
                   <div class="pull-left">
                      <span class="fa-stack">
@@ -425,93 +283,13 @@
                      </span>
                   </div>
                   <div class="media-box-body clearfix">
-                     <small class="text-muted pull-right ml">15m</small>
-                     <div class="media-box-heading"><a href="#" class="text-purple m0">NEW FILE</a>
+                     <small class="text-muted pull-right ml">{{theme.createdAt}}</small>
+                     <div class="media-box-heading"><a href="#" class="text-purple m0">{{theme.content}}</a>
                      </div>
                      <p class="m0">
-                        <small><a href="#">Bootstrap.xls</a>
+                        <small><a href="#">{{theme.user_id.username}}</a>
                         </small>
                      </p>
-                  </div>
-               </div>
-            </div>
-            <!-- END list group item-->
-            <!-- START list group item-->
-            <div class="list-group-item">
-               <div class="media-box">
-                  <div class="pull-left">
-                     <span class="fa-stack">
-                        <em class="fa fa-circle fa-stack-2x text-info"></em>
-                        <em class="fa fa-file-text-o fa-stack-1x fa-inverse text-white"></em>
-                     </span>
-                  </div>
-                  <div class="media-box-body clearfix">
-                     <small class="text-muted pull-right ml">2h</small>
-                     <div class="media-box-heading"><a href="#" class="text-info m0">NEW DOCUMENT</a>
-                     </div>
-                     <p class="m0">
-                        <small><a href="#">Bootstrap.doc</a>
-                        </small>
-                     </p>
-                  </div>
-               </div>
-            </div>
-            <!-- END list group item-->
-            <!-- START list group item-->
-            <div class="list-group-item">
-               <div class="media-box">
-                  <div class="pull-left">
-                     <span class="fa-stack">
-                        <em class="fa fa-circle fa-stack-2x text-danger"></em>
-                        <em class="fa fa-exclamation fa-stack-1x fa-inverse text-white"></em>
-                     </span>
-                  </div>
-                  <div class="media-box-body clearfix">
-                     <small class="text-muted pull-right ml">5h</small>
-                     <div class="media-box-heading"><a href="#" class="text-danger m0">BROADCAST</a>
-                     </div>
-                     <p class="m0"><a href="#">Read</a>
-                     </p>
-                  </div>
-               </div>
-            </div>
-            <!-- END list group item-->
-            <!-- START list group item-->
-            <div class="list-group-item">
-               <div class="media-box">
-                  <div class="pull-left">
-                     <span class="fa-stack">
-                        <em class="fa fa-circle fa-stack-2x text-success"></em>
-                        <em class="fa fa-clock-o fa-stack-1x fa-inverse text-white"></em>
-                     </span>
-                  </div>
-                  <div class="media-box-body clearfix">
-                     <small class="text-muted pull-right ml">15h</small>
-                     <div class="media-box-heading"><a href="#" class="text-success m0">NEW MEETING</a>
-                     </div>
-                     <p class="m0">
-                        <small>On
-                           <em>10/12/2015 09:00 am</em>
-                        </small>
-                     </p>
-                  </div>
-               </div>
-            </div>
-            <!-- END list group item-->
-            <!-- START list group item-->
-            <div class="list-group-item">
-               <div class="media-box">
-                  <div class="pull-left">
-                     <span class="fa-stack">
-                        <em class="fa fa-circle fa-stack-2x text-warning"></em>
-                        <em class="fa fa-tasks fa-stack-1x fa-inverse text-white"></em>
-                     </span>
-                  </div>
-                  <div class="media-box-body clearfix">
-                     <small class="text-muted pull-right ml">1w</small>
-                     <div class="media-box-heading"><a href="#" class="text-warning m0">TASKS COMPLETION</a>
-                     </div>
-                     <progressbar value="22" type="warning" class="progress-xs m0"></progressbar>
                   </div>
                </div>
             </div>
@@ -519,11 +297,9 @@
          </div>
          <!-- END list group-->
          <!-- START panel footer-->
-         <div class="panel-footer clearfix">
-            <a href="#" class="pull-left">
-               <small>Load more</small>
-            </a>
-         </div>
+         <!--.panel-footer.clearfix-->
+         <!--  a(href='#').pull-left-->
+         <!--    small Load more-->
          <!-- END panel-footer-->
       </div>
       <!-- END messages and activity-->

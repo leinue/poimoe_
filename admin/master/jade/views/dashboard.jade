@@ -128,84 +128,24 @@ h3
           // START list group
           .list-group
             // START list group item
-            .list-group-item
+            .list-group-item(ng-repeat='tag in dash.hotTags')
               .media-box
                 .pull-left
                   span.fa-stack
                     em.fa.fa-circle.fa-stack-2x.text-purple
-                    em.fa.fa-cloud-upload.fa-stack-1x.fa-inverse.text-white
+                    em.fa.fa-tag.fa-stack-1x.fa-inverse.text-white
                 .media-box-body.clearfix
-                  small.text-muted.pull-right.ml 15m
+                  //small.text-muted.pull-right.ml 15m
                   .media-box-heading
-                    a(href="#").text-purple.m0 NEW FILE
+                    a(href="#").text-purple.m0 {{tag.names}}
                   p.m0: small
-                    a(href="#") Bootstrap.xls
-            // END list group item
-
-            // START list group item
-            .list-group-item
-              .media-box
-                .pull-left
-                  span.fa-stack
-                    em.fa.fa-circle.fa-stack-2x.text-info
-                    em.fa.fa-file-text-o.fa-stack-1x.fa-inverse.text-white
-                .media-box-body.clearfix
-                  small.text-muted.pull-right.ml 2h
-                  .media-box-heading
-                    a(href="#").text-info.m0 NEW DOCUMENT
-                  p.m0: small
-                    a(href="#") Bootstrap.doc
-            // END list group item
-
-            // START list group item
-            .list-group-item
-              .media-box
-                .pull-left
-                  span.fa-stack
-                    em.fa.fa-circle.fa-stack-2x.text-danger
-                    em.fa.fa-exclamation.fa-stack-1x.fa-inverse.text-white
-                .media-box-body.clearfix
-                  small.text-muted.pull-right.ml 5h
-                  .media-box-heading
-                    a(href="#").text-danger.m0 BROADCAST
-                  p.m0
-                    a(href="#") Read
-            // END list group item
-
-            // START list group item
-            .list-group-item
-              .media-box
-                .pull-left
-                  span.fa-stack
-                    em.fa.fa-circle.fa-stack-2x.text-success
-                    em.fa.fa-clock-o.fa-stack-1x.fa-inverse.text-white
-                .media-box-body.clearfix
-                  small.text-muted.pull-right.ml 15h
-                  .media-box-heading
-                    a(href="#").text-success.m0 NEW MEETING
-                  p.m0
-                    small On 
-                      em 10/12/2015 09:00 am
-            // END list group item
-            // START list group item
-            .list-group-item
-              .media-box
-                .pull-left
-                  span.fa-stack
-                    em.fa.fa-circle.fa-stack-2x.text-warning
-                    em.fa.fa-tasks.fa-stack-1x.fa-inverse.text-white
-                .media-box-body.clearfix
-                  small.text-muted.pull-right.ml 1w
-                  .media-box-heading
-                    a(href="#").text-warning.m0 TASKS COMPLETION
-                  progressbar.progress-xs.m0(value='22', type='warning')
-
+                    a(href="#") {{tag.description}}
             // END list group item
           // END list group
           // START panel footer
-          .panel-footer.clearfix
-            a(href='#').pull-left
-              small Load more
+          //.panel-footer.clearfix
+          //  a(href='#').pull-left
+          //    small Load more
           // END panel-footer
         // END messages and activity
                 
@@ -220,64 +160,16 @@ h3
           // START list group
           scrollable.list-group(height="180")
             // START list group item
-            a.list-group-item(href='#')
+            a.list-group-item(href='#' ng-repeat='user in dash.recommended')
               .media-box
                 .pull-left
-                  img.media-box-object.img-circle.thumb32(src="app/img/user/02.jpg", alt="Image")
+                  img.media-box-object.img-circle.thumb32(src="{{user.photo}}", alt="Image")
                 .media-box-body.clearfix
-                  small.pull-right 2h
+                  //small.pull-right 2h
                   strong.media-box-heading.text-primary 
                     span.circle.circle-success.circle-lg.text-left
-                    | 蛤蛤
-                  p.mb-sm: 习习蛤蛤胡搞毛搞是没有江来的
-            // END list group item
-            // START list group item
-            a.list-group-item(href='#')
-              .media-box
-                .pull-left
-                  img.media-box-object.img-circle.thumb32(src="app/img/user/03.jpg", alt="Image")
-                .media-box-body.clearfix
-                  small.pull-right 3h
-                  strong.media-box-heading.text-primary 
-                    span.circle.circle-success.circle-lg.text-left
-                    | 习近平
-                  p.mb-sm: 今天你吃庆丰包子了吗？
-            // END list group item
-            // START list group item
-            a.list-group-item(href='#')
-              .media-box
-                .pull-left
-                  img.media-box-object.img-circle.thumb32(src="app/img/user/09.jpg", alt="Image")
-                .media-box-body.clearfix
-                  small.pull-right 4h
-                  strong.media-box-heading.text-primary 
-                    span.circle.circle-danger.circle-lg.text-left
-                    | 吾尔开希
-                  p.mb-sm: 为了自由
-            // END list group item
-            // START list group item
-            a.list-group-item(href='#')
-              .media-box
-                .pull-left
-                  img.media-box-object.img-circle.thumb32(src="app/img/user/12.jpg", alt="Image")
-                .media-box-body.clearfix
-                  small.pull-right 1d
-                  strong.media-box-heading.text-primary 
-                    span.circle.circle-danger.circle-lg.text-left
-                    | 柴林
-                  p.mb-sm: 为了皿煮
-            // END list group item
-            // START list group item
-            a.list-group-item(href='#')
-              .media-box
-                .pull-left
-                  img.media-box-object.img-circle.thumb32(src="app/img/user/10.jpg", alt="Image")
-                .media-box-body.clearfix
-                  small.pull-right 2d
-                  strong.media-box-heading.text-primary 
-                    span.circle.circle-danger.circle-lg.text-left
-                    | 蛤丝
-                  p.mb-sm: 为了蛤蛤
+                    | {{user.username}}
+                  p.mb-sm: {{user.description}}
             // END list group item
           // END list group
           // START panel footer
@@ -314,84 +206,24 @@ h3
       // START list group
       .list-group
         // START list group item
-        .list-group-item
+        .list-group-item(ng-repeat='theme in dash.hotThemes')
           .media-box
             .pull-left
               span.fa-stack
                 em.fa.fa-circle.fa-stack-2x.text-purple
                 em.fa.fa-cloud-upload.fa-stack-1x.fa-inverse.text-white
             .media-box-body.clearfix
-              small.text-muted.pull-right.ml 15m
+              small.text-muted.pull-right.ml {{theme.createdAt}}
               .media-box-heading
-                a(href="#").text-purple.m0 NEW FILE
+                a(href="#").text-purple.m0 {{theme.content}}
               p.m0: small
-                a(href="#") Bootstrap.xls
-        // END list group item
-
-        // START list group item
-        .list-group-item
-          .media-box
-            .pull-left
-              span.fa-stack
-                em.fa.fa-circle.fa-stack-2x.text-info
-                em.fa.fa-file-text-o.fa-stack-1x.fa-inverse.text-white
-            .media-box-body.clearfix
-              small.text-muted.pull-right.ml 2h
-              .media-box-heading
-                a(href="#").text-info.m0 NEW DOCUMENT
-              p.m0: small
-                a(href="#") Bootstrap.doc
-        // END list group item
-
-        // START list group item
-        .list-group-item
-          .media-box
-            .pull-left
-              span.fa-stack
-                em.fa.fa-circle.fa-stack-2x.text-danger
-                em.fa.fa-exclamation.fa-stack-1x.fa-inverse.text-white
-            .media-box-body.clearfix
-              small.text-muted.pull-right.ml 5h
-              .media-box-heading
-                a(href="#").text-danger.m0 BROADCAST
-              p.m0
-                a(href="#") Read
-        // END list group item
-
-        // START list group item
-        .list-group-item
-          .media-box
-            .pull-left
-              span.fa-stack
-                em.fa.fa-circle.fa-stack-2x.text-success
-                em.fa.fa-clock-o.fa-stack-1x.fa-inverse.text-white
-            .media-box-body.clearfix
-              small.text-muted.pull-right.ml 15h
-              .media-box-heading
-                a(href="#").text-success.m0 NEW MEETING
-              p.m0
-                small On 
-                  em 10/12/2015 09:00 am
-        // END list group item
-        // START list group item
-        .list-group-item
-          .media-box
-            .pull-left
-              span.fa-stack
-                em.fa.fa-circle.fa-stack-2x.text-warning
-                em.fa.fa-tasks.fa-stack-1x.fa-inverse.text-white
-            .media-box-body.clearfix
-              small.text-muted.pull-right.ml 1w
-              .media-box-heading
-                a(href="#").text-warning.m0 TASKS COMPLETION
-              progressbar.progress-xs.m0(value='22', type='warning')
-
+                a(href="#") {{theme.user_id.username}}
         // END list group item
       // END list group
       // START panel footer
-      .panel-footer.clearfix
-        a(href='#').pull-left
-          small Load more
+      //.panel-footer.clearfix
+      //  a(href='#').pull-left
+      //    small Load more
       // END panel-footer
     // END messages and activity
   // END dashboard sidebar
