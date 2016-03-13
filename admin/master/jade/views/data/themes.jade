@@ -1,5 +1,5 @@
 h3 投稿管理
-.container-md(style='max-width:100%' ng-controller="UsersController as users")
+.container-md(style='max-width:100%' ng-controller="ThemesController as themes")
   .card(style='box-shadow:none')
     md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%;padding:0px')
       md-tabs(md-dynamic-height='', md-border-bottom='')
@@ -7,158 +7,175 @@ h3 投稿管理
           md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;')
           // START panel
           .panel.panel-default
-            .panel-heading
-              | 投稿基本信息管理
-            // START table-responsive
-            .table-responsive
-              table#table-ext-1.table.table-bordered.table-hover
-                thead
-                  tr
-                    th UID
-                    th Picture
-                    th Username
-                    th First Name
-                    th Last Name
-                    th Email
-                    th Profile
-                    th Last Login
-                    th(check-all)
-                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
-                tbody
-                  tr
-                    td 1
-                    td
-                      .media
-                        img.img-responsive.img-circle(src="app/img/user/01.jpg", alt="Image")
-                    td @twitter
-                    td Larry
-                    td the Bird
-                    td mail@example.com
-                    td.text-center
-                      .radial-bar.radial-bar-25.radial-bar-xs(data-label="25%")
-                    td 1 week
-                    td
-                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
-                  tr
-                    td 2
-                    td
-                      .media
-                        img.img-responsive.img-circle(src="app/img/user/02.jpg", alt="Image")
-                    td @mdo
-                    td Mark
-                    td Otto
-                    td mail@example.com
-                    td.text-center
-                      .radial-bar.radial-bar-50.radial-bar-xs(data-label="50%")
-                    td 25 minutes
-                    td
-                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
-                  tr
-                    td 3
-                    td
-                      .media
-                        img.img-responsive.img-circle(src="app/img/user/03.jpg", alt="Image")
-                    td @fat
-                    td Jacob
-                    td Thornton
-                    td mail@example.com
-                    td.text-center
-                      .radial-bar.radial-bar-80.radial-bar-xs(data-label="80%")
-                    td 10 hours
-                    td
-                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
-            // END table-responsive
+            .panel-heading 投稿管理 | 
+              small 投稿基本信息管理
+            .panel-body
+              div
+                table.row-border.hover(datatable='ng')
+                  thead
+                    tr
+                      th 图像
+                      th 内容
+                      th 作者
+                      th 标签
+                      th 发布时间
+                      th 操作
+                      th(check-all)
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='themes.isSelectAll', ng-change="themes.toggleSelectAll()")
+                  tbody
+                    tr(ng-repeat="theme in themes.themesList")
+                      td
+                        .media
+                          img.img-responsive.img-circle(src="{{theme.image}}", alt="Image", style="width:100px;height:100px;border-radius:0px")
+                      td {{theme.content}}
+                      td {{theme.user_id.username}}
+                      td 
+                        span(ng-repeat='tag in theme.tag_list') {{tag.name}}
+                      td {{theme.createdAt}}
+                      td
+                        md-select(ng-model='themes.themeSingleSelectCtrl.name[theme._id]', placeholder='操作')
+                          md-option(ng-repeat='name in themes.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, theme, $index)") {{name.val}}                          
+                      td
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='themes.userIsSelected[theme._id]', ng-change="themes.selectThisUser(theme._id)")
             .panel-footer
               .row
-                .col-lg-2
-                  .input-group
-                    input.input-sm.form-control(type='text', placeholder='Search')
-                    span.input-group-btn
-                      button.btn.btn-sm.btn-default(type='button') Search
-                .col-lg-8
+                .col-lg-10
                 .col-lg-2
                   .input-group.pull-right
-                    md-select(ng-model='selectctrl.size', placeholder='操作')
-                      md-option(ng-repeat='size in selectctrl.sizes', value='{{size}}') {{size}}
+                    md-select(ng-model='themes.selectCtrl.name', placeholder='操作')
+                      md-option(ng-repeat='name in themes.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)") {{name.val}}
                     span.input-group-btn
                       button.md-primary.md-hue-1.md-button.md-default-theme 应用
+
+        // Dialog inline template for demo
+        script(type='text/ng-template', id='user_theme_detail.tmpl.html').
+          <md-dialog aria-label="{{title}}">
+          <form>
+            <md-toolbar>
+              <div class="md-toolbar-tools">
+                <h2>{{user.username}} 的资料</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="answer('not applicable')">
+                  <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+              </div>
+            </md-toolbar>
+            <md-dialog-content>
+              <div class="card-body">
+               <div class="row">
+                  <div class="col-sm-3">
+                     <div class="mda-form-group" style="text-align:center">
+                        <img src="{{user.photo}}" style="width:100px;height:100px;border-radius:50%;">
+                     </div>
+                  </div>
+                  <div class="col-sm-3">
+                     <div class="mda-form-group">
+                        <input ng-model="user.username" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
+                        <label>用户名</label>
+                     </div>
+                  </div>
+                  <div class="col-sm-3">
+                     <div class="mda-form-group">
+                        <input ng-model="user.email" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
+                        <label>邮箱</label>
+                     </div>
+                  </div>
+                  <div class="col-sm-3">
+                     <div class="mda-form-group">
+                        <input ng-model="user.sex" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
+                        <label>性别</label>
+                     </div>
+                  </div>
+                  <div class="col-sm-12">
+                     <div class="mda-form-group">
+                        <input ng-model="user.intro" tabindex="0" aria-invalid="false" class="mda-form-control" />
+                        <label>个人介绍</label>
+                     </div>
+                  </div>
+                  <div class="col-sm-12">
+                     <div class="mda-form-group">
+                        <input ng-model="user.region" tabindex="0" aria-invalid="false" class="mda-form-control" />
+                        <label>地址</label>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-sm-4">
+                     <div class="mda-form-group">
+                        <input ng-model="user.createdAt" tabindex="0" aria-invalid="false" class="mda-form-control" />
+                        <label>注册时间</label>
+                     </div>
+                  </div>
+                  <div class="col-sm-4">
+                     <div class="mda-form-group">
+                        <input ng-model="user.isBlocked" tabindex="0" aria-invalid="false" class="mda-form-control" />
+                        <label>锁定</label>
+                     </div>
+                  </div>
+                  <div class="col-sm-4">
+                     <div class="mda-form-group">
+                        <input ng-model="user.isDeleted" tabindex="0" aria-invalid="false" class="mda-form-control" />
+                        <label>删除</label>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            </md-dialog-content>
+            <div class="md-actions" layout="row">
+              <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" hide show-md>
+                More on Wikipedia
+              </md-button>
+              <span flex></span>
+              <md-button ng-click="answer('not useful')" class="md-primary">
+                关闭
+              </md-button>
+              <md-button ng-click="answer('useful')" class="md-primary">
+                保存
+              </md-button>
+            </div>
+          </form>
+          </md-dialog>
 
         md-tab(label='被删投稿')
           md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;')
           // START panel
           .panel.panel-default
-            .panel-heading
-              | 被删除主题管理
-            // START table-responsive
-            .table-responsive
-              table#table-ext-1.table.table-bordered.table-hover
-                thead
-                  tr
-                    th UID
-                    th Picture
-                    th Username
-                    th First Name
-                    th Last Name
-                    th Email
-                    th Profile
-                    th Last Login
-                    th(check-all)
-                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
-                tbody
-                  tr
-                    td 1
-                    td
-                      .media
-                        img.img-responsive.img-circle(src="app/img/user/01.jpg", alt="Image")
-                    td @twitter
-                    td Larry
-                    td the Bird
-                    td mail@example.com
-                    td.text-center
-                      .radial-bar.radial-bar-25.radial-bar-xs(data-label="25%")
-                    td 1 week
-                    td
-                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
-                  tr
-                    td 2
-                    td
-                      .media
-                        img.img-responsive.img-circle(src="app/img/user/02.jpg", alt="Image")
-                    td @mdo
-                    td Mark
-                    td Otto
-                    td mail@example.com
-                    td.text-center
-                      .radial-bar.radial-bar-50.radial-bar-xs(data-label="50%")
-                    td 25 minutes
-                    td
-                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
-                  tr
-                    td 3
-                    td
-                      .media
-                        img.img-responsive.img-circle(src="app/img/user/03.jpg", alt="Image")
-                    td @fat
-                    td Jacob
-                    td Thornton
-                    td mail@example.com
-                    td.text-center
-                      .radial-bar.radial-bar-80.radial-bar-xs(data-label="80%")
-                    td 10 hours
-                    td
-                      md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='data.cb5')
-            // END table-responsive
+            .panel-heading 投稿管理 | 
+              small 被删除投稿信息管理
+            .panel-body
+              div
+                table.row-border.hover(datatable='ng')
+                  thead
+                    tr
+                      th 图像
+                      th 内容
+                      th 作者
+                      th 标签
+                      th 发布时间
+                      th 操作
+                      th(check-all)
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='themes.isSelectAll', ng-change="themes.toggleSelectAll()")
+                  tbody
+                    tr(ng-repeat="theme in themes.themesDeletedList")
+                      td
+                        .media
+                          img.img-responsive.img-circle(src="{{theme.image}}", alt="Image", style="width:100px;height:100px;border-radius:0px")
+                      td {{theme.content}}
+                      td {{theme.user_id.username}}
+                      td 
+                        span(ng-repeat='tag in theme.tag_list') {{tag.name}}
+                      td {{theme.createdAt}}
+                      td
+                        md-select(ng-model='themes.selectDeletedCtrl.name[theme._id]', placeholder='操作')
+                          md-option(ng-repeat='name in themes.selectDeletedCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, theme, $index)") {{name.val}}                          
+                      td
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='themes.userIsSelected[theme._id]', ng-change="themes.selectThisUser(theme._id)")
             .panel-footer
               .row
-                .col-lg-2
-                  .input-group
-                    input.input-sm.form-control(type='text', placeholder='Search')
-                    span.input-group-btn
-                      button.btn.btn-sm.btn-default(type='button') Search
-                .col-lg-8
+                .col-lg-10
                 .col-lg-2
                   .input-group.pull-right
-                    md-select(ng-model='selectctrl.size', placeholder='操作')
-                      md-option(ng-repeat='size in selectctrl.sizes', value='{{size}}') {{size}}
+                    md-select(ng-model='themes.selectCtrl.name', placeholder='操作')
+                      md-option(ng-repeat='name in themes.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)") {{name.val}}
                     span.input-group-btn
                       button.md-primary.md-hue-1.md-button.md-default-theme 应用

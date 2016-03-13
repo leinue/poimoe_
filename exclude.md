@@ -1,2 +1,2 @@
 .git
-admin/master
+/var/www/poimoe/admin/master

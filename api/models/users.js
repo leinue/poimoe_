@@ -491,8 +491,7 @@ module.exports = {
       var skipFrom = (page * count) - count;
 
       return this.find({
-       isDeleted: false,
-       isBlocked: false
+       isDeleted: false
       }).populate('user_id').populate('tag_list').populate({
         path: 'reposter',
         match: {

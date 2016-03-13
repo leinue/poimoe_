@@ -43,7 +43,7 @@
                                           <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
                                        </md-optgroup>
                                        <md-optgroup label="安全">
-                                          <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                          <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user, $index)">{{name.val}}</md-option>
                                        </md-optgroup>
                                     </md-select>
                                  </td>
@@ -88,19 +88,24 @@
                  <md-dialog-content>
                    <div class="card-body">
                     <div class="row">
-                       <div class="col-sm-4">
+                       <div class="col-sm-3">
+                          <div class="mda-form-group" style="text-align:center">
+                             <img src="{{user.photo}}" style="width:100px;height:100px;border-radius:50%;">
+                          </div>
+                       </div>
+                       <div class="col-sm-3">
                           <div class="mda-form-group">
                              <input ng-model="user.username" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
                              <label>用户名</label>
                           </div>
                        </div>
-                       <div class="col-sm-4">
+                       <div class="col-sm-3">
                           <div class="mda-form-group">
                              <input ng-model="user.email" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
                              <label>邮箱</label>
                           </div>
                        </div>
-                       <div class="col-sm-4">
+                       <div class="col-sm-3">
                           <div class="mda-form-group">
                              <input ng-model="user.sex" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
                              <label>性别</label>
@@ -315,12 +320,8 @@
                               <td>{{theme.createdAt}}</td>
                               <td>
                                  <md-select ng-model="users.userSingleSelectCtrl.name[user._id]" placeholder="操作">
-                                    <md-optgroup label="详情">
-                                       <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
-                                    </md-optgroup>
-                                    <md-optgroup label="安全">
-                                       <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
-                                    </md-optgroup>
+                                   <md-option value="查看" ng-click="viewThisTheme(theme._id)">查看</md-option>
+                                   <md-option value="删除" ng-click="deleteThisTheme(theme._id, $index)">删除</md-option>                              
                                  </md-select>
                               </td>
                            </tr>

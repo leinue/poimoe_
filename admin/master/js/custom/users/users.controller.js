@@ -193,7 +193,7 @@
                     }
                 }, {
                     val: '删除',
-                    onClicked: function(ev, ur) {
+                    onClicked: function(ev, ur, index) {
                         var confirm = $mdDialog.confirm()
                             .title('删除确认')
                             .content('你确定要删除此用户？')
@@ -218,6 +218,10 @@
                                       .position('top right');
                                 $mdToast.show(toast).then(function() {
                                 });
+
+                                if(res.status === 200) {
+                                    vm.usersList.splice(index, 1);
+                                }
                             })
                             .error(function(res, status, headers, config) {
                                 var toast = $mdToast.simple()
@@ -294,7 +298,7 @@
 
                             $scope.user = ur;
 
-                            UserService.getRelations(ur._id, 1, 10).success(function(res, status, headers, config) {
+                            ThemeService.remove(ur._id).success(function(res, status, headers, config) {
 
                                 if(res.code != 200) {
                                     var toast = $mdToast.simple()
@@ -356,11 +360,41 @@
                             $scope.alert = 'You cancelled the dialog.';
                         });
 
-                        DialogController.$inject = ['$scope', '$mdDialog'];
-                        function DialogController($scope, $mdDialog) {
+                        DialogController.$inject = ['$scope', '$mdDialog', 'ThemeService'];
+                        function DialogController($scope, $mdDialog, ThemeService) {
 
                             $scope.user = ur;
                             $scope.themesList = [];
+
+                            $scope.viewThisTheme = function(id) {
+                                window.open("http://poi.poimoe.com/#!/view/" + id);
+                            }
+
+                            $scope.deleteThisTheme = function(id, index) {
+                                ThemeService.remove(id)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                    if(res.status === 200) {
+                                        $scope.themesList.splice(index, 1);
+                                    }
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                });
+                            }
 
                             UserService.getThemes(ur._id, 1, 10).success(function(res, status, headers, config) {
 
@@ -374,8 +408,6 @@
                                     });
                                 }
 
-                                console.log($scope.themesList);
-
                                 $scope.themesList = res.message;
 
                             }).error(function(res, status, headers, config) {
@@ -387,6 +419,7 @@
                                 $mdToast.show(toast).then(function() {
                                 });
                             });
+
                             $scope.hide = function() {
                                 $mdDialog.hide();
                             };

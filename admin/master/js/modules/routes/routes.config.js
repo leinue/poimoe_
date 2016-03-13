@@ -97,12 +97,14 @@
           .state('app.themesmgr', {
             url: '/themes',
             title: '投稿管理',
-            templateUrl: helper.basepath( 'data/themes.html' )
+            templateUrl: helper.basepath( 'data/themes.html' ),
+            resolve: helper.resolveFor('datatables')
           })
           .state('app.tagsmgr', {
             url: '/tags',
             title: '标签管理',
-            templateUrl: helper.basepath( 'data/tags.html' )
+            templateUrl: helper.basepath( 'data/tags.html' ),
+            resolve: helper.resolveFor('datatables')
           })
 
           // CUSTOM RESOLVES
