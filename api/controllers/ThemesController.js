@@ -182,6 +182,28 @@ var index = {
 
 	},
 
+	unRemove: function(req, res, next) {
+
+		var thisThemeId = req.params.id;
+
+		if(thisThemeId == undefined || thisThemeId == '') {
+			res.send(util.retMsg(401, "缺少参数：主题id"));
+		}
+
+		var Themes = ctrlInitial.models.Themes();
+
+		Themes.unRemove(thisThemeId, function(err) {
+
+			if(err) {
+				res.send(util.retMsg(401, err.toString()));
+			}
+
+	      	res.send(util.retMsg(200, "撤销删除主题成功"));
+
+		});
+
+	},
+
 	update: function(req, res, next) {
 
 		var _title = req.params.title;

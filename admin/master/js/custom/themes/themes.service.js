@@ -24,8 +24,8 @@
           return $http.get($rootScope.app.baseUrl + 'themes/remove/' + id);
         },
 
-        unRemove: function(postData) {
-          return $http.post($rootScope.app.baseUrl + 'themes/unremove', postData, {});
+        unRemove: function(id) {
+          return $http.get($rootScope.app.baseUrl + 'themes/unremove/' + id, {});
         }
 
       }

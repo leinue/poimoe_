@@ -90,6 +90,7 @@ module.exports = {
     server.post('/themes/add', ctrl.themesCtrl.add);
     server.post('/themes/update', ctrl.themesCtrl.update);
     server.get('/themes/remove/:id', ctrl.themesCtrl.remove);
+    server.get('/themes/unremove/:id', ctrl.themesCtrl.unRemove);
     server.get('/themes/get/:uid/:page/:count', ctrl.themesCtrl.getByUid);
     server.get('/themes/hot', ctrl.themesCtrl.getHotThemes);
     server.get('/themes/select/:tid', ctrl.themesCtrl.selectOneTheme);

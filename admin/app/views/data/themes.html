@@ -27,7 +27,7 @@
                               </tr>
                            </thead>
                            <tbody>
-                              <tr ng-repeat="theme in themes.themesList">
+                              <tr ng-repeat="(key, theme) in themes.themesList">
                                  <td>
                                     <div class="media">
                                        <img src="{{theme.image}}" alt="Image" style="width:100px;height:100px;border-radius:0px" class="img-responsive img-circle" />
@@ -41,7 +41,7 @@
                                  <td>{{theme.createdAt}}</td>
                                  <td>
                                     <md-select ng-model="themes.themeSingleSelectCtrl.name[theme._id]" placeholder="操作">
-                                       <md-option ng-repeat="name in themes.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, theme, $index)">{{name.val}}</md-option>
+                                       <md-option ng-repeat="name in themes.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, theme, key)">{{name.val}}</md-option>
                                     </md-select>
                                  </td>
                                  <td>

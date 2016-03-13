@@ -52,9 +52,6 @@
                               <md-select ng-model="tags.selectCtrl.name" placeholder="操作">
                                  <md-option ng-repeat="name in tags.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)" ng-hide="name.val == &quot;编辑&quot;">{{name.val}}</md-option>
                               </md-select>
-                              <span class="input-group-btn">
-                                 <button class="md-primary md-hue-1 md-button md-default-tag">应用</button>
-                              </span>
                            </div>
                         </div>
                      </div>
@@ -145,7 +142,7 @@
                                  <th>创建时间</th>
                                  <th>操作</th>
                                  <th check-all="check-all">
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="tags.isSelectAll" ng-change="tags.toggleSelectAll()" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="tags.isDeletedSelectAll" ng-change="tags.toggleSelectAllDeleted()" class="md-primary"></md-checkbox>
                                  </th>
                               </tr>
                            </thead>
@@ -161,7 +158,7 @@
                                     </md-select>
                                  </td>
                                  <td>
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="tags.tagIsSelected[tag._id]" ng-change="tags.selectThistag(tag._id)" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="tags.tagsDeletedSelected[tag._id]" ng-change="tags.selectThisDeletedTag(tag._id)" class="md-primary"></md-checkbox>
                                  </td>
                               </tr>
                            </tbody>
@@ -176,9 +173,6 @@
                               <md-select ng-model="tags.selectDeletedCtrl.name" placeholder="操作">
                                  <md-option ng-repeat="name in tags.selectDeletedCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)">{{name.val}}</md-option>
                               </md-select>
-                              <span class="input-group-btn">
-                                 <button class="md-primary md-hue-1 md-button md-default-tag">应用</button>
-                              </span>
                            </div>
                         </div>
                      </div>

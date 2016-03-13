@@ -96,9 +96,7 @@
                             targetEvent: ev,
                         })
                         .then(function(answer) {
-                            $scope.alert = 'You said the information was \'' + answer + '\'.';
                         }, function() {
-                            $scope.alert = 'You cancelled the dialog.';
                         });
 
                         DialogController.$inject = ['$scope', '$mdDialog'];
@@ -131,14 +129,9 @@
                             .cancel('取消')
                             .targetEvent(ev);
 
-                        if(ur != undefined) {
-                            vm.uids.uids = [ur._id];
-                        }
-
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            console.log(vm.uids);
-                            ThemeService.remove(vm.uids)
+                            ThemeService.remove(tm._id)
                             .success(function(res, status, headers, config) {
                                 var toast = $mdToast.simple()
                                       .content(res.message)
@@ -149,7 +142,8 @@
                                 });
 
                                 if(res.code === 200) {
-                                    vm.usersList.splice(index, 1);
+                                    vm.themesList.splice(index, 1);
+                                    vm.themesDeletedList.push(tm);
                                 }
                             })
                             .error(function(res, status, headers, config) {
@@ -161,8 +155,6 @@
                                 $mdToast.show(toast).then(function() {
                                 });
                             });
-
-                            vm.uids.uids = [];
 
                         }, function() {
                             //取消
@@ -181,7 +173,7 @@
                 }, {
                     val: '恢复',
                     onClicked: function(ev, tm, index) {
-                        ThemeService.unRemove(vm.uids)
+                        ThemeService.unRemove(tm._id)
                         .success(function(res, status, headers, config) {
                             var toast = $mdToast.simple()
                                   .content(res.message)
@@ -192,7 +184,8 @@
                             });
 
                             if(res.code === 200) {
-                                vm.usersList.splice(index, 1);
+                                vm.themesDeletedList.splice(index, 1);
+                                vm.themesList.push(tm);
                             }
                         })
                         .error(function(res, status, headers, config) {

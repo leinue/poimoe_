@@ -39,8 +39,6 @@ h3 标签管理
                   .input-group.pull-right
                     md-select(ng-model='tags.selectCtrl.name', placeholder='操作')
                       md-option(ng-repeat='name in tags.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)", ng-hide='name.val == "编辑"') {{name.val}}
-                    span.input-group-btn
-                      button.md-primary.md-hue-1.md-button.md-default-tag 应用
 
         // Dialog inline template for demo
         script(type='text/ng-template', id='tags_detail.tmpl.html').
@@ -125,7 +123,7 @@ h3 标签管理
                       th 创建时间
                       th 操作
                       th(check-all)
-                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.isSelectAll', ng-change="tags.toggleSelectAll()")
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.isDeletedSelectAll', ng-change="tags.toggleSelectAllDeleted()")
                   tbody
                     tr(ng-repeat="(key, tag) in tags.tagsDeletedList")
                       td {{tag.name}}
@@ -136,7 +134,7 @@ h3 标签管理
                         md-select(ng-model='tags.selectDeletedCtrl.name[tag._id]', placeholder='操作')
                           md-option(ng-repeat='name in tags.selectDeletedCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, tag, key)") {{name.val}}                          
                       td
-                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.tagIsSelected[tag._id]', ng-change="tags.selectThistag(tag._id)")
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.tagsDeletedSelected[tag._id]', ng-change="tags.selectThisDeletedTag(tag._id)")
             .panel-footer
               .row
                 .col-lg-10
@@ -144,5 +142,3 @@ h3 标签管理
                   .input-group.pull-right
                     md-select(ng-model='tags.selectDeletedCtrl.name', placeholder='操作')
                       md-option(ng-repeat='name in tags.selectDeletedCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)") {{name.val}}
-                    span.input-group-btn
-                      button.md-primary.md-hue-1.md-button.md-default-tag 应用

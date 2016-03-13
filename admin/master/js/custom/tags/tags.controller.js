@@ -21,9 +21,13 @@
         function activateTable() {
 
             vm.isSelectAll = false;
+            vm.isDeletedSelectAll = false;
 
             vm.tagsSelectedList =[]; 
             vm.tagsSelected = {};
+
+            vm.tagsDeletedSelectedList = [];
+            vm.tagsDeletedSelected = {};
 
             vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
             vm.dtColumnDefs = [
@@ -33,51 +37,58 @@
                 DTColumnDefBuilder.newColumnDef(3).notSortable()
             ];
 
-            TagService.getAll(1, 100)
-            .success(function(res, status, headers, config) {
-                if(res.code != 200) {
+            vm.getAll = function() {
+                TagService.getAll(1, 100)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.tagsList = res.message;
+                })
+                .error(function(res, status, headers, config) {
                     var toast = $mdToast.simple()
-                          .content(res.message)
+                          .content('出错了，错误代码：' + status)
                           .action('我知道了')
                           .highlightAction(false)
                           .position('top right');
                     $mdToast.show(toast).then(function() {
                     });
-                }
-                vm.tagsList = res.message;
-            })
-            .error(function(res, status, headers, config) {
-                var toast = $mdToast.simple()
-                      .content('出错了，错误代码：' + status)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
                 });
-            });
+            }
 
-            TagService.getDeleted(1, 10)
-            .success(function(res, status, headers, config) {
-                if(res.code != 200) {
+            vm.getAllDeleted = function() {
+                TagService.getDeleted(1, 10)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.tagsDeletedList = res.message;
+                })
+                .error(function(res, status, headers, config) {
                     var toast = $mdToast.simple()
-                          .content(res.message)
+                          .content('出错了，错误代码：' + status)
                           .action('我知道了')
                           .highlightAction(false)
                           .position('top right');
                     $mdToast.show(toast).then(function() {
                     });
-                }
-                vm.tagsDeletedList = res.message;
-            })
-            .error(function(res, status, headers, config) {
-                var toast = $mdToast.simple()
-                      .content('出错了，错误代码：' + status)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
                 });
-            });
+            }
+
+            vm.getAll();
+            vm.getAllDeleted();
 
             vm.toggleSelectAll = function() {
 
@@ -108,13 +119,53 @@
                     vm.tagsSelected[id] = false;
                 }
 
-                if(!vm.tagsSelected[id]) {
+                if(vm.tagsSelected[id]) {
                     vm.tagsSelected[id] = true;
                     vm.tagsSelectedList.push(id);
                 }else {
                     vm.tagsSelected[id] = false;
                     vm.tagsSelectedList.splice(vm.tagsSelectedList.indexOf(id), 1);
                 }
+            }
+
+            vm.toggleSelectAllDeleted = function() {
+
+                if(!vm.isDeletedSelectAll) {
+                    //取消全选
+                    for (var i = 0; i < vm.tagsDeletedList.length; i++) {
+                        var tag = vm.tagsDeletedList[i];
+                        vm.tagsDeletedSelected[tag._id] = false;
+                        vm.isDeletedSelectAll = false;
+                    };
+                    vm.tagsDeletedSelectedList = [];
+                }else {
+                    //选择全部
+                    vm.tagsDeletedSelectedList = [];
+                    for (var i = 0; i < vm.tagsDeletedList.length; i++) {
+                        var tag = vm.tagsDeletedList[i];
+                        vm.tagsDeletedSelected[tag._id] = true;
+                        vm.tagsDeletedSelectedList.push(tag._id);
+                        vm.isDeletedSelectAll = true;
+                    };
+                }
+
+            };
+
+            vm.selectThisDeletedTag = function(id) {
+
+                if(vm.tagsDeletedSelected[id] == undefined) {
+                    vm.tagsDeletedSelected[id] = false;
+                }
+
+                if(vm.tagsDeletedSelected[id]) {
+                    vm.tagsDeletedSelected[id] = true;
+                    vm.tagsDeletedSelectedList.push(id);
+                }else {
+                    vm.tagsDeletedSelected[id] = false;
+                    vm.tagsDeletedSelectedList.splice(vm.tagsDeletedSelectedList.indexOf(id), 1);
+                }
+
+                console.log(vm.tagsDeletedSelectedList);
             }
 
         }
@@ -203,6 +254,7 @@
 
                         $mdDialog.show(confirm).then(function() {
                             //确定
+                            var tagsSelectedLength = vm.tagsSelectedList.length;
                             vm.tagsSelectedList.forEach(function(id, key) {
 
                                 TagService.remove(id)
@@ -215,11 +267,9 @@
                                     $mdToast.show(toast).then(function() {
                                     });
 
-                                    if(res.code === 200) {
-                                        vm.tagsList.splice(index, 1);
-                                        vm.tagsDeletedList.push(tm);
-                                        vm.tagsSelectedList.splice(key, 1);
-                                        vm.tagsSelected[id] = false;
+                                    if(key == tagsSelectedLength - 1) {
+                                        vm.getAll();
+                                        vm.getAllDeleted();
                                     }
                                 })
                                 .error(function(res, status, headers, config) {
@@ -246,30 +296,41 @@
                 names: [{
                     val: '恢复',
                     onClicked: function(ev, tm, index) {
-                        TagService.unRemove(tm._id)
-                        .success(function(res, status, headers, config) {
-                            var toast = $mdToast.simple()
-                                  .content(res.message)
-                                  .action('我知道了')
-                                  .highlightAction(false)
-                                  .position('top right');
-                            $mdToast.show(toast).then(function() {
-                            });
 
-                            if(res.code === 200) {
-                                vm.tagsDeletedList.splice(index, 1);
-                                vm.tagsList.push(tm);
-                            }
-                        })
-                        .error(function(res, status, headers, config) {
-                            var toast = $mdToast.simple()
-                                  .content('出错了，错误代码：' + status)
-                                  .action('我知道了')
-                                  .highlightAction(false)
-                                  .position('top right');
-                            $mdToast.show(toast).then(function() {
+                        if(index != undefined) {
+                            vm.tagsDeletedSelected[tm._id] = true;
+                            vm.tagsDeletedSelectedList.push(tm._id);
+                        }
+
+                        var tagsDeletedSelectedLength = vm.tagsDeletedSelectedList.length;
+
+                        vm.tagsDeletedSelectedList.forEach(function(id, key) {
+                            TagService.unRemove(id)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+
+                                if(key == tagsDeletedSelectedLength - 1) {
+                                    vm.getAllDeleted();
+                                    vm.getAll();
+                                }
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
                             });
                         });
+
                     }
                 }]
             };
