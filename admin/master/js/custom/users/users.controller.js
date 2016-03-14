@@ -141,6 +141,17 @@
                         $mdDialog.show(confirm).then(function() {
                             //确定
                             var normalUsersLength = vm.normalUsers.selectedList.length;
+
+                            if(normalUsersLength === 0) {
+                                var toast = $mdToast.simple()
+                                      .content('您尚未选择任何用户')
+                                      .action('确定')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast)
+                                return false;
+                            }
+
                             vm.normalUsers.selectedList.forEach(function(id, key) {
                                 UserService.blockUserByUid(id)
                                 .success(function(res, status, headers, config) {
@@ -193,6 +204,17 @@
                         $mdDialog.show(confirm).then(function() {
                             //确定
                             var normalUsersLength = vm.normalUsers.selectedList.length;
+
+                            if(normalUsersLength === 0) {
+                                var toast = $mdToast.simple()
+                                      .content('您尚未选择任何用户')
+                                      .action('确定')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast)
+                                return false;
+                            }
+                            
                             vm.normalUsers.selectedList.forEach(function(id, key) {
                                 UserService.removeUserByUid(id)
                                 .success(function(res, status, headers, config) {

@@ -1241,7 +1241,7 @@ var index = {
 
   },
 
-  blockUserByUid: function() {
+  blockUserByUid: function(req, res, next) {
 
     var uids = req.params.uid;
 
@@ -1258,7 +1258,7 @@ var index = {
     });
   },
 
-  unblockUserByUid: function() {
+  unblockUserByUid: function(req, res, next) {
 
     var uids = req.params.uid;
 
