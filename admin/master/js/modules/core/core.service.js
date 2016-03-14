@@ -31,8 +31,6 @@
 
           vm.toggleSelectAll = function(list, MO) {
 
-              console.log(MO, MO.isSelectAll);
-
               if(!MO.isSelectAll) {
                   //取消全选
                   for (var i = 0; i < list.length; i++) {
@@ -69,8 +67,15 @@
           };
 
           vm.selecteThisById = function(id, MO) {
-            MO.isElementSelected[id] = true;
-            MO.selectedList.push(id);
+            if(MO.selectedList.indexOf(id) == -1) {
+              MO.isElementSelected[id] = true;
+              MO.selectedList.push(id);
+            }
+          }
+
+          vm.unSelectThisById = function(id, MO) {
+            MO.selectedList.splice(MO.selectedList.indexOf(id), 1);
+            MO.isElementSelected[id] = false;
           }
 
         }

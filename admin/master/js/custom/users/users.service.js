@@ -46,6 +46,22 @@
 
         getThemes: function(uid, page, count) {
           return $http.get($rootScope.app.baseUrl + 'themes/get/' + uid + '/' + page + '/' + count);          
+        },
+
+        removeUserByUid: function(uid) {
+          return $http.get($rootScope.app.baseUrl + 'user/delete/' + uid);          
+        },
+
+        unRemoveUserByUid: function(uid) {
+          return $http.get($rootScope.app.baseUrl + 'user/unRemove/' + uid);          
+        },
+
+        blockUserByUid: function(uid) {
+          return $http.get($rootScope.app.baseUrl + 'user/block/' + uid);          
+        },
+
+        unBlockUserByUid: function(uid) {
+          return $http.get($rootScope.app.baseUrl + 'user/unblock/' + uid);          
         }
 
       }

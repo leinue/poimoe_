@@ -22,12 +22,12 @@
                                  <th>注册时间</th>
                                  <th>操作</th>
                                  <th check-all="check-all">
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.isSelectAll" ng-change="users.toggleSelectAll()" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.normalUsers.isSelectAll" ng-change="users.toggleSelectAll(users.usersList, users.normalUsers)" class="md-primary"></md-checkbox>
                                  </th>
                               </tr>
                            </thead>
                            <tbody>
-                              <tr ng-repeat="user in users.usersList">
+                              <tr ng-repeat="(key, user) in users.usersList">
                                  <td>
                                     <div class="media">
                                        <img src="{{user.photo}}" alt="Image" style="width:36px;height:36px" class="img-responsive img-circle" />
@@ -43,12 +43,12 @@
                                           <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
                                        </md-optgroup>
                                        <md-optgroup label="安全">
-                                          <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user, $index)">{{name.val}}</md-option>
+                                          <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user, key)">{{name.val}}</md-option>
                                        </md-optgroup>
                                     </md-select>
                                  </td>
                                  <td>
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.userIsSelected[user._id]" ng-change="users.selectThisUser(user._id)" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.normalUsers.isElementSelected[user._id]" ng-change="users.selectThis(user._id, users.normalUsers)" class="md-primary"></md-checkbox>
                                  </td>
                               </tr>
                            </tbody>
@@ -63,9 +63,6 @@
                               <md-select ng-model="users.selectCtrl.name" placeholder="操作">
                                  <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)">{{name.val}}</md-option>
                               </md-select>
-                              <span class="input-group-btn">
-                                 <button class="md-primary md-hue-1 md-button md-default-theme">应用</button>
-                              </span>
                            </div>
                         </div>
                      </div>
@@ -364,7 +361,7 @@
                                  <th>注册时间</th>
                                  <th>操作</th>
                                  <th check-all="check-all">
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.removedUser.isSelectAll" ng-change="users.toggleSelectAll(users.usersDeletedList, users.removedUser)" class="md-primary"></md-checkbox>
                                  </th>
                               </tr>
                            </thead>
@@ -380,12 +377,17 @@
                                  <td>{{user.sex}}</td>
                                  <td>{{user.createdAt}}</td>
                                  <td>
-                                    <md-select ng-model="users.userDeletedSelectCtrl.name" placeholder="操作">
-                                       <md-option ng-repeat="name in users.userDeletedSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                    <md-select ng-model="users.userSingleSelectCtrl.name[user._id]" placeholder="操作">
+                                       <md-optgroup label="详情">
+                                          <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                       </md-optgroup>
+                                       <md-optgroup label="安全">
+                                          <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user, $index)">{{name.val}}</md-option>
+                                       </md-optgroup>
                                     </md-select>
                                  </td>
                                  <td>
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.removedUser.isElementSelected[user._id]" ng-change="users.selectThis(user._id, users.removedUser)" class="md-primary"></md-checkbox>
                                  </td>
                               </tr>
                            </tbody>
@@ -428,7 +430,7 @@
                                  <th>注册时间</th>
                                  <th>操作</th>
                                  <th check-all="check-all">
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.blockedUser.isSelectAll" ng-change="users.toggleSelectAll(users.usersBlockedList, users.blockedUser)" class="md-primary"></md-checkbox>
                                  </th>
                               </tr>
                            </thead>
@@ -444,17 +446,17 @@
                                  <td>{{user.sex}}</td>
                                  <td>{{user.createdAt}}</td>
                                  <td>
-                                    <md-select ng-model="users.userSingleSelectCtrl.name" placeholder="操作">
+                                    <md-select ng-model="users.userSingleSelectCtrl.name[user._id]" placeholder="操作">
                                        <md-optgroup label="详情">
                                           <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
                                        </md-optgroup>
                                        <md-optgroup label="安全">
-                                          <md-option ng-repeat="name in users.userBlockedSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
+                                          <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user, $index)">{{name.val}}</md-option>
                                        </md-optgroup>
                                     </md-select>
                                  </td>
                                  <td>
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.blockedUser.isElementSelected[user._id]" ng-change="users.selectThis(user._id, users.blockedUser)" class="md-primary"></md-checkbox>
                                  </td>
                               </tr>
                            </tbody>

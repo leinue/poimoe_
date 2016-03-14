@@ -7,14 +7,16 @@
         .module('app.users')
         .controller('UsersController', UsersController);
 
-    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http', 'UserService', '$mdToast'];
-    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http, UserService, $mdToast) {
+    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http', 'UserService', '$mdToast', 'MOptions'];
+    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http, UserService, $mdToast, MOptions) {
         // for controllerAs syntax
         var vm = this;
 
         activate();
 
         activateDataTable();
+
+        MOptions.init(vm, ['normalUsers', 'removedUser', 'blockedUser']);
 
         ////////////////
 
@@ -31,116 +33,90 @@
             vm.usersDeletedList = [];
             vm.usersBlockedList = [];
 
-            vm.uids = {
-              uids: []
-            };
+            vm.getAll = function() {
 
-            vm.isSelectAll = false;
-
-            vm.userIsSelected = {};
-
-            UserService.getAll(1, 10)
-            .success(function(res, status, headers, config) {
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                }
-                vm.usersList = res.message;
-                for (var i = vm.usersList.length - 1; i >= 0; i--) {
-                    var currentUser = vm.usersList[i];
-                    var uid = currentUser._id;
-                    vm.userIsSelected[uid] = false;
-                };
-            })
-            .error(function(res, status, headers, config) {
-                var toast = $mdToast.simple()
-                      .content('出错了，错误代码：' + status)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-
-            UserService.getUserDeleted(1, 10)
-            .success(function(res, status, headers, config) {
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                }
-                vm.usersDeletedList = res.message;
-            })
-            .error(function(res, status, headers, config) {
-                var toast = $mdToast.simple()
-                      .content('出错了，错误代码：' + status)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-
-            UserService.getUserBlocked(1, 10)
-            .success(function(res, status, headers, config) {
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                }
-                vm.usersBlockedList = res.message;
-            })
-            .error(function(res, status, headers, config) {
-                var toast = $mdToast.simple()
-                      .content('出错了，错误代码：' + status)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-
-            vm.selectThisUser = function(uid) {
-                if(!vm.userIsSelected[uid]) {
-                    var key = vm.uids.uids.indexOf(uid);
-                    vm.uids.uids.splice(key, 1);
-                }else {
-                    vm.uids.uids.push(uid);                 
-                }
-            }
-
-            vm.toggleSelectAll = function() {
-
-                if(vm.isSelectAll) {
-                    vm.uids.uids = [];
-                    for(var uid in vm.userIsSelected) {
-                        vm.userIsSelected[uid] = true;
-                        vm.uids.uids.push(uid);
+                UserService.getAll(1, 10)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
                     }
-                    vm.isSelectAll = true;
-                }else {
-                    vm.uids.uids = [];
-                    for(var uid in vm.userIsSelected) {
-                        vm.userIsSelected[uid] = false;
-                    }
-                    vm.isSelectAll = false;
-                }
+                    vm.usersList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
 
             }
 
+            vm.getAllDeleted = function() {
+
+                UserService.getUserDeleted(1, 10)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.usersDeletedList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
+
+            }
+
+            vm.getAllBlocked = function() {
+
+                UserService.getUserBlocked(1, 10)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.usersBlockedList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
+
+            }
+
+            vm.getAll();
+            vm.getAllDeleted();
+            vm.getAllBlocked();
         }
 
         function activate() {
@@ -149,7 +125,7 @@
                 name: '',
                 names: [{
                     val: '锁定',
-                    onClicked: function(ev, ur) {
+                    onClicked: function(ev, ur, index) {
                         var confirm = $mdDialog.confirm()
                             .title('锁定确认')
                             .content('你确定要锁定此用户？')
@@ -158,37 +134,45 @@
                             .cancel('取消')
                             .targetEvent(ev);
 
-                        if(ur != undefined) {
-                            vm.uids.uids = [ur._id];
+                        if(index != undefined) {
+                            vm.selecteThisById(ur._id, vm.normalUsers);
                         }
 
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            UserService.blockUser(vm.uids)
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
+                            var normalUsersLength = vm.normalUsers.selectedList.length;
+                            vm.normalUsers.selectedList.forEach(function(id, key) {
+                                UserService.blockUserByUid(id)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                    if(key == normalUsersLength -1) {
+                                        vm.getAllBlocked();
+                                        vm.getAll();
+                                    }
+
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
                                 });
                             });
-
-                            vm.uids.uids = [];
-
                         }, function() {
                             //取消
-                            
+                            if(index != undefined) {
+                                vm.unSelectThisById(ur._id, vm.normalUsers);
+                            }
                         });
                     }
                 }, {
@@ -202,41 +186,45 @@
                             .cancel('取消')
                             .targetEvent(ev);
 
-                        if(ur != undefined) {
-                            vm.uids.uids = [ur._id];
+                        if(index != undefined) {
+                            vm.selecteThisById(ur._id, vm.normalUsers);
                         }
 
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            console.log(vm.uids);
-                            UserService.deleteUser(vm.uids).save()
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
+                            var normalUsersLength = vm.normalUsers.selectedList.length;
+                            vm.normalUsers.selectedList.forEach(function(id, key) {
+                                UserService.removeUserByUid(id)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
 
-                                if(res.status === 200) {
-                                    vm.usersList.splice(index, 1);
-                                }
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
+                                    if(key == normalUsersLength -1) {
+                                        vm.getAllDeleted();
+                                        vm.getAll();
+                                    }                                        
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
                                 });
                             });
 
-                            vm.uids.uids = [];
-
                         }, function() {
                             //取消
+                            if(index != undefined) {
+                                vm.unSelectThisById(ur._id, vm.normalUsers);
+                            }
                         });
                     }
                 }]
@@ -441,7 +429,7 @@
                 names: [{
                     val: '恢复',
                     onClicked: function(ev, ur) {
-                        UserService.unDeleteUser(vm.uids).save()
+                        UserService.unRemoveUserByUid(vm.uids)
                         .success(function(res, status, headers, config) {
                             var toast = $mdToast.simple()
                                   .content(res.message)
@@ -469,7 +457,7 @@
                 names: [{
                     val: '解锁',
                     onClicked: function(ev, ur) {
-                        UserService.unBlockUser(vm.uids).save()
+                        UserService.unBlockUserByUid(vm.uids)
                         .success(function(res, status, headers, config) {
                             var toast = $mdToast.simple()
                                   .content(res.message)

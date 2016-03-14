@@ -68,12 +68,6 @@
     'use strict';
 
     angular
-        .module('app.lazyload', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.dashboard', []);
 })();
 (function() {
@@ -86,7 +80,7 @@
     'use strict';
 
     angular
-        .module('app.maps', []);
+        .module('app.lazyload', []);
 })();
 (function() {
     'use strict';
@@ -100,16 +94,22 @@
     'use strict';
 
     angular
-        .module('app.preloader', []);
+        .module('app.maps', []);
 })();
-
-
 (function() {
     'use strict';
 
     angular
         .module('app.navsearch', []);
 })();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.preloader', []);
+})();
+
+
 (function() {
     'use strict';
 
@@ -339,8 +339,6 @@
 
           vm.toggleSelectAll = function(list, MO) {
 
-              console.log(MO, MO.isSelectAll);
-
               if(!MO.isSelectAll) {
                   //取消全选
                   for (var i = 0; i < list.length; i++) {
@@ -377,8 +375,15 @@
           };
 
           vm.selecteThisById = function(id, MO) {
-            MO.isElementSelected[id] = true;
-            MO.selectedList.push(id);
+            if(MO.selectedList.indexOf(id) == -1) {
+              MO.isElementSelected[id] = true;
+              MO.selectedList.push(id);
+            }
+          }
+
+          vm.unSelectThisById = function(id, MO) {
+            MO.selectedList.splice(MO.selectedList.indexOf(id), 1);
+            MO.isElementSelected[id] = false;
           }
 
         }
@@ -386,55 +391,6 @@
       }
 
     }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.lazyload')
-        .config(lazyloadConfig);
-
-    lazyloadConfig.$inject = ['$ocLazyLoadProvider', 'APP_REQUIRES'];
-    function lazyloadConfig($ocLazyLoadProvider, APP_REQUIRES){
-
-      // Lazy Load modules configuration
-      $ocLazyLoadProvider.config({
-        debug: false,
-        events: true,
-        modules: APP_REQUIRES.modules
-      });
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.lazyload')
-        .constant('APP_REQUIRES', {
-          // jQuery based and standalone scripts
-          scripts: {
-            'modernizr':          ['vendor/modernizr/modernizr.js'],
-            'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
-                                   'vendor/simple-line-icons/css/simple-line-icons.css'],
-            'weather-icons':      ['vendor/weather-icons/css/weather-icons.min.css'],
-            'loadGoogleMapsJS':   ['app/vendor/gmap/load-google-maps.js'],
-
-          },
-          // Angular based script (use the right module name)
-          modules: [
-            // {name: 'toaster', files: ['vendor/angularjs-toaster/toaster.js', 'vendor/angularjs-toaster/toaster.css']}
-            {name: 'ui.map',                    files: ['vendor/angular-ui-map/ui-map.js']},
-            
-            {name: 'datatables',                files: ['vendor/datatables/media/css/jquery.dataTables.css',
-                                                        'vendor/datatables/media/js/jquery.dataTables.js',
-                                                        'vendor/angular-datatables/dist/angular-datatables.js'], serie: true},
-
-          ]
-        })
-        ;
 
 })();
 
@@ -776,169 +732,53 @@
     }
 
 })();
-/**=========================================================
- * Module: modals.js
- * Provides a simple way to implement bootstrap modals from templates
- =========================================================*/
-
 (function() {
     'use strict';
 
     angular
-        .module('app.maps')
-        .controller('ModalGmapController', ModalGmapController);
+        .module('app.lazyload')
+        .config(lazyloadConfig);
 
-    ModalGmapController.$inject = ['$modal'];
-    function ModalGmapController($modal) {
-        var vm = this;
+    lazyloadConfig.$inject = ['$ocLazyLoadProvider', 'APP_REQUIRES'];
+    function lazyloadConfig($ocLazyLoadProvider, APP_REQUIRES){
 
-        activate();
+      // Lazy Load modules configuration
+      $ocLazyLoadProvider.config({
+        debug: false,
+        events: true,
+        modules: APP_REQUIRES.modules
+      });
 
-        ////////////////
-
-        function activate() {
-
-          vm.open = function (size) {
-
-            //var modalInstance = 
-            $modal.open({
-              templateUrl: '/myModalContent.html',
-              controller: ModalInstanceCtrl,
-              size: size
-            });
-          };
-
-          // Please note that $modalInstance represents a modal window (instance) dependency.
-          // It is not the same as the $modal service used above.
-          
-          ModalInstanceCtrl.$inject = ['$scope', '$modalInstance', '$timeout'];
-          function ModalInstanceCtrl($scope, $modalInstance, $timeout) {
-
-            $modalInstance.opened.then(function () {
-              var position = new google.maps.LatLng(33.790807, -117.835734);
-
-              $scope.mapOptionsModal = {
-                zoom: 14,
-                center: position,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-              };
-
-              // we use timeout to wait maps to be ready before add a markers
-              $timeout(function(){
-                // 1. Add a marker at the position it was initialized
-                new google.maps.Marker({
-                  map: $scope.myMapModal,
-                  position: position
-                });
-                // 2. Trigger a resize so the map is redrawed 
-                google.maps.event.trigger($scope.myMapModal, 'resize');
-                // 3. Move to the center if it is misaligned
-                $scope.myMapModal.panTo(position);
-              });
-
-            });
-
-            $scope.ok = function () {
-              $modalInstance.close('closed');
-            };
-
-            $scope.cancel = function () {
-              $modalInstance.dismiss('cancel');
-            };
-
-          }
-          
-        }
     }
-
 })();
-
-
 (function() {
     'use strict';
 
     angular
-        .module('app.maps')
-        .controller('GMapController', GMapController);
+        .module('app.lazyload')
+        .constant('APP_REQUIRES', {
+          // jQuery based and standalone scripts
+          scripts: {
+            'modernizr':          ['vendor/modernizr/modernizr.js'],
+            'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
+                                   'vendor/simple-line-icons/css/simple-line-icons.css'],
+            'weather-icons':      ['vendor/weather-icons/css/weather-icons.min.css'],
+            'loadGoogleMapsJS':   ['app/vendor/gmap/load-google-maps.js'],
 
-    GMapController.$inject = ['$timeout'];
-    function GMapController($timeout) {
-        var vm = this;
+          },
+          // Angular based script (use the right module name)
+          modules: [
+            // {name: 'toaster', files: ['vendor/angularjs-toaster/toaster.js', 'vendor/angularjs-toaster/toaster.css']}
+            {name: 'ui.map',                    files: ['vendor/angular-ui-map/ui-map.js']},
+            
+            {name: 'datatables',                files: ['vendor/datatables/media/css/jquery.dataTables.css',
+                                                        'vendor/datatables/media/js/jquery.dataTables.js',
+                                                        'vendor/angular-datatables/dist/angular-datatables.js'], serie: true},
 
-        activate();
+          ]
+        })
+        ;
 
-        ////////////////
-
-        function activate() {
-          var position = [
-              new google.maps.LatLng(33.790807, -117.835734),
-              new google.maps.LatLng(33.790807, -117.835734),
-              new google.maps.LatLng(33.790807, -117.835734),
-              new google.maps.LatLng(33.790807, -117.835734),
-              new google.maps.LatLng(33.787453, -117.835858)
-            ];
-          
-          vm.addMarker = addMarker;
-          // we use timeout to wait maps to be ready before add a markers
-          $timeout(function(){
-            addMarker(vm.myMap1, position[0]);
-            addMarker(vm.myMap2, position[1]);
-            addMarker(vm.myMap3, position[2]);
-            addMarker(vm.myMap5, position[3]);
-          });
-
-          vm.mapOptions1 = {
-            zoom: 14,
-            center: position[0],
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            scrollwheel: false
-          };
-
-          vm.mapOptions2 = {
-            zoom: 19,
-            center: position[1],
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
-
-          vm.mapOptions3 = {
-            zoom: 14,
-            center: position[2],
-            mapTypeId: google.maps.MapTypeId.SATELLITE
-          };
-
-          vm.mapOptions4 = {
-            zoom: 14,
-            center: position[3],
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
-
-          // for multiple markers
-          $timeout(function(){
-            addMarker(vm.myMap4, position[3]);
-            addMarker(vm.myMap4, position[4]);
-          });
-
-          // custom map style
-          var MapStyles = [{'featureType':'water','stylers':[{'visibility':'on'},{'color':'#bdd1f9'}]},{'featureType':'all','elementType':'labels.text.fill','stylers':[{'color':'#334165'}]},{featureType:'landscape',stylers:[{color:'#e9ebf1'}]},{featureType:'road.highway',elementType:'geometry',stylers:[{color:'#c5c6c6'}]},{featureType:'road.arterial',elementType:'geometry',stylers:[{color:'#fff'}]},{featureType:'road.local',elementType:'geometry',stylers:[{color:'#fff'}]},{featureType:'transit',elementType:'geometry',stylers:[{color:'#d8dbe0'}]},{featureType:'poi',elementType:'geometry',stylers:[{color:'#cfd5e0'}]},{featureType:'administrative',stylers:[{visibility:'on'},{lightness:33}]},{featureType:'poi.park',elementType:'labels',stylers:[{visibility:'on'},{lightness:20}]},{featureType:'road',stylers:[{color:'#d8dbe0',lightness:20}]}];
-          vm.mapOptions5 = {
-            zoom: 14,
-            center: position[3],
-            styles: MapStyles,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            scrollwheel: false
-          };
-
-          ///////////////
-          
-          function addMarker(map, position) {
-            return new google.maps.Marker({
-              map: map,
-              position: position
-            });
-          }
-
-        }
-    }
 })();
 
 
@@ -1671,99 +1511,171 @@
         }
     }
 })();
+/**=========================================================
+ * Module: modals.js
+ * Provides a simple way to implement bootstrap modals from templates
+ =========================================================*/
+
 (function() {
     'use strict';
 
     angular
-        .module('app.preloader')
-        .directive('preloader', preloader);
+        .module('app.maps')
+        .controller('ModalGmapController', ModalGmapController);
 
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
+    ModalGmapController.$inject = ['$modal'];
+    function ModalGmapController($modal) {
+        var vm = this;
 
-        var directive = {
-            restrict: 'EAC',
-            template: 
-              '<div class="preloader-progress">' +
-                  '<div class="preloader-progress-bar" ' +
-                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
-              '</div>'
-            ,
-            link: link
-        };
-        return directive;
+        activate();
 
-        ///////
+        ////////////////
 
-        function link(scope, el) {
+        function activate() {
 
-          scope.loadCounter = 0;
+          vm.open = function (size) {
 
-          var counter  = 0,
-              timeout;
+            //var modalInstance = 
+            $modal.open({
+              templateUrl: '/myModalContent.html',
+              controller: ModalInstanceCtrl,
+              size: size
+            });
+          };
 
-          // disables scrollbar
-          angular.element('body').css('overflow', 'hidden');
-          // ensure class is present for styling
-          el.addClass('preloader');
+          // Please note that $modalInstance represents a modal window (instance) dependency.
+          // It is not the same as the $modal service used above.
+          
+          ModalInstanceCtrl.$inject = ['$scope', '$modalInstance', '$timeout'];
+          function ModalInstanceCtrl($scope, $modalInstance, $timeout) {
 
-          appReady().then(endCounter);
+            $modalInstance.opened.then(function () {
+              var position = new google.maps.LatLng(33.790807, -117.835734);
 
-          timeout = $timeout(startCounter);
+              $scope.mapOptionsModal = {
+                zoom: 14,
+                center: position,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+              };
 
-          ///////
-
-          function startCounter() {
-
-            var remaining = 100 - counter;
-            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
-
-            scope.loadCounter = parseInt(counter, 10);
-
-            timeout = $timeout(startCounter, 20);
-          }
-
-          function endCounter() {
-
-            $timeout.cancel(timeout);
-
-            scope.loadCounter = 100;
-
-            $timeout(function(){
-              // animate preloader hiding
-              $animate.addClass(el, 'preloader-hidden');
-              // retore scrollbar
-              angular.element('body').css('overflow', '');
-            }, 300);
-          }
-
-          function appReady() {
-            var deferred = $q.defer();
-            var viewsLoaded = 0;
-            // if this doesn't sync with the real app ready
-            // a custom event must be used instead
-            var off = scope.$on('$viewContentLoaded', function () {
-              viewsLoaded ++;
-              // we know there are at least two views to be loaded 
-              // before the app is ready (1-index.html 2-app*.html)
-              if ( viewsLoaded === 2) {
-                // with resolve this fires only once
-                $timeout(function(){
-                  deferred.resolve();
-                }, 1);
-
-                off();
-              }
+              // we use timeout to wait maps to be ready before add a markers
+              $timeout(function(){
+                // 1. Add a marker at the position it was initialized
+                new google.maps.Marker({
+                  map: $scope.myMapModal,
+                  position: position
+                });
+                // 2. Trigger a resize so the map is redrawed 
+                google.maps.event.trigger($scope.myMapModal, 'resize');
+                // 3. Move to the center if it is misaligned
+                $scope.myMapModal.panTo(position);
+              });
 
             });
 
-            return deferred.promise;
-          }
+            $scope.ok = function () {
+              $modalInstance.close('closed');
+            };
 
-        } //link
+            $scope.cancel = function () {
+              $modalInstance.dismiss('cancel');
+            };
+
+          }
+          
+        }
     }
 
 })();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.maps')
+        .controller('GMapController', GMapController);
+
+    GMapController.$inject = ['$timeout'];
+    function GMapController($timeout) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          var position = [
+              new google.maps.LatLng(33.790807, -117.835734),
+              new google.maps.LatLng(33.790807, -117.835734),
+              new google.maps.LatLng(33.790807, -117.835734),
+              new google.maps.LatLng(33.790807, -117.835734),
+              new google.maps.LatLng(33.787453, -117.835858)
+            ];
+          
+          vm.addMarker = addMarker;
+          // we use timeout to wait maps to be ready before add a markers
+          $timeout(function(){
+            addMarker(vm.myMap1, position[0]);
+            addMarker(vm.myMap2, position[1]);
+            addMarker(vm.myMap3, position[2]);
+            addMarker(vm.myMap5, position[3]);
+          });
+
+          vm.mapOptions1 = {
+            zoom: 14,
+            center: position[0],
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            scrollwheel: false
+          };
+
+          vm.mapOptions2 = {
+            zoom: 19,
+            center: position[1],
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          };
+
+          vm.mapOptions3 = {
+            zoom: 14,
+            center: position[2],
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+          };
+
+          vm.mapOptions4 = {
+            zoom: 14,
+            center: position[3],
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          };
+
+          // for multiple markers
+          $timeout(function(){
+            addMarker(vm.myMap4, position[3]);
+            addMarker(vm.myMap4, position[4]);
+          });
+
+          // custom map style
+          var MapStyles = [{'featureType':'water','stylers':[{'visibility':'on'},{'color':'#bdd1f9'}]},{'featureType':'all','elementType':'labels.text.fill','stylers':[{'color':'#334165'}]},{featureType:'landscape',stylers:[{color:'#e9ebf1'}]},{featureType:'road.highway',elementType:'geometry',stylers:[{color:'#c5c6c6'}]},{featureType:'road.arterial',elementType:'geometry',stylers:[{color:'#fff'}]},{featureType:'road.local',elementType:'geometry',stylers:[{color:'#fff'}]},{featureType:'transit',elementType:'geometry',stylers:[{color:'#d8dbe0'}]},{featureType:'poi',elementType:'geometry',stylers:[{color:'#cfd5e0'}]},{featureType:'administrative',stylers:[{visibility:'on'},{lightness:33}]},{featureType:'poi.park',elementType:'labels',stylers:[{visibility:'on'},{lightness:20}]},{featureType:'road',stylers:[{color:'#d8dbe0',lightness:20}]}];
+          vm.mapOptions5 = {
+            zoom: 14,
+            center: position[3],
+            styles: MapStyles,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            scrollwheel: false
+          };
+
+          ///////////////
+          
+          function addMarker(map, position) {
+            return new google.maps.Marker({
+              map: map,
+              position: position
+            });
+          }
+
+        }
+    }
+})();
+
 /**=========================================================
  * Module: navbar-search.js
  * Navbar search toggler * Auto dismiss on ESC key
@@ -1873,6 +1785,99 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.preloader')
+        .directive('preloader', preloader);
+
+    preloader.$inject = ['$animate', '$timeout', '$q'];
+    function preloader ($animate, $timeout, $q) {
+
+        var directive = {
+            restrict: 'EAC',
+            template: 
+              '<div class="preloader-progress">' +
+                  '<div class="preloader-progress-bar" ' +
+                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
+              '</div>'
+            ,
+            link: link
+        };
+        return directive;
+
+        ///////
+
+        function link(scope, el) {
+
+          scope.loadCounter = 0;
+
+          var counter  = 0,
+              timeout;
+
+          // disables scrollbar
+          angular.element('body').css('overflow', 'hidden');
+          // ensure class is present for styling
+          el.addClass('preloader');
+
+          appReady().then(endCounter);
+
+          timeout = $timeout(startCounter);
+
+          ///////
+
+          function startCounter() {
+
+            var remaining = 100 - counter;
+            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
+
+            scope.loadCounter = parseInt(counter, 10);
+
+            timeout = $timeout(startCounter, 20);
+          }
+
+          function endCounter() {
+
+            $timeout.cancel(timeout);
+
+            scope.loadCounter = 100;
+
+            $timeout(function(){
+              // animate preloader hiding
+              $animate.addClass(el, 'preloader-hidden');
+              // retore scrollbar
+              angular.element('body').css('overflow', '');
+            }, 300);
+          }
+
+          function appReady() {
+            var deferred = $q.defer();
+            var viewsLoaded = 0;
+            // if this doesn't sync with the real app ready
+            // a custom event must be used instead
+            var off = scope.$on('$viewContentLoaded', function () {
+              viewsLoaded ++;
+              // we know there are at least two views to be loaded 
+              // before the app is ready (1-index.html 2-app*.html)
+              if ( viewsLoaded === 2) {
+                // with resolve this fires only once
+                $timeout(function(){
+                  deferred.resolve();
+                }, 1);
+
+                off();
+              }
+
+            });
+
+            return deferred.promise;
+          }
+
+        } //link
+    }
+
+})();
 /**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
@@ -3747,14 +3752,16 @@
         .module('app.users')
         .controller('UsersController', UsersController);
 
-    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http', 'UserService', '$mdToast'];
-    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http, UserService, $mdToast) {
+    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http', 'UserService', '$mdToast', 'MOptions'];
+    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http, UserService, $mdToast, MOptions) {
         // for controllerAs syntax
         var vm = this;
 
         activate();
 
         activateDataTable();
+
+        MOptions.init(vm, ['normalUsers', 'removedUser', 'blockedUser']);
 
         ////////////////
 
@@ -3771,116 +3778,90 @@
             vm.usersDeletedList = [];
             vm.usersBlockedList = [];
 
-            vm.uids = {
-              uids: []
-            };
+            vm.getAll = function() {
 
-            vm.isSelectAll = false;
-
-            vm.userIsSelected = {};
-
-            UserService.getAll(1, 10)
-            .success(function(res, status, headers, config) {
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                }
-                vm.usersList = res.message;
-                for (var i = vm.usersList.length - 1; i >= 0; i--) {
-                    var currentUser = vm.usersList[i];
-                    var uid = currentUser._id;
-                    vm.userIsSelected[uid] = false;
-                };
-            })
-            .error(function(res, status, headers, config) {
-                var toast = $mdToast.simple()
-                      .content('出错了，错误代码：' + status)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-
-            UserService.getUserDeleted(1, 10)
-            .success(function(res, status, headers, config) {
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                }
-                vm.usersDeletedList = res.message;
-            })
-            .error(function(res, status, headers, config) {
-                var toast = $mdToast.simple()
-                      .content('出错了，错误代码：' + status)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-
-            UserService.getUserBlocked(1, 10)
-            .success(function(res, status, headers, config) {
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                }
-                vm.usersBlockedList = res.message;
-            })
-            .error(function(res, status, headers, config) {
-                var toast = $mdToast.simple()
-                      .content('出错了，错误代码：' + status)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-
-            vm.selectThisUser = function(uid) {
-                if(!vm.userIsSelected[uid]) {
-                    var key = vm.uids.uids.indexOf(uid);
-                    vm.uids.uids.splice(key, 1);
-                }else {
-                    vm.uids.uids.push(uid);                 
-                }
-            }
-
-            vm.toggleSelectAll = function() {
-
-                if(vm.isSelectAll) {
-                    vm.uids.uids = [];
-                    for(var uid in vm.userIsSelected) {
-                        vm.userIsSelected[uid] = true;
-                        vm.uids.uids.push(uid);
+                UserService.getAll(1, 10)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
                     }
-                    vm.isSelectAll = true;
-                }else {
-                    vm.uids.uids = [];
-                    for(var uid in vm.userIsSelected) {
-                        vm.userIsSelected[uid] = false;
-                    }
-                    vm.isSelectAll = false;
-                }
+                    vm.usersList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
 
             }
 
+            vm.getAllDeleted = function() {
+
+                UserService.getUserDeleted(1, 10)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.usersDeletedList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
+
+            }
+
+            vm.getAllBlocked = function() {
+
+                UserService.getUserBlocked(1, 10)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.usersBlockedList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
+
+            }
+
+            vm.getAll();
+            vm.getAllDeleted();
+            vm.getAllBlocked();
         }
 
         function activate() {
@@ -3889,7 +3870,7 @@
                 name: '',
                 names: [{
                     val: '锁定',
-                    onClicked: function(ev, ur) {
+                    onClicked: function(ev, ur, index) {
                         var confirm = $mdDialog.confirm()
                             .title('锁定确认')
                             .content('你确定要锁定此用户？')
@@ -3898,37 +3879,45 @@
                             .cancel('取消')
                             .targetEvent(ev);
 
-                        if(ur != undefined) {
-                            vm.uids.uids = [ur._id];
+                        if(index != undefined) {
+                            vm.selecteThisById(ur._id, vm.normalUsers);
                         }
 
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            UserService.blockUser(vm.uids)
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
+                            var normalUsersLength = vm.normalUsers.selectedList.length;
+                            vm.normalUsers.selectedList.forEach(function(id, key) {
+                                UserService.blockUserByUid(id)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                    if(key == normalUsersLength -1) {
+                                        vm.getAllBlocked();
+                                        vm.getAll();
+                                    }
+
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
                                 });
                             });
-
-                            vm.uids.uids = [];
-
                         }, function() {
                             //取消
-                            
+                            if(index != undefined) {
+                                vm.unSelectThisById(ur._id, vm.normalUsers);
+                            }
                         });
                     }
                 }, {
@@ -3942,41 +3931,45 @@
                             .cancel('取消')
                             .targetEvent(ev);
 
-                        if(ur != undefined) {
-                            vm.uids.uids = [ur._id];
+                        if(index != undefined) {
+                            vm.selecteThisById(ur._id, vm.normalUsers);
                         }
 
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            console.log(vm.uids);
-                            UserService.deleteUser(vm.uids).save()
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
+                            var normalUsersLength = vm.normalUsers.selectedList.length;
+                            vm.normalUsers.selectedList.forEach(function(id, key) {
+                                UserService.removeUserByUid(id)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
 
-                                if(res.status === 200) {
-                                    vm.usersList.splice(index, 1);
-                                }
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
+                                    if(key == normalUsersLength -1) {
+                                        vm.getAllDeleted();
+                                        vm.getAll();
+                                    }                                        
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
                                 });
                             });
 
-                            vm.uids.uids = [];
-
                         }, function() {
                             //取消
+                            if(index != undefined) {
+                                vm.unSelectThisById(ur._id, vm.normalUsers);
+                            }
                         });
                     }
                 }]
@@ -4181,7 +4174,7 @@
                 names: [{
                     val: '恢复',
                     onClicked: function(ev, ur) {
-                        UserService.unDeleteUser(vm.uids).save()
+                        UserService.unRemoveUserByUid(vm.uids)
                         .success(function(res, status, headers, config) {
                             var toast = $mdToast.simple()
                                   .content(res.message)
@@ -4209,7 +4202,7 @@
                 names: [{
                     val: '解锁',
                     onClicked: function(ev, ur) {
-                        UserService.unBlockUser(vm.uids).save()
+                        UserService.unBlockUserByUid(vm.uids)
                         .success(function(res, status, headers, config) {
                             var toast = $mdToast.simple()
                                   .content(res.message)
@@ -4285,6 +4278,22 @@
 
         getThemes: function(uid, page, count) {
           return $http.get($rootScope.app.baseUrl + 'themes/get/' + uid + '/' + page + '/' + count);          
+        },
+
+        removeUserByUid: function(uid) {
+          return $http.get($rootScope.app.baseUrl + 'user/delete/' + uid);          
+        },
+
+        unRemoveUserByUid: function(uid) {
+          return $http.get($rootScope.app.baseUrl + 'user/unRemove/' + uid);          
+        },
+
+        blockUserByUid: function(uid) {
+          return $http.get($rootScope.app.baseUrl + 'user/block/' + uid);          
+        },
+
+        unBlockUserByUid: function(uid) {
+          return $http.get($rootScope.app.baseUrl + 'user/unblock/' + uid);          
         }
 
       }

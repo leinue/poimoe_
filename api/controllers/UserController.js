@@ -1249,13 +1249,11 @@ var index = {
 
     User.blockUser(uid, function(err, msg) {
 
-        if(err) {
-          res.send(util.retMsg(401, err.toString()));
-        }
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
 
-        if(key === uidLength - 1) {
-          res.send(util.retMsg(200, '锁定用户成功'));
-        }
+      res.send(util.retMsg(200, '锁定用户成功'));
 
     });
   },
@@ -1268,13 +1266,11 @@ var index = {
 
     User.unblockUser(uid, function(err, msg) {
 
-        if(err) {
-          res.send(util.retMsg(401, err.toString()));
-        }
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
 
-        if(key === uidLength - 1) {
-          res.send(util.retMsg(200, '解锁用户成功'));
-        }
+      res.send(util.retMsg(200, '解锁用户成功'));
 
     });
   },
@@ -1311,13 +1307,11 @@ var index = {
 
     User.removeUser(uid, function(err, msg) {
 
-        if(err) {
-          res.send(util.retMsg(401, err.toString()));
-        }
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
 
-        if(key === uidLength - 1) {
-          res.send(util.retMsg(200, '删除用户成功'));
-        }
+      res.send(util.retMsg(200, '删除用户成功'));
 
     });
 
@@ -1331,13 +1325,11 @@ var index = {
 
     User.unRemoveUser(uid, function(err, msg) {
 
-        if(err) {
-          res.send(util.retMsg(401, err.toString()));
-        }
+      if(err) {
+        res.send(util.retMsg(401, err.toString()));
+      }
 
-        if(key === uidLength - 1) {
-          res.send(util.retMsg(200, '撤销删除用户成功'));
-        }
+      res.send(util.retMsg(200, '撤销删除用户成功'));
 
     });
 
