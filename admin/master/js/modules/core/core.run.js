@@ -63,11 +63,6 @@
         return title;
       };
 
-      $rootScope.$on('$locationChangeStart', function(evt, next, curr) {
-
-
-      })
-
     }
 
 })();

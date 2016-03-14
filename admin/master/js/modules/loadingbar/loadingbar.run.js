@@ -20,6 +20,7 @@
           return false;
         }
 
+        //控制未登录只能访问登录页面
         if(localStorage.login == undefined || localStorage.login == 'false') {
 
           for (var i = 0; i < publicRoutes.length; i++) {
@@ -27,14 +28,18 @@
 
             if(next.name.indexOf(route) == -1) {
               var toast = $mdToast.simple()
-                    .content('无权限访问, 请登录')
-                    .action('确定')
-                    .highlightAction(false)
-                    .position('top right');
+                .content('无权限访问, 请登录')
+                .action('确定')
+                .highlightAction(false)
+                .position('top right');
               $mdToast.show(toast).then(function() {
                 $state.go('auth.login');
               });
-              window.location.href = "http://" + document.domain + ':8888/index.html#/auth/login';
+              if(document.domain == 'localhost') {
+                window.location.href = "http://" + document.domain + ':8080/index.html#/auth/login';                
+              }else {
+                window.location.href = "http://" + document.domain + '/index.html#/auth/login';
+              }
               $state.go('auth.login');
               break;
             }
@@ -43,6 +48,32 @@
 
           return false;
 
+        }
+
+        var accessDeniedPageAfterLogin = ['auth.login'];
+
+        // 控制登录后禁止访问登录等页面
+        if(localStorage.login == 'true') {
+
+          for (var i = 0; i < accessDeniedPageAfterLogin.length; i++) {
+            var route = accessDeniedPageAfterLogin[i];
+            if(next.name.indexOf(route) != -1) {
+              var toast = $mdToast.simple()
+                .content('您已登录过')
+                .action('确定')
+                .highlightAction(false)
+                .position('top right');
+              $mdToast.show(toast).then(function() {
+                $state.go('app.welcome');
+              });
+              if(document.domain == 'localhost') {
+                window.location.href = "http://" + document.domain + ':8080/index.html#/app/welcome';                
+              }else {
+                window.location.href = "http://" + document.domain + '/index.html#/app/welcome';
+              }
+            }
+          };
+          
         }
 
         if($('.wrapper > section').length) // check if bar container exists

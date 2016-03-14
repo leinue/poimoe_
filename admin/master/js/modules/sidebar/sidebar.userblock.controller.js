@@ -14,9 +14,9 @@
 
         function activate() {
           $rootScope.user = {
-            name:     'Xieyang',
-            job:      'Poimoe 创始人',
-            picture:  'http://image.poimoe.com/upload/1/1456214269.jpg'
+            name:     localStorage.username,
+            job:      localStorage.introduction,
+            picture:  localStorage.photo
           };
 
           // Hides/show user avatar on sidebar

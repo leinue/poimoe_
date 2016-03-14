@@ -42,6 +42,12 @@
     'use strict';
 
     angular
+        .module('app.colors', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.core', [
             'ngRoute',
             'ngAnimate',
@@ -58,12 +64,6 @@
             'ngAria',
             'ngMessages'
         ]);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors', []);
 })();
 (function() {
     'use strict';
@@ -109,14 +109,6 @@
     'use strict';
 
     angular
-        .module('app.preloader', []);
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
         .module('app.routes', [
             'app.lazyload'
         ]);
@@ -125,13 +117,15 @@
     'use strict';
 
     angular
-        .module('app.settings', []);
+        .module('app.preloader', []);
 })();
+
+
 (function() {
     'use strict';
 
     angular
-        .module('app.sidebar', []);
+        .module('app.settings', []);
 })();
 (function() {
     'use strict';
@@ -143,9 +137,65 @@
     'use strict';
 
     angular
+        .module('app.sidebar', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.utils', [
           'app.colors'
           ]);
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .constant('APP_COLORS', {
+          'primary':                '#3F51B5',
+          'success':                '#4CAF50',
+          'info':                   '#2196F3',
+          'warning':                '#FF9800',
+          'danger':                 '#F44336',
+          'inverse':                '#607D8B',
+          'green':                  '#009688',
+          'pink':                   '#E91E63',
+          'purple':                 '#673AB7',
+          'dark':                   '#263238',
+          'yellow':                 '#FFEB3B',
+          'gray-darker':            '#232735',
+          'gray-dark':              '#3a3f51',
+          'gray':                   '#dde6e9',
+          'gray-light':             '#e4eaec',
+          'gray-lighter':           '#edf1f2'
+        })
+        ;
+})();
+/**=========================================================
+ * Module: colors.js
+ * Services to retrieve global colors
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .service('Colors', Colors);
+
+    Colors.$inject = ['APP_COLORS'];
+    function Colors(APP_COLORS) {
+        this.byName = byName;
+
+        ////////////////
+
+        function byName(name) {
+          return (APP_COLORS[name] || '#fff');
+        }
+    }
+
 })();
 
 (function() {
@@ -255,11 +305,6 @@
         return title;
       };
 
-      $rootScope.$on('$locationChangeStart', function(evt, next, curr) {
-
-
-      })
-
     }
 
 })();
@@ -349,56 +394,6 @@
 
       }
 
-    }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .constant('APP_COLORS', {
-          'primary':                '#3F51B5',
-          'success':                '#4CAF50',
-          'info':                   '#2196F3',
-          'warning':                '#FF9800',
-          'danger':                 '#F44336',
-          'inverse':                '#607D8B',
-          'green':                  '#009688',
-          'pink':                   '#E91E63',
-          'purple':                 '#673AB7',
-          'dark':                   '#263238',
-          'yellow':                 '#FFEB3B',
-          'gray-darker':            '#232735',
-          'gray-dark':              '#3a3f51',
-          'gray':                   '#dde6e9',
-          'gray-light':             '#e4eaec',
-          'gray-lighter':           '#edf1f2'
-        })
-        ;
-})();
-/**=========================================================
- * Module: colors.js
- * Services to retrieve global colors
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .service('Colors', Colors);
-
-    Colors.$inject = ['APP_COLORS'];
-    function Colors(APP_COLORS) {
-        this.byName = byName;
-
-        ////////////////
-
-        function byName(name) {
-          return (APP_COLORS[name] || '#fff');
-        }
     }
 
 })();
@@ -783,6 +778,7 @@
           return false;
         }
 
+        //控制未登录只能访问登录页面
         if(localStorage.login == undefined || localStorage.login == 'false') {
 
           for (var i = 0; i < publicRoutes.length; i++) {
@@ -790,14 +786,18 @@
 
             if(next.name.indexOf(route) == -1) {
               var toast = $mdToast.simple()
-                    .content('无权限访问, 请登录')
-                    .action('确定')
-                    .highlightAction(false)
-                    .position('top right');
+                .content('无权限访问, 请登录')
+                .action('确定')
+                .highlightAction(false)
+                .position('top right');
               $mdToast.show(toast).then(function() {
                 $state.go('auth.login');
               });
-              window.location.href = "http://" + document.domain + ':8888/index.html#/auth/login';
+              if(document.domain == 'localhost') {
+                window.location.href = "http://" + document.domain + ':8080/index.html#/auth/login';                
+              }else {
+                window.location.href = "http://" + document.domain + '/index.html#/auth/login';
+              }
               $state.go('auth.login');
               break;
             }
@@ -806,6 +806,32 @@
 
           return false;
 
+        }
+
+        var accessDeniedPageAfterLogin = ['auth.login'];
+
+        // 控制登录后禁止访问登录等页面
+        if(localStorage.login == 'true') {
+
+          for (var i = 0; i < accessDeniedPageAfterLogin.length; i++) {
+            var route = accessDeniedPageAfterLogin[i];
+            if(next.name.indexOf(route) != -1) {
+              var toast = $mdToast.simple()
+                .content('您已登录过')
+                .action('确定')
+                .highlightAction(false)
+                .position('top right');
+              $mdToast.show(toast).then(function() {
+                $state.go('app.welcome');
+              });
+              if(document.domain == 'localhost') {
+                window.location.href = "http://" + document.domain + ':8080/index.html#/app/welcome';                
+              }else {
+                window.location.href = "http://" + document.domain + '/index.html#/app/welcome';
+              }
+            }
+          };
+          
         }
 
         if($('.wrapper > section').length) // check if bar container exists
@@ -1828,99 +1854,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.preloader')
-        .directive('preloader', preloader);
-
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
-
-        var directive = {
-            restrict: 'EAC',
-            template: 
-              '<div class="preloader-progress">' +
-                  '<div class="preloader-progress-bar" ' +
-                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
-              '</div>'
-            ,
-            link: link
-        };
-        return directive;
-
-        ///////
-
-        function link(scope, el) {
-
-          scope.loadCounter = 0;
-
-          var counter  = 0,
-              timeout;
-
-          // disables scrollbar
-          angular.element('body').css('overflow', 'hidden');
-          // ensure class is present for styling
-          el.addClass('preloader');
-
-          appReady().then(endCounter);
-
-          timeout = $timeout(startCounter);
-
-          ///////
-
-          function startCounter() {
-
-            var remaining = 100 - counter;
-            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
-
-            scope.loadCounter = parseInt(counter, 10);
-
-            timeout = $timeout(startCounter, 20);
-          }
-
-          function endCounter() {
-
-            $timeout.cancel(timeout);
-
-            scope.loadCounter = 100;
-
-            $timeout(function(){
-              // animate preloader hiding
-              $animate.addClass(el, 'preloader-hidden');
-              // retore scrollbar
-              angular.element('body').css('overflow', '');
-            }, 300);
-          }
-
-          function appReady() {
-            var deferred = $q.defer();
-            var viewsLoaded = 0;
-            // if this doesn't sync with the real app ready
-            // a custom event must be used instead
-            var off = scope.$on('$viewContentLoaded', function () {
-              viewsLoaded ++;
-              // we know there are at least two views to be loaded 
-              // before the app is ready (1-index.html 2-app*.html)
-              if ( viewsLoaded === 2) {
-                // with resolve this fires only once
-                $timeout(function(){
-                  deferred.resolve();
-                }, 1);
-
-                off();
-              }
-
-            });
-
-            return deferred.promise;
-          }
-
-        } //link
-    }
-
-})();
 /**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
@@ -2186,6 +2119,99 @@
     'use strict';
 
     angular
+        .module('app.preloader')
+        .directive('preloader', preloader);
+
+    preloader.$inject = ['$animate', '$timeout', '$q'];
+    function preloader ($animate, $timeout, $q) {
+
+        var directive = {
+            restrict: 'EAC',
+            template: 
+              '<div class="preloader-progress">' +
+                  '<div class="preloader-progress-bar" ' +
+                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
+              '</div>'
+            ,
+            link: link
+        };
+        return directive;
+
+        ///////
+
+        function link(scope, el) {
+
+          scope.loadCounter = 0;
+
+          var counter  = 0,
+              timeout;
+
+          // disables scrollbar
+          angular.element('body').css('overflow', 'hidden');
+          // ensure class is present for styling
+          el.addClass('preloader');
+
+          appReady().then(endCounter);
+
+          timeout = $timeout(startCounter);
+
+          ///////
+
+          function startCounter() {
+
+            var remaining = 100 - counter;
+            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
+
+            scope.loadCounter = parseInt(counter, 10);
+
+            timeout = $timeout(startCounter, 20);
+          }
+
+          function endCounter() {
+
+            $timeout.cancel(timeout);
+
+            scope.loadCounter = 100;
+
+            $timeout(function(){
+              // animate preloader hiding
+              $animate.addClass(el, 'preloader-hidden');
+              // retore scrollbar
+              angular.element('body').css('overflow', '');
+            }, 300);
+          }
+
+          function appReady() {
+            var deferred = $q.defer();
+            var viewsLoaded = 0;
+            // if this doesn't sync with the real app ready
+            // a custom event must be used instead
+            var off = scope.$on('$viewContentLoaded', function () {
+              viewsLoaded ++;
+              // we know there are at least two views to be loaded 
+              // before the app is ready (1-index.html 2-app*.html)
+              if ( viewsLoaded === 2) {
+                // with resolve this fires only once
+                $timeout(function(){
+                  deferred.resolve();
+                }, 1);
+
+                off();
+              }
+
+            });
+
+            return deferred.promise;
+          }
+
+        } //link
+    }
+
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.settings')
         .run(settingsRun);
 
@@ -2221,6 +2247,33 @@
         document.domain = 'poimoe.com';
       }
 
+      var getCookie = function(c_name) {
+        if (document.cookie.length > 0){  
+          c_start = document.cookie.indexOf(c_name + "=");
+          if (c_start != -1){
+            c_start = c_start + c_name.length+1;  
+            c_end = document.cookie.indexOf(";",c_start);  
+            if (c_end == -1){
+              c_end = document.cookie.length;  
+              return unescape(document.cookie.substring(c_start,c_end));            
+            }
+          }   
+        }  
+        return "";  
+      }
+
+      var userData = getCookie('userData');
+
+      if(userData != '') {
+          localStorage.userData = userData;
+          userData = JSON.parse(userData);
+          localStorage._id = userData._id;
+          localStorage.username = userData.username;
+          localStorage.accessToken = userData.accessToken;
+          localStorage.photo = userData.photo;
+          localStorage.login = true;
+      }
+
       // Setup the layout mode
       $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
 
@@ -2244,6 +2297,68 @@
 
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .config(translateConfig)
+        ;
+    translateConfig.$inject = ['$translateProvider'];
+    function translateConfig($translateProvider){
+  
+      $translateProvider.useStaticFilesLoader({
+          prefix : 'app/i18n/',
+          suffix : '.json'
+      });
+      $translateProvider.preferredLanguage('en');
+      $translateProvider.useLocalStorage();
+      $translateProvider.usePostCompiling(true);
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .run(translateRun)
+        ;
+    translateRun.$inject = ['$rootScope', '$translate'];
+    
+    function translateRun($rootScope, $translate){
+
+      // Internationalization
+      // ----------------------
+
+      $rootScope.language = {
+        // Handles language dropdown
+        listIsOpen: false,
+        // list of available languages
+        available: {
+          'en':       '中文'
+          // 'es_AR':    '英文'
+        },
+        // display always the current ui language
+        init: function () {
+          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
+          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
+          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
+        },
+        set: function (localeId) {
+          // Set the new idiom
+          $translate.use(localeId);
+          // save a reference for the current language
+          $rootScope.language.selected = $rootScope.language.available[localeId];
+          // finally toggle dropdown
+          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
+        }
+      };
+
+      $rootScope.language.init();
+
+    }
+})();
 /**=========================================================
  * Module: sidebar-menu.js
  * Handle sidebar collapsible elements
@@ -2576,9 +2691,9 @@
 
         function activate() {
           $rootScope.user = {
-            name:     'Xieyang',
-            job:      'Poimoe 创始人',
-            picture:  'http://image.poimoe.com/upload/1/1456214269.jpg'
+            name:     localStorage.username,
+            job:      localStorage.introduction,
+            picture:  localStorage.photo
           };
 
           // Hides/show user avatar on sidebar
@@ -2597,68 +2712,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .config(translateConfig)
-        ;
-    translateConfig.$inject = ['$translateProvider'];
-    function translateConfig($translateProvider){
-  
-      $translateProvider.useStaticFilesLoader({
-          prefix : 'app/i18n/',
-          suffix : '.json'
-      });
-      $translateProvider.preferredLanguage('en');
-      $translateProvider.useLocalStorage();
-      $translateProvider.usePostCompiling(true);
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .run(translateRun)
-        ;
-    translateRun.$inject = ['$rootScope', '$translate'];
-    
-    function translateRun($rootScope, $translate){
-
-      // Internationalization
-      // ----------------------
-
-      $rootScope.language = {
-        // Handles language dropdown
-        listIsOpen: false,
-        // list of available languages
-        available: {
-          'en':       '中文'
-          // 'es_AR':    '英文'
-        },
-        // display always the current ui language
-        init: function () {
-          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
-          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
-          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
-        },
-        set: function (localeId) {
-          // Set the new idiom
-          $translate.use(localeId);
-          // save a reference for the current language
-          $rootScope.language.selected = $rootScope.language.available[localeId];
-          // finally toggle dropdown
-          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
-        }
-      };
-
-      $rootScope.language.init();
-
-    }
-})();
 /**=========================================================
  * Module: animate-enabled.js
  * Enable or disables ngAnimate for element with directive
