@@ -1243,7 +1243,7 @@ var index = {
 
   blockUserByUid: function(req, res, next) {
 
-    var uids = req.params.uid;
+    var uid = req.params.uid;
 
     var User = ctrlInitial.models.User();
 
@@ -1260,7 +1260,7 @@ var index = {
 
   unblockUserByUid: function(req, res, next) {
 
-    var uids = req.params.uid;
+    var uid = req.params.uid;
 
     var User = ctrlInitial.models.User();
 
@@ -1277,7 +1277,7 @@ var index = {
 
   deleteUser: function(req, res, next) {
 
-    var uids = req.params.uids;
+    var uid = req.params.uids;
 
     var User = ctrlInitial.models.User();
 

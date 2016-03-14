@@ -366,7 +366,7 @@
                               </tr>
                            </thead>
                            <tbody>
-                              <tr ng-repeat="user in users.usersDeletedList">
+                              <tr ng-repeat="(key, user) in users.usersDeletedList">
                                  <td>
                                     <div class="media">
                                        <img src="{{user.photo}}" alt="Image" style="width:36px;height:36px" class="img-responsive img-circle" />
@@ -377,13 +377,8 @@
                                  <td>{{user.sex}}</td>
                                  <td>{{user.createdAt}}</td>
                                  <td>
-                                    <md-select ng-model="users.userSingleSelectCtrl.name[user._id]" placeholder="操作">
-                                       <md-optgroup label="详情">
-                                          <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
-                                       </md-optgroup>
-                                       <md-optgroup label="安全">
-                                          <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user, $index)">{{name.val}}</md-option>
-                                       </md-optgroup>
+                                    <md-select ng-model="users.userDeletedSelectCtrl.name[user._id]" placeholder="操作">
+                                       <md-option ng-repeat="name in users.userDeletedSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user, key)">{{name.val}}</md-option>
                                     </md-select>
                                  </td>
                                  <td>
@@ -399,12 +394,9 @@
                         <div class="col-lg-10"></div>
                         <div class="col-lg-2">
                            <div class="input-group pull-right">
-                              <md-select ng-model="users.selectCtrl.name" placeholder="操作">
-                                 <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)">{{name.val}}</md-option>
+                              <md-select ng-model="users.userDeletedSelectCtrl.name" placeholder="操作">
+                                 <md-option ng-repeat="name in users.userDeletedSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)">{{name.val}}</md-option>
                               </md-select>
-                              <span class="input-group-btn">
-                                 <button class="md-primary md-hue-1 md-button md-default-theme">应用</button>
-                              </span>
                            </div>
                         </div>
                      </div>
@@ -435,7 +427,7 @@
                               </tr>
                            </thead>
                            <tbody>
-                              <tr ng-repeat="user in users.usersBlockedList">
+                              <tr ng-repeat="(key, user) in users.usersBlockedList">
                                  <td>
                                     <div class="media">
                                        <img src="{{user.photo}}" alt="Image" style="width:36px;height:36px" class="img-responsive img-circle" />
@@ -446,13 +438,8 @@
                                  <td>{{user.sex}}</td>
                                  <td>{{user.createdAt}}</td>
                                  <td>
-                                    <md-select ng-model="users.userSingleSelectCtrl.name[user._id]" placeholder="操作">
-                                       <md-optgroup label="详情">
-                                          <md-option ng-repeat="name in users.userSingleSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user)">{{name.val}}</md-option>
-                                       </md-optgroup>
-                                       <md-optgroup label="安全">
-                                          <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user, $index)">{{name.val}}</md-option>
-                                       </md-optgroup>
+                                    <md-select ng-model="users.userBlockedSelectCtrl.name[user._id]" placeholder="操作">
+                                       <md-option ng-repeat="name in users.userBlockedSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, user, key)">{{name.val}}</md-option>
                                     </md-select>
                                  </td>
                                  <td>
@@ -468,8 +455,8 @@
                         <div class="col-lg-10"></div>
                         <div class="col-lg-2">
                            <div class="input-group pull-right">
-                              <md-select ng-model="users.selectCtrl.name" placeholder="操作">
-                                 <md-option ng-repeat="name in users.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)">{{name.val}}</md-option>
+                              <md-select ng-model="users.userBlockedSelectCtrl.name" placeholder="操作">
+                                 <md-option ng-repeat="name in users.userBlockedSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)">{{name.val}}</md-option>
                               </md-select>
                               <span class="input-group-btn">
                                  <button class="md-primary md-hue-1 md-button md-default-theme">应用</button>

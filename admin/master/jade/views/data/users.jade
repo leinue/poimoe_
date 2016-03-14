@@ -340,7 +340,7 @@ h3 用户管理
                       th(check-all)
                         md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='users.removedUser.isSelectAll', ng-change="users.toggleSelectAll(users.usersDeletedList, users.removedUser)")
                   tbody
-                    tr(ng-repeat="user in users.usersDeletedList")
+                    tr(ng-repeat="(key, user) in users.usersDeletedList")
                       td
                         .media
                           img.img-responsive.img-circle(src="{{user.photo}}", alt="Image", style="width:36px;height:36px")
@@ -349,11 +349,8 @@ h3 用户管理
                       td {{user.sex}}
                       td {{user.createdAt}}
                       td
-                        md-select(ng-model='users.userSingleSelectCtrl.name[user._id]', placeholder='操作')
-                          md-optgroup(label='详情')
-                            md-option(ng-repeat='name in users.userSingleSelectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user)") {{name.val}}
-                          md-optgroup(label='安全')
-                            md-option(ng-repeat='name in users.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user, $index)") {{name.val}}                          
+                        md-select(ng-model='users.userDeletedSelectCtrl.name[user._id]', placeholder='操作')
+                          md-option(ng-repeat='name in users.userDeletedSelectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user, key)") {{name.val}}                          
                       td
                         md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='users.removedUser.isElementSelected[user._id]', ng-change="users.selectThis(user._id, users.removedUser)")
             .panel-footer
@@ -361,10 +358,8 @@ h3 用户管理
                 .col-lg-10
                 .col-lg-2
                   .input-group.pull-right
-                    md-select(ng-model='users.selectCtrl.name', placeholder='操作')
-                      md-option(ng-repeat='name in users.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)") {{name.val}}
-                    span.input-group-btn
-                      button.md-primary.md-hue-1.md-button.md-default-theme 应用
+                    md-select(ng-model='users.userDeletedSelectCtrl.name', placeholder='操作')
+                      md-option(ng-repeat='name in users.userDeletedSelectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)") {{name.val}}
 
         md-tab(label='被锁用户')
           md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;')
@@ -386,7 +381,7 @@ h3 用户管理
                       th(check-all)
                         md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='users.blockedUser.isSelectAll', ng-change="users.toggleSelectAll(users.usersBlockedList, users.blockedUser)")
                   tbody
-                    tr(ng-repeat="user in users.usersBlockedList")
+                    tr(ng-repeat="(key, user) in users.usersBlockedList")
                       td
                         .media
                           img.img-responsive.img-circle(src="{{user.photo}}", alt="Image", style="width:36px;height:36px")
@@ -395,11 +390,8 @@ h3 用户管理
                       td {{user.sex}}
                       td {{user.createdAt}}
                       td
-                        md-select(ng-model='users.userSingleSelectCtrl.name[user._id]', placeholder='操作')
-                          md-optgroup(label='详情')
-                            md-option(ng-repeat='name in users.userSingleSelectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user)") {{name.val}}
-                          md-optgroup(label='安全')
-                            md-option(ng-repeat='name in users.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user, $index)") {{name.val}}                          
+                        md-select(ng-model='users.userBlockedSelectCtrl.name[user._id]', placeholder='操作')
+                          md-option(ng-repeat='name in users.userBlockedSelectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, user, key)") {{name.val}}                          
                       td
                         md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='users.blockedUser.isElementSelected[user._id]', ng-change="users.selectThis(user._id, users.blockedUser)")
             .panel-footer
@@ -407,8 +399,8 @@ h3 用户管理
                 .col-lg-10
                 .col-lg-2
                   .input-group.pull-right
-                    md-select(ng-model='users.selectCtrl.name', placeholder='操作')
-                      md-option(ng-repeat='name in users.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)") {{name.val}}
+                    md-select(ng-model='users.userBlockedSelectCtrl.name', placeholder='操作')
+                      md-option(ng-repeat='name in users.userBlockedSelectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)") {{name.val}}
                     span.input-group-btn
                       button.md-primary.md-hue-1.md-button.md-default-theme 应用
 
