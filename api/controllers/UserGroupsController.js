@@ -7,6 +7,7 @@ var index = {
     var name = req.params.name;
     var description = req.params.description;
     var rights = req.params.rights;
+    var code = req.params.code;
 
     if(name == undefined || name == '') {
       res.send(util.retMsg(401, "用户组名不能为空"));
@@ -31,7 +32,8 @@ var index = {
     var ug = new UG({
       name: name,
       description: description,
-      rightsList: rights
+      rightsList: rights,
+      code: code
     });
 
     ug.save(function(err, g) {
@@ -89,6 +91,7 @@ var index = {
     var name = req.params.name;
     var description = req.params.description;
     var rights = req.params.rights;
+    var code = req.params.code;
     var id = req.params.id;
 
     if(name == undefined || name == '') {
@@ -125,7 +128,8 @@ var index = {
         name: name,
         description: description,
         rightsList: rights,
-        updatedAt: Date.now()
+        updatedAt: Date.now(),
+        code: code
       }, function(err, ug) {
 
         if(err) {

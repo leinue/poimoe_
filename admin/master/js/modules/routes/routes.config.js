@@ -152,6 +152,11 @@
               title: '登录',
               templateUrl: helper.basepath( 'auth/login.html' )
           })
+          .state('auth.noAuth', {
+              url: '/noauth',
+              title: '登录',
+              templateUrl: helper.basepath( 'auth/noauth.html' )
+          })
 
           // CUSTOM RESOLVES
           //   Add your own resolves properties

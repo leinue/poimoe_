@@ -1,0 +1,18 @@
+.abs-center.wd-xl
+  // START panel
+  .text-center.mb-xl
+    .text-lg.mb-lg 无权限操作
+    p.lead.m0 对不起，您无权进行此项操作
+    p 如有疑问，请联系管理员或在我们的官网反馈
+  
+  ul.list-inline.text-center.text-sm.mb-xl
+    li: a.text-muted(href="http://poimoe.com/?page_id=21") 去反馈
+    li.text-muted | 
+    li: a.text-muted(href="", ui-sref="auth.login") 登录
+  .p-lg.text-center
+    span &copy; 
+    span(ng-bind="app.year") 
+    span  - 
+    span(ng-bind="app.name")
+    br
+    span(ng-bind="app.description")

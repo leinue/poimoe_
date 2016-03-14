@@ -7,6 +7,7 @@ module.exports = {
     var userGroupsSchema = Schema({
       name: String,
       description: String,
+      code: String,
       createdAt: {
   		  type: Date,
   		  default: Date.now

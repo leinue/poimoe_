@@ -14,6 +14,7 @@ module.exports = {
   relationsModel: undefined,
   timelineModel: undefined,
   kakuModel: undefined,
+  userGroupsModel: undefined,
 
   init: function(mongoose) {
 
@@ -42,7 +43,7 @@ module.exports = {
       group: [{
         type: Schema.Types.ObjectId,
         ref: 'userGroups'
-      },
+      }],
       favourites: [{
         type: Schema.Types.ObjectId,
         ref: 'themes'
