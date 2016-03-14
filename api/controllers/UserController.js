@@ -1277,13 +1277,13 @@ var index = {
 
   deleteUser: function(req, res, next) {
 
-    var uid = req.params.uids;
+    var uids = req.params.uids;
 
     var User = ctrlInitial.models.User();
 
     var uidLength = uids.length;
 
-    uids.forEach(function(uid, key) {
+    uids.forEach(function(uids, key) {
         User.removeUser(uid, function(err, msg) {
 
             if(err) {
@@ -1301,7 +1301,7 @@ var index = {
 
   deleteUserByUid: function(req, res, next) {
 
-    var uid = req.params.uids;
+    var uid = req.params.uid;
 
     var User = ctrlInitial.models.User();
 
@@ -1319,7 +1319,7 @@ var index = {
 
   unRemoveUserByUid: function(req, res, next) {
 
-    var uid = req.params.uids;
+    var uid = req.params.uid;
 
     var User = ctrlInitial.models.User();
 

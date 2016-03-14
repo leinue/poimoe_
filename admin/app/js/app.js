@@ -31,18 +31,13 @@
             'app.dashboard',
             'app.users',
             'app.themes',
-            'app.tags'
+            'app.tags',
+            'auth.login'
             // 'datatables'
         ]);
 })();
 
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors', []);
-})();
 (function() {
     'use strict';
 
@@ -68,6 +63,12 @@
     'use strict';
 
     angular
+        .module('app.colors', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.dashboard', []);
 })();
 (function() {
@@ -88,6 +89,7 @@
     angular
         .module('app.maps', []);
 })();
+
 (function() {
     'use strict';
 
@@ -95,6 +97,13 @@
         .module('app.material', [
             'ngMaterial'
           ]);
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
@@ -104,12 +113,6 @@
 })();
 
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch', []);
-})();
 (function() {
     'use strict';
 
@@ -143,56 +146,6 @@
         .module('app.utils', [
           'app.colors'
           ]);
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .constant('APP_COLORS', {
-          'primary':                '#3F51B5',
-          'success':                '#4CAF50',
-          'info':                   '#2196F3',
-          'warning':                '#FF9800',
-          'danger':                 '#F44336',
-          'inverse':                '#607D8B',
-          'green':                  '#009688',
-          'pink':                   '#E91E63',
-          'purple':                 '#673AB7',
-          'dark':                   '#263238',
-          'yellow':                 '#FFEB3B',
-          'gray-darker':            '#232735',
-          'gray-dark':              '#3a3f51',
-          'gray':                   '#dde6e9',
-          'gray-light':             '#e4eaec',
-          'gray-lighter':           '#edf1f2'
-        })
-        ;
-})();
-/**=========================================================
- * Module: colors.js
- * Services to retrieve global colors
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .service('Colors', Colors);
-
-    Colors.$inject = ['APP_COLORS'];
-    function Colors(APP_COLORS) {
-        this.byName = byName;
-
-        ////////////////
-
-        function byName(name) {
-          return (APP_COLORS[name] || '#fff');
-        }
-    }
-
 })();
 
 (function() {
@@ -238,6 +191,7 @@
 
 })();
 (function() {
+
     'use strict';
 
     angular
@@ -246,7 +200,7 @@
 
     appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
     
-    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
+    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors, $mdDialog, $mdToast) {
       
       // Set reference to access them from any scope
       $rootScope.$state = $state;
@@ -299,7 +253,12 @@
         var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
         document.title = title;
         return title;
-      };      
+      };
+
+      $rootScope.$on('$locationChangeStart', function(evt, next, curr) {
+
+
+      })
 
     }
 
@@ -390,6 +349,56 @@
 
       }
 
+    }
+
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .constant('APP_COLORS', {
+          'primary':                '#3F51B5',
+          'success':                '#4CAF50',
+          'info':                   '#2196F3',
+          'warning':                '#FF9800',
+          'danger':                 '#F44336',
+          'inverse':                '#607D8B',
+          'green':                  '#009688',
+          'pink':                   '#E91E63',
+          'purple':                 '#673AB7',
+          'dark':                   '#263238',
+          'yellow':                 '#FFEB3B',
+          'gray-darker':            '#232735',
+          'gray-dark':              '#3a3f51',
+          'gray':                   '#dde6e9',
+          'gray-light':             '#e4eaec',
+          'gray-lighter':           '#edf1f2'
+        })
+        ;
+})();
+/**=========================================================
+ * Module: colors.js
+ * Services to retrieve global colors
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .service('Colors', Colors);
+
+    Colors.$inject = ['APP_COLORS'];
+    function Colors(APP_COLORS) {
+        this.byName = byName;
+
+        ////////////////
+
+        function byName(name) {
+          return (APP_COLORS[name] || '#fff');
+        }
     }
 
 })();
@@ -759,18 +768,52 @@
         .module('app.loadingbar')
         .run(loadingbarRun)
         ;
-    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
-    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
+    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar', '$mdDialog', '$mdToast', '$state'];
+    function loadingbarRun($rootScope, $timeout, cfpLoadingBar, $mdDialog, $mdToast, $state){
 
       // Loading bar transition
       // ----------------------------------- 
       var thBar;
-      $rootScope.$on('$stateChangeStart', function() {
-          if($('.wrapper > section').length) // check if bar container exists
-            thBar = $timeout(function() {
-              cfpLoadingBar.start();
-            }, 0); // sets a latency Threshold
+      $rootScope.$on('$stateChangeStart', function(evt, next, curr) {
+
+        var publicRoutes = ['auth.login'];
+
+        if(localStorage.isFromLoginPage == 'true' && localStorage.isFromLoginPage != undefined) {
+          localStorage.isFromLoginPage = 'false';
+          return false;
+        }
+
+        if(localStorage.login == undefined || localStorage.login == 'false') {
+
+          for (var i = 0; i < publicRoutes.length; i++) {
+            var route = publicRoutes[i];
+
+            if(next.name.indexOf(route) == -1) {
+              var toast = $mdToast.simple()
+                    .content('无权限访问, 请登录')
+                    .action('确定')
+                    .highlightAction(false)
+                    .position('top right');
+              $mdToast.show(toast).then(function() {
+                $state.go('auth.login');
+              });
+              window.location.href = "http://" + document.domain + ':8888/index.html#/auth/login';
+              $state.go('auth.login');
+              break;
+            }
+
+          };
+
+          return false;
+
+        }
+
+        if($('.wrapper > section').length) // check if bar container exists
+          thBar = $timeout(function() {
+            cfpLoadingBar.start();
+          }, 0); // sets a latency Threshold
       });
+
       $rootScope.$on('$stateChangeSuccess', function(event) {
           event.targetScope.$watch('$viewContentLoaded', function () {
             $timeout.cancel(thBar);
@@ -1676,99 +1719,6 @@
         }
     }
 })();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.preloader')
-        .directive('preloader', preloader);
-
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
-
-        var directive = {
-            restrict: 'EAC',
-            template: 
-              '<div class="preloader-progress">' +
-                  '<div class="preloader-progress-bar" ' +
-                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
-              '</div>'
-            ,
-            link: link
-        };
-        return directive;
-
-        ///////
-
-        function link(scope, el) {
-
-          scope.loadCounter = 0;
-
-          var counter  = 0,
-              timeout;
-
-          // disables scrollbar
-          angular.element('body').css('overflow', 'hidden');
-          // ensure class is present for styling
-          el.addClass('preloader');
-
-          appReady().then(endCounter);
-
-          timeout = $timeout(startCounter);
-
-          ///////
-
-          function startCounter() {
-
-            var remaining = 100 - counter;
-            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
-
-            scope.loadCounter = parseInt(counter, 10);
-
-            timeout = $timeout(startCounter, 20);
-          }
-
-          function endCounter() {
-
-            $timeout.cancel(timeout);
-
-            scope.loadCounter = 100;
-
-            $timeout(function(){
-              // animate preloader hiding
-              $animate.addClass(el, 'preloader-hidden');
-              // retore scrollbar
-              angular.element('body').css('overflow', '');
-            }, 300);
-          }
-
-          function appReady() {
-            var deferred = $q.defer();
-            var viewsLoaded = 0;
-            // if this doesn't sync with the real app ready
-            // a custom event must be used instead
-            var off = scope.$on('$viewContentLoaded', function () {
-              viewsLoaded ++;
-              // we know there are at least two views to be loaded 
-              // before the app is ready (1-index.html 2-app*.html)
-              if ( viewsLoaded === 2) {
-                // with resolve this fires only once
-                $timeout(function(){
-                  deferred.resolve();
-                }, 1);
-
-                off();
-              }
-
-            });
-
-            return deferred.promise;
-          }
-
-        } //link
-    }
-
-})();
 /**=========================================================
  * Module: navbar-search.js
  * Navbar search toggler * Auto dismiss on ESC key
@@ -1878,6 +1828,99 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.preloader')
+        .directive('preloader', preloader);
+
+    preloader.$inject = ['$animate', '$timeout', '$q'];
+    function preloader ($animate, $timeout, $q) {
+
+        var directive = {
+            restrict: 'EAC',
+            template: 
+              '<div class="preloader-progress">' +
+                  '<div class="preloader-progress-bar" ' +
+                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
+              '</div>'
+            ,
+            link: link
+        };
+        return directive;
+
+        ///////
+
+        function link(scope, el) {
+
+          scope.loadCounter = 0;
+
+          var counter  = 0,
+              timeout;
+
+          // disables scrollbar
+          angular.element('body').css('overflow', 'hidden');
+          // ensure class is present for styling
+          el.addClass('preloader');
+
+          appReady().then(endCounter);
+
+          timeout = $timeout(startCounter);
+
+          ///////
+
+          function startCounter() {
+
+            var remaining = 100 - counter;
+            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
+
+            scope.loadCounter = parseInt(counter, 10);
+
+            timeout = $timeout(startCounter, 20);
+          }
+
+          function endCounter() {
+
+            $timeout.cancel(timeout);
+
+            scope.loadCounter = 100;
+
+            $timeout(function(){
+              // animate preloader hiding
+              $animate.addClass(el, 'preloader-hidden');
+              // retore scrollbar
+              angular.element('body').css('overflow', '');
+            }, 300);
+          }
+
+          function appReady() {
+            var deferred = $q.defer();
+            var viewsLoaded = 0;
+            // if this doesn't sync with the real app ready
+            // a custom event must be used instead
+            var off = scope.$on('$viewContentLoaded', function () {
+              viewsLoaded ++;
+              // we know there are at least two views to be loaded 
+              // before the app is ready (1-index.html 2-app*.html)
+              if ( viewsLoaded === 2) {
+                // with resolve this fires only once
+                $timeout(function(){
+                  deferred.resolve();
+                }, 1);
+
+                off();
+              }
+
+            });
+
+            return deferred.promise;
+          }
+
+        } //link
+    }
+
+})();
 /**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
@@ -1983,7 +2026,13 @@
         $locationProvider.html5Mode(false);
 
         // defaults to welcome
-        $urlRouterProvider.otherwise('/app/welcome');
+
+        if(localStorage.login == undefined || localStorage.login == 'false') {
+          localStorage.login = 'false';
+          $urlRouterProvider.otherwise('/auth/login');
+        }else {
+          $urlRouterProvider.otherwise('/app/welcome');
+        }
 
           // {
           //   "text": "元素",
@@ -2003,7 +2052,7 @@
 
         // 
         // 应用程序欢迎目录
-        // -----------------------------------   
+        // -----------------------------------
         $stateProvider
           .state('app', {
               url: '/app',
@@ -2094,6 +2143,22 @@
             title: '官网管理',
             templateUrl: helper.basepath( 'website/website.html' )
           })
+          //
+          // 用户登录 
+          // -----------------------------------
+          .state('auth', {
+              url: '/auth',
+              templateUrl: helper.basepath( 'auth/page.html' ),
+              resolve: helper.resolveFor('modernizr', 'icons'),
+              controller: ['$rootScope', function($rootScope) {
+                  $rootScope.app.layout.isBoxed = false;
+              }]
+          })
+          .state('auth.login', {
+              url: '/login',
+              title: '登录',
+              templateUrl: helper.basepath( 'auth/login.html' )
+          })
 
           // CUSTOM RESOLVES
           //   Add your own resolves properties
@@ -2151,6 +2216,10 @@
         viewAnimation: 'ng-fadeInUp',
         baseUrl: 'http://api.poimoe.com/'
       };
+
+      if(document.domain != 'localhost') {
+        document.domain = 'poimoe.com';
+      }
 
       // Setup the layout mode
       $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
@@ -3028,6 +3097,24 @@
             /*...*/
         ]);
 })();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('auth.login', [
+            'angle'
+        ]);
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.tags', [
+            'angle'
+        ]);
+})();
 (function() {
     'use strict';
 
@@ -3041,14 +3128,6 @@
 
     angular
         .module('app.users', [
-            'angle'
-        ]);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tags', [
             'angle'
         ]);
 })();
@@ -3077,6 +3156,436 @@
           $log.log('I\'m a line from custom.js');
         }
     }
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('auth.login')
+        .controller('LoginController', LoginController);
+
+    LoginController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state'];
+    
+    function LoginController($log, $mdDialog, $mdToast, AuthService, $state) {
+	
+		var vm = this;
+
+		vm.loginIn = function() {
+
+			sessionStorage.isFromLoginPage = true;
+
+			$state.go('app.welcome');
+		}; 
+
+    }
+
+})();
+
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('auth.login')
+        .service('AuthService', AuthService);
+
+    AuthService.$inject = ['$http', '$rootScope', '$resource'];
+
+    function AuthService($http, $rootScope, $resource) {
+
+      return {
+
+        login: function(email, password) {
+          return $http.get($rootScope.app.baseUrl + 'user/login/' + email + '/' + password);
+        }
+
+      }
+
+    }
+
+})();
+
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.tags')
+        .controller('TagsController', TagsController);
+
+    TagsController.$inject = ['$log', '$mdDialog', '$mdToast', 'TagService', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
+    function TagsController($log, $mdDialog, $mdToast, TagService, DTOptionsBuilder, DTColumnDefBuilder) {
+        // for controllerAs syntax
+        var vm = this;
+
+        vm.tagsList = [];
+        vm.tagsDeletedList = [];
+
+        activate();
+        activateTable();
+
+        function activateTable() {
+
+            vm.isSelectAll = false;
+            vm.isDeletedSelectAll = false;
+
+            vm.tagsSelectedList =[]; 
+            vm.tagsSelected = {};
+
+            vm.tagsDeletedSelectedList = [];
+            vm.tagsDeletedSelected = {};
+
+            vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+            vm.dtColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(0),
+                DTColumnDefBuilder.newColumnDef(1),
+                DTColumnDefBuilder.newColumnDef(2),
+                DTColumnDefBuilder.newColumnDef(3).notSortable()
+            ];
+
+            vm.getAll = function() {
+                TagService.getAll(1, 100)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.tagsList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
+            }
+
+            vm.getAllDeleted = function() {
+                TagService.getDeleted(1, 10)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.tagsDeletedList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
+            }
+
+            vm.getAll();
+            vm.getAllDeleted();
+
+            vm.toggleSelectAll = function() {
+
+                if(!vm.isSelectAll) {
+                    //取消全选
+                    for (var i = 0; i < vm.tagsList.length; i++) {
+                        var tag = vm.tagsList[i];
+                        vm.tagsSelected[tag._id] = false;
+                        vm.isSelectAll = false;
+                    };
+                    vm.tagsSelectedList = [];
+                }else {
+                    //选择全部
+                    vm.tagsSelectedList = [];
+                    for (var i = 0; i < vm.tagsList.length; i++) {
+                        var tag = vm.tagsList[i];
+                        vm.tagsSelected[tag._id] = true;
+                        vm.tagsSelectedList.push(tag._id);
+                        vm.isSelectAll = true;
+                    };
+                }
+
+            };
+
+            vm.selectThisTag = function(id) {
+
+                if(vm.tagsSelected[id] == undefined) {
+                    vm.tagsSelected[id] = false;
+                }
+
+                if(vm.tagsSelected[id]) {
+                    vm.tagsSelected[id] = true;
+                    vm.tagsSelectedList.push(id);
+                }else {
+                    vm.tagsSelected[id] = false;
+                    vm.tagsSelectedList.splice(vm.tagsSelectedList.indexOf(id), 1);
+                }
+            }
+
+            vm.toggleSelectAllDeleted = function() {
+
+                if(!vm.isDeletedSelectAll) {
+                    //取消全选
+                    for (var i = 0; i < vm.tagsDeletedList.length; i++) {
+                        var tag = vm.tagsDeletedList[i];
+                        vm.tagsDeletedSelected[tag._id] = false;
+                        vm.isDeletedSelectAll = false;
+                    };
+                    vm.tagsDeletedSelectedList = [];
+                }else {
+                    //选择全部
+                    vm.tagsDeletedSelectedList = [];
+                    for (var i = 0; i < vm.tagsDeletedList.length; i++) {
+                        var tag = vm.tagsDeletedList[i];
+                        vm.tagsDeletedSelected[tag._id] = true;
+                        vm.tagsDeletedSelectedList.push(tag._id);
+                        vm.isDeletedSelectAll = true;
+                    };
+                }
+
+            };
+
+            vm.selectThisDeletedTag = function(id) {
+
+                if(vm.tagsDeletedSelected[id] == undefined) {
+                    vm.tagsDeletedSelected[id] = false;
+                }
+
+                if(vm.tagsDeletedSelected[id]) {
+                    vm.tagsDeletedSelected[id] = true;
+                    vm.tagsDeletedSelectedList.push(id);
+                }else {
+                    vm.tagsDeletedSelected[id] = false;
+                    vm.tagsDeletedSelectedList.splice(vm.tagsDeletedSelectedList.indexOf(id), 1);
+                }
+
+                console.log(vm.tagsDeletedSelectedList);
+            }
+
+        }
+
+        function activate() {
+            vm.selectCtrl = {
+
+                names: [{
+                    val: '编辑',
+                    onClicked: function(ev, tm, index) {
+                        $mdDialog.show({
+                            controller: DialogController,
+                            templateUrl: 'tags_detail.tmpl.html',
+                            targetEvent: ev,
+                        })
+                        .then(function(answer) {
+                        }, function() {
+                        });
+
+                        DialogController.$inject = ['$scope', '$mdDialog'];
+                        function DialogController($scope, $mdDialog) {
+
+                            $scope.tag = tm;
+
+                            $scope.hide = function() {
+                                $mdDialog.hide();
+                            };
+
+                            $scope.cancel = function() {
+                                $mdDialog.cancel();
+                            };
+
+                            $scope.answer = function(answer) {
+                                $mdDialog.hide(answer);
+                            };
+
+                            $scope.confirmToModifyThisTag = function() {
+                                TagService.update($scope.tag._id, $scope.tag.name, $scope.tag.description)
+                                .success(function(res) {
+
+                                    var msg = res.message;
+
+                                    if(res.code === 200) {
+                                        msg = '修改成功';
+                                    }
+
+                                    var toast = $mdToast.simple()
+                                          .content(msg)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                    if(res.code == 200) {
+                                        $scope.cancel();
+                                    }
+                                }).error(function(res) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                });
+                            };
+                        }
+                    }
+                }, {
+                    val: '删除',
+                    onClicked: function(ev, tm, index) {
+
+                        var confirm = $mdDialog.confirm()
+                            .title('删除确认')
+                            .content('你确定要删除此主题？')
+                            .ariaLabel('Lucky day')
+                            .ok('确定')
+                            .cancel('取消')
+                            .targetEvent(ev);
+
+                        if(index != undefined) {
+                            vm.tagsSelected[tm._id] = true;
+                            vm.tagsSelectedList.push(tm._id);
+                        }
+
+                        $mdDialog.show(confirm).then(function() {
+                            //确定
+                            var tagsSelectedLength = vm.tagsSelectedList.length;
+                            vm.tagsSelectedList.forEach(function(id, key) {
+
+                                TagService.remove(id)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                    if(key == tagsSelectedLength - 1) {
+                                        vm.getAll();
+                                        vm.getAllDeleted();
+                                    }
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                });
+
+                            });
+
+                        }, function() {
+                            //取消
+                        });
+                    }
+                }]
+
+            };
+
+            vm.selectDeletedCtrl = {
+                names: [{
+                    val: '恢复',
+                    onClicked: function(ev, tm, index) {
+
+                        if(index != undefined) {
+                            vm.tagsDeletedSelected[tm._id] = true;
+                            vm.tagsDeletedSelectedList.push(tm._id);
+                        }
+
+                        var tagsDeletedSelectedLength = vm.tagsDeletedSelectedList.length;
+
+                        vm.tagsDeletedSelectedList.forEach(function(id, key) {
+                            TagService.unRemove(id)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+
+                                if(key == tagsDeletedSelectedLength - 1) {
+                                    vm.getAllDeleted();
+                                    vm.getAll();
+                                }
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+                        });
+
+                    }
+                }]
+            };
+        }
+    }
+
+})();
+
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.tags')
+        .service('TagService', TagService);
+
+    TagService.$inject = ['$http', '$rootScope', '$resource'];
+
+    function TagService($http, $rootScope, $resource) {
+
+      return {
+
+        getAll: function(page, count) {
+          return $http.get($rootScope.app.baseUrl + 'tags/select/all');
+        },
+
+        getDeleted: function(page, count) {
+          return $http.get($rootScope.app.baseUrl + 'tags/select/removed');
+        },
+
+        remove: function(id) {
+          return $http.get($rootScope.app.baseUrl + 'tags/remove/' + id);
+        },
+
+        update: function(id, name, description) {
+          return $http.get($rootScope.app.baseUrl + 'tags/update/' + id + '/' + name + '/' + description);          
+        },
+
+        unRemove: function(id) {
+          return $http.get($rootScope.app.baseUrl + 'tags/unremove/' + id);
+        }
+
+      }
+
+    }
+
 })();
 
 
@@ -3264,6 +3773,9 @@
 
                         }, function() {
                             //取消
+                            if(index != undefined) {
+                                vm.unSelectThisById(tm._id, vm.element);
+                            }
                         });
                     }
                 }]
@@ -3371,8 +3883,8 @@
         .module('app.users')
         .controller('UsersController', UsersController);
 
-    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http', 'UserService', '$mdToast', 'MOptions'];
-    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http, UserService, $mdToast, MOptions) {
+    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http', 'UserService', '$mdToast', 'MOptions', 'ThemeService'];
+    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http, UserService, $mdToast, MOptions, ThemeService) {
         // for controllerAs syntax
         var vm = this;
 
@@ -3872,6 +4384,11 @@
 
                             });
 
+                        }, function() {
+                            //取消
+                            if(index != undefined) {
+                                vm.unSelectThisById(ur._id, vm.removedUser);
+                            }
                         });
                     }
                 }]
@@ -3892,10 +4409,10 @@
                             .targetEvent(ev);
 
                         if(index != undefined) {
-                            vm.selecteThisById(ur._id, vm.removedUser);
+                            vm.selecteThisById(ur._id, vm.blockedUser);
                         }
 
-                        var length = vm.removedUser.selectedList.length;
+                        var length = vm.blockedUser.selectedList.length;
 
                         if(length === 0) {
                             var toast = $mdToast.simple()
@@ -3909,7 +4426,7 @@
 
                         $mdDialog.show(confirm).then(function() {
 
-                            vm.removedUser.selectedList.forEach(function(id, key) {
+                            vm.blockedUser.selectedList.forEach(function(id, key) {
 
                                 UserService.unBlockUserByUid(id)
                                 .success(function(res, status, headers, config) {
@@ -3922,7 +4439,7 @@
                                     });
 
                                     if(key == length - 1) {
-                                        vm.getAllDeleted();
+                                        vm.getAllBlocked();
                                         vm.getAll();
                                     }
                                 })
@@ -3938,6 +4455,11 @@
 
                             });
 
+                        }, function() {
+                            //取消
+                            if(index != undefined) {
+                                vm.unSelectThisById(ur._id, vm.blockedUser);
+                            }
                         });
 
                     }
@@ -4013,387 +4535,6 @@
 
         unBlockUserByUid: function(uid) {
           return $http.get($rootScope.app.baseUrl + 'user/unblock/' + uid);          
-        }
-
-      }
-
-    }
-
-})();
-
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tags')
-        .controller('TagsController', TagsController);
-
-    TagsController.$inject = ['$log', '$mdDialog', '$mdToast', 'TagService', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
-    function TagsController($log, $mdDialog, $mdToast, TagService, DTOptionsBuilder, DTColumnDefBuilder) {
-        // for controllerAs syntax
-        var vm = this;
-
-        vm.tagsList = [];
-        vm.tagsDeletedList = [];
-
-        activate();
-        activateTable();
-
-        function activateTable() {
-
-            vm.isSelectAll = false;
-            vm.isDeletedSelectAll = false;
-
-            vm.tagsSelectedList =[]; 
-            vm.tagsSelected = {};
-
-            vm.tagsDeletedSelectedList = [];
-            vm.tagsDeletedSelected = {};
-
-            vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
-            vm.dtColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(0),
-                DTColumnDefBuilder.newColumnDef(1),
-                DTColumnDefBuilder.newColumnDef(2),
-                DTColumnDefBuilder.newColumnDef(3).notSortable()
-            ];
-
-            vm.getAll = function() {
-                TagService.getAll(1, 100)
-                .success(function(res, status, headers, config) {
-                    if(res.code != 200) {
-                        var toast = $mdToast.simple()
-                              .content(res.message)
-                              .action('我知道了')
-                              .highlightAction(false)
-                              .position('top right');
-                        $mdToast.show(toast).then(function() {
-                        });
-                    }
-                    vm.tagsList = res.message;
-                })
-                .error(function(res, status, headers, config) {
-                    var toast = $mdToast.simple()
-                          .content('出错了，错误代码：' + status)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                });
-            }
-
-            vm.getAllDeleted = function() {
-                TagService.getDeleted(1, 10)
-                .success(function(res, status, headers, config) {
-                    if(res.code != 200) {
-                        var toast = $mdToast.simple()
-                              .content(res.message)
-                              .action('我知道了')
-                              .highlightAction(false)
-                              .position('top right');
-                        $mdToast.show(toast).then(function() {
-                        });
-                    }
-                    vm.tagsDeletedList = res.message;
-                })
-                .error(function(res, status, headers, config) {
-                    var toast = $mdToast.simple()
-                          .content('出错了，错误代码：' + status)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                });
-            }
-
-            vm.getAll();
-            vm.getAllDeleted();
-
-            vm.toggleSelectAll = function() {
-
-                if(!vm.isSelectAll) {
-                    //取消全选
-                    for (var i = 0; i < vm.tagsList.length; i++) {
-                        var tag = vm.tagsList[i];
-                        vm.tagsSelected[tag._id] = false;
-                        vm.isSelectAll = false;
-                    };
-                    vm.tagsSelectedList = [];
-                }else {
-                    //选择全部
-                    vm.tagsSelectedList = [];
-                    for (var i = 0; i < vm.tagsList.length; i++) {
-                        var tag = vm.tagsList[i];
-                        vm.tagsSelected[tag._id] = true;
-                        vm.tagsSelectedList.push(tag._id);
-                        vm.isSelectAll = true;
-                    };
-                }
-
-            };
-
-            vm.selectThisTag = function(id) {
-
-                if(vm.tagsSelected[id] == undefined) {
-                    vm.tagsSelected[id] = false;
-                }
-
-                if(vm.tagsSelected[id]) {
-                    vm.tagsSelected[id] = true;
-                    vm.tagsSelectedList.push(id);
-                }else {
-                    vm.tagsSelected[id] = false;
-                    vm.tagsSelectedList.splice(vm.tagsSelectedList.indexOf(id), 1);
-                }
-            }
-
-            vm.toggleSelectAllDeleted = function() {
-
-                if(!vm.isDeletedSelectAll) {
-                    //取消全选
-                    for (var i = 0; i < vm.tagsDeletedList.length; i++) {
-                        var tag = vm.tagsDeletedList[i];
-                        vm.tagsDeletedSelected[tag._id] = false;
-                        vm.isDeletedSelectAll = false;
-                    };
-                    vm.tagsDeletedSelectedList = [];
-                }else {
-                    //选择全部
-                    vm.tagsDeletedSelectedList = [];
-                    for (var i = 0; i < vm.tagsDeletedList.length; i++) {
-                        var tag = vm.tagsDeletedList[i];
-                        vm.tagsDeletedSelected[tag._id] = true;
-                        vm.tagsDeletedSelectedList.push(tag._id);
-                        vm.isDeletedSelectAll = true;
-                    };
-                }
-
-            };
-
-            vm.selectThisDeletedTag = function(id) {
-
-                if(vm.tagsDeletedSelected[id] == undefined) {
-                    vm.tagsDeletedSelected[id] = false;
-                }
-
-                if(vm.tagsDeletedSelected[id]) {
-                    vm.tagsDeletedSelected[id] = true;
-                    vm.tagsDeletedSelectedList.push(id);
-                }else {
-                    vm.tagsDeletedSelected[id] = false;
-                    vm.tagsDeletedSelectedList.splice(vm.tagsDeletedSelectedList.indexOf(id), 1);
-                }
-
-                console.log(vm.tagsDeletedSelectedList);
-            }
-
-        }
-
-        function activate() {
-            vm.selectCtrl = {
-
-                names: [{
-                    val: '编辑',
-                    onClicked: function(ev, tm, index) {
-                        $mdDialog.show({
-                            controller: DialogController,
-                            templateUrl: 'tags_detail.tmpl.html',
-                            targetEvent: ev,
-                        })
-                        .then(function(answer) {
-                        }, function() {
-                        });
-
-                        DialogController.$inject = ['$scope', '$mdDialog'];
-                        function DialogController($scope, $mdDialog) {
-
-                            $scope.tag = tm;
-
-                            $scope.hide = function() {
-                                $mdDialog.hide();
-                            };
-
-                            $scope.cancel = function() {
-                                $mdDialog.cancel();
-                            };
-
-                            $scope.answer = function(answer) {
-                                $mdDialog.hide(answer);
-                            };
-
-                            $scope.confirmToModifyThisTag = function() {
-                                TagService.update($scope.tag._id, $scope.tag.name, $scope.tag.description)
-                                .success(function(res) {
-
-                                    var msg = res.message;
-
-                                    if(res.code === 200) {
-                                        msg = '修改成功';
-                                    }
-
-                                    var toast = $mdToast.simple()
-                                          .content(msg)
-                                          .action('我知道了')
-                                          .highlightAction(false)
-                                          .position('top right');
-                                    $mdToast.show(toast).then(function() {
-                                    });
-
-                                    if(res.code == 200) {
-                                        $scope.cancel();
-                                    }
-                                }).error(function(res) {
-                                    var toast = $mdToast.simple()
-                                          .content('出错了，错误代码：' + status)
-                                          .action('我知道了')
-                                          .highlightAction(false)
-                                          .position('top right');
-                                    $mdToast.show(toast).then(function() {
-                                    });
-                                });
-                            };
-                        }
-                    }
-                }, {
-                    val: '删除',
-                    onClicked: function(ev, tm, index) {
-
-                        var confirm = $mdDialog.confirm()
-                            .title('删除确认')
-                            .content('你确定要删除此主题？')
-                            .ariaLabel('Lucky day')
-                            .ok('确定')
-                            .cancel('取消')
-                            .targetEvent(ev);
-
-                        if(index != undefined) {
-                            vm.tagsSelected[tm._id] = true;
-                            vm.tagsSelectedList.push(tm._id);
-                        }
-
-                        $mdDialog.show(confirm).then(function() {
-                            //确定
-                            var tagsSelectedLength = vm.tagsSelectedList.length;
-                            vm.tagsSelectedList.forEach(function(id, key) {
-
-                                TagService.remove(id)
-                                .success(function(res, status, headers, config) {
-                                    var toast = $mdToast.simple()
-                                          .content(res.message)
-                                          .action('我知道了')
-                                          .highlightAction(false)
-                                          .position('top right');
-                                    $mdToast.show(toast).then(function() {
-                                    });
-
-                                    if(key == tagsSelectedLength - 1) {
-                                        vm.getAll();
-                                        vm.getAllDeleted();
-                                    }
-                                })
-                                .error(function(res, status, headers, config) {
-                                    var toast = $mdToast.simple()
-                                          .content('出错了，错误代码：' + status)
-                                          .action('我知道了')
-                                          .highlightAction(false)
-                                          .position('top right');
-                                    $mdToast.show(toast).then(function() {
-                                    });
-                                });
-
-                            });
-
-                        }, function() {
-                            //取消
-                        });
-                    }
-                }]
-
-            };
-
-            vm.selectDeletedCtrl = {
-                names: [{
-                    val: '恢复',
-                    onClicked: function(ev, tm, index) {
-
-                        if(index != undefined) {
-                            vm.tagsDeletedSelected[tm._id] = true;
-                            vm.tagsDeletedSelectedList.push(tm._id);
-                        }
-
-                        var tagsDeletedSelectedLength = vm.tagsDeletedSelectedList.length;
-
-                        vm.tagsDeletedSelectedList.forEach(function(id, key) {
-                            TagService.unRemove(id)
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-
-                                if(key == tagsDeletedSelectedLength - 1) {
-                                    vm.getAllDeleted();
-                                    vm.getAll();
-                                }
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-                            });
-                        });
-
-                    }
-                }]
-            };
-        }
-    }
-
-})();
-
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tags')
-        .service('TagService', TagService);
-
-    TagService.$inject = ['$http', '$rootScope', '$resource'];
-
-    function TagService($http, $rootScope, $resource) {
-
-      return {
-
-        getAll: function(page, count) {
-          return $http.get($rootScope.app.baseUrl + 'tags/select/all');
-        },
-
-        getDeleted: function(page, count) {
-          return $http.get($rootScope.app.baseUrl + 'tags/select/removed');
-        },
-
-        remove: function(id) {
-          return $http.get($rootScope.app.baseUrl + 'tags/remove/' + id);
-        },
-
-        update: function(id, name, description) {
-          return $http.get($rootScope.app.baseUrl + 'tags/update/' + id + '/' + name + '/' + description);          
-        },
-
-        unRemove: function(id) {
-          return $http.get($rootScope.app.baseUrl + 'tags/unremove/' + id);
         }
 
       }

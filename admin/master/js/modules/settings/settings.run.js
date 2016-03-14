@@ -33,6 +33,10 @@
         baseUrl: 'http://api.poimoe.com/'
       };
 
+      if(document.domain != 'localhost') {
+        document.domain = 'poimoe.com';
+      }
+
       // Setup the layout mode
       $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
 

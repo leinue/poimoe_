@@ -31,7 +31,8 @@
             'app.dashboard',
             'app.users',
             'app.themes',
-            'app.tags'
+            'app.tags',
+            'auth.login'
             // 'datatables'
         ]);
 })();

@@ -7,8 +7,8 @@
         .module('app.users')
         .controller('UsersController', UsersController);
 
-    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http', 'UserService', '$mdToast', 'MOptions'];
-    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http, UserService, $mdToast, MOptions) {
+    UsersController.$inject = ['$log', '$mdDialog', '$scope', '$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$http', 'UserService', '$mdToast', 'MOptions', 'ThemeService'];
+    function UsersController($log, $mdDialog, $scope, $resource, DTOptionsBuilder, DTColumnDefBuilder, $http, UserService, $mdToast, MOptions, ThemeService) {
         // for controllerAs syntax
         var vm = this;
 
@@ -508,6 +508,11 @@
 
                             });
 
+                        }, function() {
+                            //取消
+                            if(index != undefined) {
+                                vm.unSelectThisById(ur._id, vm.removedUser);
+                            }
                         });
                     }
                 }]
@@ -528,10 +533,10 @@
                             .targetEvent(ev);
 
                         if(index != undefined) {
-                            vm.selecteThisById(ur._id, vm.removedUser);
+                            vm.selecteThisById(ur._id, vm.blockedUser);
                         }
 
-                        var length = vm.removedUser.selectedList.length;
+                        var length = vm.blockedUser.selectedList.length;
 
                         if(length === 0) {
                             var toast = $mdToast.simple()
@@ -545,7 +550,7 @@
 
                         $mdDialog.show(confirm).then(function() {
 
-                            vm.removedUser.selectedList.forEach(function(id, key) {
+                            vm.blockedUser.selectedList.forEach(function(id, key) {
 
                                 UserService.unBlockUserByUid(id)
                                 .success(function(res, status, headers, config) {
@@ -558,7 +563,7 @@
                                     });
 
                                     if(key == length - 1) {
-                                        vm.getAllDeleted();
+                                        vm.getAllBlocked();
                                         vm.getAll();
                                     }
                                 })
@@ -574,6 +579,11 @@
 
                             });
 
+                        }, function() {
+                            //取消
+                            if(index != undefined) {
+                                vm.unSelectThisById(ur._id, vm.blockedUser);
+                            }
                         });
 
                     }

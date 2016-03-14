@@ -1,0 +1,42 @@
+<div ng-controller="LoginController as login" class="block-center mt-xl wd-xl">
+   <!-- START panel-->
+   <div class="panel panel-inverse panel-flat">
+      <div class="panel-heading text-center">
+         <a href="#">
+            <img src="app/img/logo.png" alt="Image" class="block-center img-rounded" />
+         </a>
+      </div>
+      <div class="panel-body">
+         <p class="text-center pv">登录以继续</p>
+         <form role="form" ng-submit="login.login()" name="login.loginForm" novalidate="" class="form-validate mb-lg">
+            <div class="form-group has-feedback">
+               <input id="exampleInputEmail1" type="email" name="account_email" placeholder="用户名或邮箱" autocomplete="off" ng-model="login.account.email" required="" class="form-control" />
+               <span style="line-height: 2.5;" class="fa fa-envelope form-control-feedback text-muted"></span>
+               <span ng-show="login.loginForm.account_email.$dirty &amp;&amp; login.loginForm.account_email.$error.required" class="text-danger">这是必填项</span>
+               <span ng-show="login.loginForm.account_email.$dirty &amp;&amp; login.loginForm.account_email.$error.email" class="text-danger">邮箱地址不合法</span>
+            </div>
+            <div class="form-group has-feedback">
+               <input id="exampleInputPassword1" type="password" name="account_password" placeholder="密码" ng-model="login.account.password" required="" class="form-control" />
+               <span style="line-height: 2.5;" class="fa fa-lock form-control-feedback text-muted"></span>
+               <span ng-show="login.loginForm.account_password.$dirty &amp;&amp; login.loginForm.account_password.$error.required" class="text-danger">这是必填项</span>
+            </div>
+            <div class="clearfix">
+               <md-checkbox md-no-ink="" ng-model="users.normalUsers.isSelectAll" ng-change="users.toggleSelectAll(users.usersList, users.normalUsers)" class="md-primary">记住我</md-checkbox>
+            </div>
+            <button type="submit" ng-click="login.loginIn()" class="btn btn-block btn-primary mt-lg">登录</button>
+         </form>
+         <div ng-show="login.authMsg" class="alert alert-danger text-center">{{login.authMsg}}</div>
+         <!--p.pt-lg.text-center Need to Signup?-->
+         <!--a(ui-sref="page.register").btn.btn-block.btn-default Register Now-->
+      </div>
+   </div>
+   <!-- END panel-->
+   <div class="p-lg text-center">
+      <span>&copy;</span>
+      <span ng-bind="app.year"></span>
+      <span>-</span>
+      <span ng-bind="app.name"></span>
+      <br/>
+      <span ng-bind="app.description"></span>
+   </div>
+</div>

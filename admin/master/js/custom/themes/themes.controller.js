@@ -183,6 +183,9 @@
 
                         }, function() {
                             //取消
+                            if(index != undefined) {
+                                vm.unSelectThisById(tm._id, vm.element);
+                            }
                         });
                     }
                 }]

@@ -18,6 +18,7 @@ h3 用户管理
                       th 用户名
                       th 邮箱
                       th 性别
+                      th 是否锁定
                       th 注册时间
                       th 操作
                       th(check-all)
@@ -30,6 +31,7 @@ h3 用户管理
                       td {{user.username}}
                       td {{user.email}}
                       td {{user.sex}}
+                      td {{user.isBlocked}}
                       td {{user.createdAt}}
                       td
                         md-select(ng-model='users.userSingleSelectCtrl.name[user._id]', placeholder='操作')
@@ -401,21 +403,4 @@ h3 用户管理
                   .input-group.pull-right
                     md-select(ng-model='users.userBlockedSelectCtrl.name', placeholder='操作')
                       md-option(ng-repeat='name in users.userBlockedSelectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)") {{name.val}}
-                    span.input-group-btn
-                      button.md-primary.md-hue-1.md-button.md-default-theme 应用
-
-            // END table-responsive
-            .panel-footer
-              .row
-                .col-lg-2
-                  .input-group
-                    input.input-sm.form-control(type='text', placeholder='Search')
-                    span.input-group-btn
-                      button.btn.btn-sm.btn-default(type='button') Search
-                .col-lg-8
-                .col-lg-2
-                  .input-group.pull-right
-                    md-select(ng-model='selectctrl.size', placeholder='操作')
-                      md-option(ng-repeat='size in selectctrl.sizes', value='{{size}}') {{size}}
-                    span.input-group-btn
-                      button.md-primary.md-hue-1.md-button.md-default-theme 应用
+                      

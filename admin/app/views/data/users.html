@@ -19,6 +19,7 @@
                                  <th>用户名</th>
                                  <th>邮箱</th>
                                  <th>性别</th>
+                                 <th>是否锁定</th>
                                  <th>注册时间</th>
                                  <th>操作</th>
                                  <th check-all="check-all">
@@ -36,6 +37,7 @@
                                  <td>{{user.username}}</td>
                                  <td>{{user.email}}</td>
                                  <td>{{user.sex}}</td>
+                                 <td>{{user.isBlocked}}</td>
                                  <td>{{user.createdAt}}</td>
                                  <td>
                                     <md-select ng-model="users.userSingleSelectCtrl.name[user._id]" placeholder="操作">
@@ -458,33 +460,6 @@
                               <md-select ng-model="users.userBlockedSelectCtrl.name" placeholder="操作">
                                  <md-option ng-repeat="name in users.userBlockedSelectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)">{{name.val}}</md-option>
                               </md-select>
-                              <span class="input-group-btn">
-                                 <button class="md-primary md-hue-1 md-button md-default-theme">应用</button>
-                              </span>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <!-- END table-responsive-->
-                  <div class="panel-footer">
-                     <div class="row">
-                        <div class="col-lg-2">
-                           <div class="input-group">
-                              <input type="text" placeholder="Search" class="input-sm form-control" />
-                              <span class="input-group-btn">
-                                 <button type="button" class="btn btn-sm btn-default">Search</button>
-                              </span>
-                           </div>
-                        </div>
-                        <div class="col-lg-8"></div>
-                        <div class="col-lg-2">
-                           <div class="input-group pull-right">
-                              <md-select ng-model="selectctrl.size" placeholder="操作">
-                                 <md-option ng-repeat="size in selectctrl.sizes" value="{{size}}">{{size}}</md-option>
-                              </md-select>
-                              <span class="input-group-btn">
-                                 <button class="md-primary md-hue-1 md-button md-default-theme">应用</button>
-                              </span>
                            </div>
                         </div>
                      </div>

@@ -1,4 +1,5 @@
 (function() {
+
     'use strict';
 
     angular
@@ -7,7 +8,7 @@
 
     appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
     
-    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
+    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors, $mdDialog, $mdToast) {
       
       // Set reference to access them from any scope
       $rootScope.$state = $state;
@@ -60,7 +61,12 @@
         var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
         document.title = title;
         return title;
-      };      
+      };
+
+      $rootScope.$on('$locationChangeStart', function(evt, next, curr) {
+
+
+      })
 
     }
 

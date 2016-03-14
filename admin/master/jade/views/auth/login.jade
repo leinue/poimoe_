@@ -1,0 +1,34 @@
+.block-center.mt-xl.wd-xl(ng-controller="LoginController as login")
+  // START panel
+  .panel.panel-inverse.panel-flat
+    .panel-heading.text-center
+      a(href="#")
+        img.block-center.img-rounded(src='app/img/logo.png', alt='Image')
+    .panel-body
+      p.text-center.pv 登录以继续
+      form.form-validate(role='form', ng-submit="login.login()", name='login.loginForm', novalidate='').mb-lg
+        .form-group.has-feedback
+          input#exampleInputEmail1.form-control(type='email', name="account_email" placeholder='用户名或邮箱', autocomplete="off", ng-model="login.account.email", required='')
+          span.fa.fa-envelope.form-control-feedback.text-muted(style='line-height: 2.5;')
+          span.text-danger(ng-show="login.loginForm.account_email.$dirty && login.loginForm.account_email.$error.required") 这是必填项
+          span.text-danger(ng-show="login.loginForm.account_email.$dirty && login.loginForm.account_email.$error.email") 邮箱地址不合法
+        .form-group.has-feedback
+          input#exampleInputPassword1.form-control(type='password', name="account_password" placeholder='密码', ng-model="login.account.password", required='')
+          span.fa.fa-lock.form-control-feedback.text-muted(style='line-height: 2.5;')
+          span.text-danger(ng-show="login.loginForm.account_password.$dirty && login.loginForm.account_password.$error.required") 这是必填项
+        .clearfix
+          md-checkbox.md-primary(md-no-ink='', ng-model='users.normalUsers.isSelectAll', ng-change="users.toggleSelectAll(users.usersList, users.normalUsers)") 记住我 
+
+        button.btn.btn-block.btn-primary.mt-lg(type='submit' ng-click='login.loginIn()') 登录
+      
+      .alert.alert-danger.text-center(ng-show='login.authMsg') {{login.authMsg}}
+      //p.pt-lg.text-center Need to Signup?
+      //a(ui-sref="page.register").btn.btn-block.btn-default Register Now
+  // END panel
+  .p-lg.text-center
+    span &copy; 
+    span(ng-bind="app.year") 
+    span  - 
+    span(ng-bind="app.name")
+    br
+    span(ng-bind="app.description")

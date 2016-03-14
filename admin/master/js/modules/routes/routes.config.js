@@ -19,7 +19,13 @@
         $locationProvider.html5Mode(false);
 
         // defaults to welcome
-        $urlRouterProvider.otherwise('/app/welcome');
+
+        if(localStorage.login == undefined || localStorage.login == 'false') {
+          localStorage.login = 'false';
+          $urlRouterProvider.otherwise('/auth/login');
+        }else {
+          $urlRouterProvider.otherwise('/app/welcome');
+        }
 
           // {
           //   "text": "元素",
@@ -39,7 +45,7 @@
 
         // 
         // 应用程序欢迎目录
-        // -----------------------------------   
+        // -----------------------------------
         $stateProvider
           .state('app', {
               url: '/app',
@@ -129,6 +135,22 @@
             url: '/website/manager',
             title: '官网管理',
             templateUrl: helper.basepath( 'website/website.html' )
+          })
+          //
+          // 用户登录 
+          // -----------------------------------
+          .state('auth', {
+              url: '/auth',
+              templateUrl: helper.basepath( 'auth/page.html' ),
+              resolve: helper.resolveFor('modernizr', 'icons'),
+              controller: ['$rootScope', function($rootScope) {
+                  $rootScope.app.layout.isBoxed = false;
+              }]
+          })
+          .state('auth.login', {
+              url: '/login',
+              title: '登录',
+              templateUrl: helper.basepath( 'auth/login.html' )
           })
 
           // CUSTOM RESOLVES
