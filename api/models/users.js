@@ -269,6 +269,28 @@ module.exports = {
       }, cb);
     };
 
+    userSchema.statics.unblockUser = function(uid, cb) {
+      return this.findOneAndUpdate({
+        _id: uid,
+        isDeleted: false
+      }, {
+        isBlocked: false
+      }, {
+        new: true
+      }, cb);
+    };
+
+    userSchema.statics.unRemoveUser = function(uid, cb) {
+      return this.findOneAndUpdate({
+        _id: uid,
+        isDeleted: true
+      }, {
+        isDeleted: false
+      }, {
+        new: true
+      }, cb);
+    };
+
     userSchema.statics.isFavouritesExist = function(o, fa, cb) {
       var flag = false;
       for (var i = 0; i < o.length; i++) {

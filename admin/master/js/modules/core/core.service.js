@@ -54,21 +54,24 @@
           };
 
           vm.selectThis = function(id, MO) {
-              var isElementSelected = MO.isElementSelected;
-              var selectedList = MO.selectedList;
-
-              if(isElementSelected[id] == undefined) {
-                  isElementSelected[id] = false;
+              if(MO.isElementSelected[id] == undefined) {
+                  MO.isElementSelected[id] = false;
               }
 
-              if(isElementSelected[id]) {
-                  isElementSelected[id] = true;
-                  selectedList.push(id);
+              if(MO.isElementSelected[id]) {
+                  MO.isElementSelected[id] = true;
+                  MO.selectedList.push(id);
               }else {
-                  isElementSelected[id] = false;
-                  selectedList.splice(selectedList.indexOf(id), 1);
+                  MO.isElementSelected[id] = false;
+                  MO.selectedList.splice(MO.selectedList.indexOf(id), 1);
               }
+
           };
+
+          vm.selecteThisById = function(id, MO) {
+            MO.isElementSelected[id] = true;
+            MO.selectedList.push(id);
+          }
 
         }
 

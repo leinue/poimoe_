@@ -51,6 +51,10 @@ module.exports = {
     server.get('/dashboard/info', ctrl.userCtrl.getDashboardInfo);
     server.post('/user/block', ctrl.userCtrl.blockUser);
     server.post('/user/delete', ctrl.userCtrl.deleteUser);
+    server.get('/user/block/:id', ctrl.userCtrl.blockUserByUid);
+    server.get('/user/delete/:id', ctrl.userCtrl.deleteUserByUid);
+    server.get('/user/unblock/:id', ctrl.userCtrl.unblockUserByUid);
+    server.get('/user/unRemove/:id', ctrl.userCtrl.unRemoveUserByUid);
 
     server.get('/timeline/:page/:count', ctrl.userCtrl.loadTimeline);
     server.get('/timeline/message/index/count/:uid', ctrl.userCtrl.getMessageCount);

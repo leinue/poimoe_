@@ -100,16 +100,16 @@
     'use strict';
 
     angular
-        .module('app.navsearch', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.preloader', []);
 })();
 
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch', []);
+})();
 (function() {
     'use strict';
 
@@ -134,17 +134,17 @@
     'use strict';
 
     angular
+        .module('app.translate', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.utils', [
           'app.colors'
           ]);
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate', []);
-})();
 (function() {
     'use strict';
 
@@ -362,21 +362,24 @@
           };
 
           vm.selectThis = function(id, MO) {
-              var isElementSelected = MO.isElementSelected;
-              var selectedList = MO.selectedList;
-
-              if(isElementSelected[id] == undefined) {
-                  isElementSelected[id] = false;
+              if(MO.isElementSelected[id] == undefined) {
+                  MO.isElementSelected[id] = false;
               }
 
-              if(isElementSelected[id]) {
-                  isElementSelected[id] = true;
-                  selectedList.push(id);
+              if(MO.isElementSelected[id]) {
+                  MO.isElementSelected[id] = true;
+                  MO.selectedList.push(id);
               }else {
-                  isElementSelected[id] = false;
-                  selectedList.splice(selectedList.indexOf(id), 1);
+                  MO.isElementSelected[id] = false;
+                  MO.selectedList.splice(MO.selectedList.indexOf(id), 1);
               }
+
           };
+
+          vm.selecteThisById = function(id, MO) {
+            MO.isElementSelected[id] = true;
+            MO.selectedList.push(id);
+          }
 
         }
 
@@ -1668,6 +1671,99 @@
         }
     }
 })();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.preloader')
+        .directive('preloader', preloader);
+
+    preloader.$inject = ['$animate', '$timeout', '$q'];
+    function preloader ($animate, $timeout, $q) {
+
+        var directive = {
+            restrict: 'EAC',
+            template: 
+              '<div class="preloader-progress">' +
+                  '<div class="preloader-progress-bar" ' +
+                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
+              '</div>'
+            ,
+            link: link
+        };
+        return directive;
+
+        ///////
+
+        function link(scope, el) {
+
+          scope.loadCounter = 0;
+
+          var counter  = 0,
+              timeout;
+
+          // disables scrollbar
+          angular.element('body').css('overflow', 'hidden');
+          // ensure class is present for styling
+          el.addClass('preloader');
+
+          appReady().then(endCounter);
+
+          timeout = $timeout(startCounter);
+
+          ///////
+
+          function startCounter() {
+
+            var remaining = 100 - counter;
+            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
+
+            scope.loadCounter = parseInt(counter, 10);
+
+            timeout = $timeout(startCounter, 20);
+          }
+
+          function endCounter() {
+
+            $timeout.cancel(timeout);
+
+            scope.loadCounter = 100;
+
+            $timeout(function(){
+              // animate preloader hiding
+              $animate.addClass(el, 'preloader-hidden');
+              // retore scrollbar
+              angular.element('body').css('overflow', '');
+            }, 300);
+          }
+
+          function appReady() {
+            var deferred = $q.defer();
+            var viewsLoaded = 0;
+            // if this doesn't sync with the real app ready
+            // a custom event must be used instead
+            var off = scope.$on('$viewContentLoaded', function () {
+              viewsLoaded ++;
+              // we know there are at least two views to be loaded 
+              // before the app is ready (1-index.html 2-app*.html)
+              if ( viewsLoaded === 2) {
+                // with resolve this fires only once
+                $timeout(function(){
+                  deferred.resolve();
+                }, 1);
+
+                off();
+              }
+
+            });
+
+            return deferred.promise;
+          }
+
+        } //link
+    }
+
+})();
 /**=========================================================
  * Module: navbar-search.js
  * Navbar search toggler * Auto dismiss on ESC key
@@ -1777,99 +1873,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.preloader')
-        .directive('preloader', preloader);
-
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
-
-        var directive = {
-            restrict: 'EAC',
-            template: 
-              '<div class="preloader-progress">' +
-                  '<div class="preloader-progress-bar" ' +
-                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
-              '</div>'
-            ,
-            link: link
-        };
-        return directive;
-
-        ///////
-
-        function link(scope, el) {
-
-          scope.loadCounter = 0;
-
-          var counter  = 0,
-              timeout;
-
-          // disables scrollbar
-          angular.element('body').css('overflow', 'hidden');
-          // ensure class is present for styling
-          el.addClass('preloader');
-
-          appReady().then(endCounter);
-
-          timeout = $timeout(startCounter);
-
-          ///////
-
-          function startCounter() {
-
-            var remaining = 100 - counter;
-            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
-
-            scope.loadCounter = parseInt(counter, 10);
-
-            timeout = $timeout(startCounter, 20);
-          }
-
-          function endCounter() {
-
-            $timeout.cancel(timeout);
-
-            scope.loadCounter = 100;
-
-            $timeout(function(){
-              // animate preloader hiding
-              $animate.addClass(el, 'preloader-hidden');
-              // retore scrollbar
-              angular.element('body').css('overflow', '');
-            }, 300);
-          }
-
-          function appReady() {
-            var deferred = $q.defer();
-            var viewsLoaded = 0;
-            // if this doesn't sync with the real app ready
-            // a custom event must be used instead
-            var off = scope.$on('$viewContentLoaded', function () {
-              viewsLoaded ++;
-              // we know there are at least two views to be loaded 
-              // before the app is ready (1-index.html 2-app*.html)
-              if ( viewsLoaded === 2) {
-                // with resolve this fires only once
-                $timeout(function(){
-                  deferred.resolve();
-                }, 1);
-
-                off();
-              }
-
-            });
-
-            return deferred.promise;
-          }
-
-        } //link
-    }
-
-})();
 /**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
@@ -2520,6 +2523,68 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .config(translateConfig)
+        ;
+    translateConfig.$inject = ['$translateProvider'];
+    function translateConfig($translateProvider){
+  
+      $translateProvider.useStaticFilesLoader({
+          prefix : 'app/i18n/',
+          suffix : '.json'
+      });
+      $translateProvider.preferredLanguage('en');
+      $translateProvider.useLocalStorage();
+      $translateProvider.usePostCompiling(true);
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .run(translateRun)
+        ;
+    translateRun.$inject = ['$rootScope', '$translate'];
+    
+    function translateRun($rootScope, $translate){
+
+      // Internationalization
+      // ----------------------
+
+      $rootScope.language = {
+        // Handles language dropdown
+        listIsOpen: false,
+        // list of available languages
+        available: {
+          'en':       '中文'
+          // 'es_AR':    '英文'
+        },
+        // display always the current ui language
+        init: function () {
+          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
+          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
+          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
+        },
+        set: function (localeId) {
+          // Set the new idiom
+          $translate.use(localeId);
+          // save a reference for the current language
+          $rootScope.language.selected = $rootScope.language.available[localeId];
+          // finally toggle dropdown
+          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
+        }
+      };
+
+      $rootScope.language.init();
+
+    }
+})();
 /**=========================================================
  * Module: animate-enabled.js
  * Enable or disables ngAnimate for element with directive
@@ -2945,68 +3010,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .config(translateConfig)
-        ;
-    translateConfig.$inject = ['$translateProvider'];
-    function translateConfig($translateProvider){
-  
-      $translateProvider.useStaticFilesLoader({
-          prefix : 'app/i18n/',
-          suffix : '.json'
-      });
-      $translateProvider.preferredLanguage('en');
-      $translateProvider.useLocalStorage();
-      $translateProvider.usePostCompiling(true);
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .run(translateRun)
-        ;
-    translateRun.$inject = ['$rootScope', '$translate'];
-    
-    function translateRun($rootScope, $translate){
-
-      // Internationalization
-      // ----------------------
-
-      $rootScope.language = {
-        // Handles language dropdown
-        listIsOpen: false,
-        // list of available languages
-        available: {
-          'en':       '中文'
-          // 'es_AR':    '英文'
-        },
-        // display always the current ui language
-        init: function () {
-          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
-          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
-          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
-        },
-        set: function (localeId) {
-          // Set the new idiom
-          $translate.use(localeId);
-          // save a reference for the current language
-          $rootScope.language.selected = $rootScope.language.available[localeId];
-          // finally toggle dropdown
-          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
-        }
-      };
-
-      $rootScope.language.init();
-
-    }
-})();
 (function() {
     'use strict';
 
@@ -3485,51 +3488,62 @@
                 DTColumnDefBuilder.newColumnDef(3).notSortable()
             ];
 
-            ThemeService.getAll(1, 100)
-            .success(function(res, status, headers, config) {
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                }
-                vm.themesList = res.message;
-            })
-            .error(function(res, status, headers, config) {
-                var toast = $mdToast.simple()
-                      .content('出错了，错误代码：' + status)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
+            vm.getAll = function() {
 
-            ThemeService.getDeleted(1, 10)
-            .success(function(res, status, headers, config) {
-                if(res.code != 200) {
+                ThemeService.getAll(1, 100)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.themesList = res.message;
+                })
+                .error(function(res, status, headers, config) {
                     var toast = $mdToast.simple()
-                          .content(res.message)
+                          .content('出错了，错误代码：' + status)
                           .action('我知道了')
                           .highlightAction(false)
                           .position('top right');
                     $mdToast.show(toast).then(function() {
                     });
-                }
-                vm.themesDeletedList = res.message;
-            })
-            .error(function(res, status, headers, config) {
-                var toast = $mdToast.simple()
-                      .content('出错了，错误代码：' + status)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
                 });
-            });
+            }
+
+            vm.getDeleted = function() {
+
+                ThemeService.getDeleted(1, 10)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.themesDeletedList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
+
+            }
+
+            vm.getAll();
+            vm.getDeleted();
+
         }
 
         ////////////////
@@ -3585,31 +3599,43 @@
                             .cancel('取消')
                             .targetEvent(ev);
 
+                        if(index != undefined) {
+                            vm.selecteThisById(tm._id, vm.element);
+                        }
+
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            ThemeService.remove(tm._id)
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
+
+                            var selectedListLength = vm.element.selectedList.length;
+
+                            vm.element.selectedList.forEach(function(id, key) {
+
+                                ThemeService.remove(id)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                    if(key == selectedListLength - 1) {
+                                        vm.getAll();
+                                        vm.getDeleted();
+                                    }
+
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
                                 });
 
-                                if(res.code === 200) {
-                                    vm.themesList.splice(index, 1);
-                                    vm.themesDeletedList.push(tm);
-                                }
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
                             });
 
                         }, function() {
@@ -3629,30 +3655,44 @@
                 }, {
                     val: '恢复',
                     onClicked: function(ev, tm, index) {
-                        ThemeService.unRemove(tm._id)
-                        .success(function(res, status, headers, config) {
-                            var toast = $mdToast.simple()
-                                  .content(res.message)
-                                  .action('我知道了')
-                                  .highlightAction(false)
-                                  .position('top right');
-                            $mdToast.show(toast).then(function() {
+
+                        if(index != undefined) {
+                            vm.selecteThisById(tm._id, vm.elementDeleted);
+                        }
+
+                        var selectedListLength = vm.elementDeleted.selectedList.length;
+
+
+                        vm.elementDeleted.selectedList.forEach(function(id, key) {
+
+                            ThemeService.unRemove(id)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+
+                                if(key == selectedListLength - 1) {
+                                    vm.getAll();
+                                    vm.getDeleted();
+                                }
+
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
                             });
 
-                            if(res.code === 200) {
-                                vm.themesDeletedList.splice(index, 1);
-                                vm.themesList.push(tm);
-                            }
-                        })
-                        .error(function(res, status, headers, config) {
-                            var toast = $mdToast.simple()
-                                  .content('出错了，错误代码：' + status)
-                                  .action('我知道了')
-                                  .highlightAction(false)
-                                  .position('top right');
-                            $mdToast.show(toast).then(function() {
-                            });
                         });
+
                     }
                 }]
             };
@@ -3864,7 +3904,7 @@
 
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            UserService.blockUser(vm.uids).save()
+                            UserService.blockUser(vm.uids)
                             .success(function(res, status, headers, config) {
                                 var toast = $mdToast.simple()
                                       .content(res.message)

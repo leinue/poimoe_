@@ -164,7 +164,7 @@
 
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            UserService.blockUser(vm.uids).save()
+                            UserService.blockUser(vm.uids)
                             .success(function(res, status, headers, config) {
                                 var toast = $mdToast.simple()
                                       .content(res.message)

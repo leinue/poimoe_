@@ -1233,12 +1233,50 @@ var index = {
             }
 
             if(key === uidLength - 1) {
-              res.send(util.retMsg(200, '删除成功'));
+              res.send(util.retMsg(200, '锁定用户成功'));
             }
 
         });
     });
 
+  },
+
+  blockUserByUid: function() {
+
+    var uids = req.params.uid;
+
+    var User = ctrlInitial.models.User();
+
+    User.blockUser(uid, function(err, msg) {
+
+        if(err) {
+          res.send(util.retMsg(401, err.toString()));
+        }
+
+        if(key === uidLength - 1) {
+          res.send(util.retMsg(200, '锁定用户成功'));
+        }
+
+    });
+  },
+
+  unblockUserByUid: function() {
+
+    var uids = req.params.uid;
+
+    var User = ctrlInitial.models.User();
+
+    User.unblockUser(uid, function(err, msg) {
+
+        if(err) {
+          res.send(util.retMsg(401, err.toString()));
+        }
+
+        if(key === uidLength - 1) {
+          res.send(util.retMsg(200, '解锁用户成功'));
+        }
+
+    });
   },
 
   deleteUser: function(req, res, next) {
@@ -1257,10 +1295,50 @@ var index = {
             }
 
             if(key === uidLength - 1) {
-              res.send(util.retMsg(200, '删除成功'));
+              res.send(util.retMsg(200, '删除用户成功'));
             }
 
         });
+    });
+
+  },
+
+  deleteUserByUid: function(req, res, next) {
+
+    var uid = req.params.uids;
+
+    var User = ctrlInitial.models.User();
+
+    User.removeUser(uid, function(err, msg) {
+
+        if(err) {
+          res.send(util.retMsg(401, err.toString()));
+        }
+
+        if(key === uidLength - 1) {
+          res.send(util.retMsg(200, '删除用户成功'));
+        }
+
+    });
+
+  },
+
+  unRemoveUserByUid: function(req, res, next) {
+
+    var uid = req.params.uids;
+
+    var User = ctrlInitial.models.User();
+
+    User.unRemoveUser(uid, function(err, msg) {
+
+        if(err) {
+          res.send(util.retMsg(401, err.toString()));
+        }
+
+        if(key === uidLength - 1) {
+          res.send(util.retMsg(200, '撤销删除用户成功'));
+        }
+
     });
 
   },

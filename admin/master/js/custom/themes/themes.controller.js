@@ -31,51 +31,62 @@
                 DTColumnDefBuilder.newColumnDef(3).notSortable()
             ];
 
-            ThemeService.getAll(1, 100)
-            .success(function(res, status, headers, config) {
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                }
-                vm.themesList = res.message;
-            })
-            .error(function(res, status, headers, config) {
-                var toast = $mdToast.simple()
-                      .content('出错了，错误代码：' + status)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
+            vm.getAll = function() {
 
-            ThemeService.getDeleted(1, 10)
-            .success(function(res, status, headers, config) {
-                if(res.code != 200) {
+                ThemeService.getAll(1, 100)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.themesList = res.message;
+                })
+                .error(function(res, status, headers, config) {
                     var toast = $mdToast.simple()
-                          .content(res.message)
+                          .content('出错了，错误代码：' + status)
                           .action('我知道了')
                           .highlightAction(false)
                           .position('top right');
                     $mdToast.show(toast).then(function() {
                     });
-                }
-                vm.themesDeletedList = res.message;
-            })
-            .error(function(res, status, headers, config) {
-                var toast = $mdToast.simple()
-                      .content('出错了，错误代码：' + status)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
                 });
-            });
+            }
+
+            vm.getDeleted = function() {
+
+                ThemeService.getDeleted(1, 10)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.themesDeletedList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
+
+            }
+
+            vm.getAll();
+            vm.getDeleted();
+
         }
 
         ////////////////
@@ -131,31 +142,43 @@
                             .cancel('取消')
                             .targetEvent(ev);
 
+                        if(index != undefined) {
+                            vm.selecteThisById(tm._id, vm.element);
+                        }
+
                         $mdDialog.show(confirm).then(function() {
                             //确定
-                            ThemeService.remove(tm._id)
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
+
+                            var selectedListLength = vm.element.selectedList.length;
+
+                            vm.element.selectedList.forEach(function(id, key) {
+
+                                ThemeService.remove(id)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                    if(key == selectedListLength - 1) {
+                                        vm.getAll();
+                                        vm.getDeleted();
+                                    }
+
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
                                 });
 
-                                if(res.code === 200) {
-                                    vm.themesList.splice(index, 1);
-                                    vm.themesDeletedList.push(tm);
-                                }
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
                             });
 
                         }, function() {
@@ -175,30 +198,44 @@
                 }, {
                     val: '恢复',
                     onClicked: function(ev, tm, index) {
-                        ThemeService.unRemove(tm._id)
-                        .success(function(res, status, headers, config) {
-                            var toast = $mdToast.simple()
-                                  .content(res.message)
-                                  .action('我知道了')
-                                  .highlightAction(false)
-                                  .position('top right');
-                            $mdToast.show(toast).then(function() {
+
+                        if(index != undefined) {
+                            vm.selecteThisById(tm._id, vm.elementDeleted);
+                        }
+
+                        var selectedListLength = vm.elementDeleted.selectedList.length;
+
+
+                        vm.elementDeleted.selectedList.forEach(function(id, key) {
+
+                            ThemeService.unRemove(id)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+
+                                if(key == selectedListLength - 1) {
+                                    vm.getAll();
+                                    vm.getDeleted();
+                                }
+
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
                             });
 
-                            if(res.code === 200) {
-                                vm.themesDeletedList.splice(index, 1);
-                                vm.themesList.push(tm);
-                            }
-                        })
-                        .error(function(res, status, headers, config) {
-                            var toast = $mdToast.simple()
-                                  .content('出错了，错误代码：' + status)
-                                  .action('我知道了')
-                                  .highlightAction(false)
-                                  .position('top right');
-                            $mdToast.show(toast).then(function() {
-                            });
                         });
+
                     }
                 }]
             };
