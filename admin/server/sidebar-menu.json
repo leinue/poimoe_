@@ -20,21 +20,6 @@
     "translate": "sidebar.heading.MANAGER_LIST"
   },
   {
-    "text": "元素",
-    "sref": "#",
-    "icon": "fa fa-sitemap",
-    "submenu": [
-      {"text": "Widgets",     "sref": "app.matwidgets"},
-      {"text": "Cards",       "sref": "app.cards"},
-      {"text": "Forms",       "sref": "app.forms"},
-      {"text": "Inputs",      "sref": "app.inputs"},
-      {"text": "Lists",       "sref": "app.lists"},
-      {"text": "Whiteframe",  "sref": "app.whiteframe"},
-      {"text": "Colors",      "sref": "app.matcolors"},
-      {"text": "ngMaterial",  "sref": "app.ngmaterial"}
-    ]
-  },
-  {
     "text": "信息管理",
     "sref": "#",
     "icon": "fa fa-sitemap",
@@ -45,11 +30,16 @@
     ]
   },
   {
+    "text": "官网管理",
+    "sref": "app.website",
+    "icon": "fa fa-desktop"
+  },
+  {
     "text": "权限管理",
     "sref": "#",
     "icon": "fa fa-shield",
     "submenu": [
-      {"text": "角色管理",     "sref": "app.rolesmgr"},
+      {"text": "用户组管理",     "sref": "app.rolesmgr"},
       {"text": "权限分配",     "sref": "app.rightsmgr"}
     ]
   }]

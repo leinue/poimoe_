@@ -67,9 +67,6 @@ var index = {
           res.send(util.retMsg(400, err.toString()));
         }
 
-        console.log(req.authorization.credentials);
-        console.log(u);
-
         if(u.length === 0) {
           res.send(util.retMsg(4001, "access_token非法，请重新登录"));
         }
@@ -1283,6 +1280,26 @@ var index = {
       tagsDeletedCount: 0
     };
 
+    var LSTR_ndate = new Date();
+    var LSTR_Year = LSTR_ndate.getYear();
+    var LSTR_Month = LSTR_ndate.getMonth();
+    var LSTR_Date = LSTR_ndate.getDate();
+    //处理
+    var uom = new Date(LSTR_Year, LSTR_Month, LSTR_Date);
+    uom.setDate(uom.getDate() - 1); //取得系统时间的前一天,重点在这里,负数是前几天,正数是后几天
+    var LINT_MM = uom.getMonth();
+    LINT_MM++;
+    var LSTR_MM = LINT_MM > 10 ? LINT_MM : ("0" + LINT_MM)
+    var LINT_DD = uom.getDate();
+    var LSTR_DD = LINT_DD > 10 ? LINT_DD : ("0" + LINT_DD)
+    //得到最终结果
+    uom = uom.getFullYear() + "/" + LSTR_MM + "/" + LSTR_DD;
+    uom = '20' + uom.substring(1, uom.length);
+
+    var yesterday = uom;
+    var nowaday = LSTR_Year + '/' + LSTR_Month + '/' + LSTR_Date;
+    nowaday = '20' + nowaday.substring(1, nowaday.length);
+
     var Themes = ctrlInitial.models.Themes();
 
     Themes.count({
@@ -1306,7 +1323,10 @@ var index = {
         dashboardInfo.themesDeletedCount = themesDeletedCount;
 
         Themes.count({
-          isDeleted: false
+          isDeleted: false,
+          createdAt: {
+            '$gt': new Date(yesterday)
+          }
         }, function(err, themesAddedToday) {
 
           if(err) {
@@ -1328,7 +1348,10 @@ var index = {
             dashboardInfo.usersCount = usersCount;
 
             User.count({
-              isDeleted: false
+              isDeleted: false,
+              createdAt: {
+                '$gt': new Date(yesterday)
+              }
             }, function(err, usersAddedToday) {
 
               if(err) {
@@ -1383,7 +1406,10 @@ var index = {
                       dashboardInfo.tagsDeletedCount = tagsDeletedCount;
 
                       Tags.count({
-                        isDeleted: false
+                        isDeleted: false,
+                        createdAt: {
+                          '$gt': new Date(yesterday)
+                        }
                       }, function(err, tagsAddedToday) {
 
                         if(err) {

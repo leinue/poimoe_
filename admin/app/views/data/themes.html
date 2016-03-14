@@ -22,7 +22,7 @@
                                  <th>发布时间</th>
                                  <th>操作</th>
                                  <th check-all="check-all">
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="themes.isSelectAll" ng-change="themes.toggleSelectAll()" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="themes.element.isSelectAll" ng-change="themes.toggleSelectAll(themes.themesList, themes.element)" class="md-primary"></md-checkbox>
                                  </th>
                               </tr>
                            </thead>
@@ -45,7 +45,7 @@
                                     </md-select>
                                  </td>
                                  <td>
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="themes.userIsSelected[theme._id]" ng-change="themes.selectThisUser(theme._id)" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="themes.element.isElementSelected[theme._id]" ng-change="themes.selectThis(theme._id, themes.element)" class="md-primary"></md-checkbox>
                                  </td>
                               </tr>
                            </tbody>
@@ -177,7 +177,7 @@
                                  <th>发布时间</th>
                                  <th>操作</th>
                                  <th check-all="check-all">
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="themes.isSelectAll" ng-change="themes.toggleSelectAll()" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="themes.elementDeleted.isSelectAll" ng-change="themes.toggleSelectAll(themes.themesDeletedList, themes.elementDeleted)" class="md-primary"></md-checkbox>
                                  </th>
                               </tr>
                            </thead>
@@ -200,7 +200,7 @@
                                     </md-select>
                                  </td>
                                  <td>
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="themes.userIsSelected[theme._id]" ng-change="themes.selectThisUser(theme._id)" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="themes.elementDeleted.isElementSelected[theme._id]" ng-change="themes.selectThis(theme._id, themes.elementDeleted)" class="md-primary"></md-checkbox>
                                  </td>
                               </tr>
                            </tbody>

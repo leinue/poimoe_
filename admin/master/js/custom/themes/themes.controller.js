@@ -7,14 +7,16 @@
         .module('app.themes')
         .controller('ThemesController', ThemesController);
 
-    ThemesController.$inject = ['$log', '$mdDialog', '$mdToast', 'ThemeService', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
-    function ThemesController($log, $mdDialog, $mdToast, ThemeService, DTOptionsBuilder, DTColumnDefBuilder) {
+    ThemesController.$inject = ['$log', '$mdDialog', '$mdToast', 'ThemeService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'MOptions'];
+    function ThemesController($log, $mdDialog, $mdToast, ThemeService, DTOptionsBuilder, DTColumnDefBuilder, MOptions) {
         // for controllerAs syntax
         var vm = this;
 
         activate();
 
         activateTable();
+
+        MOptions.init(vm, ['element', 'elementDeleted']);
 
         vm.themesList = [];
         vm.themesDeletedList = [];

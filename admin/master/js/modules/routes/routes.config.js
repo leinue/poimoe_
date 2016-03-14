@@ -21,6 +21,22 @@
         // defaults to welcome
         $urlRouterProvider.otherwise('/app/welcome');
 
+          // {
+          //   "text": "元素",
+          //   "sref": "#",
+          //   "icon": "fa fa-sitemap",
+          //   "submenu": [
+          //     {"text": "Widgets",     "sref": "app.matwidgets"},
+          //     {"text": "Cards",       "sref": "app.cards"},
+          //     {"text": "Forms",       "sref": "app.forms"},
+          //     {"text": "Inputs",      "sref": "app.inputs"},
+          //     {"text": "Lists",       "sref": "app.lists"},
+          //     {"text": "Whiteframe",  "sref": "app.whiteframe"},
+          //     {"text": "Colors",      "sref": "app.matcolors"},
+          //     {"text": "ngMaterial",  "sref": "app.ngmaterial"}
+          //   ]
+          // },
+
         // 
         // 应用程序欢迎目录
         // -----------------------------------   
@@ -105,6 +121,14 @@
             title: '标签管理',
             templateUrl: helper.basepath( 'data/tags.html' ),
             resolve: helper.resolveFor('datatables')
+          })
+          //
+          // 官网管理 
+          // -----------------------------------
+          .state('app.website', {
+            url: '/website/manager',
+            title: '官网管理',
+            templateUrl: helper.basepath( 'website/website.html' )
           })
 
           // CUSTOM RESOLVES

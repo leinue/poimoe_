@@ -197,16 +197,8 @@
                         </div>
                      </div>
                   </div>
-                  <!-- END list group item-->
                </div>
-               <!-- END list group-->
-               <!-- START panel footer-->
-               <!--.panel-footer.clearfix-->
-               <!--  a(href='#').pull-left-->
-               <!--    small Load more-->
-               <!-- END panel-footer-->
             </div>
-            <!-- END messages and activity-->
             <!-- END widget-->
          </div>
          <div class="col-lg-8">
@@ -219,10 +211,10 @@
                <!-- START list group-->
                <scrollable height="180" class="list-group">
                   <!-- START list group item-->
-                  <a href="#" ng-repeat="user in dash.recommended" class="list-group-item">
+                  <a href="http://poi.poimoe.com/#!/profile/{{user._id}}" ng-repeat="user in dash.recommended" target="_blank" class="list-group-item">
                      <div class="media-box">
                         <div class="pull-left">
-                           <img src="{{user.photo}}" alt="Image" class="media-box-object img-circle thumb32" />
+                           <img src="{{user.photo}}" alt="Image" style="width:100px!important;height:100px!important;" class="media-box-object img-circle thumb32" />
                         </div>
                         <div class="media-box-body clearfix">
                            <!--small.pull-right 2h-->
@@ -232,77 +224,36 @@
                         </div>
                      </div>
                   </a>
-                  <!-- END list group item-->
                </scrollable>
-               <!-- END list group-->
-               <!-- START panel footer-->
-               <div class="panel-footer clearfix">
-                  <div class="input-group">
-                     <input type="text" placeholder="搜索用户" class="form-control input-sm" />
-                     <span class="input-group-btn">
-                        <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i>
-                        </button>
-                     </span>
-                  </div>
-               </div>
-               <!-- END panel-footer-->
             </div>
          </div>
       </div>
    </div>
-   <!-- END dashboard main content-->
    <!-- START dashboard sidebar-->
    <aside class="col-lg-3">
-      <!-- START loader widget-->
-      <!--.panel.panel-default-->
-      <!--  .panel-body-->
-      <!--    a.text-muted.pull-right(href="#"): em.fa.fa-arrow-right-->
-      <!--    .text-info Average Monthly Uploads-->
-      <!--    canvas.center-block(classyloader="", data-percentage="70", data-speed="20", data-font-size="40px", data-diameter="70", data-line-color="{{colorByName('info')}}", data-remaining-line-color="rgba(200,200,200,0.4)", data-line-width="10", data-rounded-line="true")-->
-      <!--    .text-center(sparkline="", data-bar-color="{{colorByName('info')}}", data-height="30", data-bar-width="5", data-bar-spacing="2", values="5,4,8,7,8,5,4,6,5,5,9,4,6,3,4,7,5,4,7")-->
-      <!--  .panel-footer-->
-      <!--    p.text-muted-->
-      <!--      em.fa.fa-upload.fa-fw-->
-      <!--      span This Month-->
-      <!--      span.text-dark 1000 Gb-->
-      <!-- END loader widget-->
-      <!-- START messages and activity-->
       <div class="panel panel-default">
          <div class="panel-heading">
+            <!--.pull-right.label.label-danger 5-->
+            <!--.pull-right.label.label-success 12-->
             <div class="panel-title">活跃主题</div>
          </div>
          <!-- START list group-->
-         <div class="list-group">
+         <scrollable height="180" class="list-group">
             <!-- START list group item-->
-            <div ng-repeat="theme in dash.hotThemes" class="list-group-item">
+            <a href="http://poi.poimoe.com/#!/view/{{theme._id}}" ng-repeat="theme in dash.hotThemes" target="_blank" class="list-group-item">
                <div class="media-box">
                   <div class="pull-left">
-                     <span class="fa-stack">
-                        <em class="fa fa-circle fa-stack-2x text-purple"></em>
-                        <em class="fa fa-cloud-upload fa-stack-1x fa-inverse text-white"></em>
-                     </span>
+                     <img src="{{theme.image}}" alt="Image" style="width:100px!important;height:100px!important;border-radius:0px" class="media-box-object img-circle thumb32" />
                   </div>
                   <div class="media-box-body clearfix">
-                     <small class="text-muted pull-right ml">{{theme.createdAt}}</small>
-                     <div class="media-box-heading"><a href="#" class="text-purple m0">{{theme.content}}</a>
-                     </div>
-                     <p class="m0">
-                        <small><a href="#">{{theme.user_id.username}}</a>
-                        </small>
-                     </p>
+                     <small class="pull-right">{{theme.createdAt}}</small>
+                     <strong class="media-box-heading text-primary">
+                        <span class="circle circle-success circle-lg text-left"></span>{{theme.user_id.username}}</strong>
+                     <p class="mb-sm">{{theme.content}}</p>
                   </div>
                </div>
-            </div>
-            <!-- END list group item-->
-         </div>
-         <!-- END list group-->
-         <!-- START panel footer-->
-         <!--.panel-footer.clearfix-->
-         <!--  a(href='#').pull-left-->
-         <!--    small Load more-->
-         <!-- END panel-footer-->
+            </a>
+         </scrollable>
       </div>
-      <!-- END messages and activity-->
    </aside>
-   <!-- END dashboard sidebar-->
 </div>

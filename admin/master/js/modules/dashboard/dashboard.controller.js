@@ -208,7 +208,7 @@
               $mdToast.show(toast).then(function() {
               });
           });
-
+          
         }
     }
 })();
