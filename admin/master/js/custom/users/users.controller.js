@@ -214,7 +214,7 @@
                                 $mdToast.show(toast)
                                 return false;
                             }
-                            
+
                             vm.normalUsers.selectedList.forEach(function(id, key) {
                                 UserService.removeUserByUid(id)
                                 .success(function(res, status, headers, config) {
@@ -450,25 +450,64 @@
                 name: '',
                 names: [{
                     val: '恢复',
-                    onClicked: function(ev, ur) {
-                        UserService.unRemoveUserByUid(vm.uids)
-                        .success(function(res, status, headers, config) {
+                    onClicked: function(ev, ur, index) {
+
+                        var confirm = $mdDialog.confirm()
+                            .title('锁定确认')
+                            .content('你确定要恢复此用户？')
+                            .ariaLabel('Lucky day')
+                            .ok('确定')
+                            .cancel('取消')
+                            .targetEvent(ev);
+
+                        if(index != undefined) {
+                            vm.selecteThisById(ur._id, vm.removedUser);
+                        }
+
+                        var length = vm.removedUser.selectedList.length;
+
+                        if(length === 0) {
                             var toast = $mdToast.simple()
-                                  .content(res.message)
-                                  .action('我知道了')
+                                  .content('您尚未选择任何用户')
+                                  .action('确定')
                                   .highlightAction(false)
                                   .position('top right');
-                            $mdToast.show(toast).then(function() {
+                            $mdToast.show(toast)
+                            return false;
+                        }
+
+                        $mdDialog.show(confirm).then(function() {
+
+                            vm.removedUser.selectedList.forEach(function(id, key) {
+
+                                UserService.unRemoveUserByUid(id)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                    if(key == length - 1) {
+                                        vm.getAllDeleted();
+                                        vm.getAll();
+                                    }
+
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                });
+
                             });
-                        })
-                        .error(function(res, status, headers, config) {
-                            var toast = $mdToast.simple()
-                                  .content('出错了，错误代码：' + status)
-                                  .action('我知道了')
-                                  .highlightAction(false)
-                                  .position('top right');
-                            $mdToast.show(toast).then(function() {
-                            });
+
                         });
                     }
                 }]
@@ -478,26 +517,65 @@
                 name: '',
                 names: [{
                     val: '解锁',
-                    onClicked: function(ev, ur) {
-                        UserService.unBlockUserByUid(vm.uids)
-                        .success(function(res, status, headers, config) {
+                    onClicked: function(ev, ur, index) {
+
+                        var confirm = $mdDialog.confirm()
+                            .title('锁定确认')
+                            .content('你确定要恢复此用户？')
+                            .ariaLabel('Lucky day')
+                            .ok('确定')
+                            .cancel('取消')
+                            .targetEvent(ev);
+
+                        if(index != undefined) {
+                            vm.selecteThisById(ur._id, vm.removedUser);
+                        }
+
+                        var length = vm.removedUser.selectedList.length;
+
+                        if(length === 0) {
                             var toast = $mdToast.simple()
-                                  .content(res.message)
-                                  .action('我知道了')
+                                  .content('您尚未选择任何用户')
+                                  .action('确定')
                                   .highlightAction(false)
                                   .position('top right');
-                            $mdToast.show(toast).then(function() {
+                            $mdToast.show(toast)
+                            return false;
+                        }
+
+                        $mdDialog.show(confirm).then(function() {
+
+                            vm.removedUser.selectedList.forEach(function(id, key) {
+
+                                UserService.unBlockUserByUid(id)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                    if(key == length - 1) {
+                                        vm.getAllDeleted();
+                                        vm.getAll();
+                                    }
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                });
+
                             });
-                        })
-                        .error(function(res, status, headers, config) {
-                            var toast = $mdToast.simple()
-                                  .content('出错了，错误代码：' + status)
-                                  .action('我知道了')
-                                  .highlightAction(false)
-                                  .position('top right');
-                            $mdToast.show(toast).then(function() {
-                            });
+
                         });
+
                     }
                 }]
             }
