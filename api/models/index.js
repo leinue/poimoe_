@@ -53,6 +53,11 @@ module.exports = {
   },
 
   UserGroups: function() {
+    this.userGroupsModel = this.cacheModel('userGroups', this.userGroupsModel, {
+      name: userAndThemes
+    });
+    return this.userGroupsModel;
+
     this.userGroupsModel = this.cacheModel(userGroups, this.userGroupsModel);
     return this.userGroupsModel;
   },

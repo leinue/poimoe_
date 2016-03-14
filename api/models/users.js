@@ -4,6 +4,7 @@ var tagsModel = require('./tags.js');
 var relationsModel = require('./relations.js');
 var timelineModel = require('./timeline.js');
 var kakuModel = require('./kaku.js');
+var userGroupsModel = require('./userGroups.js');
 
 module.exports = {
 
@@ -38,7 +39,10 @@ module.exports = {
       	type: String,
       	default: '天朝'
       },
-      group: Schema.Types.ObjectId,
+      group: [{
+        type: Schema.Types.ObjectId,
+        ref: 'userGroups'
+      },
       favourites: [{
         type: Schema.Types.ObjectId,
         ref: 'themes'
@@ -726,6 +730,7 @@ module.exports = {
     var relationsSchema = relationsModel.init(mongoose);
     var timelineSchema = timelineModel.init(mongoose);
     var kakuSchema = kakuModel.init(mongoose);
+    var userGroupsSchema = kakuModel.init(mongoose);
 
     this.userModel = util.cacheMongooseModel(mongoose, userSchema, 'users', this.userModel);
     this.themesModel = util.cacheMongooseModel(mongoose, themesSchema, 'themes', this.themesModel);
@@ -733,6 +738,7 @@ module.exports = {
     this.relationsModel = util.cacheMongooseModel(mongoose, relationsSchema, 'relations', this.relationsModel);
     this.timelineModel = util.cacheMongooseModel(mongoose, timelineSchema, 'timeline', this.timelineModel);
     this.kakuModel = util.cacheMongooseModel(mongoose, kakuSchema, 'kaku', this.kakuModel);
+    this.userGroupsModel = util.cacheMongooseModel(mongoose, userGroupsSchema, 'userGroups', this.userGroupsModel);
 
     var _this = this;
 
@@ -742,7 +748,8 @@ module.exports = {
       tags: _this.tagsModel,
       relations: _this.relationsModel,
       timeline: _this.timelineModel,
-      kaku: _this.kakuModel
+      kaku: _this.kakuModel,
+      userGroupsModel: _this.userGroupsModel
     };
 
   }
