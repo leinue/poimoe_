@@ -5,9 +5,9 @@
         .module('app.settings')
         .run(settingsRun);
 
-    settingsRun.$inject = ['$rootScope', '$localStorage'];
+    settingsRun.$inject = ['$rootScope', '$localStorage', 'AuthService'];
 
-    function settingsRun($rootScope, $localStorage){
+    function settingsRun($rootScope, $localStorage, AuthService){
 
       // Global Settings
       // ----------------------------------- 
@@ -53,42 +53,7 @@
       }
 
       var userData = getCookie('userData');
-
-      if(userData != '') {
-          localStorage.userData = userData;
-          userData = JSON.parse(userData);
-          localStorage._id = userData._id;
-          localStorage.username = userData.username;
-          localStorage.accessToken = userData.accessToken;
-          localStorage.photo = userData.photo;
-          localStorage.group = userData.group;
-          localStorage.login = true;
-      }
-
-      var group = localStorage.group;
-       
-      if(group == 'undefined' || group == undefined) {
-        localStorage.auth = false;
-        localStorage.isRoot = false;
-      }else {
-        group = JSON.parse(group);
-
-        var isRoot = false;
-
-        for (var i = 0; i < group.length; i++) {
-          var g = group[i];
-          if(g.name === 'root' && g.code === '100') {
-            isRoot = true;
-            break;
-          }
-        };
-
-        if(!isRoot) {
-          localStorage.auth = true;
-          localStorage.isRoot = true;
-        }
-
-      }
+      AuthService.parseUserInfo(userData);
 
       // Setup the layout mode
       $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;

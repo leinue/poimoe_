@@ -89,20 +89,6 @@
     angular
         .module('app.maps', []);
 })();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.preloader', []);
-})();
-
-
 
 (function() {
     'use strict';
@@ -117,15 +103,29 @@
     'use strict';
 
     angular
-        .module('app.routes', [
-            'app.lazyload'
-        ]);
+        .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
 
     angular
+        .module('app.preloader', []);
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
         .module('app.settings', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.routes', [
+            'app.lazyload'
+        ]);
 })();
 (function() {
     'use strict';
@@ -1022,208 +1022,6 @@
     }
 })();
 
-/**=========================================================
- * Module: navbar-search.js
- * Navbar search toggler * Auto dismiss on ESC key
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .directive('searchOpen', searchOpen)
-        .directive('searchDismiss', searchDismiss);
-
-    //
-    // directives definition
-    // 
-    
-    function searchOpen () {
-        var directive = {
-            controller: searchOpenController,
-            restrict: 'A'
-        };
-        return directive;
-
-    }
-
-    function searchDismiss () {
-        var directive = {
-            controller: searchDismissController,
-            restrict: 'A'
-        };
-        return directive;
-        
-    }
-
-    //
-    // Contrller definition
-    // 
-    
-    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchOpenController ($scope, $element, NavSearch) {
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.toggle);
-    }
-
-    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchDismissController ($scope, $element, NavSearch) {
-      
-      var inputSelector = '.navbar-form input[type="text"]';
-
-      $(inputSelector)
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('keyup', function(e) {
-          if (e.keyCode === 27) // ESC
-            NavSearch.dismiss();
-        });
-        
-      // click anywhere closes the search
-      $(document).on('click', NavSearch.dismiss);
-      // dismissable options
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.dismiss);
-    }
-
-})();
-
-
-/**=========================================================
- * Module: nav-search.js
- * Services to share navbar search functions
- =========================================================*/
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .service('NavSearch', NavSearch);
-
-    function NavSearch() {
-        this.toggle = toggle;
-        this.dismiss = dismiss;
-
-        ////////////////
-
-        var navbarFormSelector = 'form.navbar-form';
-
-        function toggle() {
-          var navbarForm = $(navbarFormSelector);
-
-          navbarForm.toggleClass('open');
-          
-          var isOpen = navbarForm.hasClass('open');
-          
-          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
-        }
-
-        function dismiss() {
-          $(navbarFormSelector)
-            .removeClass('open') // Close control
-            .find('input[type="text"]').blur() // remove focus
-            .val('') // Empty input
-            ;
-        }        
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.preloader')
-        .directive('preloader', preloader);
-
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
-
-        var directive = {
-            restrict: 'EAC',
-            template: 
-              '<div class="preloader-progress">' +
-                  '<div class="preloader-progress-bar" ' +
-                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
-              '</div>'
-            ,
-            link: link
-        };
-        return directive;
-
-        ///////
-
-        function link(scope, el) {
-
-          scope.loadCounter = 0;
-
-          var counter  = 0,
-              timeout;
-
-          // disables scrollbar
-          angular.element('body').css('overflow', 'hidden');
-          // ensure class is present for styling
-          el.addClass('preloader');
-
-          appReady().then(endCounter);
-
-          timeout = $timeout(startCounter);
-
-          ///////
-
-          function startCounter() {
-
-            var remaining = 100 - counter;
-            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
-
-            scope.loadCounter = parseInt(counter, 10);
-
-            timeout = $timeout(startCounter, 20);
-          }
-
-          function endCounter() {
-
-            $timeout.cancel(timeout);
-
-            scope.loadCounter = 100;
-
-            $timeout(function(){
-              // animate preloader hiding
-              $animate.addClass(el, 'preloader-hidden');
-              // retore scrollbar
-              angular.element('body').css('overflow', '');
-            }, 300);
-          }
-
-          function appReady() {
-            var deferred = $q.defer();
-            var viewsLoaded = 0;
-            // if this doesn't sync with the real app ready
-            // a custom event must be used instead
-            var off = scope.$on('$viewContentLoaded', function () {
-              viewsLoaded ++;
-              // we know there are at least two views to be loaded 
-              // before the app is ready (1-index.html 2-app*.html)
-              if ( viewsLoaded === 2) {
-                // with resolve this fires only once
-                $timeout(function(){
-                  deferred.resolve();
-                }, 1);
-
-                off();
-              }
-
-            });
-
-            return deferred.promise;
-          }
-
-        } //link
-    }
-
-})();
 
 (function() {
     'use strict';
@@ -1955,6 +1753,288 @@
     }
 })();
 /**=========================================================
+ * Module: navbar-search.js
+ * Navbar search toggler * Auto dismiss on ESC key
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .directive('searchOpen', searchOpen)
+        .directive('searchDismiss', searchDismiss);
+
+    //
+    // directives definition
+    // 
+    
+    function searchOpen () {
+        var directive = {
+            controller: searchOpenController,
+            restrict: 'A'
+        };
+        return directive;
+
+    }
+
+    function searchDismiss () {
+        var directive = {
+            controller: searchDismissController,
+            restrict: 'A'
+        };
+        return directive;
+        
+    }
+
+    //
+    // Contrller definition
+    // 
+    
+    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchOpenController ($scope, $element, NavSearch) {
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.toggle);
+    }
+
+    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchDismissController ($scope, $element, NavSearch) {
+      
+      var inputSelector = '.navbar-form input[type="text"]';
+
+      $(inputSelector)
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('keyup', function(e) {
+          if (e.keyCode === 27) // ESC
+            NavSearch.dismiss();
+        });
+        
+      // click anywhere closes the search
+      $(document).on('click', NavSearch.dismiss);
+      // dismissable options
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.dismiss);
+    }
+
+})();
+
+
+/**=========================================================
+ * Module: nav-search.js
+ * Services to share navbar search functions
+ =========================================================*/
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .service('NavSearch', NavSearch);
+
+    function NavSearch() {
+        this.toggle = toggle;
+        this.dismiss = dismiss;
+
+        ////////////////
+
+        var navbarFormSelector = 'form.navbar-form';
+
+        function toggle() {
+          var navbarForm = $(navbarFormSelector);
+
+          navbarForm.toggleClass('open');
+          
+          var isOpen = navbarForm.hasClass('open');
+          
+          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
+        }
+
+        function dismiss() {
+          $(navbarFormSelector)
+            .removeClass('open') // Close control
+            .find('input[type="text"]').blur() // remove focus
+            .val('') // Empty input
+            ;
+        }        
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.preloader')
+        .directive('preloader', preloader);
+
+    preloader.$inject = ['$animate', '$timeout', '$q'];
+    function preloader ($animate, $timeout, $q) {
+
+        var directive = {
+            restrict: 'EAC',
+            template: 
+              '<div class="preloader-progress">' +
+                  '<div class="preloader-progress-bar" ' +
+                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
+              '</div>'
+            ,
+            link: link
+        };
+        return directive;
+
+        ///////
+
+        function link(scope, el) {
+
+          scope.loadCounter = 0;
+
+          var counter  = 0,
+              timeout;
+
+          // disables scrollbar
+          angular.element('body').css('overflow', 'hidden');
+          // ensure class is present for styling
+          el.addClass('preloader');
+
+          appReady().then(endCounter);
+
+          timeout = $timeout(startCounter);
+
+          ///////
+
+          function startCounter() {
+
+            var remaining = 100 - counter;
+            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
+
+            scope.loadCounter = parseInt(counter, 10);
+
+            timeout = $timeout(startCounter, 20);
+          }
+
+          function endCounter() {
+
+            $timeout.cancel(timeout);
+
+            scope.loadCounter = 100;
+
+            $timeout(function(){
+              // animate preloader hiding
+              $animate.addClass(el, 'preloader-hidden');
+              // retore scrollbar
+              angular.element('body').css('overflow', '');
+            }, 300);
+          }
+
+          function appReady() {
+            var deferred = $q.defer();
+            var viewsLoaded = 0;
+            // if this doesn't sync with the real app ready
+            // a custom event must be used instead
+            var off = scope.$on('$viewContentLoaded', function () {
+              viewsLoaded ++;
+              // we know there are at least two views to be loaded 
+              // before the app is ready (1-index.html 2-app*.html)
+              if ( viewsLoaded === 2) {
+                // with resolve this fires only once
+                $timeout(function(){
+                  deferred.resolve();
+                }, 1);
+
+                off();
+              }
+
+            });
+
+            return deferred.promise;
+          }
+
+        } //link
+    }
+
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.settings')
+        .run(settingsRun);
+
+    settingsRun.$inject = ['$rootScope', '$localStorage', 'AuthService'];
+
+    function settingsRun($rootScope, $localStorage, AuthService){
+
+      // Global Settings
+      // ----------------------------------- 
+      $rootScope.app = {
+        name: 'Poimoe',
+        description: '管理后台',
+        year: ((new Date()).getFullYear()),
+        layout: {
+          isFixed: true,
+          isCollapsed: false,
+          isBoxed: false,
+          isRTL: false,
+          horizontal: false,
+          isFloat: false,
+          asideHover: false,
+          theme: null
+        },
+        useFullLayout: false,
+        hiddenFooter: false,
+        offsidebarOpen: false,
+        asideToggled: false,
+        viewAnimation: 'ng-fadeInUp',
+        baseUrl: 'http://api.poimoe.com/'
+      };
+
+      if(document.domain != 'localhost') {
+        document.domain = 'poimoe.com';
+      }
+
+      var getCookie = function(c_name) {
+        if (document.cookie.length > 0){  
+          c_start = document.cookie.indexOf(c_name + "=");
+          if (c_start != -1){
+            c_start = c_start + c_name.length+1;  
+            c_end = document.cookie.indexOf(";",c_start);  
+            if (c_end == -1){
+              c_end = document.cookie.length;  
+              return unescape(document.cookie.substring(c_start,c_end));            
+            }
+          }   
+        }  
+        return "";  
+      }
+
+      var userData = getCookie('userData');
+      AuthService.parseUserInfo(userData);
+
+      // Setup the layout mode
+      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
+
+      // Restore layout settings [*** UNCOMMENT TO ENABLE ***]
+      // if( angular.isDefined($localStorage.layout) )
+      //   $rootScope.app.layout = $localStorage.layout;
+      // else
+      //   $localStorage.layout = $rootScope.app.layout;
+      //
+      // $rootScope.$watch('app.layout', function () {
+      //   $localStorage.layout = $rootScope.app.layout;
+      // }, true);
+
+      // Close submenu when sidebar change from collapsed to normal
+      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
+        if( newValue === false )
+          $rootScope.$broadcast('closeSidebarMenu');
+      });
+
+    }
+
+})();
+
+/**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
  =========================================================*/
@@ -2219,121 +2299,6 @@
 
 })();
 
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.settings')
-        .run(settingsRun);
-
-    settingsRun.$inject = ['$rootScope', '$localStorage'];
-
-    function settingsRun($rootScope, $localStorage){
-
-      // Global Settings
-      // ----------------------------------- 
-      $rootScope.app = {
-        name: 'Poimoe',
-        description: '管理后台',
-        year: ((new Date()).getFullYear()),
-        layout: {
-          isFixed: true,
-          isCollapsed: false,
-          isBoxed: false,
-          isRTL: false,
-          horizontal: false,
-          isFloat: false,
-          asideHover: false,
-          theme: null
-        },
-        useFullLayout: false,
-        hiddenFooter: false,
-        offsidebarOpen: false,
-        asideToggled: false,
-        viewAnimation: 'ng-fadeInUp',
-        baseUrl: 'http://api.poimoe.com/'
-      };
-
-      if(document.domain != 'localhost') {
-        document.domain = 'poimoe.com';
-      }
-
-      var getCookie = function(c_name) {
-        if (document.cookie.length > 0){  
-          c_start = document.cookie.indexOf(c_name + "=");
-          if (c_start != -1){
-            c_start = c_start + c_name.length+1;  
-            c_end = document.cookie.indexOf(";",c_start);  
-            if (c_end == -1){
-              c_end = document.cookie.length;  
-              return unescape(document.cookie.substring(c_start,c_end));            
-            }
-          }   
-        }  
-        return "";  
-      }
-
-      var userData = getCookie('userData');
-
-      if(userData != '') {
-          localStorage.userData = userData;
-          userData = JSON.parse(userData);
-          localStorage._id = userData._id;
-          localStorage.username = userData.username;
-          localStorage.accessToken = userData.accessToken;
-          localStorage.photo = userData.photo;
-          localStorage.group = userData.group;
-          localStorage.login = true;
-      }
-
-      var group = localStorage.group;
-       
-      if(group == 'undefined' || group == undefined) {
-        localStorage.auth = false;
-        localStorage.isRoot = false;
-      }else {
-        group = JSON.parse(group);
-
-        var isRoot = false;
-
-        for (var i = 0; i < group.length; i++) {
-          var g = group[i];
-          if(g.name === 'root' && g.code === '100') {
-            isRoot = true;
-            break;
-          }
-        };
-
-        if(!isRoot) {
-          localStorage.auth = true;
-          localStorage.isRoot = true;
-        }
-
-      }
-
-      // Setup the layout mode
-      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
-
-      // Restore layout settings [*** UNCOMMENT TO ENABLE ***]
-      // if( angular.isDefined($localStorage.layout) )
-      //   $rootScope.app.layout = $localStorage.layout;
-      // else
-      //   $localStorage.layout = $rootScope.app.layout;
-      //
-      // $rootScope.$watch('app.layout', function () {
-      //   $localStorage.layout = $rootScope.app.layout;
-      // }, true);
-
-      // Close submenu when sidebar change from collapsed to normal
-      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
-        if( newValue === false )
-          $rootScope.$broadcast('closeSidebarMenu');
-      });
-
-    }
-
-})();
 
 /**=========================================================
  * Module: sidebar-menu.js
@@ -3263,11 +3228,83 @@
 	
 		var vm = this;
 
+        vm.account = {
+            username: '',
+            password: ''
+        };
+
+        vm.rememberMe = false;
+
+        localStorage.rememberMe = typeof localStorage.rememberMe == 'undefined' || localStorage.rememberMe == 'false' ? false : localStorage.rememberMe;
+
+        if(localStorage.rememberMe === 'true') {
+            vm.account.username = localStorage.username;
+            vm.account.password = localStorage.password;
+        }
+
 		vm.loginIn = function() {
 
-			sessionStorage.isFromLoginPage = true;
+            if(vm.account.username == '') {
+                var toast = $mdToast.simple()
+                    .content('请填写用户名')
+                    .action('确定')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                    // $state.go(pathTo);
+                });
+                return false;
+            }
 
-			$state.go('app.welcome');
+            if(vm.account.password == '') {
+                var toast = $mdToast.simple()
+                    .content('请填写密码')
+                    .action('确定')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                    // $state.go(pathTo);
+                });
+                return false;
+            }
+
+            AuthService.login(vm.account.username, vm.account.password)
+            .success(function(res) {
+
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                    return false;
+                }
+
+                var userData = res.message;
+
+                sessionStorage.isFromLoginPage = true;
+
+                AuthService.parseUserInfo(userData);
+
+                if(vm.rememberMe) {
+                    localStorage.rememberMe = true;
+                    localStorage.password = vm.account.password;
+                }
+
+                $state.go('app.welcome');
+
+            })
+            .error(function(res) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
 		}; 
 
     }
@@ -3290,6 +3327,60 @@
 
         login: function(email, password) {
           return $http.get($rootScope.app.baseUrl + 'user/login/' + email + '/' + password);
+        },
+
+        parseUserInfo: function(userData) {
+
+          var isValid = false;
+
+          if(typeof userData == 'string') {
+            if(userData != '') {
+              localStorage.userData = userData;
+              userData = JSON.parse(userData);              
+              isValid = true;
+            }
+          }else {
+            localStorage.userData = JSON.stringify(userData);
+            isValid = true;
+          }
+
+          if(!isValid) {
+            return false;
+          }
+
+          userData = JSON.parse(userData);
+          localStorage._id = userData._id;
+          localStorage.username = userData.username;
+          localStorage.accessToken = userData.accessToken;
+          localStorage.photo = userData.photo;
+          localStorage.group = userData.group;
+          localStorage.login = true;
+
+          var group = localStorage.group;
+           
+          if(group == 'undefined' || group == undefined) {
+            localStorage.auth = false;
+            localStorage.isRoot = false;
+          }else {
+            group = JSON.parse(group);
+
+            var isRoot = false;
+
+            for (var i = 0; i < group.length; i++) {
+              var g = group[i];
+              if(g.name === 'root' && g.code === '100') {
+                isRoot = true;
+                break;
+              }
+            };
+
+            if(!isRoot) {
+              localStorage.auth = true;
+              localStorage.isRoot = true;
+            }
+
+          }
+
         }
 
       }
