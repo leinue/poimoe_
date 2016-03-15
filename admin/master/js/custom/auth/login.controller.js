@@ -22,7 +22,7 @@
         vm.rememberMe = localStorage.rememberMe == 'true' ? true : false;
 
         if(localStorage.rememberMe === 'true') {
-            vm.account.username = localStorage.username;
+            vm.account.username = localStorage.email;
             vm.account.password = localStorage.password;
         }
 
@@ -74,11 +74,12 @@
 
                 if(vm.rememberMe) {
                     localStorage.rememberMe = true;
+                    localStorage.email = vm.account.username;
                     localStorage.password = vm.account.password;
                 }
 
                 if(localStorage.isRoot == 'false') {
-                    $state.go('auth.noauth');
+                    $state.go('auth.noAuth');
                 }else {
                     $state.go('app.welcome');
                 }
