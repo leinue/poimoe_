@@ -17,9 +17,9 @@
             password: ''
         };
 
-        vm.rememberMe = false;
-
         localStorage.rememberMe = typeof localStorage.rememberMe == 'undefined' || localStorage.rememberMe == 'false' ? false : localStorage.rememberMe;
+
+        vm.rememberMe = localStorage.rememberMe == 'true' ? true : false;
 
         if(localStorage.rememberMe === 'true') {
             vm.account.username = localStorage.username;
@@ -66,7 +66,7 @@
                     return false;
                 }
 
-                var userData = res.message;
+                var userData = res.data;
 
                 sessionStorage.isFromLoginPage = true;
 
@@ -77,7 +77,11 @@
                     localStorage.password = vm.account.password;
                 }
 
-                $state.go('app.welcome');
+                if(localStorage.isRoot == 'false') {
+                    $state.go('auth.noauth');
+                }else {
+                    $state.go('app.welcome');
+                }
 
             })
             .error(function(res) {

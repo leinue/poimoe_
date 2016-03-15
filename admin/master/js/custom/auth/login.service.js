@@ -16,6 +16,20 @@
           return $http.get($rootScope.app.baseUrl + 'user/login/' + email + '/' + password);
         },
 
+        clearAfterLogout: function() {
+          localStorage._id = undefined;
+          if(localStorage.rememberMe != 'true') {
+            localStorage.username = undefined;
+            localStorage.password = undefined;
+          }
+          localStorage.accessToken = undefined;
+          localStorage.photo = undefined;
+          localStorage.group = undefined;
+          localStorage.login = false;
+          localStorage.auth = false;
+          localStorage.isRoot = false;
+        },
+
         parseUserInfo: function(userData) {
 
           var isValid = false;
@@ -35,12 +49,12 @@
             return false;
           }
 
-          userData = JSON.parse(userData);
           localStorage._id = userData._id;
           localStorage.username = userData.username;
+          localStorage.password = userData.password;
           localStorage.accessToken = userData.accessToken;
           localStorage.photo = userData.photo;
-          localStorage.group = userData.group;
+          localStorage.group = JSON.stringify(userData.group);
           localStorage.login = true;
 
           var group = localStorage.group;
@@ -61,7 +75,7 @@
               }
             };
 
-            if(!isRoot) {
+            if(isRoot) {
               localStorage.auth = true;
               localStorage.isRoot = true;
             }

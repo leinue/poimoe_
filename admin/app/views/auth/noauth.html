@@ -1,4 +1,4 @@
-<div class="abs-center wd-xl">
+<div ng-controller="NoAuthController as noAuth" class="abs-center wd-xl">
    <!-- START panel-->
    <div class="text-center mb-xl">
       <div class="text-lg mb-lg">无权限操作</div>
@@ -8,8 +8,11 @@
    <ul class="list-inline text-center text-sm mb-xl">
       <li><a href="http://poimoe.com/?page_id=21" class="text-muted">去反馈</a>
       </li>
-      <li class="text-muted">|</li>
-      <li><a href="" ui-sref="auth.login" class="text-muted">登录</a>
+      <li ng-show="noAuth.isLogin == false" class="text-muted">|</li>
+      <li><a href="" ui-sref="auth.login" ng-show="noAuth.isLogin == false" class="text-muted">登录</a>
+      </li>
+      <li ng-show="noAuth.isLogin == true" class="text-muted">|</li>
+      <li><a href="" ng-click="noAuth.logout()" ng-show="noAuth.isLogin == true" class="text-muted">注销登录</a>
       </li>
    </ul>
    <div class="p-lg text-center">

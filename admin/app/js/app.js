@@ -32,7 +32,8 @@
             'app.users',
             'app.themes',
             'app.tags',
-            'auth.login'
+            'auth.login',
+            'auth.noAuth'
             // 'datatables'
         ]);
 })();
@@ -117,15 +118,15 @@
     'use strict';
 
     angular
-        .module('app.settings', []);
+        .module('app.routes', [
+            'app.lazyload'
+        ]);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.routes', [
-            'app.lazyload'
-        ]);
+        .module('app.settings', []);
 })();
 (function() {
     'use strict';
@@ -1954,86 +1955,6 @@
     }
 
 })();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.settings')
-        .run(settingsRun);
-
-    settingsRun.$inject = ['$rootScope', '$localStorage', 'AuthService'];
-
-    function settingsRun($rootScope, $localStorage, AuthService){
-
-      // Global Settings
-      // ----------------------------------- 
-      $rootScope.app = {
-        name: 'Poimoe',
-        description: '管理后台',
-        year: ((new Date()).getFullYear()),
-        layout: {
-          isFixed: true,
-          isCollapsed: false,
-          isBoxed: false,
-          isRTL: false,
-          horizontal: false,
-          isFloat: false,
-          asideHover: false,
-          theme: null
-        },
-        useFullLayout: false,
-        hiddenFooter: false,
-        offsidebarOpen: false,
-        asideToggled: false,
-        viewAnimation: 'ng-fadeInUp',
-        baseUrl: 'http://api.poimoe.com/'
-      };
-
-      if(document.domain != 'localhost') {
-        document.domain = 'poimoe.com';
-      }
-
-      var getCookie = function(c_name) {
-        if (document.cookie.length > 0){  
-          c_start = document.cookie.indexOf(c_name + "=");
-          if (c_start != -1){
-            c_start = c_start + c_name.length+1;  
-            c_end = document.cookie.indexOf(";",c_start);  
-            if (c_end == -1){
-              c_end = document.cookie.length;  
-              return unescape(document.cookie.substring(c_start,c_end));            
-            }
-          }   
-        }  
-        return "";  
-      }
-
-      var userData = getCookie('userData');
-      AuthService.parseUserInfo(userData);
-
-      // Setup the layout mode
-      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
-
-      // Restore layout settings [*** UNCOMMENT TO ENABLE ***]
-      // if( angular.isDefined($localStorage.layout) )
-      //   $rootScope.app.layout = $localStorage.layout;
-      // else
-      //   $localStorage.layout = $rootScope.app.layout;
-      //
-      // $rootScope.$watch('app.layout', function () {
-      //   $localStorage.layout = $rootScope.app.layout;
-      // }, true);
-
-      // Close submenu when sidebar change from collapsed to normal
-      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
-        if( newValue === false )
-          $rootScope.$broadcast('closeSidebarMenu');
-      });
-
-    }
-
-})();
-
 /**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
@@ -2299,6 +2220,86 @@
 
 })();
 
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.settings')
+        .run(settingsRun);
+
+    settingsRun.$inject = ['$rootScope', '$localStorage', 'AuthService'];
+
+    function settingsRun($rootScope, $localStorage, AuthService){
+
+      // Global Settings
+      // ----------------------------------- 
+      $rootScope.app = {
+        name: 'Poimoe',
+        description: '管理后台',
+        year: ((new Date()).getFullYear()),
+        layout: {
+          isFixed: true,
+          isCollapsed: false,
+          isBoxed: false,
+          isRTL: false,
+          horizontal: false,
+          isFloat: false,
+          asideHover: false,
+          theme: null
+        },
+        useFullLayout: false,
+        hiddenFooter: false,
+        offsidebarOpen: false,
+        asideToggled: false,
+        viewAnimation: 'ng-fadeInUp',
+        baseUrl: 'http://api.poimoe.com/'
+      };
+
+      if(document.domain != 'localhost') {
+        document.domain = 'poimoe.com';
+      }
+
+      var getCookie = function(c_name) {
+        if (document.cookie.length > 0){  
+          c_start = document.cookie.indexOf(c_name + "=");
+          if (c_start != -1){
+            c_start = c_start + c_name.length+1;  
+            c_end = document.cookie.indexOf(";",c_start);  
+            if (c_end == -1){
+              c_end = document.cookie.length;  
+              return unescape(document.cookie.substring(c_start,c_end));            
+            }
+          }   
+        }  
+        return "";  
+      }
+
+      var userData = getCookie('userData');
+      AuthService.parseUserInfo(userData);
+
+      // Setup the layout mode
+      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
+
+      // Restore layout settings [*** UNCOMMENT TO ENABLE ***]
+      // if( angular.isDefined($localStorage.layout) )
+      //   $rootScope.app.layout = $localStorage.layout;
+      // else
+      //   $localStorage.layout = $rootScope.app.layout;
+      //
+      // $rootScope.$watch('app.layout', function () {
+      //   $localStorage.layout = $rootScope.app.layout;
+      // }, true);
+
+      // Close submenu when sidebar change from collapsed to normal
+      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
+        if( newValue === false )
+          $rootScope.$broadcast('closeSidebarMenu');
+      });
+
+    }
+
+})();
 
 /**=========================================================
  * Module: sidebar-menu.js
@@ -3163,11 +3164,21 @@
         ]);
 })();
 
+
 (function() {
     'use strict';
 
     angular
-        .module('app.tags', [
+        .module('auth.noAuth', [
+            'angle'
+        ]);
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.themes', [
             'angle'
         ]);
 })();
@@ -3175,7 +3186,7 @@
     'use strict';
 
     angular
-        .module('app.themes', [
+        .module('app.tags', [
             'angle'
         ]);
 })();
@@ -3233,9 +3244,9 @@
             password: ''
         };
 
-        vm.rememberMe = false;
-
         localStorage.rememberMe = typeof localStorage.rememberMe == 'undefined' || localStorage.rememberMe == 'false' ? false : localStorage.rememberMe;
+
+        vm.rememberMe = localStorage.rememberMe == 'true' ? true : false;
 
         if(localStorage.rememberMe === 'true') {
             vm.account.username = localStorage.username;
@@ -3282,7 +3293,7 @@
                     return false;
                 }
 
-                var userData = res.message;
+                var userData = res.data;
 
                 sessionStorage.isFromLoginPage = true;
 
@@ -3293,7 +3304,11 @@
                     localStorage.password = vm.account.password;
                 }
 
-                $state.go('app.welcome');
+                if(localStorage.isRoot == 'false') {
+                    $state.go('auth.noauth');
+                }else {
+                    $state.go('app.welcome');
+                }
 
             })
             .error(function(res) {
@@ -3329,6 +3344,20 @@
           return $http.get($rootScope.app.baseUrl + 'user/login/' + email + '/' + password);
         },
 
+        clearAfterLogout: function() {
+          localStorage._id = undefined;
+          if(localStorage.rememberMe != 'true') {
+            localStorage.username = undefined;
+            localStorage.password = undefined;
+          }
+          localStorage.accessToken = undefined;
+          localStorage.photo = undefined;
+          localStorage.group = undefined;
+          localStorage.login = false;
+          localStorage.auth = false;
+          localStorage.isRoot = false;
+        },
+
         parseUserInfo: function(userData) {
 
           var isValid = false;
@@ -3348,12 +3377,12 @@
             return false;
           }
 
-          userData = JSON.parse(userData);
           localStorage._id = userData._id;
           localStorage.username = userData.username;
+          localStorage.password = userData.password;
           localStorage.accessToken = userData.accessToken;
           localStorage.photo = userData.photo;
-          localStorage.group = userData.group;
+          localStorage.group = JSON.stringify(userData.group);
           localStorage.login = true;
 
           var group = localStorage.group;
@@ -3374,13 +3403,349 @@
               }
             };
 
-            if(!isRoot) {
+            if(isRoot) {
               localStorage.auth = true;
               localStorage.isRoot = true;
             }
 
           }
 
+        }
+
+      }
+
+    }
+
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('auth.noAuth')
+        .controller('NoAuthController', NoAuthController);
+
+    NoAuthController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state'];
+    
+    function NoAuthController($log, $mdDialog, $mdToast, AuthService, $state) {
+
+    	var vm = this;
+
+    	vm.isLogin = typeof localStorage.login == 'undefined' || localStorage.login == 'false' ? false : true;
+
+    	vm.logout = function() {
+
+    		AuthService.logout()
+            .success(function(res) {
+
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                    return false;
+                }
+
+                AuthService.clearAfterLogout();
+
+                $state.go('app.login');
+            })
+            .error(function(res) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+
+    	};
+    }
+
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.themes')
+        .controller('ThemesController', ThemesController);
+
+    ThemesController.$inject = ['$log', '$mdDialog', '$mdToast', 'ThemeService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'MOptions'];
+    function ThemesController($log, $mdDialog, $mdToast, ThemeService, DTOptionsBuilder, DTColumnDefBuilder, MOptions) {
+        // for controllerAs syntax
+        var vm = this;
+
+        activate();
+
+        activateTable();
+
+        MOptions.init(vm, ['element', 'elementDeleted']);
+
+        vm.themesList = [];
+        vm.themesDeletedList = [];
+
+        function activateTable() {
+
+            vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+            vm.dtColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(0),
+                DTColumnDefBuilder.newColumnDef(1),
+                DTColumnDefBuilder.newColumnDef(2),
+                DTColumnDefBuilder.newColumnDef(3).notSortable()
+            ];
+
+            vm.getAll = function() {
+
+                ThemeService.getAll(1, 100)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.themesList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
+            }
+
+            vm.getDeleted = function() {
+
+                ThemeService.getDeleted(1, 10)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.themesDeletedList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
+
+            }
+
+            vm.getAll();
+            vm.getDeleted();
+
+        }
+
+        ////////////////
+
+        function activate() {
+            
+            vm.selectCtrl = {
+
+                names: [{
+                    val: '查看投稿',
+                    onClicked: function(ev, tm, index) {
+                        window.open("http://poi.poimoe.com/#!/view/" + tm._id);
+                    }
+                }, {
+                    val: '作者信息',
+                    onClicked: function(ev, tm, index) {
+                        $mdDialog.show({
+                            controller: DialogController,
+                            templateUrl: 'user_theme_detail.tmpl.html',
+                            targetEvent: ev,
+                        })
+                        .then(function(answer) {
+                        }, function() {
+                        });
+
+                        DialogController.$inject = ['$scope', '$mdDialog'];
+                        function DialogController($scope, $mdDialog) {
+
+                            $scope.user = tm.user_id;
+
+                            $scope.hide = function() {
+                                $mdDialog.hide();
+                            };
+
+                            $scope.cancel = function() {
+                                $mdDialog.cancel();
+                            };
+
+                            $scope.answer = function(answer) {
+                                $mdDialog.hide(answer);
+                            };
+                        }
+                    }
+                }, {
+                    val: '删除',
+                    onClicked: function(ev, tm, index) {
+
+                        var confirm = $mdDialog.confirm()
+                            .title('删除确认')
+                            .content('你确定要删除此主题？')
+                            .ariaLabel('Lucky day')
+                            .ok('确定')
+                            .cancel('取消')
+                            .targetEvent(ev);
+
+                        if(index != undefined) {
+                            vm.selecteThisById(tm._id, vm.element);
+                        }
+
+                        $mdDialog.show(confirm).then(function() {
+                            //确定
+
+                            var selectedListLength = vm.element.selectedList.length;
+
+                            vm.element.selectedList.forEach(function(id, key) {
+
+                                ThemeService.remove(id)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                    if(key == selectedListLength - 1) {
+                                        vm.getAll();
+                                        vm.getDeleted();
+                                    }
+
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                });
+
+                            });
+
+                        }, function() {
+                            //取消
+                            if(index != undefined) {
+                                vm.unSelectThisById(tm._id, vm.element);
+                            }
+                        });
+                    }
+                }]
+
+            };
+
+            vm.selectDeletedCtrl = {
+                names: [{
+                    val: '作者信息',
+                    onClicked: function(ev, tm, index) {
+                        vm.selectCtrl.names[1].onClicked(ev, tm, index);
+                    }
+                }, {
+                    val: '恢复',
+                    onClicked: function(ev, tm, index) {
+
+                        if(index != undefined) {
+                            vm.selecteThisById(tm._id, vm.elementDeleted);
+                        }
+
+                        var selectedListLength = vm.elementDeleted.selectedList.length;
+
+
+                        vm.elementDeleted.selectedList.forEach(function(id, key) {
+
+                            ThemeService.unRemove(id)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+
+                                if(key == selectedListLength - 1) {
+                                    vm.getAll();
+                                    vm.getDeleted();
+                                }
+
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+
+                        });
+
+                    }
+                }]
+            };
+
+        }
+    }
+
+})();
+
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.themes')
+        .service('ThemeService', ThemeService);
+
+    ThemeService.$inject = ['$http', '$rootScope', '$resource'];
+
+    function ThemeService($http, $rootScope, $resource) {
+
+      return {
+
+        getAll: function(page, count) {
+          return $http.get($rootScope.app.baseUrl + 'themes/select/all/' + page + '/' + count);
+        },
+
+        getDeleted: function(page, count) {
+          return $http.get($rootScope.app.baseUrl + 'themes/select/removed/' + page + '/' + count);
+        },
+
+        remove: function(id) {
+          return $http.get($rootScope.app.baseUrl + 'themes/remove/' + id);
+        },
+
+        unRemove: function(id) {
+          return $http.get($rootScope.app.baseUrl + 'themes/unremove/' + id, {});
         }
 
       }
@@ -3762,292 +4127,6 @@
 
         unRemove: function(id) {
           return $http.get($rootScope.app.baseUrl + 'tags/unremove/' + id);
-        }
-
-      }
-
-    }
-
-})();
-
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.themes')
-        .controller('ThemesController', ThemesController);
-
-    ThemesController.$inject = ['$log', '$mdDialog', '$mdToast', 'ThemeService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'MOptions'];
-    function ThemesController($log, $mdDialog, $mdToast, ThemeService, DTOptionsBuilder, DTColumnDefBuilder, MOptions) {
-        // for controllerAs syntax
-        var vm = this;
-
-        activate();
-
-        activateTable();
-
-        MOptions.init(vm, ['element', 'elementDeleted']);
-
-        vm.themesList = [];
-        vm.themesDeletedList = [];
-
-        function activateTable() {
-
-            vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
-            vm.dtColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(0),
-                DTColumnDefBuilder.newColumnDef(1),
-                DTColumnDefBuilder.newColumnDef(2),
-                DTColumnDefBuilder.newColumnDef(3).notSortable()
-            ];
-
-            vm.getAll = function() {
-
-                ThemeService.getAll(1, 100)
-                .success(function(res, status, headers, config) {
-                    if(res.code != 200) {
-                        var toast = $mdToast.simple()
-                              .content(res.message)
-                              .action('我知道了')
-                              .highlightAction(false)
-                              .position('top right');
-                        $mdToast.show(toast).then(function() {
-                        });
-                    }
-                    vm.themesList = res.message;
-                })
-                .error(function(res, status, headers, config) {
-                    var toast = $mdToast.simple()
-                          .content('出错了，错误代码：' + status)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                });
-            }
-
-            vm.getDeleted = function() {
-
-                ThemeService.getDeleted(1, 10)
-                .success(function(res, status, headers, config) {
-                    if(res.code != 200) {
-                        var toast = $mdToast.simple()
-                              .content(res.message)
-                              .action('我知道了')
-                              .highlightAction(false)
-                              .position('top right');
-                        $mdToast.show(toast).then(function() {
-                        });
-                    }
-                    vm.themesDeletedList = res.message;
-                })
-                .error(function(res, status, headers, config) {
-                    var toast = $mdToast.simple()
-                          .content('出错了，错误代码：' + status)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                });
-
-            }
-
-            vm.getAll();
-            vm.getDeleted();
-
-        }
-
-        ////////////////
-
-        function activate() {
-            
-            vm.selectCtrl = {
-
-                names: [{
-                    val: '查看投稿',
-                    onClicked: function(ev, tm, index) {
-                        window.open("http://poi.poimoe.com/#!/view/" + tm._id);
-                    }
-                }, {
-                    val: '作者信息',
-                    onClicked: function(ev, tm, index) {
-                        $mdDialog.show({
-                            controller: DialogController,
-                            templateUrl: 'user_theme_detail.tmpl.html',
-                            targetEvent: ev,
-                        })
-                        .then(function(answer) {
-                        }, function() {
-                        });
-
-                        DialogController.$inject = ['$scope', '$mdDialog'];
-                        function DialogController($scope, $mdDialog) {
-
-                            $scope.user = tm.user_id;
-
-                            $scope.hide = function() {
-                                $mdDialog.hide();
-                            };
-
-                            $scope.cancel = function() {
-                                $mdDialog.cancel();
-                            };
-
-                            $scope.answer = function(answer) {
-                                $mdDialog.hide(answer);
-                            };
-                        }
-                    }
-                }, {
-                    val: '删除',
-                    onClicked: function(ev, tm, index) {
-
-                        var confirm = $mdDialog.confirm()
-                            .title('删除确认')
-                            .content('你确定要删除此主题？')
-                            .ariaLabel('Lucky day')
-                            .ok('确定')
-                            .cancel('取消')
-                            .targetEvent(ev);
-
-                        if(index != undefined) {
-                            vm.selecteThisById(tm._id, vm.element);
-                        }
-
-                        $mdDialog.show(confirm).then(function() {
-                            //确定
-
-                            var selectedListLength = vm.element.selectedList.length;
-
-                            vm.element.selectedList.forEach(function(id, key) {
-
-                                ThemeService.remove(id)
-                                .success(function(res, status, headers, config) {
-                                    var toast = $mdToast.simple()
-                                          .content(res.message)
-                                          .action('我知道了')
-                                          .highlightAction(false)
-                                          .position('top right');
-                                    $mdToast.show(toast).then(function() {
-                                    });
-
-                                    if(key == selectedListLength - 1) {
-                                        vm.getAll();
-                                        vm.getDeleted();
-                                    }
-
-                                })
-                                .error(function(res, status, headers, config) {
-                                    var toast = $mdToast.simple()
-                                          .content('出错了，错误代码：' + status)
-                                          .action('我知道了')
-                                          .highlightAction(false)
-                                          .position('top right');
-                                    $mdToast.show(toast).then(function() {
-                                    });
-                                });
-
-                            });
-
-                        }, function() {
-                            //取消
-                            if(index != undefined) {
-                                vm.unSelectThisById(tm._id, vm.element);
-                            }
-                        });
-                    }
-                }]
-
-            };
-
-            vm.selectDeletedCtrl = {
-                names: [{
-                    val: '作者信息',
-                    onClicked: function(ev, tm, index) {
-                        vm.selectCtrl.names[1].onClicked(ev, tm, index);
-                    }
-                }, {
-                    val: '恢复',
-                    onClicked: function(ev, tm, index) {
-
-                        if(index != undefined) {
-                            vm.selecteThisById(tm._id, vm.elementDeleted);
-                        }
-
-                        var selectedListLength = vm.elementDeleted.selectedList.length;
-
-
-                        vm.elementDeleted.selectedList.forEach(function(id, key) {
-
-                            ThemeService.unRemove(id)
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-
-                                if(key == selectedListLength - 1) {
-                                    vm.getAll();
-                                    vm.getDeleted();
-                                }
-
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-                            });
-
-                        });
-
-                    }
-                }]
-            };
-
-        }
-    }
-
-})();
-
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.themes')
-        .service('ThemeService', ThemeService);
-
-    ThemeService.$inject = ['$http', '$rootScope', '$resource'];
-
-    function ThemeService($http, $rootScope, $resource) {
-
-      return {
-
-        getAll: function(page, count) {
-          return $http.get($rootScope.app.baseUrl + 'themes/select/all/' + page + '/' + count);
-        },
-
-        getDeleted: function(page, count) {
-          return $http.get($rootScope.app.baseUrl + 'themes/select/removed/' + page + '/' + count);
-        },
-
-        remove: function(id) {
-          return $http.get($rootScope.app.baseUrl + 'themes/remove/' + id);
-        },
-
-        unRemove: function(id) {
-          return $http.get($rootScope.app.baseUrl + 'themes/unremove/' + id, {});
         }
 
       }

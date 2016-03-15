@@ -1,4 +1,4 @@
-.abs-center.wd-xl
+.abs-center.wd-xl(ng-controller="NoAuthController as noAuth")
   // START panel
   .text-center.mb-xl
     .text-lg.mb-lg 无权限操作
@@ -7,8 +7,10 @@
   
   ul.list-inline.text-center.text-sm.mb-xl
     li: a.text-muted(href="http://poimoe.com/?page_id=21") 去反馈
-    li.text-muted | 
-    li: a.text-muted(href="", ui-sref="auth.login") 登录
+    li.text-muted(ng-show="noAuth.isLogin == false") | 
+    li: a.text-muted(href="", ui-sref="auth.login", ng-show="noAuth.isLogin == false") 登录
+    li.text-muted(ng-show="noAuth.isLogin == true") | 
+    li: a.text-muted(href="", ng-click="noAuth.logout()", ng-show="noAuth.isLogin == true") 注销登录
   .p-lg.text-center
     span &copy; 
     span(ng-bind="app.year") 
