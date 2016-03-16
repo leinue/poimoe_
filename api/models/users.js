@@ -263,6 +263,20 @@ module.exports = {
       }, cb);
     };
 
+    userSchema.statics.updateGroup = function(aid, uid, err) {
+
+      aid = [aid];
+
+      return this.findOneAndUpdate({
+        _id: uid,
+        isDeleted: false
+      }, {
+        group: aid
+      }, {
+        new: true
+      }, cb);
+    };
+
     userSchema.statics.blockUser = function(uid, cb) {
       return this.findOneAndUpdate({
         _id: uid,
@@ -731,7 +745,7 @@ module.exports = {
     var relationsSchema = relationsModel.init(mongoose);
     var timelineSchema = timelineModel.init(mongoose);
     var kakuSchema = kakuModel.init(mongoose);
-    var userGroupsSchema = kakuModel.init(mongoose);
+    var userGroupsSchema = userGroupsModel.init(mongoose);
 
     this.userModel = util.cacheMongooseModel(mongoose, userSchema, 'users', this.userModel);
     this.themesModel = util.cacheMongooseModel(mongoose, themesSchema, 'themes', this.themesModel);
@@ -750,7 +764,7 @@ module.exports = {
       relations: _this.relationsModel,
       timeline: _this.timelineModel,
       kaku: _this.kakuModel,
-      userGroupsModel: _this.userGroupsModel
+      userGroups: _this.userGroupsModel
     };
 
   }

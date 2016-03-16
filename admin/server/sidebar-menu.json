@@ -39,7 +39,7 @@
     "sref": "#",
     "icon": "fa fa-shield",
     "submenu": [
-      {"text": "用户组管理",     "sref": "app.rolesmgr"},
-      {"text": "权限分配",     "sref": "app.rightsmgr"}
+      {"text": "用户组管理",     "sref": "app.group"},
+      {"text": "用户权限管理",     "sref": "app.authority"}
     ]
   }]

@@ -114,7 +114,7 @@
                 }
 
             })
-            .error(function(res) {
+            .error(function(res, status) {
                 var toast = $mdToast.simple()
                     .content('出错了，错误代码：' + status)
                     .action('我知道了')

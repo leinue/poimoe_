@@ -1,0 +1,148 @@
+h3 用户组管理
+.container-md(style='max-width:100%' ng-controller="GroupController as groups")
+  .card(style='box-shadow:none')
+    md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%;padding:0px')
+      md-tabs(md-dynamic-height='', md-border-bottom='')
+        md-tab(label='基本信息')
+          md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;')
+          // ngRepeat + ngResource
+          .panel.panel-default
+            .panel-heading(style='border:1px solid rgb(238, 238, 238)') 用户组管理 
+            .panel-body(style='padding:0px')
+              .table-responsive
+                table#table-ext-1.table.table-bordered.table-hover
+                  thead
+                    tr
+                      th 用户组名称
+                      th 用户组描述
+                      th 用户组代码
+                      th 创建时间
+                      th 操作
+                      th
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='groups.allGroupsList.isSelectAll', ng-change="groups.toggleSelectAll(groups.groupsList, groups.allGroupsList)")
+                  tbody
+                    tr(ng-repeat='(key, group) in groups.groupsList')
+                      td {{group.name}}
+                      td {{group.description}}
+                      td {{group.code}}
+                      td {{group.createdAt}}
+                      td
+                        md-select(ng-model='groups.groupsAction.name[group._id]', placeholder='操作')
+                          md-option(ng-repeat='name in groups.groupsAction.names', value='{{name.val}}' ng-click="name.onClicked($event, group, key)") {{name.val}}                          
+                      td
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='groups.allGroupsList.isElementSelected[group._id]', ng-change="groups.selectThis(group._id, groups.allGroupsList)")
+
+              .panel-footer
+                .row
+                  .col-lg-10
+                  .col-lg-2
+                    .input-group.pull-right
+                      md-select(ng-model='groups.footerAction.name', placeholder='操作')
+                        md-option(ng-repeat='name in groups.footerAction.names', value='{{name.val}}', ng-click="name.onClicked($event)") {{name.val}}
+
+        script(type='text/ng-template', id='group_detail.tmpl.html').
+          <md-dialog aria-label="{{title}}">
+          <form>
+            <md-toolbar>
+              <div class="md-toolbar-tools">
+                <h2>编辑用户组 {{group.name}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="answer('not applicable')">
+                  <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+              </div>
+            </md-toolbar>
+            <md-dialog-content>
+              <div class="card-body">
+               <div class="row">
+                  <div class="col-sm-12">
+                     <div class="mda-form-group">
+                        <input ng-model="group.name" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
+                        <label>用户组名</label>
+                     </div>
+                  </div>
+                  <div class="col-sm-12">
+                     <div class="mda-form-group">
+                        <input ng-model="group.code" tabindex="0" aria-invalid="false" aria-required="true" required='' class="mda-form-control" />
+                        <label>用户组代码</label>
+                     </div>
+                  </div>
+                  <div class="col-sm-12">
+                     <div class="mda-form-group">
+                        <input ng-model="group.description" tabindex="0" aria-invalid="false" class="mda-form-control" />
+                        <label>用户组描述</label>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            </md-dialog-content>
+            <div class="md-actions" layout="row">
+              <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" hide show-md>
+                More on Wikipedia
+              </md-button>
+              <span flex></span>
+              <md-button ng-click="answer('not useful')" class="md-primary">
+                关闭
+              </md-button>
+              <md-button ng-click="updateThisGroup()" class="md-primary">
+                保存
+              </md-button>
+            </div>
+          </form>
+          </md-dialog>
+
+        script(type='text/ng-template', id='auth_distribute.tmpl.html').
+          <md-dialog aria-label="{{title}}">
+          <form>
+            <md-toolbar>
+              <div class="md-toolbar-tools">
+                <h2>为 {{group.name}} 分配权限</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="answer('not applicable')">
+                  <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+              </div>
+            </md-toolbar>
+            <md-dialog-content>
+              <div class="card-body">
+              </div>
+            </md-dialog-content>
+            <div class="md-actions" layout="row">
+              <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" hide show-md>
+                More on Wikipedia
+              </md-button>
+              <span flex></span>
+              <md-button ng-click="answer('not useful')" class="md-primary">
+                关闭
+              </md-button>
+              <md-button ng-click="answer('useful')" class="md-primary">
+                保存
+              </md-button>
+            </div>
+          </form>
+          </md-dialog>
+
+        md-tab(label='新建用户组')
+          md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;')
+          // ngRepeat + ngResource
+          .panel.panel-default
+            .panel-heading(style='border:1px solid rgb(238, 238, 238)') 新建用户组 
+            .panel-body
+              form.form-validate
+                .mda-form-group.float-label.mb
+                  input.mda-form-control(ng-model='groups.group.name', required='', tabindex='0', aria-required='true', aria-invalid='true')
+                  label 用户组名称
+                  span.mda-form-msg 必填项
+                
+                .mda-form-group
+                  input.mda-form-control(ng-model='groups.group.code', tabindex='0', required='', aria-required='', aria-invalid='true', ng-minlength="3", type='number')
+                  label 用户组代码
+                  span.mda-form-msg 必填项，必须为数字，大于三位
+
+                .mda-form-group
+                  input.mda-form-control(ng-model='groups.group.description', tabindex='0', aria-invalid='true', ng-maxength="100")
+                  label 用户组描述
+                  span.mda-form-msg 写下这个权限组的描述，最多100个字符
+
+                .mda-form-group
+                  md-button.md-raised.md-primary(md-no-ink='', ng-click='groups.submitThisGroup()') 提交

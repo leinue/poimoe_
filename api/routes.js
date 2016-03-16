@@ -113,6 +113,8 @@ module.exports = {
     server.post('/groups/add', ctrl.userGroupsCtrl.add);
     server.post('/groups/update', ctrl.userGroupsCtrl.update);
     server.get('/groups/remove/:id', ctrl.userGroupsCtrl.remove);
+    server.get('/groups/authority/applyment', ctrl.userGroupsCtrl.applyAuthority);
+    server.get('/groups/to/user', ctrl.userGroupsCtrl.applyToUser);
 
     server.get('/kaku/room/all/:page/:count', ctrl.kakuCtrl.indexAll);
     server.post('/kaku/room/create', ctrl.kakuCtrl.create);

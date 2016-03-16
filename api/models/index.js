@@ -57,9 +57,6 @@ module.exports = {
       name: userAndThemes
     });
     return this.userGroupsModel;
-
-    this.userGroupsModel = this.cacheModel(userGroups, this.userGroupsModel);
-    return this.userGroupsModel;
   },
 
   Tags: function() {

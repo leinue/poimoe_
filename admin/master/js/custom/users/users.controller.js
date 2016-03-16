@@ -443,6 +443,89 @@
                             };
                         }                    
                     }
+                }, {
+                    val: '用户组管理',
+                    onClicked: function(ev, ur) {
+                        $mdDialog.show({
+                            controller: DialogController,
+                            templateUrl: 'user_groups.tmpl.html',
+                            targetEvent: ev,
+                        })
+                        .then(function(answer) {
+                            $scope.alert = 'You said the information was \'' + answer + '\'.';
+                        }, function() {
+                            $scope.alert = 'You cancelled the dialog.';
+                        });
+
+                        DialogController.$inject = ['$scope', '$mdDialog', 'AuthorityService'];
+                        function DialogController($scope, $mdDialog, AuthorityService) {
+
+                            $scope.user = ur;
+                            $scope.groupsList = [];
+
+                            $scope.applyThisUserGroup = function(id, index) {
+                                AuthorityService.applyToUser({
+                                    aid: id,
+                                    uid: $scope.user._id
+                                })
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                });
+                            }
+
+                            AuthorityService.get().success(function(res, status, headers, config) {
+
+                                if(res.code != 200) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                }
+
+                                $scope.groupsList = res.message;
+
+                            }).error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+
+                            $scope.hide = function() {
+                                $mdDialog.hide();
+                            };
+
+                            $scope.cancel = function() {
+                                $mdDialog.cancel();
+                            };
+
+                            $scope.answer = function(answer) {
+                                $mdDialog.hide(answer);
+                            };
+                        }                        
+                    }
                 }]                
             }
 

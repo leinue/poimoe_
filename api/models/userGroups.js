@@ -16,10 +16,10 @@ module.exports = {
   		  type: Date,
   		  default: Date.now
       },
-      rightsList: {
-        type: Schema.Types.Mixed,
-        default: {}
-      },
+      rightsList: [{
+        type: Schema.Types.ObjectId,
+        ref: 'authority'
+      }],
       isDeleted: {
     		type: Boolean,
     		default: false
@@ -33,6 +33,13 @@ module.exports = {
     userGroupsSchema.statics.findById = function(id, cb) {
       return this.find({
         _id: id,
+        isDeleted: false
+      }, cb);
+    };
+
+    userGroupsSchema.statics.findByCode = function(code, cb) {
+      return this.find({
+        code: code,
         isDeleted: false
       }, cb);
     };
@@ -99,9 +106,7 @@ module.exports = {
 
     };
 
-    var userGroups = mongoose.model('userGroups', userGroupsSchema);
-
-    return userGroups;
+    return userGroupsSchema;
 
   }
 };

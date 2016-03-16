@@ -33,7 +33,9 @@
             'app.themes',
             'app.tags',
             'auth.login',
-            'auth.noAuth'
+            'auth.noAuth',
+            'app.group',
+            'app.authority'
             // 'datatables'
         ]);
 })();

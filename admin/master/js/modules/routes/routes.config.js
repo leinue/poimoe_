@@ -157,6 +157,19 @@
               title: '登录',
               templateUrl: helper.basepath( 'auth/noauth.html' )
           })
+          //
+          // 权限管理 
+          // -----------------------------------
+          .state('app.authority', {
+              url: '/authority',
+              title: '登录',
+              templateUrl: helper.basepath( 'authority/authority.html' )
+          })
+          .state('app.group', {
+              url: '/group',
+              title: '登录',
+              templateUrl: helper.basepath( 'authority/group.html' )
+          })
 
           // CUSTOM RESOLVES
           //   Add your own resolves properties

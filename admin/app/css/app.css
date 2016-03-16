@@ -7904,3 +7904,6 @@ body .dataTables_wrapper .dataTables_processing,
 body .dataTables_wrapper .dataTables_paginate {
   color: #888;
 }
+.table > thead > tr > th {
+  width: 3%;
+}

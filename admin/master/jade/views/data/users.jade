@@ -321,6 +321,62 @@ h3 用户管理
           </form>
           </md-dialog>
 
+        // Dialog inline template for demo
+        script(type='text/ng-template', id='user_groups.tmpl.html').
+          <md-dialog aria-label="{{title}}">
+          <form>
+            <md-toolbar>
+              <div class="md-toolbar-tools">
+                <h2>点击确定选择 {{user.username}} 的用户组</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="answer('not applicable')">
+                  <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+              </div>
+            </md-toolbar>
+            <md-dialog-content>
+              <div class="card-body">
+                <table datatable="ng" class="row-border hover">
+                   <thead>
+                      <tr>
+                         <th>用户组名称</th>
+                         <th>用户组代码</th>
+                         <th>用户组描述</th>
+                         <th>创建时间</th>
+                         <th>操作</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      <tr ng-repeat="group in groupsList">
+                         <td>{{group.name}}</td>
+                         <td>{{group.code}}</td>
+                         <td>{{group.description}}</td>
+                         <td>{{group.createdAt}}</td>
+                         <td>
+                            <md-button value="确定" ng-click="applyThisUserGroup(group._id)" class="md-primary">
+                            确定选择
+                            </md-button>
+                         </td>
+                      </tr>
+                   </tbody>
+                </table>
+              </div>
+            </md-dialog-content>
+            <div class="md-actions" layout="row">
+              <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" hide show-md>
+                More on Wikipedia
+              </md-button>
+              <span flex></span>
+              <md-button ng-click="answer('not useful')" class="md-primary">
+                关闭
+              </md-button>
+              <md-button ng-click="answer('useful')" class="md-primary">
+                确定
+              </md-button>
+            </div>
+          </form>
+          </md-dialog>
+
         md-tab(label='被删用户')
           md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;')
           // START panel
