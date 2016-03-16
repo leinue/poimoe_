@@ -25,6 +25,8 @@
     httpConfig.$inject = ['$httpProvider'];
     function httpConfig($httpProvider) {
 
+        window.$hp = $httpProvider;
+
         if(typeof localStorage.login != 'undefined') {
             if(localStorage.login == 'true') {
                 $httpProvider.defaults.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;                

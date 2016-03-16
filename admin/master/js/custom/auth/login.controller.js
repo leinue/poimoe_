@@ -6,9 +6,9 @@
         .module('auth.login')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state', '$httpProvider'];
+    LoginController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state'];
     
-    function LoginController($log, $mdDialog, $mdToast, AuthService, $state, $httpProvider) {
+    function LoginController($log, $mdDialog, $mdToast, AuthService, $state) {
 	
 		var vm = this;
 
@@ -42,8 +42,7 @@
                 }
 
                 AuthService.clearAfterLogout();
-                delete $httpProvider.defaults.headers.common['Authorization'];
-                $state.go('app.login');
+                $state.go('auth.login');
             })
             .error(function(res) {
                 var toast = $mdToast.simple()
@@ -107,8 +106,6 @@
                     localStorage.email = vm.account.username;
                     localStorage.password = vm.account.password;
                 }
-
-                $httpProvider.defaults.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;
 
                 if(localStorage.isRoot == 'false') {
                     $state.go('auth.noAuth');

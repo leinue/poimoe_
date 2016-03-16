@@ -31,8 +31,7 @@
                 }
 
                 AuthService.clearAfterLogout();
-
-                $state.go('app.login');
+                $state.go('auth.login');
             })
             .error(function(res) {
                 var toast = $mdToast.simple()

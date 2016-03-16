@@ -18,10 +18,12 @@
 
         clearAfterLogout: function() {
           localStorage._id = undefined;
+
           if(localStorage.rememberMe != 'true') {
             localStorage.email = undefined;
             localStorage.password = undefined;
           }
+          
           localStorage.accessToken = undefined;
           localStorage.photo = undefined;
           localStorage.group = undefined;
@@ -30,6 +32,8 @@
           localStorage.isRoot = false;
           localStorage.userData = undefined;
           localStorage.username = undefined;
+
+          delete window.$hp.defaults.headers.common['Authorization'];
         },
 
         logout: function() {
@@ -62,6 +66,8 @@
           localStorage.photo = userData.photo;
           localStorage.group = JSON.stringify(userData.group);
           localStorage.login = true;
+
+          window.$hp.defaults.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;
 
           var group = localStorage.group;
            
