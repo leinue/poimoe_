@@ -19,7 +19,7 @@
         clearAfterLogout: function() {
           localStorage._id = undefined;
           if(localStorage.rememberMe != 'true') {
-            localStorage.username = undefined;
+            localStorage.email = undefined;
             localStorage.password = undefined;
           }
           localStorage.accessToken = undefined;
@@ -28,6 +28,12 @@
           localStorage.login = false;
           localStorage.auth = false;
           localStorage.isRoot = false;
+          localStorage.userData = undefined;
+          localStorage.username = undefined;
+        },
+
+        logout: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/logout');
         },
 
         parseUserInfo: function(userData) {

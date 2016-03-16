@@ -6,9 +6,9 @@
         .module('auth.login')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state'];
+    LoginController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state', '$httpProvider'];
     
-    function LoginController($log, $mdDialog, $mdToast, AuthService, $state) {
+    function LoginController($log, $mdDialog, $mdToast, AuthService, $state, $httpProvider) {
 	
 		var vm = this;
 
@@ -25,6 +25,36 @@
             vm.account.username = localStorage.email;
             vm.account.password = localStorage.password;
         }
+
+        vm.logout = function() {
+            AuthService.logout()
+            .success(function(res) {
+
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                    return false;
+                }
+
+                AuthService.clearAfterLogout();
+                delete $httpProvider.defaults.headers.common['Authorization'];
+                $state.go('app.login');
+            })
+            .error(function(res) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });;
+        };
 
 		vm.loginIn = function() {
 
@@ -77,6 +107,8 @@
                     localStorage.email = vm.account.username;
                     localStorage.password = vm.account.password;
                 }
+
+                $httpProvider.defaults.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;
 
                 if(localStorage.isRoot == 'false') {
                     $state.go('auth.noAuth');

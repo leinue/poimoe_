@@ -212,7 +212,7 @@ var index = {
     var thisToken = req.authorization.credentials;
 
     if(thisToken == '' || thisToken == undefined) {
-      res.send(util.retMsg(200, "缺少access_token或未登录"));      
+      res.send(util.retMsg(401, "缺少access_token或未登录"));      
     }
 
     var User = ctrlInitial.models.User();
@@ -229,7 +229,7 @@ var index = {
         res.send(util.retMsg(200, "注销成功"));
       }
 
-      res.send(util.retMsg(200, "注销失败"));
+      res.send(util.retMsg(401, "注销失败"));
     }
 
     User.rollbackAccessToken(thisToken, _verify);

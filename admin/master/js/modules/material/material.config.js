@@ -5,7 +5,8 @@
     angular
         .module('app.material')
         .config(materialConfig)
-        ;
+        .config(httpConfig);
+
     materialConfig.$inject = ['$mdIconProvider'];
     function materialConfig($mdIconProvider){
       $mdIconProvider
@@ -20,4 +21,17 @@
         .icon('facebook', 'app/img/icons/facebook.svg', 24)
         .icon('twitter', 'app/img/icons/twitter.svg', 24);
     }
+
+    httpConfig.$inject = ['$httpProvider'];
+    function httpConfig($httpProvider) {
+
+        if(typeof localStorage.login != 'undefined') {
+            if(localStorage.login == 'true') {
+                $httpProvider.defaults.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;                
+            }
+        }
+
+    }
+
+
 })();
