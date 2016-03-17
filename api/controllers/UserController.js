@@ -61,11 +61,11 @@ var index = {
         }
 
         if(u[0].isBlocked === true) {
-          res.send(util(400, "账号为：" + thisEmail + " 的用户已被锁定"));
+          res.send(util.retMsg(400, "账号为：" + thisEmail + " 的用户已被锁定"));
         }
 
         if(u[0].isDeleted === true) {
-          res.send(util(400, "账号为：" + thisEmail + " 的用户已被删除"));
+          res.send(util.retMsg(400, "账号为：" + thisEmail + " 的用户已被删除"));
         }
 
         global.currentUserId = u[0]._id;
@@ -73,7 +73,7 @@ var index = {
         var group = u[0].group;
 
         if(group.length === 0) {
-          res.send(util(401, "无权限访问当前资源"));
+          res.send(util.retMsg(401, "无权限访问当前资源"));
         }
 
         var group = group[0];
@@ -92,15 +92,26 @@ var index = {
             }
 
             if(auth.length === 0) {
-              res.send(util(401, "无权限访问当前资源"));
+              res.send(util.retMsg(401, "无权限访问当前资源"));
             }
 
             var authList = auth[0].rightsList;
 
-            var hadAuth = authList.indexOf();
+            var hadAuth = false;
+            var AuthName = '';
 
-            if(hadAuth == -1) {
-              res.send(util(401, "无权限访问当前资源"));
+            for (var i = 0; i < authList.length; i++) {
+              var currentAuth = authList[i];
+              var router = currentAuth.router;
+
+              if(router == reqRoute) {
+                hadAuth  = true;
+                break;
+              }
+            };
+
+            if(!hadAuth) {
+              res.send(util.retMsg(401, "无权限访问当前资源"));
             }else {
               next();
             }
