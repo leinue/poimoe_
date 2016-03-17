@@ -53,7 +53,7 @@ module.exports = {
 
       return this.find({
         isDeleted: false
-      }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
+      }).sort('createdAt').populate('rightsList').skip(skipFrom).limit(count).exec(cb);
 
     };
 

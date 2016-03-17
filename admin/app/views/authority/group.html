@@ -121,6 +121,31 @@
                  </md-toolbar>
                  <md-dialog-content>
                    <div class="card-body">
+                     <div style="padding:0px" class="panel-body">
+                        <div class="table-responsive">
+                           <table id="table-ext-1" class="table table-bordered table-hover">
+                              <thead>
+                                 <tr>
+                                    <th style="width: 50%;">权限名称</th>
+                                    <th>权限路由</th>
+                                    <th>创建时间</th>
+                                    <th>
+                                     <md-switch ng-model="authListOptions.isSelectAll" ng-change="toggleSelectAll(auth.authList, authListOptions)"></md-switch>
+                                    </th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <tr ng-repeat="(key, ath) in auth.authList">
+                                   <td>{{ath.name}}</td>
+                                   <td>{{ath.router}}</td>
+                                   <td>{{ath.createdAt}}</td>
+                                   <td>
+                                     <md-switch ng-model="authListOptions.isElementSelected[ath._id]" ng-change="selectThis(ath._id, authListOptions)"></md-switch>
+                                   </td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </div>
                    </div>
                  </md-dialog-content>
                  <div class="md-actions" layout="row">
@@ -131,7 +156,7 @@
                    <md-button ng-click="answer('not useful')" class="md-primary">
                      关闭
                    </md-button>
-                   <md-button ng-click="answer('useful')" class="md-primary">
+                   <md-button ng-click="applyTheAuth()" class="md-primary">
                      保存
                    </md-button>
                  </div>

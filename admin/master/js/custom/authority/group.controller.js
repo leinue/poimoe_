@@ -6,9 +6,9 @@
         .module('app.group')
         .controller('GroupController', GroupController);
 
-    GroupController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthorityService', '$state', 'MOptions'];
+    GroupController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthorityService', '$state', 'MOptions', 'AuthorityListService'];
     
-    function GroupController($log, $mdDialog, $mdToast, AuthorityService, $state, MOptions) {
+    function GroupController($log, $mdDialog, $mdToast, AuthorityService, $state, MOptions, AuthorityListService) {
 
     	var vm = this;
 
@@ -170,7 +170,82 @@
                     DialogController.$inject = ['$scope', '$mdDialog', 'ThemeService'];
                     function DialogController($scope, $mdDialog, ThemeService) {
 
+                        MOptions.init($scope, ['authListOptions']);
+
                         $scope.group = group;
+
+                        $scope.auth = {
+                            authList: []
+                        };
+
+                        var rightsList = $scope.group.rightsList;
+
+                        for (var i = 0; i < rightsList.length; i++) {
+                            var right = rightsList[i];
+                            var id = right._id;
+
+                            $scope.selecteThisById(id, $scope.authListOptions);
+                        };
+
+                        AuthorityListService.get()
+                        .success(function(res) {
+
+                            if(res.code != 200) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                                return false;
+                            }
+
+                            $scope.auth.authList = res.message;
+
+                        })
+                        .error(function(res, status) {
+                            var toast = $mdToast.simple()
+                                .content('出错了，错误代码：' + status)
+                                .action('我知道了')
+                                .highlightAction(false)
+                                .position('top right');
+                            $mdToast.show(toast).then(function() {
+                            });
+                        });
+
+                        $scope.applyTheAuth = function() {
+
+                            AuthorityService.applyAuthority({
+                                id: $scope.group._id,
+                                rights: $scope.authListOptions.selectedList
+                            })
+                            .success(function(res) {
+
+                                var toast = $mdToast.simple()
+                                    .content(res.message)
+                                    .action('我知道了')
+                                    .highlightAction(false)
+                                    .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+
+                                if(res.code === 200) {
+                                    $mdDialog.cancel();
+                                }
+
+                            })
+                            .error(function(res, status) {
+                                var toast = $mdToast.simple()
+                                    .content('出错了，错误代码：' + status)
+                                    .action('我知道了')
+                                    .highlightAction(false)
+                                    .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+
+                        };
 
                         $scope.hide = function() {
                             $mdDialog.hide();
