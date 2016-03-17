@@ -183,7 +183,6 @@
                         for (var i = 0; i < rightsList.length; i++) {
                             var right = rightsList[i];
                             var id = right._id;
-
                             $scope.selecteThisById(id, $scope.authListOptions);
                         };
 
@@ -202,6 +201,10 @@
                             }
 
                             $scope.auth.authList = res.message;
+
+                            if($scope.auth.authList.length === rightsList.length) {
+                                $scope.selectAll($scope.auth.authList, $scope.authListOptions);
+                            }
 
                         })
                         .error(function(res, status) {

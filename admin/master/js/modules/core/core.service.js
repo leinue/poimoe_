@@ -78,6 +78,16 @@
             MO.isElementSelected[id] = false;
           }
 
+          vm.selectAll = function(list, MO) {
+            MO.selectedList = [];
+            for (var i = 0; i < list.length; i++) {
+                var ele = list[i];
+                MO.isElementSelected[ele._id] = true;
+                MO.selectedList.push(ele._id);
+                MO.isSelectAll = true;
+            };
+          }
+
         }
 
       }

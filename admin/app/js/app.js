@@ -343,6 +343,16 @@
             MO.isElementSelected[id] = false;
           }
 
+          vm.selectAll = function(list, MO) {
+            MO.selectedList = [];
+            for (var i = 0; i < list.length; i++) {
+                var ele = list[i];
+                MO.isElementSelected[ele._id] = true;
+                MO.selectedList.push(ele._id);
+                MO.isSelectAll = true;
+            };
+          }
+
         }
 
       }
@@ -4044,7 +4054,6 @@
                         for (var i = 0; i < rightsList.length; i++) {
                             var right = rightsList[i];
                             var id = right._id;
-
                             $scope.selecteThisById(id, $scope.authListOptions);
                         };
 
@@ -4063,6 +4072,10 @@
                             }
 
                             $scope.auth.authList = res.message;
+
+                            if($scope.auth.authList.length === rightsList.length) {
+                                $scope.selectAll($scope.auth.authList, $scope.authListOptions);
+                            }
 
                         })
                         .error(function(res, status) {
