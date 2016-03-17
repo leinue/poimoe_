@@ -51,24 +51,6 @@
     'use strict';
 
     angular
-        .module('app.lazyload', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.core', [
             'ngRoute',
             'ngAnimate',
@@ -86,6 +68,40 @@
             'ngMessages'
         ]);
 })();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lazyload', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.maps', []);
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.material', [
+            'ngMaterial'
+          ]);
+})();
+
 (function() {
     'use strict';
 
@@ -118,27 +134,8 @@
     'use strict';
 
     angular
-        .module('app.maps', []);
+        .module('app.sidebar', []);
 })();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.material', [
-            'ngMaterial'
-          ]);
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.utils', [
-          'app.colors'
-          ]);
-})();
-
 (function() {
     'use strict';
 
@@ -149,8 +146,11 @@
     'use strict';
 
     angular
-        .module('app.sidebar', []);
+        .module('app.utils', [
+          'app.colors'
+          ]);
 })();
+
 (function() {
     'use strict';
 
@@ -205,48 +205,209 @@
     'use strict';
 
     angular
-        .module('app.lazyload')
-        .config(lazyloadConfig);
+        .module('app.core')
+        .config(coreConfig);
 
-    lazyloadConfig.$inject = ['$ocLazyLoadProvider', 'APP_REQUIRES'];
-    function lazyloadConfig($ocLazyLoadProvider, APP_REQUIRES){
-
-      // Lazy Load modules configuration
-      $ocLazyLoadProvider.config({
-        debug: false,
-        events: true,
-        modules: APP_REQUIRES.modules
-      });
+    coreConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide'];
+    function coreConfig($controllerProvider, $compileProvider, $filterProvider, $provide){
+      
+      var core = angular.module('app.core');
+      // registering components after bootstrap
+      core.controller = $controllerProvider.register;
+      core.directive  = $compileProvider.directive;
+      core.filter     = $filterProvider.register;
+      core.factory    = $provide.factory;
+      core.service    = $provide.service;
+      core.constant   = $provide.constant;
+      core.value      = $provide.value;
 
     }
+
 })();
+/**=========================================================
+ * Module: constants.js
+ * Define constants to inject across the application
+ =========================================================*/
+
 (function() {
     'use strict';
 
     angular
-        .module('app.lazyload')
-        .constant('APP_REQUIRES', {
-          // jQuery based and standalone scripts
-          scripts: {
-            'modernizr':          ['vendor/modernizr/modernizr.js'],
-            'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
-                                   'vendor/simple-line-icons/css/simple-line-icons.css'],
-            'weather-icons':      ['vendor/weather-icons/css/weather-icons.min.css'],
-            'loadGoogleMapsJS':   ['app/vendor/gmap/load-google-maps.js'],
-
-          },
-          // Angular based script (use the right module name)
-          modules: [
-            // {name: 'toaster', files: ['vendor/angularjs-toaster/toaster.js', 'vendor/angularjs-toaster/toaster.css']}
-            {name: 'ui.map',                    files: ['vendor/angular-ui-map/ui-map.js']},
-            
-            {name: 'datatables',                files: ['vendor/datatables/media/css/jquery.dataTables.css',
-                                                        'vendor/datatables/media/js/jquery.dataTables.js',
-                                                        'vendor/angular-datatables/dist/angular-datatables.js'], serie: true},
-
-          ]
+        .module('app.core')
+        .constant('APP_MEDIAQUERY', {
+          'desktopLG':             1200,
+          'desktop':                992,
+          'tablet':                 768,
+          'mobile':                 480
         })
-        ;
+      ;
+
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.core')
+        .run(appRun);
+
+    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
+    
+    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors, $mdDialog, $mdToast) {
+      
+      // Set reference to access them from any scope
+      $rootScope.$state = $state;
+      $rootScope.$stateParams = $stateParams;
+      $rootScope.$storage = $window.localStorage;
+
+      // Uncomment this to disable template cache
+      /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+          if (typeof(toState) !== 'undefined'){
+            $templateCache.remove(toState.templateUrl);
+          }
+      });*/
+
+      // Allows to use branding color with interpolation
+      // {{ colorByName('primary') }}
+      $rootScope.colorByName = Colors.byName;
+
+      // cancel click event easily
+      $rootScope.cancel = function($event) {
+        $event.stopPropagation();
+      };
+
+      // Hooks Example
+      // ----------------------------------- 
+
+      // Hook not found
+      $rootScope.$on('$stateNotFound',
+        function(event, unfoundState/*, fromState, fromParams*/) {
+            console.log(unfoundState.to); // "lazy.state"
+            console.log(unfoundState.toParams); // {a:1, b:2}
+            console.log(unfoundState.options); // {inherit:false} + default options
+        });
+      // Hook error
+      $rootScope.$on('$stateChangeError',
+        function(event, toState, toParams, fromState, fromParams, error){
+          console.log(error);
+        });
+      // Hook success
+      $rootScope.$on('$stateChangeSuccess',
+        function(/*event, toState, toParams, fromState, fromParams*/) {
+          // display new view from top
+          $window.scrollTo(0, 0);
+          // Save the route title
+          $rootScope.currTitle = $state.current.title;
+        });
+
+      // Load a title dynamically
+      $rootScope.currTitle = $state.current.title;
+      $rootScope.pageTitle = function() {
+        var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
+        document.title = title;
+        return title;
+      };
+
+    }
+
+})();
+
+
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .service('MOptions', MOptions);
+
+    MOptions.$inject = ['$http', '$rootScope'];
+
+    function MOptions($http, $rootScope) {
+
+      return {
+
+        init: function(vm, eles) {
+
+          var init = function() {
+
+              return {
+                  isSelectAll: false,
+                  isElementSelected: {},
+                  selectedList: []
+              };
+
+          };
+
+          for (var i = 0; i < eles.length; i++) {
+              var ele = eles[i];
+              vm[ele] = init();
+          };
+
+          vm.toggleSelectAll = function(list, MO) {
+
+              if(!MO.isSelectAll) {
+                  //取消全选
+                  for (var i = 0; i < list.length; i++) {
+                      var ele = list[i];
+                      MO.isElementSelected[ele._id] = false;
+                      MO.isSelectAll = false;
+                  };
+                  MO.selectedList = [];
+              }else {
+                  //选择全部
+                  MO.selectedList = [];
+                  for (var i = 0; i < list.length; i++) {
+                      var ele = list[i];
+                      MO.isElementSelected[ele._id] = true;
+                      MO.selectedList.push(ele._id);
+                      MO.isSelectAll = true;
+                  };
+              }
+          };
+
+          vm.selectThis = function(id, MO) {
+              if(MO.isElementSelected[id] == undefined) {
+                  MO.isElementSelected[id] = false;
+              }
+
+              if(MO.isElementSelected[id]) {
+                  MO.isElementSelected[id] = true;
+                  MO.selectedList.push(id);
+              }else {
+                  MO.isElementSelected[id] = false;
+                  MO.selectedList.splice(MO.selectedList.indexOf(id), 1);
+              }
+
+          };
+
+          vm.selecteThisById = function(id, MO) {
+            if(MO.selectedList.indexOf(id) == -1) {
+              MO.isElementSelected[id] = true;
+              MO.selectedList.push(id);
+            }
+          }
+
+          vm.unSelectThisById = function(id, MO) {
+            MO.selectedList.splice(MO.selectedList.indexOf(id), 1);
+            MO.isElementSelected[id] = false;
+          }
+
+          vm.selectAll = function(list, MO) {
+            MO.selectedList = [];
+            for (var i = 0; i < list.length; i++) {
+                var ele = list[i];
+                MO.isElementSelected[ele._id] = true;
+                MO.selectedList.push(ele._id);
+                MO.isSelectAll = true;
+            };
+          }
+
+        }
+
+      }
+
+    }
 
 })();
 
@@ -548,6 +709,55 @@
     'use strict';
 
     angular
+        .module('app.lazyload')
+        .config(lazyloadConfig);
+
+    lazyloadConfig.$inject = ['$ocLazyLoadProvider', 'APP_REQUIRES'];
+    function lazyloadConfig($ocLazyLoadProvider, APP_REQUIRES){
+
+      // Lazy Load modules configuration
+      $ocLazyLoadProvider.config({
+        debug: false,
+        events: true,
+        modules: APP_REQUIRES.modules
+      });
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lazyload')
+        .constant('APP_REQUIRES', {
+          // jQuery based and standalone scripts
+          scripts: {
+            'modernizr':          ['vendor/modernizr/modernizr.js'],
+            'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
+                                   'vendor/simple-line-icons/css/simple-line-icons.css'],
+            'weather-icons':      ['vendor/weather-icons/css/weather-icons.min.css'],
+            'loadGoogleMapsJS':   ['app/vendor/gmap/load-google-maps.js'],
+
+          },
+          // Angular based script (use the right module name)
+          modules: [
+            // {name: 'toaster', files: ['vendor/angularjs-toaster/toaster.js', 'vendor/angularjs-toaster/toaster.css']}
+            {name: 'ui.map',                    files: ['vendor/angular-ui-map/ui-map.js']},
+            
+            {name: 'datatables',                files: ['vendor/datatables/media/css/jquery.dataTables.css',
+                                                        'vendor/datatables/media/js/jquery.dataTables.js',
+                                                        'vendor/angular-datatables/dist/angular-datatables.js'], serie: true},
+
+          ]
+        })
+        ;
+
+})();
+
+(function() {
+    'use strict';
+
+    angular
         .module('app.loadingbar')
         .config(loadingbarConfig)
         ;
@@ -646,797 +856,20 @@
         }
 
         // 检测用户组非root之后指向noAuth页面
-        // if(localStorage.isRoot == 'false') {
-        //   if(next.name != 'auth.noAuth') {
-        //     if(next.name != 'auth.login') {
-        //       $state.go('auth.noAuth');
-        //     }
-        //   }
-        //   return false;
-        // }
+        if(localStorage.isRoot == 'false') {
+          if(next.name != 'auth.noAuth') {
+            if(next.name != 'auth.login') {
+              $state.go('auth.noAuth');
+            }
+          }
+          return false;
+        }
 
       });
 
     }
 
 })();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .config(coreConfig);
-
-    coreConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide'];
-    function coreConfig($controllerProvider, $compileProvider, $filterProvider, $provide){
-      
-      var core = angular.module('app.core');
-      // registering components after bootstrap
-      core.controller = $controllerProvider.register;
-      core.directive  = $compileProvider.directive;
-      core.filter     = $filterProvider.register;
-      core.factory    = $provide.factory;
-      core.service    = $provide.service;
-      core.constant   = $provide.constant;
-      core.value      = $provide.value;
-
-    }
-
-})();
-/**=========================================================
- * Module: constants.js
- * Define constants to inject across the application
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .constant('APP_MEDIAQUERY', {
-          'desktopLG':             1200,
-          'desktop':                992,
-          'tablet':                 768,
-          'mobile':                 480
-        })
-      ;
-
-})();
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.core')
-        .run(appRun);
-
-    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
-    
-    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors, $mdDialog, $mdToast) {
-      
-      // Set reference to access them from any scope
-      $rootScope.$state = $state;
-      $rootScope.$stateParams = $stateParams;
-      $rootScope.$storage = $window.localStorage;
-
-      // Uncomment this to disable template cache
-      /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-          if (typeof(toState) !== 'undefined'){
-            $templateCache.remove(toState.templateUrl);
-          }
-      });*/
-
-      // Allows to use branding color with interpolation
-      // {{ colorByName('primary') }}
-      $rootScope.colorByName = Colors.byName;
-
-      // cancel click event easily
-      $rootScope.cancel = function($event) {
-        $event.stopPropagation();
-      };
-
-      // Hooks Example
-      // ----------------------------------- 
-
-      // Hook not found
-      $rootScope.$on('$stateNotFound',
-        function(event, unfoundState/*, fromState, fromParams*/) {
-            console.log(unfoundState.to); // "lazy.state"
-            console.log(unfoundState.toParams); // {a:1, b:2}
-            console.log(unfoundState.options); // {inherit:false} + default options
-        });
-      // Hook error
-      $rootScope.$on('$stateChangeError',
-        function(event, toState, toParams, fromState, fromParams, error){
-          console.log(error);
-        });
-      // Hook success
-      $rootScope.$on('$stateChangeSuccess',
-        function(/*event, toState, toParams, fromState, fromParams*/) {
-          // display new view from top
-          $window.scrollTo(0, 0);
-          // Save the route title
-          $rootScope.currTitle = $state.current.title;
-        });
-
-      // Load a title dynamically
-      $rootScope.currTitle = $state.current.title;
-      $rootScope.pageTitle = function() {
-        var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
-        document.title = title;
-        return title;
-      };
-
-    }
-
-})();
-
-
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .service('MOptions', MOptions);
-
-    MOptions.$inject = ['$http', '$rootScope'];
-
-    function MOptions($http, $rootScope) {
-
-      return {
-
-        init: function(vm, eles) {
-
-          var init = function() {
-
-              return {
-                  isSelectAll: false,
-                  isElementSelected: {},
-                  selectedList: []
-              };
-
-          };
-
-          for (var i = 0; i < eles.length; i++) {
-              var ele = eles[i];
-              vm[ele] = init();
-          };
-
-          vm.toggleSelectAll = function(list, MO) {
-
-              if(!MO.isSelectAll) {
-                  //取消全选
-                  for (var i = 0; i < list.length; i++) {
-                      var ele = list[i];
-                      MO.isElementSelected[ele._id] = false;
-                      MO.isSelectAll = false;
-                  };
-                  MO.selectedList = [];
-              }else {
-                  //选择全部
-                  MO.selectedList = [];
-                  for (var i = 0; i < list.length; i++) {
-                      var ele = list[i];
-                      MO.isElementSelected[ele._id] = true;
-                      MO.selectedList.push(ele._id);
-                      MO.isSelectAll = true;
-                  };
-              }
-          };
-
-          vm.selectThis = function(id, MO) {
-              if(MO.isElementSelected[id] == undefined) {
-                  MO.isElementSelected[id] = false;
-              }
-
-              if(MO.isElementSelected[id]) {
-                  MO.isElementSelected[id] = true;
-                  MO.selectedList.push(id);
-              }else {
-                  MO.isElementSelected[id] = false;
-                  MO.selectedList.splice(MO.selectedList.indexOf(id), 1);
-              }
-
-          };
-
-          vm.selecteThisById = function(id, MO) {
-            if(MO.selectedList.indexOf(id) == -1) {
-              MO.isElementSelected[id] = true;
-              MO.selectedList.push(id);
-            }
-          }
-
-          vm.unSelectThisById = function(id, MO) {
-            MO.selectedList.splice(MO.selectedList.indexOf(id), 1);
-            MO.isElementSelected[id] = false;
-          }
-
-          vm.selectAll = function(list, MO) {
-            MO.selectedList = [];
-            for (var i = 0; i < list.length; i++) {
-                var ele = list[i];
-                MO.isElementSelected[ele._id] = true;
-                MO.selectedList.push(ele._id);
-                MO.isSelectAll = true;
-            };
-          }
-
-        }
-
-      }
-
-    }
-
-})();
-
-/**=========================================================
- * Module: navbar-search.js
- * Navbar search toggler * Auto dismiss on ESC key
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .directive('searchOpen', searchOpen)
-        .directive('searchDismiss', searchDismiss);
-
-    //
-    // directives definition
-    // 
-    
-    function searchOpen () {
-        var directive = {
-            controller: searchOpenController,
-            restrict: 'A'
-        };
-        return directive;
-
-    }
-
-    function searchDismiss () {
-        var directive = {
-            controller: searchDismissController,
-            restrict: 'A'
-        };
-        return directive;
-        
-    }
-
-    //
-    // Contrller definition
-    // 
-    
-    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchOpenController ($scope, $element, NavSearch) {
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.toggle);
-    }
-
-    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchDismissController ($scope, $element, NavSearch) {
-      
-      var inputSelector = '.navbar-form input[type="text"]';
-
-      $(inputSelector)
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('keyup', function(e) {
-          if (e.keyCode === 27) // ESC
-            NavSearch.dismiss();
-        });
-        
-      // click anywhere closes the search
-      $(document).on('click', NavSearch.dismiss);
-      // dismissable options
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.dismiss);
-    }
-
-})();
-
-
-/**=========================================================
- * Module: nav-search.js
- * Services to share navbar search functions
- =========================================================*/
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .service('NavSearch', NavSearch);
-
-    function NavSearch() {
-        this.toggle = toggle;
-        this.dismiss = dismiss;
-
-        ////////////////
-
-        var navbarFormSelector = 'form.navbar-form';
-
-        function toggle() {
-          var navbarForm = $(navbarFormSelector);
-
-          navbarForm.toggleClass('open');
-          
-          var isOpen = navbarForm.hasClass('open');
-          
-          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
-        }
-
-        function dismiss() {
-          $(navbarFormSelector)
-            .removeClass('open') // Close control
-            .find('input[type="text"]').blur() // remove focus
-            .val('') // Empty input
-            ;
-        }        
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.preloader')
-        .directive('preloader', preloader);
-
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
-
-        var directive = {
-            restrict: 'EAC',
-            template: 
-              '<div class="preloader-progress">' +
-                  '<div class="preloader-progress-bar" ' +
-                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
-              '</div>'
-            ,
-            link: link
-        };
-        return directive;
-
-        ///////
-
-        function link(scope, el) {
-
-          scope.loadCounter = 0;
-
-          var counter  = 0,
-              timeout;
-
-          // disables scrollbar
-          angular.element('body').css('overflow', 'hidden');
-          // ensure class is present for styling
-          el.addClass('preloader');
-
-          appReady().then(endCounter);
-
-          timeout = $timeout(startCounter);
-
-          ///////
-
-          function startCounter() {
-
-            var remaining = 100 - counter;
-            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
-
-            scope.loadCounter = parseInt(counter, 10);
-
-            timeout = $timeout(startCounter, 20);
-          }
-
-          function endCounter() {
-
-            $timeout.cancel(timeout);
-
-            scope.loadCounter = 100;
-
-            $timeout(function(){
-              // animate preloader hiding
-              $animate.addClass(el, 'preloader-hidden');
-              // retore scrollbar
-              angular.element('body').css('overflow', '');
-            }, 300);
-          }
-
-          function appReady() {
-            var deferred = $q.defer();
-            var viewsLoaded = 0;
-            // if this doesn't sync with the real app ready
-            // a custom event must be used instead
-            var off = scope.$on('$viewContentLoaded', function () {
-              viewsLoaded ++;
-              // we know there are at least two views to be loaded 
-              // before the app is ready (1-index.html 2-app*.html)
-              if ( viewsLoaded === 2) {
-                // with resolve this fires only once
-                $timeout(function(){
-                  deferred.resolve();
-                }, 1);
-
-                off();
-              }
-
-            });
-
-            return deferred.promise;
-          }
-
-        } //link
-    }
-
-})();
-/**=========================================================
- * Module: helpers.js
- * Provides helper functions for routes definition
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.routes')
-        .provider('RouteHelpers', RouteHelpersProvider)
-        ;
-
-    RouteHelpersProvider.$inject = ['APP_REQUIRES'];
-    function RouteHelpersProvider(APP_REQUIRES) {
-
-      /* jshint validthis:true */
-      return {
-        // provider access level
-        basepath: basepath,
-        resolveFor: resolveFor,
-        // controller access level
-        $get: function() {
-          return {
-            basepath: basepath,
-            resolveFor: resolveFor
-          };
-        }
-      };
-
-      // Set here the base of the relative path
-      // for all app views
-      function basepath(uri) {
-        return 'app/views/' + uri;
-      }
-
-      // Generates a resolve object by passing script names
-      // previously configured in constant.APP_REQUIRES
-      function resolveFor() {
-        var _args = arguments;
-        return {
-          deps: ['$ocLazyLoad','$q', function ($ocLL, $q) {
-            // Creates a promise chain for each argument
-            var promise = $q.when(1); // empty promise
-            for(var i=0, len=_args.length; i < len; i ++){
-              promise = andThen(_args[i]);
-            }
-            return promise;
-
-            // creates promise to chain dynamically
-            function andThen(_arg) {
-              // also support a function that returns a promise
-              if(typeof _arg === 'function')
-                  return promise.then(_arg);
-              else
-                  return promise.then(function() {
-                    // if is a module, pass the name. If not, pass the array
-                    var whatToLoad = getRequired(_arg);
-                    // simple error check
-                    if(!whatToLoad) return $.error('Route resolve: Bad resource name [' + _arg + ']');
-                    // finally, return a promise
-                    return $ocLL.load( whatToLoad );
-                  });
-            }
-            // check and returns required data
-            // analyze module items with the form [name: '', files: []]
-            // and also simple array of script files (for not angular js)
-            function getRequired(name) {
-              if (APP_REQUIRES.modules)
-                  for(var m in APP_REQUIRES.modules)
-                      if(APP_REQUIRES.modules[m].name && APP_REQUIRES.modules[m].name === name)
-                          return APP_REQUIRES.modules[m];
-              return APP_REQUIRES.scripts && APP_REQUIRES.scripts[name];
-            }
-
-          }]};
-      } // resolveFor
-
-    }
-
-
-})();
-
-
-/**=========================================================
- * Module: config.js
- * App routes and resources configuration
- =========================================================*/
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.routes')
-        .config(routesConfig);
-
-    routesConfig.$inject = ['$stateProvider', '$locationProvider', '$urlRouterProvider', 'RouteHelpersProvider'];
-    function routesConfig($stateProvider, $locationProvider, $urlRouterProvider, helper){
-        
-        // Set the following to true to enable the HTML5 Mode
-        // You may have to set <base> tag in index and a routing configuration in your server
-        $locationProvider.html5Mode(false);
-
-        // defaults to welcome
-
-        if(localStorage.login == undefined || localStorage.login == 'false') {
-          localStorage.login = 'false';
-          $urlRouterProvider.otherwise('/auth/login');
-        }else {
-          $urlRouterProvider.otherwise('/app/welcome');
-        }
-
-          // {
-          //   "text": "元素",
-          //   "sref": "#",
-          //   "icon": "fa fa-sitemap",
-          //   "submenu": [
-          //     {"text": "Widgets",     "sref": "app.matwidgets"},
-          //     {"text": "Cards",       "sref": "app.cards"},
-          //     {"text": "Forms",       "sref": "app.forms"},
-          //     {"text": "Inputs",      "sref": "app.inputs"},
-          //     {"text": "Lists",       "sref": "app.lists"},
-          //     {"text": "Whiteframe",  "sref": "app.whiteframe"},
-          //     {"text": "Colors",      "sref": "app.matcolors"},
-          //     {"text": "ngMaterial",  "sref": "app.ngmaterial"}
-          //   ]
-          // },
-
-        // 
-        // 应用程序欢迎目录
-        // -----------------------------------
-        $stateProvider
-          .state('app', {
-              url: '/app',
-              abstract: true,
-              templateUrl: helper.basepath('app.html'),
-              resolve: helper.resolveFor('modernizr', 'icons')
-          })
-          .state('app.welcome', {
-              url: '/welcome',
-              title: 'Welcome',
-              templateUrl: helper.basepath('welcome.html')
-          })
-          .state('app.dashboard', {
-              url: '/dashboard',
-              title: '控制面板',
-              templateUrl: helper.basepath('dashboard.html')
-          })
-          //
-          // Material 
-          // ----------------------------------- 
-          .state('app.cards', {
-            url: '/cards',
-            title: 'Material Cards',
-            templateUrl: helper.basepath( 'material.cards.html' )
-          })
-          .state('app.forms', {
-            url: '/forms',
-            title: 'Material Forms',
-            templateUrl: helper.basepath( 'material.forms.html' )
-          })
-          .state('app.whiteframe', {
-            url: '/whiteframe',
-            title: 'Material Whiteframe',
-            templateUrl: helper.basepath( 'material.whiteframe.html' )
-          })
-          .state('app.matcolors', {
-            url: '/matcolors',
-            title: 'Material Colors',
-            templateUrl: helper.basepath( 'material.colors.html' )
-          })
-          .state('app.lists', {
-            url: '/lists',
-            title: 'Material Lists',
-            templateUrl: helper.basepath( 'material.lists.html' )
-          })
-          .state('app.inputs', {
-            url: '/inputs',
-            title: 'Material Inputs',
-            templateUrl: helper.basepath( 'material.inputs.html' )
-          })
-          .state('app.matwidgets', {
-            url: '/matwidgets',
-            title: 'Material Widgets',
-            templateUrl: helper.basepath( 'material.widgets.html' ),
-            resolve: helper.resolveFor('weather-icons', 'loadGoogleMapsJS', function() { return loadGoogleMaps(); }, 'ui.map')
-          })
-          .state('app.ngmaterial', {
-            url: '/ngmaterial',
-            title: 'ngMaterial',
-            templateUrl: helper.basepath( 'material.ngmaterial.html' )
-          })
-          //
-          // 数据管理 
-          // -----------------------------------
-          .state('app.usersmgr', {
-            url: '/users',
-            title: '用户数据管理',
-            templateUrl: helper.basepath( 'data/users.html' ),
-            resolve: helper.resolveFor('datatables')
-          })
-          .state('app.themesmgr', {
-            url: '/themes',
-            title: '投稿管理',
-            templateUrl: helper.basepath( 'data/themes.html' ),
-            resolve: helper.resolveFor('datatables')
-          })
-          .state('app.tagsmgr', {
-            url: '/tags',
-            title: '标签管理',
-            templateUrl: helper.basepath( 'data/tags.html' ),
-            resolve: helper.resolveFor('datatables')
-          })
-          //
-          // 官网管理 
-          // -----------------------------------
-          .state('app.website', {
-            url: '/website/manager',
-            title: '官网管理',
-            templateUrl: helper.basepath( 'website/website.html' )
-          })
-          //
-          // 用户登录 
-          // -----------------------------------
-          .state('auth', {
-              url: '/auth',
-              templateUrl: helper.basepath( 'auth/page.html' ),
-              resolve: helper.resolveFor('modernizr', 'icons'),
-              controller: ['$rootScope', function($rootScope) {
-                  $rootScope.app.layout.isBoxed = false;
-              }]
-          })
-          .state('auth.login', {
-              url: '/login',
-              title: '登录',
-              templateUrl: helper.basepath( 'auth/login.html' )
-          })
-          .state('auth.noAuth', {
-              url: '/noauth',
-              title: '登录',
-              templateUrl: helper.basepath( 'auth/noauth.html' )
-          })
-          //
-          // 权限管理 
-          // -----------------------------------
-          .state('app.authority', {
-              url: '/authority',
-              title: '登录',
-              templateUrl: helper.basepath( 'authority/authority.html' )
-          })
-          .state('app.group', {
-              url: '/group',
-              title: '登录',
-              templateUrl: helper.basepath( 'authority/group.html' )
-          })
-
-          // CUSTOM RESOLVES
-          //   Add your own resolves properties
-          //   following this object extend
-          //   method
-          // ----------------------------------- 
-          // .state('app.someroute', {
-          //   url: '/some_url',
-          //   templateUrl: 'path_to_template.html',
-          //   controller: 'someController',
-          //   resolve: angular.extend(
-          //     helper.resolveFor(), {
-          //     // YOUR RESOLVES GO HERE
-          //     }
-          //   )
-          // })
-          ;
-
-    } // routesConfig
-
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.settings')
-        .run(settingsRun);
-
-    settingsRun.$inject = ['$rootScope', '$localStorage', 'AuthService', '$state'];
-
-    function settingsRun($rootScope, $localStorage, AuthService, $state){
-
-      // Global Settings
-      // ----------------------------------- 
-      $rootScope.app = {
-        name: 'Poimoe',
-        description: '管理后台',
-        year: ((new Date()).getFullYear()),
-        layout: {
-          isFixed: true,
-          isCollapsed: false,
-          isBoxed: false,
-          isRTL: false,
-          horizontal: false,
-          isFloat: false,
-          asideHover: false,
-          theme: null
-        },
-        useFullLayout: false,
-        hiddenFooter: false,
-        offsidebarOpen: false,
-        asideToggled: false,
-        viewAnimation: 'ng-fadeInUp',
-        baseUrl: 'http://api.poimoe.com/'
-      };
-
-      if(document.domain != 'localhost') {
-        document.domain = 'poimoe.com';
-      }
-
-      var getCookie = function(c_name) {
-        if (document.cookie.length > 0){  
-          var c_start = document.cookie.indexOf(c_name + "=");
-          if (c_start != -1){
-            c_start = c_start + c_name.length+1;  
-            var c_end = document.cookie.indexOf(";",c_start);  
-            if (c_end == -1){
-              c_end = document.cookie.length;  
-              return unescape(document.cookie.substring(c_start,c_end));            
-            }
-          }   
-        }
-        return "";  
-      }
-
-      var userData = getCookie('userData');
-      AuthService.parseUserInfo(userData);
-
-      if(localStorage.login != 'undefined') {
-        if(localStorage.login == 'true') {
-          $state.go('app.welcome');
-        }
-      }
-
-      // Setup the layout mode
-      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
-
-      // Restore layout settings [*** UNCOMMENT TO ENABLE ***]
-      // if( angular.isDefined($localStorage.layout) )
-      //   $rootScope.app.layout = $localStorage.layout;
-      // else
-      //   $localStorage.layout = $rootScope.app.layout;
-      //
-      // $rootScope.$watch('app.layout', function () {
-      //   $localStorage.layout = $rootScope.app.layout;
-      // }, true);
-
-      // Close submenu when sidebar change from collapsed to normal
-      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
-        if( newValue === false )
-          $rootScope.$broadcast('closeSidebarMenu');
-      });
-
-    }
-
-})();
-
 /**=========================================================
  * Module: modals.js
  * Provides a simple way to implement bootstrap modals from templates
@@ -2349,6 +1782,988 @@
     }
 })();
 /**=========================================================
+ * Module: navbar-search.js
+ * Navbar search toggler * Auto dismiss on ESC key
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .directive('searchOpen', searchOpen)
+        .directive('searchDismiss', searchDismiss);
+
+    //
+    // directives definition
+    // 
+    
+    function searchOpen () {
+        var directive = {
+            controller: searchOpenController,
+            restrict: 'A'
+        };
+        return directive;
+
+    }
+
+    function searchDismiss () {
+        var directive = {
+            controller: searchDismissController,
+            restrict: 'A'
+        };
+        return directive;
+        
+    }
+
+    //
+    // Contrller definition
+    // 
+    
+    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchOpenController ($scope, $element, NavSearch) {
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.toggle);
+    }
+
+    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchDismissController ($scope, $element, NavSearch) {
+      
+      var inputSelector = '.navbar-form input[type="text"]';
+
+      $(inputSelector)
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('keyup', function(e) {
+          if (e.keyCode === 27) // ESC
+            NavSearch.dismiss();
+        });
+        
+      // click anywhere closes the search
+      $(document).on('click', NavSearch.dismiss);
+      // dismissable options
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.dismiss);
+    }
+
+})();
+
+
+/**=========================================================
+ * Module: nav-search.js
+ * Services to share navbar search functions
+ =========================================================*/
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .service('NavSearch', NavSearch);
+
+    function NavSearch() {
+        this.toggle = toggle;
+        this.dismiss = dismiss;
+
+        ////////////////
+
+        var navbarFormSelector = 'form.navbar-form';
+
+        function toggle() {
+          var navbarForm = $(navbarFormSelector);
+
+          navbarForm.toggleClass('open');
+          
+          var isOpen = navbarForm.hasClass('open');
+          
+          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
+        }
+
+        function dismiss() {
+          $(navbarFormSelector)
+            .removeClass('open') // Close control
+            .find('input[type="text"]').blur() // remove focus
+            .val('') // Empty input
+            ;
+        }        
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.preloader')
+        .directive('preloader', preloader);
+
+    preloader.$inject = ['$animate', '$timeout', '$q'];
+    function preloader ($animate, $timeout, $q) {
+
+        var directive = {
+            restrict: 'EAC',
+            template: 
+              '<div class="preloader-progress">' +
+                  '<div class="preloader-progress-bar" ' +
+                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
+              '</div>'
+            ,
+            link: link
+        };
+        return directive;
+
+        ///////
+
+        function link(scope, el) {
+
+          scope.loadCounter = 0;
+
+          var counter  = 0,
+              timeout;
+
+          // disables scrollbar
+          angular.element('body').css('overflow', 'hidden');
+          // ensure class is present for styling
+          el.addClass('preloader');
+
+          appReady().then(endCounter);
+
+          timeout = $timeout(startCounter);
+
+          ///////
+
+          function startCounter() {
+
+            var remaining = 100 - counter;
+            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
+
+            scope.loadCounter = parseInt(counter, 10);
+
+            timeout = $timeout(startCounter, 20);
+          }
+
+          function endCounter() {
+
+            $timeout.cancel(timeout);
+
+            scope.loadCounter = 100;
+
+            $timeout(function(){
+              // animate preloader hiding
+              $animate.addClass(el, 'preloader-hidden');
+              // retore scrollbar
+              angular.element('body').css('overflow', '');
+            }, 300);
+          }
+
+          function appReady() {
+            var deferred = $q.defer();
+            var viewsLoaded = 0;
+            // if this doesn't sync with the real app ready
+            // a custom event must be used instead
+            var off = scope.$on('$viewContentLoaded', function () {
+              viewsLoaded ++;
+              // we know there are at least two views to be loaded 
+              // before the app is ready (1-index.html 2-app*.html)
+              if ( viewsLoaded === 2) {
+                // with resolve this fires only once
+                $timeout(function(){
+                  deferred.resolve();
+                }, 1);
+
+                off();
+              }
+
+            });
+
+            return deferred.promise;
+          }
+
+        } //link
+    }
+
+})();
+/**=========================================================
+ * Module: helpers.js
+ * Provides helper functions for routes definition
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.routes')
+        .provider('RouteHelpers', RouteHelpersProvider)
+        ;
+
+    RouteHelpersProvider.$inject = ['APP_REQUIRES'];
+    function RouteHelpersProvider(APP_REQUIRES) {
+
+      /* jshint validthis:true */
+      return {
+        // provider access level
+        basepath: basepath,
+        resolveFor: resolveFor,
+        // controller access level
+        $get: function() {
+          return {
+            basepath: basepath,
+            resolveFor: resolveFor
+          };
+        }
+      };
+
+      // Set here the base of the relative path
+      // for all app views
+      function basepath(uri) {
+        return 'app/views/' + uri;
+      }
+
+      // Generates a resolve object by passing script names
+      // previously configured in constant.APP_REQUIRES
+      function resolveFor() {
+        var _args = arguments;
+        return {
+          deps: ['$ocLazyLoad','$q', function ($ocLL, $q) {
+            // Creates a promise chain for each argument
+            var promise = $q.when(1); // empty promise
+            for(var i=0, len=_args.length; i < len; i ++){
+              promise = andThen(_args[i]);
+            }
+            return promise;
+
+            // creates promise to chain dynamically
+            function andThen(_arg) {
+              // also support a function that returns a promise
+              if(typeof _arg === 'function')
+                  return promise.then(_arg);
+              else
+                  return promise.then(function() {
+                    // if is a module, pass the name. If not, pass the array
+                    var whatToLoad = getRequired(_arg);
+                    // simple error check
+                    if(!whatToLoad) return $.error('Route resolve: Bad resource name [' + _arg + ']');
+                    // finally, return a promise
+                    return $ocLL.load( whatToLoad );
+                  });
+            }
+            // check and returns required data
+            // analyze module items with the form [name: '', files: []]
+            // and also simple array of script files (for not angular js)
+            function getRequired(name) {
+              if (APP_REQUIRES.modules)
+                  for(var m in APP_REQUIRES.modules)
+                      if(APP_REQUIRES.modules[m].name && APP_REQUIRES.modules[m].name === name)
+                          return APP_REQUIRES.modules[m];
+              return APP_REQUIRES.scripts && APP_REQUIRES.scripts[name];
+            }
+
+          }]};
+      } // resolveFor
+
+    }
+
+
+})();
+
+
+/**=========================================================
+ * Module: config.js
+ * App routes and resources configuration
+ =========================================================*/
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.routes')
+        .config(routesConfig);
+
+    routesConfig.$inject = ['$stateProvider', '$locationProvider', '$urlRouterProvider', 'RouteHelpersProvider'];
+    function routesConfig($stateProvider, $locationProvider, $urlRouterProvider, helper){
+        
+        // Set the following to true to enable the HTML5 Mode
+        // You may have to set <base> tag in index and a routing configuration in your server
+        $locationProvider.html5Mode(false);
+
+        // defaults to welcome
+
+        if(localStorage.login == undefined || localStorage.login == 'false') {
+          localStorage.login = 'false';
+          $urlRouterProvider.otherwise('/auth/login');
+        }else {
+          $urlRouterProvider.otherwise('/app/welcome');
+        }
+
+          // {
+          //   "text": "元素",
+          //   "sref": "#",
+          //   "icon": "fa fa-sitemap",
+          //   "submenu": [
+          //     {"text": "Widgets",     "sref": "app.matwidgets"},
+          //     {"text": "Cards",       "sref": "app.cards"},
+          //     {"text": "Forms",       "sref": "app.forms"},
+          //     {"text": "Inputs",      "sref": "app.inputs"},
+          //     {"text": "Lists",       "sref": "app.lists"},
+          //     {"text": "Whiteframe",  "sref": "app.whiteframe"},
+          //     {"text": "Colors",      "sref": "app.matcolors"},
+          //     {"text": "ngMaterial",  "sref": "app.ngmaterial"}
+          //   ]
+          // },
+
+        // 
+        // 应用程序欢迎目录
+        // -----------------------------------
+        $stateProvider
+          .state('app', {
+              url: '/app',
+              abstract: true,
+              templateUrl: helper.basepath('app.html'),
+              resolve: helper.resolveFor('modernizr', 'icons')
+          })
+          .state('app.welcome', {
+              url: '/welcome',
+              title: 'Welcome',
+              templateUrl: helper.basepath('welcome.html')
+          })
+          .state('app.dashboard', {
+              url: '/dashboard',
+              title: '控制面板',
+              templateUrl: helper.basepath('dashboard.html')
+          })
+          //
+          // Material 
+          // ----------------------------------- 
+          .state('app.cards', {
+            url: '/cards',
+            title: 'Material Cards',
+            templateUrl: helper.basepath( 'material.cards.html' )
+          })
+          .state('app.forms', {
+            url: '/forms',
+            title: 'Material Forms',
+            templateUrl: helper.basepath( 'material.forms.html' )
+          })
+          .state('app.whiteframe', {
+            url: '/whiteframe',
+            title: 'Material Whiteframe',
+            templateUrl: helper.basepath( 'material.whiteframe.html' )
+          })
+          .state('app.matcolors', {
+            url: '/matcolors',
+            title: 'Material Colors',
+            templateUrl: helper.basepath( 'material.colors.html' )
+          })
+          .state('app.lists', {
+            url: '/lists',
+            title: 'Material Lists',
+            templateUrl: helper.basepath( 'material.lists.html' )
+          })
+          .state('app.inputs', {
+            url: '/inputs',
+            title: 'Material Inputs',
+            templateUrl: helper.basepath( 'material.inputs.html' )
+          })
+          .state('app.matwidgets', {
+            url: '/matwidgets',
+            title: 'Material Widgets',
+            templateUrl: helper.basepath( 'material.widgets.html' ),
+            resolve: helper.resolveFor('weather-icons', 'loadGoogleMapsJS', function() { return loadGoogleMaps(); }, 'ui.map')
+          })
+          .state('app.ngmaterial', {
+            url: '/ngmaterial',
+            title: 'ngMaterial',
+            templateUrl: helper.basepath( 'material.ngmaterial.html' )
+          })
+          //
+          // 数据管理 
+          // -----------------------------------
+          .state('app.usersmgr', {
+            url: '/users',
+            title: '用户数据管理',
+            templateUrl: helper.basepath( 'data/users.html' ),
+            resolve: helper.resolveFor('datatables')
+          })
+          .state('app.themesmgr', {
+            url: '/themes',
+            title: '投稿管理',
+            templateUrl: helper.basepath( 'data/themes.html' ),
+            resolve: helper.resolveFor('datatables')
+          })
+          .state('app.tagsmgr', {
+            url: '/tags',
+            title: '标签管理',
+            templateUrl: helper.basepath( 'data/tags.html' ),
+            resolve: helper.resolveFor('datatables')
+          })
+          //
+          // 官网管理 
+          // -----------------------------------
+          .state('app.website', {
+            url: '/website/manager',
+            title: '官网管理',
+            templateUrl: helper.basepath( 'website/website.html' )
+          })
+          //
+          // 用户登录 
+          // -----------------------------------
+          .state('auth', {
+              url: '/auth',
+              templateUrl: helper.basepath( 'auth/page.html' ),
+              resolve: helper.resolveFor('modernizr', 'icons'),
+              controller: ['$rootScope', function($rootScope) {
+                  $rootScope.app.layout.isBoxed = false;
+              }]
+          })
+          .state('auth.login', {
+              url: '/login',
+              title: '登录',
+              templateUrl: helper.basepath( 'auth/login.html' )
+          })
+          .state('auth.noAuth', {
+              url: '/noauth',
+              title: '登录',
+              templateUrl: helper.basepath( 'auth/noauth.html' )
+          })
+          //
+          // 权限管理 
+          // -----------------------------------
+          .state('app.authority', {
+              url: '/authority',
+              title: '登录',
+              templateUrl: helper.basepath( 'authority/authority.html' )
+          })
+          .state('app.group', {
+              url: '/group',
+              title: '登录',
+              templateUrl: helper.basepath( 'authority/group.html' )
+          })
+
+          // CUSTOM RESOLVES
+          //   Add your own resolves properties
+          //   following this object extend
+          //   method
+          // ----------------------------------- 
+          // .state('app.someroute', {
+          //   url: '/some_url',
+          //   templateUrl: 'path_to_template.html',
+          //   controller: 'someController',
+          //   resolve: angular.extend(
+          //     helper.resolveFor(), {
+          //     // YOUR RESOLVES GO HERE
+          //     }
+          //   )
+          // })
+          ;
+
+    } // routesConfig
+
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.settings')
+        .run(settingsRun);
+
+    settingsRun.$inject = ['$rootScope', '$localStorage', 'AuthService', '$state'];
+
+    function settingsRun($rootScope, $localStorage, AuthService, $state){
+
+      // Global Settings
+      // ----------------------------------- 
+      $rootScope.app = {
+        name: 'Poimoe',
+        description: '管理后台',
+        year: ((new Date()).getFullYear()),
+        layout: {
+          isFixed: true,
+          isCollapsed: false,
+          isBoxed: false,
+          isRTL: false,
+          horizontal: false,
+          isFloat: false,
+          asideHover: false,
+          theme: null
+        },
+        useFullLayout: false,
+        hiddenFooter: false,
+        offsidebarOpen: false,
+        asideToggled: false,
+        viewAnimation: 'ng-fadeInUp',
+        baseUrl: 'http://api.poimoe.com/'
+      };
+
+      if(document.domain != 'localhost') {
+        document.domain = 'poimoe.com';
+      }
+
+      var getCookie = function(c_name) {
+        if (document.cookie.length > 0){  
+          var c_start = document.cookie.indexOf(c_name + "=");
+          if (c_start != -1){
+            c_start = c_start + c_name.length+1;  
+            var c_end = document.cookie.indexOf(";",c_start);  
+            if (c_end == -1){
+              c_end = document.cookie.length;  
+              return unescape(document.cookie.substring(c_start,c_end));            
+            }
+          }   
+        }
+        return "";  
+      }
+
+      var userData = getCookie('userData');
+      AuthService.parseUserInfo(userData);
+
+      if(localStorage.login != 'undefined') {
+        if(localStorage.login == 'true') {
+          $state.go('app.welcome');
+        }
+      }
+
+      // Setup the layout mode
+      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
+
+      // Restore layout settings [*** UNCOMMENT TO ENABLE ***]
+      // if( angular.isDefined($localStorage.layout) )
+      //   $rootScope.app.layout = $localStorage.layout;
+      // else
+      //   $localStorage.layout = $rootScope.app.layout;
+      //
+      // $rootScope.$watch('app.layout', function () {
+      //   $localStorage.layout = $rootScope.app.layout;
+      // }, true);
+
+      // Close submenu when sidebar change from collapsed to normal
+      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
+        if( newValue === false )
+          $rootScope.$broadcast('closeSidebarMenu');
+      });
+
+    }
+
+})();
+
+/**=========================================================
+ * Module: sidebar-menu.js
+ * Handle sidebar collapsible elements
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sidebar')
+        .controller('SidebarController', SidebarController);
+
+    SidebarController.$inject = ['$rootScope', '$scope', '$state', 'SidebarLoader', 'Utils'];
+    function SidebarController($rootScope, $scope, $state, SidebarLoader,  Utils) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          var collapseList = [];
+
+          // demo: when switch from collapse to hover, close all items
+          $rootScope.$watch('app.layout.asideHover', function(oldVal, newVal){
+            if ( newVal === false && oldVal === true) {
+              closeAllBut(-1);
+            }
+          });
+
+
+          // Load menu from json file
+          // ----------------------------------- 
+
+          SidebarLoader.getMenu(sidebarReady);
+          
+          function sidebarReady(items) {
+            $scope.menuItems = items;
+          }
+
+          // Handle sidebar and collapse items
+          // ----------------------------------
+          
+          $scope.getMenuItemPropClasses = function(item) {
+            return (item.heading ? 'nav-heading' : '') +
+                   (isActive(item) ? ' active' : '') ;
+          };
+
+          $scope.addCollapse = function($index, item) {
+            collapseList[$index] = $rootScope.app.layout.asideHover ? true : !isActive(item);
+          };
+
+          $scope.isCollapse = function($index) {
+            return (collapseList[$index]);
+          };
+
+          $scope.toggleCollapse = function($index, isParentItem) {
+
+            // collapsed sidebar doesn't toggle drodopwn
+            if( Utils.isSidebarCollapsed() || $rootScope.app.layout.asideHover ) return true;
+
+            // make sure the item index exists
+            if( angular.isDefined( collapseList[$index] ) ) {
+              if ( ! $scope.lastEventFromChild ) {
+                collapseList[$index] = !collapseList[$index];
+                closeAllBut($index);
+              }
+            }
+            else if ( isParentItem ) {
+              closeAllBut(-1);
+            }
+            
+            $scope.lastEventFromChild = isChild($index);
+
+            return true;
+          
+          };
+
+          // Controller helpers
+          // ----------------------------------- 
+
+            // Check item and children active state
+            function isActive(item) {
+
+              if(!item) return;
+
+              if( !item.sref || item.sref === '#') {
+                var foundActive = false;
+                angular.forEach(item.submenu, function(value) {
+                  if(isActive(value)) foundActive = true;
+                });
+                return foundActive;
+              }
+              else
+                return $state.is(item.sref) || $state.includes(item.sref);
+            }
+
+            function closeAllBut(index) {
+              index += '';
+              for(var i in collapseList) {
+                if(index < 0 || index.indexOf(i) < 0)
+                  collapseList[i] = true;
+              }
+            }
+
+            function isChild($index) {
+              /*jshint -W018*/
+              return (typeof $index === 'string') && !($index.indexOf('-') < 0);
+            }
+        
+        } // activate
+    }
+
+})();
+
+/**=========================================================
+ * Module: sidebar.js
+ * Wraps the sidebar and handles collapsed state
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sidebar')
+        .directive('sidebar', sidebar);
+
+    sidebar.$inject = ['$rootScope', '$timeout', '$window', 'Utils'];
+    function sidebar ($rootScope, $timeout, $window, Utils) {
+        var $win = angular.element($window);
+        var directive = {
+            // bindToController: true,
+            // controller: Controller,
+            // controllerAs: 'vm',
+            link: link,
+            restrict: 'EA',
+            template: '<nav class="sidebar" ng-transclude></nav>',
+            transclude: true,
+            replace: true
+            // scope: {}
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+
+          var currentState = $rootScope.$state.current.name;
+          var $sidebar = element;
+
+          var eventName = Utils.isTouch() ? 'click' : 'mouseenter' ;
+          var subNav = $();
+
+          $sidebar.on( eventName, '.nav > li', function() {
+
+            if( Utils.isSidebarCollapsed() || $rootScope.app.layout.asideHover ) {
+
+              subNav.trigger('mouseleave');
+              subNav = toggleMenuItem( $(this), $sidebar);
+
+              // Used to detect click and touch events outside the sidebar          
+              sidebarAddBackdrop();
+
+            }
+
+          });
+
+          scope.$on('closeSidebarMenu', function() {
+            removeFloatingNav();
+          });
+
+          // Normalize state when resize to mobile
+          $win.on('resize', function() {
+            if( ! Utils.isMobile() )
+          	asideToggleOff();
+          });
+
+          // Adjustment on route changes
+          $rootScope.$on('$stateChangeStart', function(event, toState) {
+            currentState = toState.name;
+            // Hide sidebar automatically on mobile
+            asideToggleOff();
+
+            $rootScope.$broadcast('closeSidebarMenu');
+          });
+
+      	  // Autoclose when click outside the sidebar
+          if ( angular.isDefined(attrs.sidebarAnyclickClose) ) {
+            
+            var wrapper = $('.wrapper');
+            var sbclickEvent = 'click.sidebar';
+            
+            $rootScope.$watch('app.asideToggled', watchExternalClicks);
+
+          }
+
+          //////
+
+          function watchExternalClicks(newVal) {
+            // if sidebar becomes visible
+            if ( newVal === true ) {
+              $timeout(function(){ // render after current digest cycle
+                wrapper.on(sbclickEvent, function(e){
+                  // if not child of sidebar
+                  if( ! $(e.target).parents('.aside').length ) {
+                    asideToggleOff();
+                  }
+                });
+              });
+            }
+            else {
+              // dettach event
+              wrapper.off(sbclickEvent);
+            }
+          }
+
+          function asideToggleOff() {
+            $rootScope.app.asideToggled = false;
+            if(!scope.$$phase) scope.$apply(); // anti-pattern but sometimes necessary
+      	  }
+        }
+        
+        ///////
+
+        function sidebarAddBackdrop() {
+          var $backdrop = $('<div/>', { 'class': 'dropdown-backdrop'} );
+          $backdrop.insertAfter('.aside-inner').on('click mouseenter', function () {
+            removeFloatingNav();
+          });
+        }
+
+        // Open the collapse sidebar submenu items when on touch devices 
+        // - desktop only opens on hover
+        function toggleTouchItem($element){
+          $element
+            .siblings('li')
+            .removeClass('open')
+            .end()
+            .toggleClass('open');
+        }
+
+        // Handles hover to open items under collapsed menu
+        // ----------------------------------- 
+        function toggleMenuItem($listItem, $sidebar) {
+
+          removeFloatingNav();
+
+          var ul = $listItem.children('ul');
+          
+          if( !ul.length ) return $();
+          if( $listItem.hasClass('open') ) {
+            toggleTouchItem($listItem);
+            return $();
+          }
+
+          var $aside = $('.aside');
+          var $asideInner = $('.aside-inner'); // for top offset calculation
+          // float aside uses extra padding on aside
+          var mar = parseInt( $asideInner.css('padding-top'), 0) + parseInt( $aside.css('padding-top'), 0);
+          var subNav = ul.clone().appendTo( $aside );
+          
+          toggleTouchItem($listItem);
+
+          var itemTop = ($listItem.position().top + mar) - $sidebar.scrollTop();
+          var vwHeight = $win.height();
+
+          subNav
+            .addClass('nav-floating')
+            .css({
+              position: $rootScope.app.layout.isFixed ? 'fixed' : 'absolute',
+              top:      itemTop,
+              bottom:   (subNav.outerHeight(true) + itemTop > vwHeight) ? 0 : 'auto'
+            });
+
+          subNav.on('mouseleave', function() {
+            toggleTouchItem($listItem);
+            subNav.remove();
+          });
+
+          return subNav;
+        }
+
+        function removeFloatingNav() {
+          $('.dropdown-backdrop').remove();
+          $('.sidebar-subnav.nav-floating').remove();
+          $('.sidebar li.open').removeClass('open');
+        }
+    }
+
+
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sidebar')
+        .service('SidebarLoader', SidebarLoader);
+
+    SidebarLoader.$inject = ['$http'];
+    function SidebarLoader($http) {
+        this.getMenu = getMenu;
+
+        ////////////////
+
+        function getMenu(onReady, onError) {
+          var menuJson = 'server/sidebar-menu.json',
+              menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
+            
+          onError = onError || function() { alert('Failure loading menu'); };
+
+          $http
+            .get(menuURL)
+            .success(onReady)
+            .error(onError);
+        }
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sidebar')
+        .controller('UserBlockController', UserBlockController);
+
+    UserBlockController.$inject = ['$rootScope'];
+    function UserBlockController($rootScope) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $rootScope.user = {
+            name:     localStorage.username,
+            job:      localStorage.introduction,
+            picture:  localStorage.photo
+          };
+
+          // Hides/show user avatar on sidebar
+          $rootScope.toggleUserBlock = function(){
+            $rootScope.$broadcast('toggleUserBlock');
+          };
+
+          $rootScope.userBlockVisible = false;
+          
+          $rootScope.$on('toggleUserBlock', function(/*event, args*/) {
+
+            $rootScope.userBlockVisible = ! $rootScope.userBlockVisible;
+            
+          });
+        }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .config(translateConfig)
+        ;
+    translateConfig.$inject = ['$translateProvider'];
+    function translateConfig($translateProvider){
+  
+      $translateProvider.useStaticFilesLoader({
+          prefix : 'app/i18n/',
+          suffix : '.json'
+      });
+      $translateProvider.preferredLanguage('en');
+      $translateProvider.useLocalStorage();
+      $translateProvider.usePostCompiling(true);
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .run(translateRun)
+        ;
+    translateRun.$inject = ['$rootScope', '$translate'];
+    
+    function translateRun($rootScope, $translate){
+
+      // Internationalization
+      // ----------------------
+
+      $rootScope.language = {
+        // Handles language dropdown
+        listIsOpen: false,
+        // list of available languages
+        available: {
+          'en':       '中文'
+          // 'es_AR':    '英文'
+        },
+        // display always the current ui language
+        init: function () {
+          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
+          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
+          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
+        },
+        set: function (localeId) {
+          // Set the new idiom
+          $translate.use(localeId);
+          // save a reference for the current language
+          $rootScope.language.selected = $rootScope.language.available[localeId];
+          // finally toggle dropdown
+          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
+        }
+      };
+
+      $rootScope.language.init();
+
+    }
+})();
+/**=========================================================
  * Module: animate-enabled.js
  * Enable or disables ngAnimate for element with directive
  =========================================================*/
@@ -2777,421 +3192,6 @@
     'use strict';
 
     angular
-        .module('app.translate')
-        .config(translateConfig)
-        ;
-    translateConfig.$inject = ['$translateProvider'];
-    function translateConfig($translateProvider){
-  
-      $translateProvider.useStaticFilesLoader({
-          prefix : 'app/i18n/',
-          suffix : '.json'
-      });
-      $translateProvider.preferredLanguage('en');
-      $translateProvider.useLocalStorage();
-      $translateProvider.usePostCompiling(true);
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .run(translateRun)
-        ;
-    translateRun.$inject = ['$rootScope', '$translate'];
-    
-    function translateRun($rootScope, $translate){
-
-      // Internationalization
-      // ----------------------
-
-      $rootScope.language = {
-        // Handles language dropdown
-        listIsOpen: false,
-        // list of available languages
-        available: {
-          'en':       '中文'
-          // 'es_AR':    '英文'
-        },
-        // display always the current ui language
-        init: function () {
-          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
-          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
-          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
-        },
-        set: function (localeId) {
-          // Set the new idiom
-          $translate.use(localeId);
-          // save a reference for the current language
-          $rootScope.language.selected = $rootScope.language.available[localeId];
-          // finally toggle dropdown
-          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
-        }
-      };
-
-      $rootScope.language.init();
-
-    }
-})();
-/**=========================================================
- * Module: sidebar-menu.js
- * Handle sidebar collapsible elements
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sidebar')
-        .controller('SidebarController', SidebarController);
-
-    SidebarController.$inject = ['$rootScope', '$scope', '$state', 'SidebarLoader', 'Utils'];
-    function SidebarController($rootScope, $scope, $state, SidebarLoader,  Utils) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          var collapseList = [];
-
-          // demo: when switch from collapse to hover, close all items
-          $rootScope.$watch('app.layout.asideHover', function(oldVal, newVal){
-            if ( newVal === false && oldVal === true) {
-              closeAllBut(-1);
-            }
-          });
-
-
-          // Load menu from json file
-          // ----------------------------------- 
-
-          SidebarLoader.getMenu(sidebarReady);
-          
-          function sidebarReady(items) {
-            $scope.menuItems = items;
-          }
-
-          // Handle sidebar and collapse items
-          // ----------------------------------
-          
-          $scope.getMenuItemPropClasses = function(item) {
-            return (item.heading ? 'nav-heading' : '') +
-                   (isActive(item) ? ' active' : '') ;
-          };
-
-          $scope.addCollapse = function($index, item) {
-            collapseList[$index] = $rootScope.app.layout.asideHover ? true : !isActive(item);
-          };
-
-          $scope.isCollapse = function($index) {
-            return (collapseList[$index]);
-          };
-
-          $scope.toggleCollapse = function($index, isParentItem) {
-
-            // collapsed sidebar doesn't toggle drodopwn
-            if( Utils.isSidebarCollapsed() || $rootScope.app.layout.asideHover ) return true;
-
-            // make sure the item index exists
-            if( angular.isDefined( collapseList[$index] ) ) {
-              if ( ! $scope.lastEventFromChild ) {
-                collapseList[$index] = !collapseList[$index];
-                closeAllBut($index);
-              }
-            }
-            else if ( isParentItem ) {
-              closeAllBut(-1);
-            }
-            
-            $scope.lastEventFromChild = isChild($index);
-
-            return true;
-          
-          };
-
-          // Controller helpers
-          // ----------------------------------- 
-
-            // Check item and children active state
-            function isActive(item) {
-
-              if(!item) return;
-
-              if( !item.sref || item.sref === '#') {
-                var foundActive = false;
-                angular.forEach(item.submenu, function(value) {
-                  if(isActive(value)) foundActive = true;
-                });
-                return foundActive;
-              }
-              else
-                return $state.is(item.sref) || $state.includes(item.sref);
-            }
-
-            function closeAllBut(index) {
-              index += '';
-              for(var i in collapseList) {
-                if(index < 0 || index.indexOf(i) < 0)
-                  collapseList[i] = true;
-              }
-            }
-
-            function isChild($index) {
-              /*jshint -W018*/
-              return (typeof $index === 'string') && !($index.indexOf('-') < 0);
-            }
-        
-        } // activate
-    }
-
-})();
-
-/**=========================================================
- * Module: sidebar.js
- * Wraps the sidebar and handles collapsed state
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sidebar')
-        .directive('sidebar', sidebar);
-
-    sidebar.$inject = ['$rootScope', '$timeout', '$window', 'Utils'];
-    function sidebar ($rootScope, $timeout, $window, Utils) {
-        var $win = angular.element($window);
-        var directive = {
-            // bindToController: true,
-            // controller: Controller,
-            // controllerAs: 'vm',
-            link: link,
-            restrict: 'EA',
-            template: '<nav class="sidebar" ng-transclude></nav>',
-            transclude: true,
-            replace: true
-            // scope: {}
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-
-          var currentState = $rootScope.$state.current.name;
-          var $sidebar = element;
-
-          var eventName = Utils.isTouch() ? 'click' : 'mouseenter' ;
-          var subNav = $();
-
-          $sidebar.on( eventName, '.nav > li', function() {
-
-            if( Utils.isSidebarCollapsed() || $rootScope.app.layout.asideHover ) {
-
-              subNav.trigger('mouseleave');
-              subNav = toggleMenuItem( $(this), $sidebar);
-
-              // Used to detect click and touch events outside the sidebar          
-              sidebarAddBackdrop();
-
-            }
-
-          });
-
-          scope.$on('closeSidebarMenu', function() {
-            removeFloatingNav();
-          });
-
-          // Normalize state when resize to mobile
-          $win.on('resize', function() {
-            if( ! Utils.isMobile() )
-          	asideToggleOff();
-          });
-
-          // Adjustment on route changes
-          $rootScope.$on('$stateChangeStart', function(event, toState) {
-            currentState = toState.name;
-            // Hide sidebar automatically on mobile
-            asideToggleOff();
-
-            $rootScope.$broadcast('closeSidebarMenu');
-          });
-
-      	  // Autoclose when click outside the sidebar
-          if ( angular.isDefined(attrs.sidebarAnyclickClose) ) {
-            
-            var wrapper = $('.wrapper');
-            var sbclickEvent = 'click.sidebar';
-            
-            $rootScope.$watch('app.asideToggled', watchExternalClicks);
-
-          }
-
-          //////
-
-          function watchExternalClicks(newVal) {
-            // if sidebar becomes visible
-            if ( newVal === true ) {
-              $timeout(function(){ // render after current digest cycle
-                wrapper.on(sbclickEvent, function(e){
-                  // if not child of sidebar
-                  if( ! $(e.target).parents('.aside').length ) {
-                    asideToggleOff();
-                  }
-                });
-              });
-            }
-            else {
-              // dettach event
-              wrapper.off(sbclickEvent);
-            }
-          }
-
-          function asideToggleOff() {
-            $rootScope.app.asideToggled = false;
-            if(!scope.$$phase) scope.$apply(); // anti-pattern but sometimes necessary
-      	  }
-        }
-        
-        ///////
-
-        function sidebarAddBackdrop() {
-          var $backdrop = $('<div/>', { 'class': 'dropdown-backdrop'} );
-          $backdrop.insertAfter('.aside-inner').on('click mouseenter', function () {
-            removeFloatingNav();
-          });
-        }
-
-        // Open the collapse sidebar submenu items when on touch devices 
-        // - desktop only opens on hover
-        function toggleTouchItem($element){
-          $element
-            .siblings('li')
-            .removeClass('open')
-            .end()
-            .toggleClass('open');
-        }
-
-        // Handles hover to open items under collapsed menu
-        // ----------------------------------- 
-        function toggleMenuItem($listItem, $sidebar) {
-
-          removeFloatingNav();
-
-          var ul = $listItem.children('ul');
-          
-          if( !ul.length ) return $();
-          if( $listItem.hasClass('open') ) {
-            toggleTouchItem($listItem);
-            return $();
-          }
-
-          var $aside = $('.aside');
-          var $asideInner = $('.aside-inner'); // for top offset calculation
-          // float aside uses extra padding on aside
-          var mar = parseInt( $asideInner.css('padding-top'), 0) + parseInt( $aside.css('padding-top'), 0);
-          var subNav = ul.clone().appendTo( $aside );
-          
-          toggleTouchItem($listItem);
-
-          var itemTop = ($listItem.position().top + mar) - $sidebar.scrollTop();
-          var vwHeight = $win.height();
-
-          subNav
-            .addClass('nav-floating')
-            .css({
-              position: $rootScope.app.layout.isFixed ? 'fixed' : 'absolute',
-              top:      itemTop,
-              bottom:   (subNav.outerHeight(true) + itemTop > vwHeight) ? 0 : 'auto'
-            });
-
-          subNav.on('mouseleave', function() {
-            toggleTouchItem($listItem);
-            subNav.remove();
-          });
-
-          return subNav;
-        }
-
-        function removeFloatingNav() {
-          $('.dropdown-backdrop').remove();
-          $('.sidebar-subnav.nav-floating').remove();
-          $('.sidebar li.open').removeClass('open');
-        }
-    }
-
-
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sidebar')
-        .service('SidebarLoader', SidebarLoader);
-
-    SidebarLoader.$inject = ['$http'];
-    function SidebarLoader($http) {
-        this.getMenu = getMenu;
-
-        ////////////////
-
-        function getMenu(onReady, onError) {
-          var menuJson = 'server/sidebar-menu.json',
-              menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
-            
-          onError = onError || function() { alert('Failure loading menu'); };
-
-          $http
-            .get(menuURL)
-            .success(onReady)
-            .error(onError);
-        }
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sidebar')
-        .controller('UserBlockController', UserBlockController);
-
-    UserBlockController.$inject = ['$rootScope'];
-    function UserBlockController($rootScope) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $rootScope.user = {
-            name:     localStorage.username,
-            job:      localStorage.introduction,
-            picture:  localStorage.photo
-          };
-
-          // Hides/show user avatar on sidebar
-          $rootScope.toggleUserBlock = function(){
-            $rootScope.$broadcast('toggleUserBlock');
-          };
-
-          $rootScope.userBlockVisible = false;
-          
-          $rootScope.$on('toggleUserBlock', function(/*event, args*/) {
-
-            $rootScope.userBlockVisible = ! $rootScope.userBlockVisible;
-            
-          });
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
         .module('custom', [
             // request the the entire framework
             'angle',
@@ -3201,50 +3201,6 @@
             /*...*/
         ]);
 })();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tags', [
-            'angle'
-        ]);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.users', [
-            'angle'
-        ]);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.themes', [
-            'angle'
-        ]);
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.authority', [
-            'angle'
-        ]);
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.group', [
-            'angle'
-        ]);
-})();
-
 
 (function() {
     'use strict';
@@ -3265,6 +3221,50 @@
         ]);
 })();
 
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.authority', [
+            'angle'
+        ]);
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.group', [
+            'angle'
+        ]);
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.tags', [
+            'angle'
+        ]);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.themes', [
+            'angle'
+        ]);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.users', [
+            'angle'
+        ]);
+})();
 
 // To run this code, edit file index.html or index.jade and change
 // html data-ng-app attribute from angle to myAppName
@@ -3292,6 +3292,934 @@
     }
 })();
 
+
+(function() {
+    'use strict';
+
+    angular
+        .module('auth.login')
+        .controller('LoginController', LoginController);
+
+    LoginController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state'];
+    
+    function LoginController($log, $mdDialog, $mdToast, AuthService, $state) {
+	
+		var vm = this;
+
+        vm.account = {
+            username: '',
+            password: ''
+        };
+
+        localStorage.rememberMe = typeof localStorage.rememberMe == 'undefined' || localStorage.rememberMe == 'false' ? false : localStorage.rememberMe;
+
+        vm.rememberMe = localStorage.rememberMe == 'true' ? true : false;
+
+        if(localStorage.rememberMe === 'true') {
+            vm.account.username = localStorage.email;
+            vm.account.password = localStorage.password;
+        }
+
+        vm.logout = function() {
+            AuthService.logout()
+            .success(function(res) {
+
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                    return false;
+                }
+
+                AuthService.clearAfterLogout();
+                $state.go('auth.login');
+            })
+            .error(function(res) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });;
+        };
+
+		vm.loginIn = function() {
+
+            if(vm.account.username == '') {
+                var toast = $mdToast.simple()
+                    .content('请填写用户名')
+                    .action('确定')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                    // $state.go(pathTo);
+                });
+                return false;
+            }
+
+            if(vm.account.password == '') {
+                var toast = $mdToast.simple()
+                    .content('请填写密码')
+                    .action('确定')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                    // $state.go(pathTo);
+                });
+                return false;
+            }
+
+            AuthService.login(vm.account.username, vm.account.password)
+            .success(function(res) {
+
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                    return false;
+                }
+
+                var userData = res.data;
+
+                sessionStorage.isFromLoginPage = true;
+
+                AuthService.parseUserInfo(userData);
+
+                if(vm.rememberMe) {
+                    localStorage.rememberMe = true;
+                    localStorage.email = vm.account.username;
+                    localStorage.password = vm.account.password;
+                }
+
+                if(localStorage.isRoot == 'false') {
+                    $state.go('auth.noAuth');
+                }else {
+                    $state.go('app.welcome');
+                }
+
+            })
+            .error(function(res, status) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+		}; 
+
+    }
+
+})();
+
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('auth.login')
+        .service('AuthService', AuthService);
+
+    AuthService.$inject = ['$http', '$rootScope', '$resource'];
+
+    function AuthService($http, $rootScope, $resource) {
+
+      return {
+
+        login: function(email, password) {
+          return $http.get($rootScope.app.baseUrl + 'user/login/' + email + '/' + password);
+        },
+
+        clearAfterLogout: function() {
+          localStorage._id = undefined;
+
+          if(localStorage.rememberMe != 'true') {
+            localStorage.email = undefined;
+            localStorage.password = undefined;
+          }
+          
+          localStorage.accessToken = undefined;
+          localStorage.photo = undefined;
+          localStorage.group = undefined;
+          localStorage.login = false;
+          localStorage.auth = false;
+          localStorage.isRoot = false;
+          localStorage.userData = undefined;
+          localStorage.username = undefined;
+
+          delete window.$hp.defaults.headers.common['Authorization'];
+        },
+
+        logout: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/logout');
+        },
+
+        parseUserInfo: function(userData) {
+
+          var isValid = false;
+
+          if(typeof userData == 'string') {
+            if(userData != '') {
+              localStorage.userData = userData;
+              userData = JSON.parse(userData);              
+              isValid = true;
+            }
+          }else {
+            localStorage.userData = JSON.stringify(userData);
+            isValid = true;
+          }
+
+          console.log(isValid);
+
+          if(!isValid) {
+            return false;
+          }
+
+          localStorage._id = userData._id;
+          localStorage.username = userData.username;
+          localStorage.password = userData.password;
+          localStorage.accessToken = userData.accessToken;
+          localStorage.photo = userData.photo;
+          localStorage.group = JSON.stringify(userData.group);
+          localStorage.login = true;
+
+          window.$hp.defaults.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;
+
+          var group = localStorage.group;
+
+          if(group == 'undefined' || group == undefined) {
+            localStorage.auth = false;
+            localStorage.isRoot = false;
+          }else {
+            group = JSON.parse(group);
+
+            var isRoot = false;
+
+            for (var i = 0; i < group.length; i++) {
+              var g = group[i];
+              if((g.name === 'root' && g.code === '100') || g.code === '101') {
+                isRoot = true;
+                break;
+              }
+            };
+
+            if(isRoot) {
+              localStorage.auth = true;
+              localStorage.isRoot = true;
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('auth.noAuth')
+        .controller('NoAuthController', NoAuthController);
+
+    NoAuthController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state'];
+    
+    function NoAuthController($log, $mdDialog, $mdToast, AuthService, $state) {
+
+    	var vm = this;
+
+    	vm.isLogin = typeof localStorage.login == 'undefined' || localStorage.login == 'false' ? false : true;
+
+    	vm.logout = function() {
+
+    		AuthService.logout()
+            .success(function(res) {
+
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                    return false;
+                }
+
+                AuthService.clearAfterLogout();
+                $state.go('auth.login');
+            })
+            .error(function(res) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+
+    	};
+    }
+
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.authority')
+        .controller('AuthorityController', AuthorityController);
+
+    AuthorityController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthorityListService', '$state', 'MOptions'];
+    
+    function AuthorityController($log, $mdDialog, $mdToast, AuthorityListService, $state, MOptions) {
+
+    	var vm = this;
+
+        MOptions.init(vm, ['allAuthList']);
+
+        vm.submitThisAuth = function() {
+            AuthorityListService.new(vm.newAuth)
+            .success(function(res) {
+
+                var msg = res.code === 200 ? '添加成功' : res.message;
+
+                var toast = $mdToast.simple()
+                      .content(msg)
+                      .action('我知道了')
+                      .highlightAction(false)
+                      .position('top right');
+                $mdToast.show(toast).then(function() {
+                    $state.go('app.authority');
+                });
+
+                if(res.code == 200) {
+                    vm.newAuth = {};
+                    vm.getAuthList();
+                }
+
+            })
+            .error(function(res, status) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+        };
+
+        vm.getAuthList = function() {
+            AuthorityListService.get()
+            .success(function(res) {
+
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                    return false;
+                }
+
+                vm.authList = res.message;
+
+            })
+            .error(function(res, status) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+        };
+
+        vm.getAuthList();
+
+        vm.authActions = {
+            name: '',
+            names: [{
+                val: '编辑',
+                onClicked: function(ev, auth, index) {
+                    $mdDialog.show({
+                        controller: DialogController,
+                        templateUrl: 'auth_detail.tmpl.html',
+                        targetEvent: ev,
+                    })
+                    .then(function(answer) {
+                        $scope.alert = 'You said the information was \'' + answer + '\'.';
+                    }, function() {
+                        $scope.alert = 'You cancelled the dialog.';
+                    });
+
+                    DialogController.$inject = ['$scope', '$mdDialog', 'ThemeService'];
+                    function DialogController($scope, $mdDialog, ThemeService) {
+
+                        $scope.auth = auth;
+
+                        $scope.hide = function() {
+                            $mdDialog.hide();
+                        };
+
+                        $scope.cancel = function() {
+                            $mdDialog.cancel();
+                        };
+
+                        $scope.answer = function(answer) {
+                            $mdDialog.hide(answer);
+                        };
+
+                        $scope.editThisAuth = function() {
+                            AuthorityListService.edit(auth)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+
+                                if(res.code == 200) {
+                                    vm.getAuthList();
+                                    $mdDialog.cancel();
+                                }
+
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+                        }
+                    }
+
+                }
+            }, {
+                val: '删除',
+                onClicked: function(ev, auth, index) {
+                    var confirm = $mdDialog.confirm()
+                        .title('删除确认')
+                        .content('你确定要删除此用户组？')
+                        .ariaLabel('Lucky day')
+                        .ok('确定')
+                        .cancel('取消')
+                        .targetEvent(ev);
+
+                    if(index != undefined) {
+                        vm.selecteThisById(auth._id, vm.allAuthList);
+                    }
+
+                    $mdDialog.show(confirm).then(function() {
+                        //确定
+                        var groupSelectedLength = vm.allAuthList.selectedList.length;
+
+                        console.log(vm.allAuthList);
+
+                        if(groupSelectedLength === 0) {
+                            var toast = $mdToast.simple()
+                                  .content('您尚未选择任何用户组')
+                                  .action('确定')
+                                  .highlightAction(false)
+                                  .position('top right');
+                            $mdToast.show(toast)
+                            return false;
+                        }
+
+                        vm.allAuthList.selectedList.forEach(function(id, key) {
+                            AuthorityListService.remove(id)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+
+                                if(key == groupSelectedLength - 1) {
+                                    vm.getAuthList();
+                                }                                        
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+                        });
+
+                    }, function() {
+                        //取消
+                        if(index != undefined) {
+                            vm.unSelectThisById(auth._id, vm.allAuthList);
+                        }
+                    });
+                }
+            }]
+        };
+
+        // console.log(vm.authAction.names);
+
+        vm.footerAction = {
+            name: '',
+            names: [{
+                val: '删除',
+                onClicked: function(ev) {
+                    vm.authActions.names[1].onClicked(ev);
+                }
+            }]
+        }
+    }
+
+})();
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.authority')
+        .service('AuthorityService', AuthorityService)
+        .service('AuthorityListService', AuthorityListService);
+
+    AuthorityService.$inject = ['$http', '$rootScope', '$resource'];
+    AuthorityListService.$inject = ['$http', '$rootScope', '$resource'];
+
+    function AuthorityService($http, $rootScope, $resource) {
+
+      return {
+
+          get: function() {
+            return $http.get($rootScope.app.baseUrl + 'groups/select/all');
+          },
+
+          new: function(data) {
+            return $http.post($rootScope.app.baseUrl + 'groups/add', data);
+          },
+
+          remove: function(id) {
+            return $http.get($rootScope.app.baseUrl + 'groups/remove/' + id);
+          },
+
+          edit: function(data) {
+            return $http.post($rootScope.app.baseUrl + 'groups/update', data);
+          },
+
+          applyAuthority: function(data) {
+            return $http.post($rootScope.app.baseUrl + 'groups/authority/applyment', data);
+          },
+
+          applyToUser: function(data) {
+            return $http.post($rootScope.app.baseUrl + 'groups/to/user', data);
+          }
+
+      }
+
+    }
+
+    function AuthorityListService($http, $rootScope, $resource) {
+
+      return {
+
+        get: function() {
+            return $http.get($rootScope.app.baseUrl + 'auth/list/select/all');
+        },
+
+        new: function(data) {
+            return $http.post($rootScope.app.baseUrl + 'auth/list/add', data);
+        },
+
+        remove: function(id) {
+            return $http.get($rootScope.app.baseUrl + 'auth/list/remove/' + id);
+        },
+
+        edit: function(data) {
+            return $http.post($rootScope.app.baseUrl + 'auth/list/update', data);
+        }
+
+      };
+
+    }
+
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.group')
+        .controller('GroupController', GroupController);
+
+    GroupController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthorityService', '$state', 'MOptions', 'AuthorityListService'];
+    
+    function GroupController($log, $mdDialog, $mdToast, AuthorityService, $state, MOptions, AuthorityListService) {
+
+    	var vm = this;
+
+    	vm.groupsList = [];
+
+        MOptions.init(vm, ['allGroupsList']);
+
+    	vm.getGroups = function() {
+    		AuthorityService.get()
+    		.success(function(res) {
+
+				if(res.code != 200) {
+					var toast = $mdToast.simple()
+	                      .content(res.message)
+	                      .action('我知道了')
+	                      .highlightAction(false)
+	                      .position('top right');
+	                $mdToast.show(toast).then(function() {
+	                });
+	                return false;
+				}
+
+                console.log(res);
+
+				vm.groupsList = res.message;
+
+    		})
+    		.error(function(res, status) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+    	}
+
+        vm.getGroups();
+
+    	vm.submitThisGroup = function() {
+
+    		AuthorityService.new(vm.group)
+    		.success(function(res) {
+
+                var msg = res.code === 200 ? '添加成功' : res.message;
+
+				var toast = $mdToast.simple()
+                      .content(msg)
+                      .action('我知道了')
+                      .highlightAction(false)
+                      .position('top right');
+                $mdToast.show(toast).then(function() {
+                    $state.go('app.group');
+                });
+
+				if(res.code == 200) {
+					vm.group = {};
+                    vm.getGroups();
+				}
+
+    		})
+    		.error(function(res, status) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+
+    	}
+
+        vm.groupsAction = {
+            name: '',
+            names: [{
+                val: '编辑',
+                onClicked: function(ev, group, index) {
+
+                    $mdDialog.show({
+                        controller: DialogController,
+                        templateUrl: 'group_detail.tmpl.html',
+                        targetEvent: ev,
+                    })
+                    .then(function(answer) {
+                        $scope.alert = 'You said the information was \'' + answer + '\'.';
+                    }, function() {
+                        $scope.alert = 'You cancelled the dialog.';
+                    });
+
+                    DialogController.$inject = ['$scope', '$mdDialog', 'ThemeService'];
+                    function DialogController($scope, $mdDialog, ThemeService) {
+
+                        $scope.group = group;
+
+                        if(!isNaN($scope.code)) {
+                            $scope.group = parseInt($scope.group);
+                            console.log($scope.group);
+                        }
+
+                        $scope.hide = function() {
+                            $mdDialog.hide();
+                        };
+
+                        $scope.cancel = function() {
+                            $mdDialog.cancel();
+                        };
+
+                        $scope.answer = function(answer) {
+                            $mdDialog.hide(answer);
+                        };
+
+                        $scope.updateThisGroup = function() {
+                            AuthorityService.edit(group)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+
+                                if(res.code == 200) {
+                                    vm.getGroups();
+                                    $mdDialog.cancel();
+                                }
+
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+                        }
+                    }
+
+                }
+            },{
+                val: '分配权限',
+                onClicked: function(ev, group, index) {
+
+                    $mdDialog.show({
+                        controller: DialogController,
+                        templateUrl: 'auth_distribute.tmpl.html',
+                        targetEvent: ev,
+                    })
+                    .then(function(answer) {
+                        $scope.alert = 'You said the information was \'' + answer + '\'.';
+                    }, function() {
+                        $scope.alert = 'You cancelled the dialog.';
+                    });
+
+                    DialogController.$inject = ['$scope', '$mdDialog', 'ThemeService'];
+                    function DialogController($scope, $mdDialog, ThemeService) {
+
+                        MOptions.init($scope, ['authListOptions']);
+
+                        $scope.group = group;
+
+                        $scope.auth = {
+                            authList: []
+                        };
+
+                        var rightsList = $scope.group.rightsList;
+
+                        for (var i = 0; i < rightsList.length; i++) {
+                            var right = rightsList[i];
+                            var id = right._id;
+                            $scope.selecteThisById(id, $scope.authListOptions);
+                        };
+
+                        AuthorityListService.get()
+                        .success(function(res) {
+
+                            if(res.code != 200) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                                return false;
+                            }
+
+                            $scope.auth.authList = res.message;
+
+                            if($scope.auth.authList.length === rightsList.length) {
+                                $scope.selectAll($scope.auth.authList, $scope.authListOptions);
+                            }
+
+                            vm.getGroups();
+
+                        })
+                        .error(function(res, status) {
+                            var toast = $mdToast.simple()
+                                .content('出错了，错误代码：' + status)
+                                .action('我知道了')
+                                .highlightAction(false)
+                                .position('top right');
+                            $mdToast.show(toast).then(function() {
+                            });
+                        });
+
+                        $scope.applyTheAuth = function() {
+
+                            AuthorityService.applyAuthority({
+                                id: $scope.group._id,
+                                rights: $scope.authListOptions.selectedList
+                            })
+                            .success(function(res) {
+
+                                var toast = $mdToast.simple()
+                                    .content(res.message)
+                                    .action('我知道了')
+                                    .highlightAction(false)
+                                    .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+
+                                if(res.code === 200) {
+                                    $mdDialog.cancel();
+                                }
+
+                            })
+                            .error(function(res, status) {
+                                var toast = $mdToast.simple()
+                                    .content('出错了，错误代码：' + status)
+                                    .action('我知道了')
+                                    .highlightAction(false)
+                                    .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+
+                        };
+
+                        $scope.hide = function() {
+                            $mdDialog.hide();
+                        };
+
+                        $scope.cancel = function() {
+                            $mdDialog.cancel();
+                        };
+
+                        $scope.answer = function(answer) {
+                            $mdDialog.hide(answer);
+                        };
+                    }
+
+                }
+            },{
+                val: '删除',
+                onClicked: function(ev, group, index) {
+
+                    var confirm = $mdDialog.confirm()
+                        .title('删除确认')
+                        .content('你确定要删除此用户组？')
+                        .ariaLabel('Lucky day')
+                        .ok('确定')
+                        .cancel('取消')
+                        .targetEvent(ev);
+
+                    if(index != undefined) {
+                        vm.selecteThisById(group._id, vm.allGroupsList);
+                    }
+
+                    $mdDialog.show(confirm).then(function() {
+                        //确定
+                        var groupSelectedLength = vm.allGroupsList.selectedList.length;
+
+                        console.log(vm.allGroupsList);
+
+                        if(groupSelectedLength === 0) {
+                            var toast = $mdToast.simple()
+                                  .content('您尚未选择任何用户组')
+                                  .action('确定')
+                                  .highlightAction(false)
+                                  .position('top right');
+                            $mdToast.show(toast)
+                            return false;
+                        }
+
+                        vm.allGroupsList.selectedList.forEach(function(id, key) {
+                            AuthorityService.remove(id)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+
+                                if(key == groupSelectedLength - 1) {
+                                    vm.getGroups();
+                                }                                        
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+                        });
+
+                    }, function() {
+                        //取消
+                        if(index != undefined) {
+                            vm.unSelectThisById(group._id, vm.allGroupsList);
+                        }
+                    });
+                }
+            }]
+        };
+
+        vm.footerAction = {
+            name: '',
+            names: [{
+                val: '删除',
+                onClicked: function(evt) {
+                    vm.groupsAction.names[2].onClicked(evt);
+                } 
+            }]
+        }
+
+    }
+
+})();
 
 
 (function() {
@@ -3665,6 +4593,292 @@
 
         unRemove: function(id) {
           return $http.get($rootScope.app.baseUrl + 'tags/unremove/' + id);
+        }
+
+      }
+
+    }
+
+})();
+
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.themes')
+        .controller('ThemesController', ThemesController);
+
+    ThemesController.$inject = ['$log', '$mdDialog', '$mdToast', 'ThemeService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'MOptions'];
+    function ThemesController($log, $mdDialog, $mdToast, ThemeService, DTOptionsBuilder, DTColumnDefBuilder, MOptions) {
+        // for controllerAs syntax
+        var vm = this;
+
+        activate();
+
+        activateTable();
+
+        MOptions.init(vm, ['element', 'elementDeleted']);
+
+        vm.themesList = [];
+        vm.themesDeletedList = [];
+
+        function activateTable() {
+
+            vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+            vm.dtColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(0),
+                DTColumnDefBuilder.newColumnDef(1),
+                DTColumnDefBuilder.newColumnDef(2),
+                DTColumnDefBuilder.newColumnDef(3).notSortable()
+            ];
+
+            vm.getAll = function() {
+
+                ThemeService.getAll(1, 100)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.themesList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
+            }
+
+            vm.getDeleted = function() {
+
+                ThemeService.getDeleted(1, 10)
+                .success(function(res, status, headers, config) {
+                    if(res.code != 200) {
+                        var toast = $mdToast.simple()
+                              .content(res.message)
+                              .action('我知道了')
+                              .highlightAction(false)
+                              .position('top right');
+                        $mdToast.show(toast).then(function() {
+                        });
+                    }
+                    vm.themesDeletedList = res.message;
+                })
+                .error(function(res, status, headers, config) {
+                    var toast = $mdToast.simple()
+                          .content('出错了，错误代码：' + status)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                });
+
+            }
+
+            vm.getAll();
+            vm.getDeleted();
+
+        }
+
+        ////////////////
+
+        function activate() {
+            
+            vm.selectCtrl = {
+
+                names: [{
+                    val: '查看投稿',
+                    onClicked: function(ev, tm, index) {
+                        window.open("http://poi.poimoe.com/#!/view/" + tm._id);
+                    }
+                }, {
+                    val: '作者信息',
+                    onClicked: function(ev, tm, index) {
+                        $mdDialog.show({
+                            controller: DialogController,
+                            templateUrl: 'user_theme_detail.tmpl.html',
+                            targetEvent: ev,
+                        })
+                        .then(function(answer) {
+                        }, function() {
+                        });
+
+                        DialogController.$inject = ['$scope', '$mdDialog'];
+                        function DialogController($scope, $mdDialog) {
+
+                            $scope.user = tm.user_id;
+
+                            $scope.hide = function() {
+                                $mdDialog.hide();
+                            };
+
+                            $scope.cancel = function() {
+                                $mdDialog.cancel();
+                            };
+
+                            $scope.answer = function(answer) {
+                                $mdDialog.hide(answer);
+                            };
+                        }
+                    }
+                }, {
+                    val: '删除',
+                    onClicked: function(ev, tm, index) {
+
+                        var confirm = $mdDialog.confirm()
+                            .title('删除确认')
+                            .content('你确定要删除此主题？')
+                            .ariaLabel('Lucky day')
+                            .ok('确定')
+                            .cancel('取消')
+                            .targetEvent(ev);
+
+                        if(index != undefined) {
+                            vm.selecteThisById(tm._id, vm.element);
+                        }
+
+                        $mdDialog.show(confirm).then(function() {
+                            //确定
+
+                            var selectedListLength = vm.element.selectedList.length;
+
+                            vm.element.selectedList.forEach(function(id, key) {
+
+                                ThemeService.remove(id)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                    if(key == selectedListLength - 1) {
+                                        vm.getAll();
+                                        vm.getDeleted();
+                                    }
+
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                });
+
+                            });
+
+                        }, function() {
+                            //取消
+                            if(index != undefined) {
+                                vm.unSelectThisById(tm._id, vm.element);
+                            }
+                        });
+                    }
+                }]
+
+            };
+
+            vm.selectDeletedCtrl = {
+                names: [{
+                    val: '作者信息',
+                    onClicked: function(ev, tm, index) {
+                        vm.selectCtrl.names[1].onClicked(ev, tm, index);
+                    }
+                }, {
+                    val: '恢复',
+                    onClicked: function(ev, tm, index) {
+
+                        if(index != undefined) {
+                            vm.selecteThisById(tm._id, vm.elementDeleted);
+                        }
+
+                        var selectedListLength = vm.elementDeleted.selectedList.length;
+
+
+                        vm.elementDeleted.selectedList.forEach(function(id, key) {
+
+                            ThemeService.unRemove(id)
+                            .success(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content(res.message)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+
+                                if(key == selectedListLength - 1) {
+                                    vm.getAll();
+                                    vm.getDeleted();
+                                }
+
+                            })
+                            .error(function(res, status, headers, config) {
+                                var toast = $mdToast.simple()
+                                      .content('出错了，错误代码：' + status)
+                                      .action('我知道了')
+                                      .highlightAction(false)
+                                      .position('top right');
+                                $mdToast.show(toast).then(function() {
+                                });
+                            });
+
+                        });
+
+                    }
+                }]
+            };
+
+        }
+    }
+
+})();
+
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.themes')
+        .service('ThemeService', ThemeService);
+
+    ThemeService.$inject = ['$http', '$rootScope', '$resource'];
+
+    function ThemeService($http, $rootScope, $resource) {
+
+      return {
+
+        getAll: function(page, count) {
+          return $http.get($rootScope.app.baseUrl + 'themes/select/all/' + page + '/' + count);
+        },
+
+        getDeleted: function(page, count) {
+          return $http.get($rootScope.app.baseUrl + 'themes/select/removed/' + page + '/' + count);
+        },
+
+        remove: function(id) {
+          return $http.get($rootScope.app.baseUrl + 'themes/remove/' + id);
+        },
+
+        unRemove: function(id) {
+          return $http.get($rootScope.app.baseUrl + 'themes/unremove/' + id, {});
         }
 
       }
@@ -4453,1219 +5667,6 @@
 
       }
 
-    }
-
-})();
-
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.themes')
-        .controller('ThemesController', ThemesController);
-
-    ThemesController.$inject = ['$log', '$mdDialog', '$mdToast', 'ThemeService', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'MOptions'];
-    function ThemesController($log, $mdDialog, $mdToast, ThemeService, DTOptionsBuilder, DTColumnDefBuilder, MOptions) {
-        // for controllerAs syntax
-        var vm = this;
-
-        activate();
-
-        activateTable();
-
-        MOptions.init(vm, ['element', 'elementDeleted']);
-
-        vm.themesList = [];
-        vm.themesDeletedList = [];
-
-        function activateTable() {
-
-            vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
-            vm.dtColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(0),
-                DTColumnDefBuilder.newColumnDef(1),
-                DTColumnDefBuilder.newColumnDef(2),
-                DTColumnDefBuilder.newColumnDef(3).notSortable()
-            ];
-
-            vm.getAll = function() {
-
-                ThemeService.getAll(1, 100)
-                .success(function(res, status, headers, config) {
-                    if(res.code != 200) {
-                        var toast = $mdToast.simple()
-                              .content(res.message)
-                              .action('我知道了')
-                              .highlightAction(false)
-                              .position('top right');
-                        $mdToast.show(toast).then(function() {
-                        });
-                    }
-                    vm.themesList = res.message;
-                })
-                .error(function(res, status, headers, config) {
-                    var toast = $mdToast.simple()
-                          .content('出错了，错误代码：' + status)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                });
-            }
-
-            vm.getDeleted = function() {
-
-                ThemeService.getDeleted(1, 10)
-                .success(function(res, status, headers, config) {
-                    if(res.code != 200) {
-                        var toast = $mdToast.simple()
-                              .content(res.message)
-                              .action('我知道了')
-                              .highlightAction(false)
-                              .position('top right');
-                        $mdToast.show(toast).then(function() {
-                        });
-                    }
-                    vm.themesDeletedList = res.message;
-                })
-                .error(function(res, status, headers, config) {
-                    var toast = $mdToast.simple()
-                          .content('出错了，错误代码：' + status)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                });
-
-            }
-
-            vm.getAll();
-            vm.getDeleted();
-
-        }
-
-        ////////////////
-
-        function activate() {
-            
-            vm.selectCtrl = {
-
-                names: [{
-                    val: '查看投稿',
-                    onClicked: function(ev, tm, index) {
-                        window.open("http://poi.poimoe.com/#!/view/" + tm._id);
-                    }
-                }, {
-                    val: '作者信息',
-                    onClicked: function(ev, tm, index) {
-                        $mdDialog.show({
-                            controller: DialogController,
-                            templateUrl: 'user_theme_detail.tmpl.html',
-                            targetEvent: ev,
-                        })
-                        .then(function(answer) {
-                        }, function() {
-                        });
-
-                        DialogController.$inject = ['$scope', '$mdDialog'];
-                        function DialogController($scope, $mdDialog) {
-
-                            $scope.user = tm.user_id;
-
-                            $scope.hide = function() {
-                                $mdDialog.hide();
-                            };
-
-                            $scope.cancel = function() {
-                                $mdDialog.cancel();
-                            };
-
-                            $scope.answer = function(answer) {
-                                $mdDialog.hide(answer);
-                            };
-                        }
-                    }
-                }, {
-                    val: '删除',
-                    onClicked: function(ev, tm, index) {
-
-                        var confirm = $mdDialog.confirm()
-                            .title('删除确认')
-                            .content('你确定要删除此主题？')
-                            .ariaLabel('Lucky day')
-                            .ok('确定')
-                            .cancel('取消')
-                            .targetEvent(ev);
-
-                        if(index != undefined) {
-                            vm.selecteThisById(tm._id, vm.element);
-                        }
-
-                        $mdDialog.show(confirm).then(function() {
-                            //确定
-
-                            var selectedListLength = vm.element.selectedList.length;
-
-                            vm.element.selectedList.forEach(function(id, key) {
-
-                                ThemeService.remove(id)
-                                .success(function(res, status, headers, config) {
-                                    var toast = $mdToast.simple()
-                                          .content(res.message)
-                                          .action('我知道了')
-                                          .highlightAction(false)
-                                          .position('top right');
-                                    $mdToast.show(toast).then(function() {
-                                    });
-
-                                    if(key == selectedListLength - 1) {
-                                        vm.getAll();
-                                        vm.getDeleted();
-                                    }
-
-                                })
-                                .error(function(res, status, headers, config) {
-                                    var toast = $mdToast.simple()
-                                          .content('出错了，错误代码：' + status)
-                                          .action('我知道了')
-                                          .highlightAction(false)
-                                          .position('top right');
-                                    $mdToast.show(toast).then(function() {
-                                    });
-                                });
-
-                            });
-
-                        }, function() {
-                            //取消
-                            if(index != undefined) {
-                                vm.unSelectThisById(tm._id, vm.element);
-                            }
-                        });
-                    }
-                }]
-
-            };
-
-            vm.selectDeletedCtrl = {
-                names: [{
-                    val: '作者信息',
-                    onClicked: function(ev, tm, index) {
-                        vm.selectCtrl.names[1].onClicked(ev, tm, index);
-                    }
-                }, {
-                    val: '恢复',
-                    onClicked: function(ev, tm, index) {
-
-                        if(index != undefined) {
-                            vm.selecteThisById(tm._id, vm.elementDeleted);
-                        }
-
-                        var selectedListLength = vm.elementDeleted.selectedList.length;
-
-
-                        vm.elementDeleted.selectedList.forEach(function(id, key) {
-
-                            ThemeService.unRemove(id)
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-
-                                if(key == selectedListLength - 1) {
-                                    vm.getAll();
-                                    vm.getDeleted();
-                                }
-
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-                            });
-
-                        });
-
-                    }
-                }]
-            };
-
-        }
-    }
-
-})();
-
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.themes')
-        .service('ThemeService', ThemeService);
-
-    ThemeService.$inject = ['$http', '$rootScope', '$resource'];
-
-    function ThemeService($http, $rootScope, $resource) {
-
-      return {
-
-        getAll: function(page, count) {
-          return $http.get($rootScope.app.baseUrl + 'themes/select/all/' + page + '/' + count);
-        },
-
-        getDeleted: function(page, count) {
-          return $http.get($rootScope.app.baseUrl + 'themes/select/removed/' + page + '/' + count);
-        },
-
-        remove: function(id) {
-          return $http.get($rootScope.app.baseUrl + 'themes/remove/' + id);
-        },
-
-        unRemove: function(id) {
-          return $http.get($rootScope.app.baseUrl + 'themes/unremove/' + id, {});
-        }
-
-      }
-
-    }
-
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.authority')
-        .controller('AuthorityController', AuthorityController);
-
-    AuthorityController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthorityListService', '$state', 'MOptions'];
-    
-    function AuthorityController($log, $mdDialog, $mdToast, AuthorityListService, $state, MOptions) {
-
-    	var vm = this;
-
-        MOptions.init(vm, ['allAuthList']);
-
-        vm.submitThisAuth = function() {
-            AuthorityListService.new(vm.newAuth)
-            .success(function(res) {
-
-                var msg = res.code === 200 ? '添加成功' : res.message;
-
-                var toast = $mdToast.simple()
-                      .content(msg)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
-                    $state.go('app.authority');
-                });
-
-                if(res.code == 200) {
-                    vm.newAuth = {};
-                    vm.getAuthList();
-                }
-
-            })
-            .error(function(res, status) {
-                var toast = $mdToast.simple()
-                    .content('出错了，错误代码：' + status)
-                    .action('我知道了')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-        };
-
-        vm.getAuthList = function() {
-            AuthorityListService.get()
-            .success(function(res) {
-
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                    return false;
-                }
-
-                vm.authList = res.message;
-
-            })
-            .error(function(res, status) {
-                var toast = $mdToast.simple()
-                    .content('出错了，错误代码：' + status)
-                    .action('我知道了')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-        };
-
-        vm.getAuthList();
-
-        vm.authActions = {
-            name: '',
-            names: [{
-                val: '编辑',
-                onClicked: function(ev, auth, index) {
-                    $mdDialog.show({
-                        controller: DialogController,
-                        templateUrl: 'auth_detail.tmpl.html',
-                        targetEvent: ev,
-                    })
-                    .then(function(answer) {
-                        $scope.alert = 'You said the information was \'' + answer + '\'.';
-                    }, function() {
-                        $scope.alert = 'You cancelled the dialog.';
-                    });
-
-                    DialogController.$inject = ['$scope', '$mdDialog', 'ThemeService'];
-                    function DialogController($scope, $mdDialog, ThemeService) {
-
-                        $scope.auth = auth;
-
-                        $scope.hide = function() {
-                            $mdDialog.hide();
-                        };
-
-                        $scope.cancel = function() {
-                            $mdDialog.cancel();
-                        };
-
-                        $scope.answer = function(answer) {
-                            $mdDialog.hide(answer);
-                        };
-
-                        $scope.editThisAuth = function() {
-                            AuthorityListService.edit(auth)
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-
-                                if(res.code == 200) {
-                                    vm.getAuthList();
-                                    $mdDialog.cancel();
-                                }
-
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-                            });
-                        }
-                    }
-
-                }
-            }, {
-                val: '删除',
-                onClicked: function(ev, auth, index) {
-                    var confirm = $mdDialog.confirm()
-                        .title('删除确认')
-                        .content('你确定要删除此用户组？')
-                        .ariaLabel('Lucky day')
-                        .ok('确定')
-                        .cancel('取消')
-                        .targetEvent(ev);
-
-                    if(index != undefined) {
-                        vm.selecteThisById(auth._id, vm.allAuthList);
-                    }
-
-                    $mdDialog.show(confirm).then(function() {
-                        //确定
-                        var groupSelectedLength = vm.allAuthList.selectedList.length;
-
-                        console.log(vm.allAuthList);
-
-                        if(groupSelectedLength === 0) {
-                            var toast = $mdToast.simple()
-                                  .content('您尚未选择任何用户组')
-                                  .action('确定')
-                                  .highlightAction(false)
-                                  .position('top right');
-                            $mdToast.show(toast)
-                            return false;
-                        }
-
-                        vm.allAuthList.selectedList.forEach(function(id, key) {
-                            AuthorityListService.remove(id)
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-
-                                if(key == groupSelectedLength - 1) {
-                                    vm.getAuthList();
-                                }                                        
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-                            });
-                        });
-
-                    }, function() {
-                        //取消
-                        if(index != undefined) {
-                            vm.unSelectThisById(auth._id, vm.allAuthList);
-                        }
-                    });
-                }
-            }]
-        };
-
-        // console.log(vm.authAction.names);
-
-        vm.footerAction = {
-            name: '',
-            names: [{
-                val: '删除',
-                onClicked: function(ev) {
-                    vm.authActions.names[1].onClicked(ev);
-                }
-            }]
-        }
-    }
-
-})();
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.authority')
-        .service('AuthorityService', AuthorityService)
-        .service('AuthorityListService', AuthorityListService);
-
-    AuthorityService.$inject = ['$http', '$rootScope', '$resource'];
-    AuthorityListService.$inject = ['$http', '$rootScope', '$resource'];
-
-    function AuthorityService($http, $rootScope, $resource) {
-
-      return {
-
-          get: function() {
-            return $http.get($rootScope.app.baseUrl + 'groups/select/all');
-          },
-
-          new: function(data) {
-            return $http.post($rootScope.app.baseUrl + 'groups/add', data);
-          },
-
-          remove: function(id) {
-            return $http.get($rootScope.app.baseUrl + 'groups/remove/' + id);
-          },
-
-          edit: function(data) {
-            return $http.post($rootScope.app.baseUrl + 'groups/update', data);
-          },
-
-          applyAuthority: function(data) {
-            return $http.post($rootScope.app.baseUrl + 'groups/authority/applyment', data);
-          },
-
-          applyToUser: function(data) {
-            return $http.post($rootScope.app.baseUrl + 'groups/to/user', data);
-          }
-
-      }
-
-    }
-
-    function AuthorityListService($http, $rootScope, $resource) {
-
-      return {
-
-        get: function() {
-            return $http.get($rootScope.app.baseUrl + 'auth/list/select/all');
-        },
-
-        new: function(data) {
-            return $http.post($rootScope.app.baseUrl + 'auth/list/add', data);
-        },
-
-        remove: function(id) {
-            return $http.get($rootScope.app.baseUrl + 'auth/list/remove/' + id);
-        },
-
-        edit: function(data) {
-            return $http.post($rootScope.app.baseUrl + 'auth/list/update', data);
-        }
-
-      };
-
-    }
-
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.group')
-        .controller('GroupController', GroupController);
-
-    GroupController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthorityService', '$state', 'MOptions', 'AuthorityListService'];
-    
-    function GroupController($log, $mdDialog, $mdToast, AuthorityService, $state, MOptions, AuthorityListService) {
-
-    	var vm = this;
-
-    	vm.groupsList = [];
-
-        MOptions.init(vm, ['allGroupsList']);
-
-    	vm.getGroups = function() {
-    		AuthorityService.get()
-    		.success(function(res) {
-
-				if(res.code != 200) {
-					var toast = $mdToast.simple()
-	                      .content(res.message)
-	                      .action('我知道了')
-	                      .highlightAction(false)
-	                      .position('top right');
-	                $mdToast.show(toast).then(function() {
-	                });
-	                return false;
-				}
-
-                console.log(res);
-
-				vm.groupsList = res.message;
-
-    		})
-    		.error(function(res, status) {
-                var toast = $mdToast.simple()
-                    .content('出错了，错误代码：' + status)
-                    .action('我知道了')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-    	}
-
-        vm.getGroups();
-
-    	vm.submitThisGroup = function() {
-
-    		AuthorityService.new(vm.group)
-    		.success(function(res) {
-
-                var msg = res.code === 200 ? '添加成功' : res.message;
-
-				var toast = $mdToast.simple()
-                      .content(msg)
-                      .action('我知道了')
-                      .highlightAction(false)
-                      .position('top right');
-                $mdToast.show(toast).then(function() {
-                    $state.go('app.group');
-                });
-
-				if(res.code == 200) {
-					vm.group = {};
-                    vm.getGroups();
-				}
-
-    		})
-    		.error(function(res, status) {
-                var toast = $mdToast.simple()
-                    .content('出错了，错误代码：' + status)
-                    .action('我知道了')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-
-    	}
-
-        vm.groupsAction = {
-            name: '',
-            names: [{
-                val: '编辑',
-                onClicked: function(ev, group, index) {
-
-                    $mdDialog.show({
-                        controller: DialogController,
-                        templateUrl: 'group_detail.tmpl.html',
-                        targetEvent: ev,
-                    })
-                    .then(function(answer) {
-                        $scope.alert = 'You said the information was \'' + answer + '\'.';
-                    }, function() {
-                        $scope.alert = 'You cancelled the dialog.';
-                    });
-
-                    DialogController.$inject = ['$scope', '$mdDialog', 'ThemeService'];
-                    function DialogController($scope, $mdDialog, ThemeService) {
-
-                        $scope.group = group;
-
-                        if(!isNaN($scope.code)) {
-                            $scope.group = parseInt($scope.group);
-                            console.log($scope.group);
-                        }
-
-                        $scope.hide = function() {
-                            $mdDialog.hide();
-                        };
-
-                        $scope.cancel = function() {
-                            $mdDialog.cancel();
-                        };
-
-                        $scope.answer = function(answer) {
-                            $mdDialog.hide(answer);
-                        };
-
-                        $scope.updateThisGroup = function() {
-                            AuthorityService.edit(group)
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-
-                                if(res.code == 200) {
-                                    vm.getGroups();
-                                    $mdDialog.cancel();
-                                }
-
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-                            });
-                        }
-                    }
-
-                }
-            },{
-                val: '分配权限',
-                onClicked: function(ev, group, index) {
-
-                    $mdDialog.show({
-                        controller: DialogController,
-                        templateUrl: 'auth_distribute.tmpl.html',
-                        targetEvent: ev,
-                    })
-                    .then(function(answer) {
-                        $scope.alert = 'You said the information was \'' + answer + '\'.';
-                    }, function() {
-                        $scope.alert = 'You cancelled the dialog.';
-                    });
-
-                    DialogController.$inject = ['$scope', '$mdDialog', 'ThemeService'];
-                    function DialogController($scope, $mdDialog, ThemeService) {
-
-                        MOptions.init($scope, ['authListOptions']);
-
-                        $scope.group = group;
-
-                        $scope.auth = {
-                            authList: []
-                        };
-
-                        var rightsList = $scope.group.rightsList;
-
-                        for (var i = 0; i < rightsList.length; i++) {
-                            var right = rightsList[i];
-                            var id = right._id;
-                            $scope.selecteThisById(id, $scope.authListOptions);
-                        };
-
-                        AuthorityListService.get()
-                        .success(function(res) {
-
-                            if(res.code != 200) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-                                return false;
-                            }
-
-                            $scope.auth.authList = res.message;
-
-                            if($scope.auth.authList.length === rightsList.length) {
-                                $scope.selectAll($scope.auth.authList, $scope.authListOptions);
-                            }
-
-                            vm.getGroups();
-
-                        })
-                        .error(function(res, status) {
-                            var toast = $mdToast.simple()
-                                .content('出错了，错误代码：' + status)
-                                .action('我知道了')
-                                .highlightAction(false)
-                                .position('top right');
-                            $mdToast.show(toast).then(function() {
-                            });
-                        });
-
-                        $scope.applyTheAuth = function() {
-
-                            AuthorityService.applyAuthority({
-                                id: $scope.group._id,
-                                rights: $scope.authListOptions.selectedList
-                            })
-                            .success(function(res) {
-
-                                var toast = $mdToast.simple()
-                                    .content(res.message)
-                                    .action('我知道了')
-                                    .highlightAction(false)
-                                    .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-
-                                if(res.code === 200) {
-                                    $mdDialog.cancel();
-                                }
-
-                            })
-                            .error(function(res, status) {
-                                var toast = $mdToast.simple()
-                                    .content('出错了，错误代码：' + status)
-                                    .action('我知道了')
-                                    .highlightAction(false)
-                                    .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-                            });
-
-                        };
-
-                        $scope.hide = function() {
-                            $mdDialog.hide();
-                        };
-
-                        $scope.cancel = function() {
-                            $mdDialog.cancel();
-                        };
-
-                        $scope.answer = function(answer) {
-                            $mdDialog.hide(answer);
-                        };
-                    }
-
-                }
-            },{
-                val: '删除',
-                onClicked: function(ev, group, index) {
-
-                    var confirm = $mdDialog.confirm()
-                        .title('删除确认')
-                        .content('你确定要删除此用户组？')
-                        .ariaLabel('Lucky day')
-                        .ok('确定')
-                        .cancel('取消')
-                        .targetEvent(ev);
-
-                    if(index != undefined) {
-                        vm.selecteThisById(group._id, vm.allGroupsList);
-                    }
-
-                    $mdDialog.show(confirm).then(function() {
-                        //确定
-                        var groupSelectedLength = vm.allGroupsList.selectedList.length;
-
-                        console.log(vm.allGroupsList);
-
-                        if(groupSelectedLength === 0) {
-                            var toast = $mdToast.simple()
-                                  .content('您尚未选择任何用户组')
-                                  .action('确定')
-                                  .highlightAction(false)
-                                  .position('top right');
-                            $mdToast.show(toast)
-                            return false;
-                        }
-
-                        vm.allGroupsList.selectedList.forEach(function(id, key) {
-                            AuthorityService.remove(id)
-                            .success(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content(res.message)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-
-                                if(key == groupSelectedLength - 1) {
-                                    vm.getGroups();
-                                }                                        
-                            })
-                            .error(function(res, status, headers, config) {
-                                var toast = $mdToast.simple()
-                                      .content('出错了，错误代码：' + status)
-                                      .action('我知道了')
-                                      .highlightAction(false)
-                                      .position('top right');
-                                $mdToast.show(toast).then(function() {
-                                });
-                            });
-                        });
-
-                    }, function() {
-                        //取消
-                        if(index != undefined) {
-                            vm.unSelectThisById(group._id, vm.allGroupsList);
-                        }
-                    });
-                }
-            }]
-        };
-
-        vm.footerAction = {
-            name: '',
-            names: [{
-                val: '删除',
-                onClicked: function(evt) {
-                    vm.groupsAction.names[2].onClicked(evt);
-                } 
-            }]
-        }
-
-    }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('auth.login')
-        .controller('LoginController', LoginController);
-
-    LoginController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state'];
-    
-    function LoginController($log, $mdDialog, $mdToast, AuthService, $state) {
-	
-		var vm = this;
-
-        vm.account = {
-            username: '',
-            password: ''
-        };
-
-        localStorage.rememberMe = typeof localStorage.rememberMe == 'undefined' || localStorage.rememberMe == 'false' ? false : localStorage.rememberMe;
-
-        vm.rememberMe = localStorage.rememberMe == 'true' ? true : false;
-
-        if(localStorage.rememberMe === 'true') {
-            vm.account.username = localStorage.email;
-            vm.account.password = localStorage.password;
-        }
-
-        vm.logout = function() {
-            AuthService.logout()
-            .success(function(res) {
-
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                    return false;
-                }
-
-                AuthService.clearAfterLogout();
-                $state.go('auth.login');
-            })
-            .error(function(res) {
-                var toast = $mdToast.simple()
-                    .content('出错了，错误代码：' + status)
-                    .action('我知道了')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });;
-        };
-
-		vm.loginIn = function() {
-
-            if(vm.account.username == '') {
-                var toast = $mdToast.simple()
-                    .content('请填写用户名')
-                    .action('确定')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                    // $state.go(pathTo);
-                });
-                return false;
-            }
-
-            if(vm.account.password == '') {
-                var toast = $mdToast.simple()
-                    .content('请填写密码')
-                    .action('确定')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                    // $state.go(pathTo);
-                });
-                return false;
-            }
-
-            AuthService.login(vm.account.username, vm.account.password)
-            .success(function(res) {
-
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                    return false;
-                }
-
-                var userData = res.data;
-
-                sessionStorage.isFromLoginPage = true;
-
-                AuthService.parseUserInfo(userData);
-
-                if(vm.rememberMe) {
-                    localStorage.rememberMe = true;
-                    localStorage.email = vm.account.username;
-                    localStorage.password = vm.account.password;
-                }
-
-                if(localStorage.isRoot == 'false') {
-                    $state.go('auth.noAuth');
-                }else {
-                    $state.go('app.welcome');
-                }
-
-            })
-            .error(function(res, status) {
-                var toast = $mdToast.simple()
-                    .content('出错了，错误代码：' + status)
-                    .action('我知道了')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-		}; 
-
-    }
-
-})();
-
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('auth.login')
-        .service('AuthService', AuthService);
-
-    AuthService.$inject = ['$http', '$rootScope', '$resource'];
-
-    function AuthService($http, $rootScope, $resource) {
-
-      return {
-
-        login: function(email, password) {
-          return $http.get($rootScope.app.baseUrl + 'user/login/' + email + '/' + password);
-        },
-
-        clearAfterLogout: function() {
-          localStorage._id = undefined;
-
-          if(localStorage.rememberMe != 'true') {
-            localStorage.email = undefined;
-            localStorage.password = undefined;
-          }
-          
-          localStorage.accessToken = undefined;
-          localStorage.photo = undefined;
-          localStorage.group = undefined;
-          localStorage.login = false;
-          localStorage.auth = false;
-          localStorage.isRoot = false;
-          localStorage.userData = undefined;
-          localStorage.username = undefined;
-
-          delete window.$hp.defaults.headers.common['Authorization'];
-        },
-
-        logout: function() {
-          return $http.get($rootScope.app.baseUrl + 'user/logout');
-        },
-
-        parseUserInfo: function(userData) {
-
-          var isValid = false;
-
-          if(typeof userData == 'string') {
-            if(userData != '') {
-              localStorage.userData = userData;
-              userData = JSON.parse(userData);              
-              isValid = true;
-            }
-          }else {
-            localStorage.userData = JSON.stringify(userData);
-            isValid = true;
-          }
-
-          if(!isValid) {
-            return false;
-          }
-
-          localStorage._id = userData._id;
-          localStorage.username = userData.username;
-          localStorage.password = userData.password;
-          localStorage.accessToken = userData.accessToken;
-          localStorage.photo = userData.photo;
-          localStorage.group = JSON.stringify(userData.group);
-          localStorage.login = true;
-
-          window.$hp.defaults.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;
-
-          var group = localStorage.group;
-           
-          if(group == 'undefined' || group == undefined) {
-            localStorage.auth = false;
-            localStorage.isRoot = false;
-          }else {
-            group = JSON.parse(group);
-
-            var isRoot = false;
-
-            for (var i = 0; i < group.length; i++) {
-              var g = group[i];
-              if(g.name === 'root' && g.code === '100') {
-                isRoot = true;
-                break;
-              }
-            };
-
-            if(isRoot) {
-              localStorage.auth = true;
-              localStorage.isRoot = true;
-            }
-
-          }
-
-        }
-
-      }
-
-    }
-
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('auth.noAuth')
-        .controller('NoAuthController', NoAuthController);
-
-    NoAuthController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state'];
-    
-    function NoAuthController($log, $mdDialog, $mdToast, AuthService, $state) {
-
-    	var vm = this;
-
-    	vm.isLogin = typeof localStorage.login == 'undefined' || localStorage.login == 'false' ? false : true;
-
-    	vm.logout = function() {
-
-    		AuthService.logout()
-            .success(function(res) {
-
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                    return false;
-                }
-
-                AuthService.clearAfterLogout();
-                $state.go('auth.login');
-            })
-            .error(function(res) {
-                var toast = $mdToast.simple()
-                    .content('出错了，错误代码：' + status)
-                    .action('我知道了')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-
-    	};
     }
 
 })();

@@ -353,7 +353,19 @@ module.exports = {
         tokenDestoriedAt: destoriedAt
       };
 
-      return this.findOneAndUpdate(query, update, options, cb);
+      var _this = this;
+
+      return this.findOneAndUpdate(query, update, options, function(err, newUser) {
+
+        if(err) {
+          cb(err);
+        }
+
+        _this.findOne({
+          _id: newUser._id
+        }).populate('group').exec(cb);
+
+      });
 
     };
 

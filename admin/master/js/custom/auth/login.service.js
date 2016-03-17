@@ -55,6 +55,8 @@
             isValid = true;
           }
 
+          console.log(isValid);
+
           if(!isValid) {
             return false;
           }
@@ -70,7 +72,7 @@
           window.$hp.defaults.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;
 
           var group = localStorage.group;
-           
+
           if(group == 'undefined' || group == undefined) {
             localStorage.auth = false;
             localStorage.isRoot = false;
@@ -81,7 +83,7 @@
 
             for (var i = 0; i < group.length; i++) {
               var g = group[i];
-              if(g.name === 'root' && g.code === '100') {
+              if((g.name === 'root' && g.code === '100') || g.code === '101') {
                 isRoot = true;
                 break;
               }

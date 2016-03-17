@@ -85,14 +85,14 @@
         }
 
         // 检测用户组非root之后指向noAuth页面
-        // if(localStorage.isRoot == 'false') {
-        //   if(next.name != 'auth.noAuth') {
-        //     if(next.name != 'auth.login') {
-        //       $state.go('auth.noAuth');
-        //     }
-        //   }
-        //   return false;
-        // }
+        if(localStorage.isRoot == 'false') {
+          if(next.name != 'auth.noAuth') {
+            if(next.name != 'auth.login') {
+              $state.go('auth.noAuth');
+            }
+          }
+          return false;
+        }
 
       });
 
