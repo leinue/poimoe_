@@ -20,15 +20,15 @@ h3 权限管理
                       th(check-all)
                         md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='auth.allAuthList.isSelectAll', ng-change="auth.toggleSelectAll(auth.authList, auth.allAuthList)")
                   tbody
-                    tr(ng-repeat='auth in authList')
-                      td {{auth.name}}
-                      td {{auth.router}}
-                      td {{auth.createdAt}}
+                    tr(ng-repeat='(key, ath) in auth.authList')
+                      td {{ath.name}}
+                      td {{ath.router}}
+                      td {{ath.createdAt}}
                       td
-                        md-select(ng-model='auth.authAction.name[auth._id]', placeholder='操作')
-                          md-option(ng-repeat='name in auth.authAction.names', value='{{name.val}}' ng-click="name.onClicked($event, auth, key)") {{name.val}}                          
+                        md-select(ng-model='auth.authAction.name[ath._id]', placeholder='操作')
+                          md-option(ng-repeat='name in auth.authActions.names', value='{{name.val}}' ng-click="name.onClicked($event, ath, key)") {{name.val}}                          
                       td
-                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='auth.allAuthList.isElementSelected[auth._id]', ng-change="groups.selectThis(auth._id, auth.allAuthList)")
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='auth.allAuthList.isElementSelected[ath._id]', ng-change="auth.selectThis(ath._id, auth.allAuthList)")
 
               .panel-footer
                 .row
@@ -62,11 +62,10 @@ h3 权限管理
                   </div>
                   <div class="col-sm-12">
                      <div class="mda-form-group">
-                        <input ng-model="auth.route" tabindex="0" aria-invalid="false" required='' class="mda-form-control" />
+                        <input ng-model="auth.router" tabindex="0" aria-invalid="false" required='' class="mda-form-control" />
                         <label>权限路由</label>
                      </div>
                   </div>
-               </div>
                </div>
             </div>
             </md-dialog-content>
@@ -98,7 +97,7 @@ h3 权限管理
                   span.mda-form-msg 必填项
                 
                 .mda-form-group
-                  input.mda-form-control(ng-model='auth.newAuth.route', tabindex='0', required='', aria-required='', aria-invalid='true')
+                  input.mda-form-control(ng-model='auth.newAuth.router', tabindex='0', required='', aria-required='', aria-invalid='true')
                   label 权限路由
                   span.mda-form-msg 必填项
 

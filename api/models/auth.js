@@ -4,10 +4,9 @@ module.exports = {
 
   	var Schema = mongoose.Schema;
 
-    var userGroupsSchema = Schema({
+    var authSchema = Schema({
       name: String,
-      description: String,
-      code: String,
+      router: String,
       createdAt: {
   		  type: Date,
   		  default: Date.now
@@ -16,10 +15,6 @@ module.exports = {
   		  type: Date,
   		  default: Date.now
       },
-      rightsList: [{
-        type: Schema.Types.ObjectId,
-        ref: 'auths'
-      }],
       isDeleted: {
     		type: Boolean,
     		default: false
@@ -30,47 +25,29 @@ module.exports = {
       }
     });
 
-    userGroupsSchema.statics.findById = function(id, cb) {
+    authSchema.statics.findById = function(id, cb) {
       return this.find({
         _id: id,
         isDeleted: false
       }, cb);
     };
 
-    userGroupsSchema.statics.findByCode = function(code, cb) {
+    authSchema.statics.findByRouter = function(router, cb) {
       return this.find({
-        code: code,
+        router: router,
         isDeleted: false
       }, cb);
     };
 
-    userGroupsSchema.statics.findAll = function(page, count, cb) {
-
-      page = page == null ? 1 : page;
-      count = count == null ? 20 : count;
-
-      var skipFrom = (page * count) - count;
+    authSchema.statics.findAll = function(cb) {
 
       return this.find({
         isDeleted: false
-      }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
+      }).sort('createdAt').exec(cb);
 
     };
 
-    userGroupsSchema.statics.findAllRemoved = function(page, count, cb) {
-
-      page = page == null ? 1 : page;
-      count = count == null ? 20 : count;
-
-      var skipFrom = (page * count) - count;
-
-      return this.find({
-        isDeleted: true
-      }).sort('createdAt').skip(skipFrom).limit(count).exec(cb);
-
-    };
-
-    userGroupsSchema.statics._remove = function(id, cb) {
+    authSchema.statics._remove = function(id, cb) {
 
       var query = {
         _id: id,
@@ -90,7 +67,7 @@ module.exports = {
 
     };
 
-    userGroupsSchema.statics.update = function(id, obj, cb) {
+    authSchema.statics.update = function(id, obj, cb) {
       var query = {
         _id: id,
         isDeleted: false
@@ -106,7 +83,7 @@ module.exports = {
 
     };
 
-    return userGroupsSchema;
+    return authSchema;
 
   }
 };

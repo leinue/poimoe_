@@ -47,19 +47,19 @@
       return {
 
         get: function() {
-            return $http.get($rootScope.app.baseUrl + 'authlist/select/all');
+            return $http.get($rootScope.app.baseUrl + 'auth/list/select/all');
         },
 
         new: function(data) {
-            return $http.get($rootScope.app.baseUrl + 'authlist/add');
+            return $http.post($rootScope.app.baseUrl + 'auth/list/add', data);
         },
 
         remove: function(id) {
-            return $http.get($rootScope.app.baseUrl + 'authlist/remove/' + id);
+            return $http.get($rootScope.app.baseUrl + 'auth/list/remove/' + id);
         },
 
         edit: function(data) {
-            return $http.get($rootScope.app.baseUrl + 'authlist/update');
+            return $http.post($rootScope.app.baseUrl + 'auth/list/update', data);
         }
 
       };

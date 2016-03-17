@@ -31,7 +31,7 @@
 
                 if(res.code == 200) {
                     vm.newAuth = {};
-                    vm.getGroups();
+                    vm.getAuthList();
                 }
 
             })
@@ -77,7 +77,7 @@
 
         vm.getAuthList();
 
-        vm.authAction = {
+        vm.authActions = {
             name: '',
             names: [{
                 val: '编辑',
@@ -205,14 +205,16 @@
                     });
                 }
             }]
-        }
+        };
+
+        // console.log(vm.authAction.names);
 
         vm.footerAction = {
             name: '',
             names: [{
                 val: '删除',
                 onClicked: function(ev) {
-                    vm.authAction.names[1].onClicked(ev);
+                    vm.authActions.names[1].onClicked(ev);
                 }
             }]
         }

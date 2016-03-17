@@ -5,6 +5,7 @@ var relationsModel = require('./relations.js');
 var timelineModel = require('./timeline.js');
 var kakuModel = require('./kaku.js');
 var userGroupsModel = require('./userGroups.js');
+var authModel = require('./auth.js');
 
 module.exports = {
 
@@ -15,6 +16,7 @@ module.exports = {
   timelineModel: undefined,
   kakuModel: undefined,
   userGroupsModel: undefined,
+  authModel: undefined,
 
   init: function(mongoose) {
 
@@ -746,6 +748,7 @@ module.exports = {
     var timelineSchema = timelineModel.init(mongoose);
     var kakuSchema = kakuModel.init(mongoose);
     var userGroupsSchema = userGroupsModel.init(mongoose);
+    var authSchema = authModel.init(mongoose);
 
     this.userModel = util.cacheMongooseModel(mongoose, userSchema, 'users', this.userModel);
     this.themesModel = util.cacheMongooseModel(mongoose, themesSchema, 'themes', this.themesModel);
@@ -754,6 +757,7 @@ module.exports = {
     this.timelineModel = util.cacheMongooseModel(mongoose, timelineSchema, 'timeline', this.timelineModel);
     this.kakuModel = util.cacheMongooseModel(mongoose, kakuSchema, 'kaku', this.kakuModel);
     this.userGroupsModel = util.cacheMongooseModel(mongoose, userGroupsSchema, 'userGroups', this.userGroupsModel);
+    this.authModel = util.cacheMongooseModel(mongoose, authSchema, 'auths', this.authModel);
 
     var _this = this;
 
@@ -764,7 +768,8 @@ module.exports = {
       relations: _this.relationsModel,
       timeline: _this.timelineModel,
       kaku: _this.kakuModel,
-      userGroups: _this.userGroupsModel
+      userGroups: _this.userGroupsModel,
+      auth: _this.authModel
     };
 
   }

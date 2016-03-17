@@ -23,17 +23,17 @@
                               </tr>
                            </thead>
                            <tbody>
-                              <tr ng-repeat="auth in authList">
-                                 <td>{{auth.name}}</td>
-                                 <td>{{auth.router}}</td>
-                                 <td>{{auth.createdAt}}</td>
+                              <tr ng-repeat="(key, ath) in auth.authList">
+                                 <td>{{ath.name}}</td>
+                                 <td>{{ath.router}}</td>
+                                 <td>{{ath.createdAt}}</td>
                                  <td>
-                                    <md-select ng-model="auth.authAction.name[auth._id]" placeholder="操作">
-                                       <md-option ng-repeat="name in auth.authAction.names" value="{{name.val}}" ng-click="name.onClicked($event, auth, key)">{{name.val}}</md-option>
+                                    <md-select ng-model="auth.authAction.name[ath._id]" placeholder="操作">
+                                       <md-option ng-repeat="name in auth.authActions.names" value="{{name.val}}" ng-click="name.onClicked($event, ath, key)">{{name.val}}</md-option>
                                     </md-select>
                                  </td>
                                  <td>
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="auth.allAuthList.isElementSelected[auth._id]" ng-change="groups.selectThis(auth._id, auth.allAuthList)" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="auth.allAuthList.isElementSelected[ath._id]" ng-change="auth.selectThis(ath._id, auth.allAuthList)" class="md-primary"></md-checkbox>
                                  </td>
                               </tr>
                            </tbody>
@@ -78,11 +78,10 @@
                        </div>
                        <div class="col-sm-12">
                           <div class="mda-form-group">
-                             <input ng-model="auth.route" tabindex="0" aria-invalid="false" required='' class="mda-form-control" />
+                             <input ng-model="auth.router" tabindex="0" aria-invalid="false" required='' class="mda-form-control" />
                              <label>权限路由</label>
                           </div>
                        </div>
-                    </div>
                     </div>
                  </div>
                  </md-dialog-content>
@@ -114,7 +113,7 @@
                            <span class="mda-form-msg">必填项</span>
                         </div>
                         <div class="mda-form-group">
-                           <input ng-model="auth.newAuth.route" tabindex="0" required="" aria-required="" aria-invalid="true" class="mda-form-control" />
+                           <input ng-model="auth.newAuth.router" tabindex="0" required="" aria-required="" aria-invalid="true" class="mda-form-control" />
                            <label>权限路由</label>
                            <span class="mda-form-msg">必填项</span>
                         </div>

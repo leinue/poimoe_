@@ -9,6 +9,7 @@ var themesCtrl = require('./ThemesController');
 var userGroupsCtrl = require('./UserGroupsController');
 var timelineCtrl = require('./TimelineController');
 var kakuCtrl = require('./KakuController');
+var authCtrl = require('./AuthController');
 
 var db = {
   mongoose: undefined
@@ -37,6 +38,8 @@ module.exports = {
 
 	timelineCtrl: timelineCtrl.init(models),
 
-	kakuCtrl: kakuCtrl.init(models)
+	kakuCtrl: kakuCtrl.init(models),
+
+	authCtrl: authCtrl.init(models)
 
 };

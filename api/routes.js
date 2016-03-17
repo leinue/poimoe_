@@ -56,6 +56,12 @@ module.exports = {
     server.get('/user/unblock/:uid', ctrl.userCtrl.unblockUserByUid);
     server.get('/user/unRemove/:uid', ctrl.userCtrl.unRemoveUserByUid);
 
+    //权限列表
+    server.get('/auth/list/select/all', ctrl.authCtrl.getAll);
+    server.get('/auth/list/remove/:id', ctrl.authCtrl.remove);
+    server.post('/auth/list/add', ctrl.authCtrl.add);
+    server.post('/auth/list/update', ctrl.authCtrl.update);
+
     server.get('/timeline/:page/:count', ctrl.userCtrl.loadTimeline);
     server.get('/timeline/message/index/count/:uid', ctrl.userCtrl.getMessageCount);
     server.get('/timeline/message/index/lastest/:count', ctrl.userCtrl.getLastestMessage);
