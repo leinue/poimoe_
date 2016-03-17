@@ -544,7 +544,10 @@ var index = {
     var username = req.params.username;
 
     if (uid == '' || uid == undefined) {
-      res.send(util.retMsg(401, '却少用户id'));
+      uid = req.params._id;
+      if(uid == '' || uid == undefined) {
+        res.send(util.retMsg(401, '缺少用户id'));        
+      }
     }
 
     if (username == '' || username == undefined) {

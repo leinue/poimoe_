@@ -19,6 +19,7 @@
                                  <th>用户名</th>
                                  <th>邮箱</th>
                                  <th>性别</th>
+                                 <th>用户组</th>
                                  <th>是否锁定</th>
                                  <th>注册时间</th>
                                  <th>操作</th>
@@ -37,6 +38,7 @@
                                  <td>{{user.username}}</td>
                                  <td>{{user.email}}</td>
                                  <td>{{user.sex}}</td>
+                                 <td>{{user.group[0].name}}</td>
                                  <td>{{user.isBlocked}}</td>
                                  <td>{{user.createdAt}}</td>
                                  <td>
@@ -153,7 +155,7 @@
                    <md-button ng-click="answer('not useful')" class="md-primary">
                      关闭
                    </md-button>
-                   <md-button ng-click="answer('useful')" class="md-primary">
+                   <md-button ng-click="editThisUser()" class="md-primary">
                      保存
                    </md-button>
                  </div>
@@ -349,7 +351,7 @@
                <form>
                  <md-toolbar>
                    <div class="md-toolbar-tools">
-                     <h2>点击确定选择 {{user.username}} 的用户组</h2>
+                     <h2>点击确定选择 {{user.username}} 的用户组 - 当前用户组：{{user.group[0].name}}</h2>
                      <span flex></span>
                      <md-button class="md-icon-button" ng-click="answer('not applicable')">
                        <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>

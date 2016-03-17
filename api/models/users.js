@@ -124,7 +124,7 @@ module.exports = {
         isDeleted: false
       }).sort({
         createdAt: -1
-      }).skip(skipFrom).limit(count).exec(cb);
+      }).populate('group').skip(skipFrom).limit(count).exec(cb);
     };
 
     userSchema.statics.findAllDeleted = function(page, count, cb) {
@@ -138,7 +138,7 @@ module.exports = {
         isDeleted: true
       }).sort({
         createdAt: -1
-      }).skip(skipFrom).limit(count).exec(cb);
+      }).populate('group').skip(skipFrom).limit(count).exec(cb);
 
     };
 
@@ -154,7 +154,7 @@ module.exports = {
         isBlocked: true
       }).sort({
         createdAt: -1
-      }).skip(skipFrom).limit(count).exec(cb);
+      }).populate('group').skip(skipFrom).limit(count).exec(cb);
 
     };
 
@@ -263,7 +263,7 @@ module.exports = {
       }, cb);
     };
 
-    userSchema.statics.updateGroup = function(aid, uid, err) {
+    userSchema.statics.updateGroup = function(aid, uid, cb) {
 
       aid = [aid];
 

@@ -289,7 +289,7 @@ var index = {
       res.send(util.retMsg(401, "缺少参数：用户组id"));
     }
 
-    var ug = ctrlInitial.models.UserGroups();
+    var UG = ctrlInitial.models.UserGroups();
 
     UG.findById(aid, function(err, ug) {
 
@@ -302,10 +302,6 @@ var index = {
       }
 
       ug = ug[0];
-
-      if(ug.code == '100') {
-        res.send(util.retMsg(401, '系统默认用户组，禁止更改'));
-      }
 
       var User = ctrlInitial.models.User();
 

@@ -1,5 +1,5 @@
 <h3>权限管理</h3>
-<div style="max-width:100%" ng-controller="GroupController as groups" class="container-md">
+<div style="max-width:100%" ng-controller="AuthorityController as auth" class="container-md">
    <div style="box-shadow:none" class="card">
       <md-content style="background: rgb(245, 247, 250) none repeat scroll 0% 0%;padding:0px" class="md-padding">
          <md-tabs md-dynamic-height="" md-border-bottom="">
@@ -13,76 +13,54 @@
                         <table id="table-ext-1" class="table table-bordered table-hover">
                            <thead>
                               <tr>
-                                 <th>用户组名称</th>
-                                 <th>用户组描述</th>
-                                 <th>用户组代码</th>
+                                 <th>权限名称</th>
+                                 <th>权限路由</th>
                                  <th>创建时间</th>
+                                 <th>操作</th>
                                  <th check-all="check-all">
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.normalUsers.isSelectAll" ng-change="users.toggleSelectAll(users.usersList, users.normalUsers)" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="auth.allAuthList.isSelectAll" ng-change="auth.toggleSelectAll(auth.authList, auth.allAuthList)" class="md-primary"></md-checkbox>
                                  </th>
                               </tr>
                            </thead>
                            <tbody>
-                              <tr>
-                                 <td>1</td>
-                                 <td>Larry</td>
-                                 <td>the Bird</td>
-                                 <td>1 week</td>
+                              <tr ng-repeat="auth in authList">
+                                 <td>{{auth.name}}</td>
+                                 <td>{{auth.router}}</td>
+                                 <td>{{auth.createdAt}}</td>
                                  <td>
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.normalUsers.isSelectAll" ng-change="users.toggleSelectAll(users.usersList, users.normalUsers)" class="md-primary"></md-checkbox>
+                                    <md-select ng-model="auth.authAction.name[auth._id]" placeholder="操作">
+                                       <md-option ng-repeat="name in auth.authAction.names" value="{{name.val}}" ng-click="name.onClicked($event, auth, key)">{{name.val}}</md-option>
+                                    </md-select>
                                  </td>
-                              </tr>
-                              <tr>
-                                 <td>2</td>
                                  <td>
-                                    <div class="media">
-                                       <img src="app/img/user/02.jpg" alt="Image" class="img-responsive img-circle" />
-                                    </div>
-                                 </td>
-                                 <td>@mdo</td>
-                                 <td>Mark</td>
-                                 <td>Otto</td>
-                                 <td>mail@example.com</td>
-                                 <td class="text-center">
-                                    <div data-label="50%" class="radial-bar radial-bar-50 radial-bar-xs"></div>
-                                 </td>
-                                 <td>25 minutes</td>
-                                 <td>
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.normalUsers.isSelectAll" ng-change="users.toggleSelectAll(users.usersList, users.normalUsers)" class="md-primary"></md-checkbox>
-                                 </td>
-                              </tr>
-                              <tr>
-                                 <td>3</td>
-                                 <td>
-                                    <div class="media">
-                                       <img src="app/img/user/03.jpg" alt="Image" class="img-responsive img-circle" />
-                                    </div>
-                                 </td>
-                                 <td>@fat</td>
-                                 <td>Jacob</td>
-                                 <td>Thornton</td>
-                                 <td>mail@example.com</td>
-                                 <td class="text-center">
-                                    <div data-label="80%" class="radial-bar radial-bar-80 radial-bar-xs"></div>
-                                 </td>
-                                 <td>10 hours</td>
-                                 <td>
-                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="users.normalUsers.isSelectAll" ng-change="users.toggleSelectAll(users.usersList, users.normalUsers)" class="md-primary"></md-checkbox>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="auth.allAuthList.isElementSelected[auth._id]" ng-change="groups.selectThis(auth._id, auth.allAuthList)" class="md-primary"></md-checkbox>
                                  </td>
                               </tr>
                            </tbody>
                         </table>
                      </div>
+                     <div class="panel-footer">
+                        <div class="row">
+                           <div class="col-lg-10"></div>
+                           <div class="col-lg-2">
+                              <div class="input-group pull-right">
+                                 <md-select ng-model="auth.footerAction.name" placeholder="操作">
+                                    <md-option ng-repeat="name in auth.footerAction.names" value="{{name.val}}" ng-click="name.onClicked($event)">{{name.val}}</md-option>
+                                 </md-select>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
                   </div>
                </div>
             </md-tab>
             <!-- Dialog inline template for demo-->
-            <script type="text/ng-template" id="new_group.tmpl.html">
+            <script type="text/ng-template" id="auth_detail.tmpl.html">
                <md-dialog aria-label="{{title}}">
                <form>
                  <md-toolbar>
                    <div class="md-toolbar-tools">
-                     <h2>{{user.username}} 的资料</h2>
+                     <h2>编辑权限 {{auth.username}}</h2>
                      <span flex></span>
                      <md-button class="md-icon-button" ng-click="answer('not applicable')">
                        <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
@@ -92,61 +70,19 @@
                  <md-dialog-content>
                    <div class="card-body">
                     <div class="row">
-                       <div class="col-sm-3">
-                          <div class="mda-form-group" style="text-align:center">
-                             <img src="{{user.photo}}" style="width:100px;height:100px;border-radius:50%;">
-                          </div>
-                       </div>
-                       <div class="col-sm-3">
+                       <div class="col-sm-12">
                           <div class="mda-form-group">
-                             <input ng-model="user.username" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
-                             <label>用户名</label>
-                          </div>
-                       </div>
-                       <div class="col-sm-3">
-                          <div class="mda-form-group">
-                             <input ng-model="user.email" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
-                             <label>邮箱</label>
-                          </div>
-                       </div>
-                       <div class="col-sm-3">
-                          <div class="mda-form-group">
-                             <input ng-model="user.sex" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
-                             <label>性别</label>
+                             <input ng-model="user.sex" tabindex="0" aria-required="true" required='' aria-invalid="false" class="mda-form-control" />
+                             <label>权限名称</label>
                           </div>
                        </div>
                        <div class="col-sm-12">
                           <div class="mda-form-group">
-                             <input ng-model="user.intro" tabindex="0" aria-invalid="false" class="mda-form-control" />
-                             <label>个人介绍</label>
-                          </div>
-                       </div>
-                       <div class="col-sm-12">
-                          <div class="mda-form-group">
-                             <input ng-model="user.region" tabindex="0" aria-invalid="false" class="mda-form-control" />
-                             <label>地址</label>
+                             <input ng-model="user.intro" tabindex="0" aria-invalid="false" required='' class="mda-form-control" />
+                             <label>权限路由</label>
                           </div>
                        </div>
                     </div>
-                    <div class="row">
-                       <div class="col-sm-4">
-                          <div class="mda-form-group">
-                             <input ng-model="user.createdAt" tabindex="0" aria-invalid="false" class="mda-form-control" />
-                             <label>注册时间</label>
-                          </div>
-                       </div>
-                       <div class="col-sm-4">
-                          <div class="mda-form-group">
-                             <input ng-model="user.isBlocked" tabindex="0" aria-invalid="false" class="mda-form-control" />
-                             <label>锁定</label>
-                          </div>
-                       </div>
-                       <div class="col-sm-4">
-                          <div class="mda-form-group">
-                             <input ng-model="user.isDeleted" tabindex="0" aria-invalid="false" class="mda-form-control" />
-                             <label>删除</label>
-                          </div>
-                       </div>
                     </div>
                  </div>
                  </md-dialog-content>
@@ -165,6 +101,30 @@
                </form>
                </md-dialog>
             </script>
+            <md-tab label="新增权限">
+               <md-content style="background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;" class="md-padding"></md-content>
+               <!-- ngRepeat + ngResource-->
+               <div class="panel panel-default">
+                  <div style="border:1px solid rgb(238, 238, 238)" class="panel-heading">新增权限</div>
+                  <div class="panel-body">
+                     <form class="form-validate">
+                        <div class="mda-form-group float-label mb">
+                           <input ng-model="auth.newAuth.name" required="" tabindex="0" aria-required="true" aria-invalid="true" class="mda-form-control" />
+                           <label>权限名称</label>
+                           <span class="mda-form-msg">必填项</span>
+                        </div>
+                        <div class="mda-form-group">
+                           <input ng-model="auth.newAuth.route" tabindex="0" required="" aria-required="" aria-invalid="true" class="mda-form-control" />
+                           <label>权限路由</label>
+                           <span class="mda-form-msg">必填项</span>
+                        </div>
+                        <div class="mda-form-group">
+                           <md-button md-no-ink="" ng-click="auth.submitThisAuth()" class="md-raised md-primary">提交</md-button>
+                        </div>
+                     </form>
+                  </div>
+               </div>
+            </md-tab>
          </md-tabs>
       </md-content>
    </div>

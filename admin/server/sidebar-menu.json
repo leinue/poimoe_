@@ -40,6 +40,6 @@
     "icon": "fa fa-shield",
     "submenu": [
       {"text": "用户组管理",     "sref": "app.group"},
-      {"text": "用户权限管理",     "sref": "app.authority"}
+      {"text": "用户组权限管理",     "sref": "app.authority"}
     ]
   }]

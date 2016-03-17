@@ -44,7 +44,7 @@
                     .position('top right');
                 $mdToast.show(toast).then(function() {
                 });
-            });    	
+            });
     	}
 
         vm.getGroups();

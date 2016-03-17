@@ -273,6 +273,32 @@
 
                             $scope.user = ur;
 
+                            $scope.editThisUser = function() {
+                                UserService.update($scope.user)
+                                .success(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content(res.message)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+
+                                    if(res.code === 200) {
+                                        $mdDialog.cancel();
+                                    }
+                                })
+                                .error(function(res, status, headers, config) {
+                                    var toast = $mdToast.simple()
+                                          .content('出错了，错误代码：' + status)
+                                          .action('我知道了')
+                                          .highlightAction(false)
+                                          .position('top right');
+                                    $mdToast.show(toast).then(function() {
+                                    });
+                                });
+                            }
+
                             $scope.hide = function() {
                                 $mdDialog.hide();
                             };
@@ -319,8 +345,6 @@
                                     $mdToast.show(toast).then(function() {
                                     });
                                 }
-
-                                console.log(res.message);
 
                                 if(res.message.length > 0) {
                                     $scope.followList = res.message[0].follow;
@@ -391,7 +415,7 @@
                                     $mdToast.show(toast).then(function() {
                                     });
 
-                                    if(res.status === 200) {
+                                    if(res.code === 200) {
                                         $scope.themesList.splice(index, 1);
                                     }
                                 })
@@ -476,6 +500,10 @@
                                           .position('top right');
                                     $mdToast.show(toast).then(function() {
                                     });
+
+                                    if(res.code === 200) {
+                                        $mdDialog.cancel();
+                                    }
 
                                 })
                                 .error(function(res, status, headers, config) {

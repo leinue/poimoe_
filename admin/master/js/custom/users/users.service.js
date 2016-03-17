@@ -32,6 +32,10 @@
           return $http.post($rootScope.app.baseUrl + 'user/delete', postData, {});
         },
 
+        update: function(data) {
+          return $http.post($rootScope.app.baseUrl + 'user/profile/modify', data);
+        },
+
         unDeleteUser: function(postData) {
           return $http.post($rootScope.app.baseUrl + 'user/undelete', postData, {});
         },
