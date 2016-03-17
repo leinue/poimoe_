@@ -206,6 +206,8 @@
                                 $scope.selectAll($scope.auth.authList, $scope.authListOptions);
                             }
 
+                            vm.getGroups();
+
                         })
                         .error(function(res, status) {
                             var toast = $mdToast.simple()

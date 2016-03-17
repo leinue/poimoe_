@@ -185,7 +185,12 @@ module.exports = {
       return this.find({
         accessToken: at,
         isDeleted: false
-      },cb);
+      }).populate({
+        'path': 'group',
+        populate: {
+          'path': 'rightsList'
+        }
+      }).exec(cb);
     };
 
     userSchema.statics.findFavouritesByAccessToken = function(at, cb) {

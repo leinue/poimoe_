@@ -34,7 +34,12 @@ module.exports = {
       return this.find({
         _id: id,
         isDeleted: false
-      }, cb);
+      }).populate({
+        path: 'rightsList',
+        match: {
+          isDeleted: false
+        }
+      }).exec(cb);
     };
 
     userGroupsSchema.statics.findByCode = function(code, cb) {

@@ -76,7 +76,7 @@ var index = {
 
 		var thisAuthName = req.params.name;
 		var thisAuthRouter = req.params.router;
-		var thisAuthId = req.params.id;
+		var thisAuthId = req.params._id;
 
 		if(thisAuthName == undefined || thisAuthName == '') {
 			res.send(util.retMsg(401, "权限名不能为空"));
@@ -102,7 +102,7 @@ var index = {
 	      		res.send(util.retMsg(401, '无此权限'));
 	      	}
 
-	      	Auths.update(thisAuthId, {
+	      	Auth.update(thisAuthId, {
 				name: thisAuthName,
 				router: thisAuthRouter
 			}, function(err, auth) {
@@ -111,7 +111,7 @@ var index = {
 		        	res.send(util.retMsg(401, err.toString()));
 		      	}
 
-		      	res.send(util.retMsg(200, '更新成功', tag));
+		      	res.send(util.retMsg(200, '更新成功', auth));
 
 			});
 

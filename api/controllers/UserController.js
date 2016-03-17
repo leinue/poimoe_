@@ -7,26 +7,6 @@ var index = {
     PASSWORD_LENGTH: 16
   },
 
-  logUser: function(req, res, next) {
-  
-    var ret = '';
-
-    var User = ctrlInitial.models.User();
-    var realUser = new User({
-      username: 'xieyangss_',
-      email: 'ivydomcdo_@gmail.com',
-      password: '12345dd6_',
-      sex: '男_d',
-      photo: '_udnknown', 
-      intro: '_fucddk',
-      region: '_hdell'
-    });
-
-    ret = util.retMsg(200, server);
-    res.send(ret);
-
-  },
-
   auth: function(req, res, next) {
 
     var reqRoute = req.route.path;
@@ -90,7 +70,44 @@ var index = {
 
         global.currentUserId = u[0]._id;
 
-        return next();
+        var group = u[0].group;
+
+        if(group.length === 0) {
+          res.send(util(401, "无权限访问当前资源"));
+        }
+
+        var group = group[0];
+
+        if(group.name == 'root' && group.code == 100) {
+          //为root用户组
+          next();
+        }else {
+
+          var ug = ctrlInitial.models.UserGroups();
+
+          ug.findById(group._id, function(err, auth) {
+
+            if(err) {
+              res.send(util.retMsg(400, err.toString()));
+            }
+
+            if(auth.length === 0) {
+              res.send(util(401, "无权限访问当前资源"));
+            }
+
+            var authList = auth[0].rightsList;
+
+            var hadAuth = authList.indexOf();
+
+            if(hadAuth == -1) {
+              res.send(util(401, "无权限访问当前资源"));
+            }else {
+              next();
+            }
+
+          });
+
+        }
 
       });
     }
