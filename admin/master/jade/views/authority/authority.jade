@@ -56,13 +56,13 @@ h3 权限管理
                <div class="row">
                   <div class="col-sm-12">
                      <div class="mda-form-group">
-                        <input ng-model="user.sex" tabindex="0" aria-required="true" required='' aria-invalid="false" class="mda-form-control" />
+                        <input ng-model="auth.name" tabindex="0" aria-required="true" required='' aria-invalid="false" class="mda-form-control" />
                         <label>权限名称</label>
                      </div>
                   </div>
                   <div class="col-sm-12">
                      <div class="mda-form-group">
-                        <input ng-model="user.intro" tabindex="0" aria-invalid="false" required='' class="mda-form-control" />
+                        <input ng-model="auth.route" tabindex="0" aria-invalid="false" required='' class="mda-form-control" />
                         <label>权限路由</label>
                      </div>
                   </div>
@@ -78,7 +78,7 @@ h3 权限管理
               <md-button ng-click="answer('not useful')" class="md-primary">
                 关闭
               </md-button>
-              <md-button ng-click="answer('useful')" class="md-primary">
+              <md-button ng-click="editThisAuth()" class="md-primary">
                 保存
               </md-button>
             </div>

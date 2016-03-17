@@ -140,17 +140,17 @@
     'use strict';
 
     angular
-        .module('app.translate', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.utils', [
           'app.colors'
           ]);
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate', []);
+})();
 (function() {
     'use strict';
 
@@ -2691,68 +2691,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .config(translateConfig)
-        ;
-    translateConfig.$inject = ['$translateProvider'];
-    function translateConfig($translateProvider){
-  
-      $translateProvider.useStaticFilesLoader({
-          prefix : 'app/i18n/',
-          suffix : '.json'
-      });
-      $translateProvider.preferredLanguage('en');
-      $translateProvider.useLocalStorage();
-      $translateProvider.usePostCompiling(true);
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .run(translateRun)
-        ;
-    translateRun.$inject = ['$rootScope', '$translate'];
-    
-    function translateRun($rootScope, $translate){
-
-      // Internationalization
-      // ----------------------
-
-      $rootScope.language = {
-        // Handles language dropdown
-        listIsOpen: false,
-        // list of available languages
-        available: {
-          'en':       '中文'
-          // 'es_AR':    '英文'
-        },
-        // display always the current ui language
-        init: function () {
-          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
-          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
-          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
-        },
-        set: function (localeId) {
-          // Set the new idiom
-          $translate.use(localeId);
-          // save a reference for the current language
-          $rootScope.language.selected = $rootScope.language.available[localeId];
-          // finally toggle dropdown
-          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
-        }
-      };
-
-      $rootScope.language.init();
-
-    }
-})();
 /**=========================================================
  * Module: animate-enabled.js
  * Enable or disables ngAnimate for element with directive
@@ -3182,6 +3120,68 @@
     'use strict';
 
     angular
+        .module('app.translate')
+        .config(translateConfig)
+        ;
+    translateConfig.$inject = ['$translateProvider'];
+    function translateConfig($translateProvider){
+  
+      $translateProvider.useStaticFilesLoader({
+          prefix : 'app/i18n/',
+          suffix : '.json'
+      });
+      $translateProvider.preferredLanguage('en');
+      $translateProvider.useLocalStorage();
+      $translateProvider.usePostCompiling(true);
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .run(translateRun)
+        ;
+    translateRun.$inject = ['$rootScope', '$translate'];
+    
+    function translateRun($rootScope, $translate){
+
+      // Internationalization
+      // ----------------------
+
+      $rootScope.language = {
+        // Handles language dropdown
+        listIsOpen: false,
+        // list of available languages
+        available: {
+          'en':       '中文'
+          // 'es_AR':    '英文'
+        },
+        // display always the current ui language
+        init: function () {
+          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
+          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
+          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
+        },
+        set: function (localeId) {
+          // Set the new idiom
+          $translate.use(localeId);
+          // save a reference for the current language
+          $rootScope.language.selected = $rootScope.language.available[localeId];
+          // finally toggle dropdown
+          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
+        }
+      };
+
+      $rootScope.language.init();
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('custom', [
             // request the the entire framework
             'angle',
@@ -3191,26 +3191,6 @@
             /*...*/
         ]);
 })();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.authority', [
-            'angle'
-        ]);
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.group', [
-            'angle'
-        ]);
-})();
-
 
 (function() {
     'use strict';
@@ -3227,6 +3207,26 @@
 
     angular
         .module('auth.noAuth', [
+            'angle'
+        ]);
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.authority', [
+            'angle'
+        ]);
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.group', [
             'angle'
         ]);
 })();
@@ -3282,6 +3282,290 @@
     }
 })();
 
+
+(function() {
+    'use strict';
+
+    angular
+        .module('auth.login')
+        .controller('LoginController', LoginController);
+
+    LoginController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state'];
+    
+    function LoginController($log, $mdDialog, $mdToast, AuthService, $state) {
+	
+		var vm = this;
+
+        vm.account = {
+            username: '',
+            password: ''
+        };
+
+        localStorage.rememberMe = typeof localStorage.rememberMe == 'undefined' || localStorage.rememberMe == 'false' ? false : localStorage.rememberMe;
+
+        vm.rememberMe = localStorage.rememberMe == 'true' ? true : false;
+
+        if(localStorage.rememberMe === 'true') {
+            vm.account.username = localStorage.email;
+            vm.account.password = localStorage.password;
+        }
+
+        vm.logout = function() {
+            AuthService.logout()
+            .success(function(res) {
+
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                    return false;
+                }
+
+                AuthService.clearAfterLogout();
+                $state.go('auth.login');
+            })
+            .error(function(res) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });;
+        };
+
+		vm.loginIn = function() {
+
+            if(vm.account.username == '') {
+                var toast = $mdToast.simple()
+                    .content('请填写用户名')
+                    .action('确定')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                    // $state.go(pathTo);
+                });
+                return false;
+            }
+
+            if(vm.account.password == '') {
+                var toast = $mdToast.simple()
+                    .content('请填写密码')
+                    .action('确定')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                    // $state.go(pathTo);
+                });
+                return false;
+            }
+
+            AuthService.login(vm.account.username, vm.account.password)
+            .success(function(res) {
+
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                    return false;
+                }
+
+                var userData = res.data;
+
+                sessionStorage.isFromLoginPage = true;
+
+                AuthService.parseUserInfo(userData);
+
+                if(vm.rememberMe) {
+                    localStorage.rememberMe = true;
+                    localStorage.email = vm.account.username;
+                    localStorage.password = vm.account.password;
+                }
+
+                if(localStorage.isRoot == 'false') {
+                    $state.go('auth.noAuth');
+                }else {
+                    $state.go('app.welcome');
+                }
+
+            })
+            .error(function(res, status) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+		}; 
+
+    }
+
+})();
+
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('auth.login')
+        .service('AuthService', AuthService);
+
+    AuthService.$inject = ['$http', '$rootScope', '$resource'];
+
+    function AuthService($http, $rootScope, $resource) {
+
+      return {
+
+        login: function(email, password) {
+          return $http.get($rootScope.app.baseUrl + 'user/login/' + email + '/' + password);
+        },
+
+        clearAfterLogout: function() {
+          localStorage._id = undefined;
+
+          if(localStorage.rememberMe != 'true') {
+            localStorage.email = undefined;
+            localStorage.password = undefined;
+          }
+          
+          localStorage.accessToken = undefined;
+          localStorage.photo = undefined;
+          localStorage.group = undefined;
+          localStorage.login = false;
+          localStorage.auth = false;
+          localStorage.isRoot = false;
+          localStorage.userData = undefined;
+          localStorage.username = undefined;
+
+          delete window.$hp.defaults.headers.common['Authorization'];
+        },
+
+        logout: function() {
+          return $http.get($rootScope.app.baseUrl + 'user/logout');
+        },
+
+        parseUserInfo: function(userData) {
+
+          var isValid = false;
+
+          if(typeof userData == 'string') {
+            if(userData != '') {
+              localStorage.userData = userData;
+              userData = JSON.parse(userData);              
+              isValid = true;
+            }
+          }else {
+            localStorage.userData = JSON.stringify(userData);
+            isValid = true;
+          }
+
+          if(!isValid) {
+            return false;
+          }
+
+          localStorage._id = userData._id;
+          localStorage.username = userData.username;
+          localStorage.password = userData.password;
+          localStorage.accessToken = userData.accessToken;
+          localStorage.photo = userData.photo;
+          localStorage.group = JSON.stringify(userData.group);
+          localStorage.login = true;
+
+          window.$hp.defaults.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;
+
+          var group = localStorage.group;
+           
+          if(group == 'undefined' || group == undefined) {
+            localStorage.auth = false;
+            localStorage.isRoot = false;
+          }else {
+            group = JSON.parse(group);
+
+            var isRoot = false;
+
+            for (var i = 0; i < group.length; i++) {
+              var g = group[i];
+              if(g.name === 'root' && g.code === '100') {
+                isRoot = true;
+                break;
+              }
+            };
+
+            if(isRoot) {
+              localStorage.auth = true;
+              localStorage.isRoot = true;
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('auth.noAuth')
+        .controller('NoAuthController', NoAuthController);
+
+    NoAuthController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state'];
+    
+    function NoAuthController($log, $mdDialog, $mdToast, AuthService, $state) {
+
+    	var vm = this;
+
+    	vm.isLogin = typeof localStorage.login == 'undefined' || localStorage.login == 'false' ? false : true;
+
+    	vm.logout = function() {
+
+    		AuthService.logout()
+            .success(function(res) {
+
+                if(res.code != 200) {
+                    var toast = $mdToast.simple()
+                          .content(res.message)
+                          .action('我知道了')
+                          .highlightAction(false)
+                          .position('top right');
+                    $mdToast.show(toast).then(function() {
+                    });
+                    return false;
+                }
+
+                AuthService.clearAfterLogout();
+                $state.go('auth.login');
+            })
+            .error(function(res) {
+                var toast = $mdToast.simple()
+                    .content('出错了，错误代码：' + status)
+                    .action('我知道了')
+                    .highlightAction(false)
+                    .position('top right');
+                $mdToast.show(toast).then(function() {
+                });
+            });
+
+    	};
+    }
+
+})();
 
 (function() {
     'use strict';
@@ -3394,8 +3678,8 @@
                             $mdDialog.hide(answer);
                         };
 
-                        $scope.updateThisGroup = function() {
-                            AuthorityListService.edit(group)
+                        $scope.editThisAuth = function() {
+                            AuthorityListService.edit(auth)
                             .success(function(res, status, headers, config) {
                                 var toast = $mdToast.simple()
                                       .content(res.message)
@@ -3839,290 +4123,6 @@
             }]
         }
 
-    }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('auth.login')
-        .controller('LoginController', LoginController);
-
-    LoginController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state'];
-    
-    function LoginController($log, $mdDialog, $mdToast, AuthService, $state) {
-	
-		var vm = this;
-
-        vm.account = {
-            username: '',
-            password: ''
-        };
-
-        localStorage.rememberMe = typeof localStorage.rememberMe == 'undefined' || localStorage.rememberMe == 'false' ? false : localStorage.rememberMe;
-
-        vm.rememberMe = localStorage.rememberMe == 'true' ? true : false;
-
-        if(localStorage.rememberMe === 'true') {
-            vm.account.username = localStorage.email;
-            vm.account.password = localStorage.password;
-        }
-
-        vm.logout = function() {
-            AuthService.logout()
-            .success(function(res) {
-
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                    return false;
-                }
-
-                AuthService.clearAfterLogout();
-                $state.go('auth.login');
-            })
-            .error(function(res) {
-                var toast = $mdToast.simple()
-                    .content('出错了，错误代码：' + status)
-                    .action('我知道了')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });;
-        };
-
-		vm.loginIn = function() {
-
-            if(vm.account.username == '') {
-                var toast = $mdToast.simple()
-                    .content('请填写用户名')
-                    .action('确定')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                    // $state.go(pathTo);
-                });
-                return false;
-            }
-
-            if(vm.account.password == '') {
-                var toast = $mdToast.simple()
-                    .content('请填写密码')
-                    .action('确定')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                    // $state.go(pathTo);
-                });
-                return false;
-            }
-
-            AuthService.login(vm.account.username, vm.account.password)
-            .success(function(res) {
-
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                    return false;
-                }
-
-                var userData = res.data;
-
-                sessionStorage.isFromLoginPage = true;
-
-                AuthService.parseUserInfo(userData);
-
-                if(vm.rememberMe) {
-                    localStorage.rememberMe = true;
-                    localStorage.email = vm.account.username;
-                    localStorage.password = vm.account.password;
-                }
-
-                if(localStorage.isRoot == 'false') {
-                    $state.go('auth.noAuth');
-                }else {
-                    $state.go('app.welcome');
-                }
-
-            })
-            .error(function(res, status) {
-                var toast = $mdToast.simple()
-                    .content('出错了，错误代码：' + status)
-                    .action('我知道了')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-		}; 
-
-    }
-
-})();
-
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('auth.login')
-        .service('AuthService', AuthService);
-
-    AuthService.$inject = ['$http', '$rootScope', '$resource'];
-
-    function AuthService($http, $rootScope, $resource) {
-
-      return {
-
-        login: function(email, password) {
-          return $http.get($rootScope.app.baseUrl + 'user/login/' + email + '/' + password);
-        },
-
-        clearAfterLogout: function() {
-          localStorage._id = undefined;
-
-          if(localStorage.rememberMe != 'true') {
-            localStorage.email = undefined;
-            localStorage.password = undefined;
-          }
-          
-          localStorage.accessToken = undefined;
-          localStorage.photo = undefined;
-          localStorage.group = undefined;
-          localStorage.login = false;
-          localStorage.auth = false;
-          localStorage.isRoot = false;
-          localStorage.userData = undefined;
-          localStorage.username = undefined;
-
-          delete window.$hp.defaults.headers.common['Authorization'];
-        },
-
-        logout: function() {
-          return $http.get($rootScope.app.baseUrl + 'user/logout');
-        },
-
-        parseUserInfo: function(userData) {
-
-          var isValid = false;
-
-          if(typeof userData == 'string') {
-            if(userData != '') {
-              localStorage.userData = userData;
-              userData = JSON.parse(userData);              
-              isValid = true;
-            }
-          }else {
-            localStorage.userData = JSON.stringify(userData);
-            isValid = true;
-          }
-
-          if(!isValid) {
-            return false;
-          }
-
-          localStorage._id = userData._id;
-          localStorage.username = userData.username;
-          localStorage.password = userData.password;
-          localStorage.accessToken = userData.accessToken;
-          localStorage.photo = userData.photo;
-          localStorage.group = JSON.stringify(userData.group);
-          localStorage.login = true;
-
-          window.$hp.defaults.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;
-
-          var group = localStorage.group;
-           
-          if(group == 'undefined' || group == undefined) {
-            localStorage.auth = false;
-            localStorage.isRoot = false;
-          }else {
-            group = JSON.parse(group);
-
-            var isRoot = false;
-
-            for (var i = 0; i < group.length; i++) {
-              var g = group[i];
-              if(g.name === 'root' && g.code === '100') {
-                isRoot = true;
-                break;
-              }
-            };
-
-            if(isRoot) {
-              localStorage.auth = true;
-              localStorage.isRoot = true;
-            }
-
-          }
-
-        }
-
-      }
-
-    }
-
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('auth.noAuth')
-        .controller('NoAuthController', NoAuthController);
-
-    NoAuthController.$inject = ['$log', '$mdDialog', '$mdToast', 'AuthService', '$state'];
-    
-    function NoAuthController($log, $mdDialog, $mdToast, AuthService, $state) {
-
-    	var vm = this;
-
-    	vm.isLogin = typeof localStorage.login == 'undefined' || localStorage.login == 'false' ? false : true;
-
-    	vm.logout = function() {
-
-    		AuthService.logout()
-            .success(function(res) {
-
-                if(res.code != 200) {
-                    var toast = $mdToast.simple()
-                          .content(res.message)
-                          .action('我知道了')
-                          .highlightAction(false)
-                          .position('top right');
-                    $mdToast.show(toast).then(function() {
-                    });
-                    return false;
-                }
-
-                AuthService.clearAfterLogout();
-                $state.go('auth.login');
-            })
-            .error(function(res) {
-                var toast = $mdToast.simple()
-                    .content('出错了，错误代码：' + status)
-                    .action('我知道了')
-                    .highlightAction(false)
-                    .position('top right');
-                $mdToast.show(toast).then(function() {
-                });
-            });
-
-    	};
     }
 
 })();

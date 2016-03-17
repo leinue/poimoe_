@@ -110,8 +110,8 @@
                             $mdDialog.hide(answer);
                         };
 
-                        $scope.updateThisGroup = function() {
-                            AuthorityListService.edit(group)
+                        $scope.editThisAuth = function() {
+                            AuthorityListService.edit(auth)
                             .success(function(res, status, headers, config) {
                                 var toast = $mdToast.simple()
                                       .content(res.message)
