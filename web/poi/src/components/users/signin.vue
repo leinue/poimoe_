@@ -40,7 +40,7 @@
 										</div>
 									</div>
 
-									<div class="timeline-new-section upload" style="background: rgb(237, 247, 253);height:65px;cursor:default;margin-bottom:22px;">
+									<div class="timeline-new-section upload" style="background: rgb(237, 247, 253);height:65px!important;cursor:default;margin-bottom:22px;">
 										<div class="timeline-new-section-outer">
 											<span>QQ登录</span>
 											<span>微信登录</span>

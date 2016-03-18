@@ -245,7 +245,7 @@ button.navbar-toggle.collapsed {
 
 @media screen and (max-width: 960px) {
 	.flex-item {
-		width: 88.333333%;
+		width: 100%;
 	}
 }
 
@@ -424,6 +424,14 @@ button.navbar-toggle.collapsed {
 	di.scroll-top.footer-transition {
 		left: 10px!important;
 	}
+
+	.timeline-new-section {
+		height: 240px!important;
+	}
+
+	.timeline-new-section-outer h1 {
+		line-height: 6!important;
+	}
 }
 
 @media screen and (max-width: 375px) {
@@ -480,6 +488,10 @@ button.navbar-toggle.collapsed {
 
 	.timeline-new div.new-timeline:last-child {
 		margin-left: 8px!important;
+	}
+
+	.new-cg-form {
+		margin-top: 10px!important;
 	}
 
 }

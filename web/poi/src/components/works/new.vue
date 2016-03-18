@@ -45,7 +45,7 @@
 	                        	<span @click="removeThisTag(tag._id)" class="glyphicon glyphicon-remove"></span>
 	                        </div>
 						</div>
-						<div class="new-cg-confirm">
+						<div class="new-cg-confirm new-cg-form">
 							<button class="btn btn-default" @click="back()" style="margin-right:10px;">取消</button>
 							<button class="btn btn-primary" @click="publishNewCG()">投稿</button>
 						</div>
