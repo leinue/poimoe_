@@ -28,9 +28,12 @@ if(localStorage.login == 'true') {
 	vue.http.headers.common['Authorization'] = 'Basic ' + localStorage.accessToken;	
 }
 
+if(localStorage.login === 'true') {
+	setCookie('userData', localStorage.userData, 15);
+}
+
 var shareCG = util.getCookie('shareCG');
 sessionStorage.shareCG = shareCG
-console.log(sessionStorage.shareCG);
 
 //初始化全局css
 require('../node_modules/bootstrap/dist/css/bootstrap.min.css');

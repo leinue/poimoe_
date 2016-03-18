@@ -612,6 +612,24 @@
 		line-height: 40px!important;
 	}
 
+	@media screen and (max-width: 320px) {
+		.type-circle {
+			width: 30px!important;
+			height: 30px!important;
+			line-height: 30px!important;
+		}
+
+		a.navbar-brand {
+			font-size: 14px!important;
+			margin-right: 0px!important;
+			line-height:115px;
+		}
+
+		div.aside.slideright-transition.right{
+			width: 260px!important;
+		}
+	}
+
 	.menu-header {
 		display: table;
 		margin-top: -19px;

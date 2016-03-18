@@ -49,13 +49,15 @@
               localStorage.userData = userData;
               userData = JSON.parse(userData);              
               isValid = true;
+            }else {
+              if(document.domain != 'localhost') {
+                // this.clearAfterLogout();                
+              }
             }
           }else {
             localStorage.userData = JSON.stringify(userData);
             isValid = true;
           }
-
-          console.log(isValid);
 
           if(!isValid) {
             return false;

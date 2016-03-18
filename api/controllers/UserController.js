@@ -156,21 +156,67 @@ var index = {
 
       var thisPwd = util.sha1Pwd(thisPwd);
       
-      var user = new User({
-        email: thisEmail,
-        username: util.randomString(6),
-        password: thisPwd
-      });
+      var groupId = '';
 
-      user.save(function(err, u) {
+      var UG = ctrlInitial.models.UserGroups();
+
+      //系统默认102位普通用户组带好
+      UG.findByCode(102, function(err, ug) {
 
         if(err) {
-          res.send(util.retMsg(401, err.toString()));
+          res.send(util.retMsg(400, err.toString()));
         }
 
-        res.send(util.retMsg(200, '注册成功'));
+        var register = function(groupId) {
+
+          var user = new User({
+            email: thisEmail,
+            username: util.randomString(6),
+            password: thisPwd,
+            group: [groupId]
+          });
+
+          user.save(function(err, u) {
+
+            if(err) {
+              res.send(util.retMsg(401, err.toString()));
+            }
+
+            res.send(util.retMsg(200, '注册成功'));
+
+          });
+
+        }
+
+        //如果没有代号为102的用户组，则新添加一个用户组
+        if(ug.length === 0) {
+
+          ug = new UG({
+            name: name,
+            description: description,
+            code: code
+          });
+
+          ug.save(function(err, g) {
+
+            if(err) {
+              res.send(util.retMsg(401, err.toString()));
+            }
+
+            register(g._id);
+
+          });
+
+        }else {
+
+          ug = ug[0];
+          register(ug._id);
+
+        }
 
       });
+
+
 
     });
   
@@ -221,6 +267,8 @@ var index = {
           if(err) {
             res.send(util.retMsg(400, "access_token error: " + err.toString()));
           }
+
+          uUpdated.group[0].rightsList = [];
 
           res.send(util.retMsg(200, "登录成功", uUpdated));
 

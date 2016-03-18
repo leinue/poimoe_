@@ -554,6 +554,32 @@
             height: 60px;
             background-size: 60px;
         }
+
+        div.timeline-new-section-outer {
+            font-size: 11px;
+        }
+    }
+
+    @media screen and (max-width: 320px) {
+    
+        div.new-cg-confirm button {
+            margin: 10px;
+            width: 100%;
+        }
+
+        div.new-cg-confirm button:nth-child(2) {
+            margin-top: -25px!important;
+        }
+
+        div.new-cg-confirm button:nth-child(3) {
+            margin-top: -55px!important;
+        }
+
+        div.new-cg-confirm {
+            padding-right: 20px;
+            margin-top: -24px;
+            height:150px;
+        }
     }
 
     @media screen and (max-width: 1023px) {
