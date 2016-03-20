@@ -33,7 +33,7 @@
 
             vm.getAll = function() {
 
-                ThemeService.getAll(1, 100)
+                ThemeService.getAll(1, 1000)
                 .success(function(res, status, headers, config) {
                     if(res.code != 200) {
                         var toast = $mdToast.simple()
@@ -59,7 +59,7 @@
 
             vm.getDeleted = function() {
 
-                ThemeService.getDeleted(1, 10)
+                ThemeService.getDeleted(1, 1000)
                 .success(function(res, status, headers, config) {
                     if(res.code != 200) {
                         var toast = $mdToast.simple()

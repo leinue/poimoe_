@@ -6,10 +6,12 @@
   "dependencies": {
     "connect": "^3.4.0",
     "mongoose": "^4.2.6",
-    "nodemailer": "^1.10.0",
+    "nodemailer": "^2.3.0",
     "restify": "^4.0.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemailer": "^2.3.0"
+  },
   "scripts": {
     "test": "node app.js/supervisor app.js"
   },

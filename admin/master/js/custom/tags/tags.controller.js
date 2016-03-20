@@ -38,7 +38,7 @@
             ];
 
             vm.getAll = function() {
-                TagService.getAll(1, 100)
+                TagService.getAll(1, 1000)
                 .success(function(res, status, headers, config) {
                     if(res.code != 200) {
                         var toast = $mdToast.simple()
@@ -63,7 +63,7 @@
             }
 
             vm.getAllDeleted = function() {
-                TagService.getDeleted(1, 10)
+                TagService.getDeleted(1, 1000)
                 .success(function(res, status, headers, config) {
                     if(res.code != 200) {
                         var toast = $mdToast.simple()

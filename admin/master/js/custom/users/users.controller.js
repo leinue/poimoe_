@@ -35,7 +35,7 @@
 
             vm.getAll = function() {
 
-                UserService.getAll(1, 10)
+                UserService.getAll(1, 1000)
                 .success(function(res, status, headers, config) {
                     if(res.code != 200) {
                         var toast = $mdToast.simple()
@@ -62,7 +62,7 @@
 
             vm.getAllDeleted = function() {
 
-                UserService.getUserDeleted(1, 10)
+                UserService.getUserDeleted(1, 1000)
                 .success(function(res, status, headers, config) {
                     if(res.code != 200) {
                         var toast = $mdToast.simple()
@@ -89,7 +89,7 @@
 
             vm.getAllBlocked = function() {
 
-                UserService.getUserBlocked(1, 10)
+                UserService.getUserBlocked(1, 1000)
                 .success(function(res, status, headers, config) {
                     if(res.code != 200) {
                         var toast = $mdToast.simple()

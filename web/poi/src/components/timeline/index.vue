@@ -216,6 +216,7 @@
 		background-size: cover;
 		background-repeat: no-repeat;
 		cursor: zoom-in;
+		background-position: center center;
 	}
 
 	.timeline-new-section:hover {
