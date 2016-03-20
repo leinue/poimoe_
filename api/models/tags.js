@@ -49,7 +49,7 @@ module.exports = {
     };
 
     tagsSchema.statics.findAll = function(page, count, cb) {
-      return this._find(page, count, false, cb);
+      return this._find(page, 100000, false, cb);
     };
 
     tagsSchema.statics.findAllRemoved = function(page, count, cb) {
