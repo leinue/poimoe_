@@ -566,8 +566,8 @@ module.exports = {
 
       var count = 6;
       return this.find({
-        isDeleted: false
-        // isRepost: false
+        isDeleted: false,
+        isRepost: false
       }).sort({
         favouritesCount: -1,
         repostCount: -1
