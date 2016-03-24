@@ -34,7 +34,7 @@ var index = {
       };
 
       if(!isHasNoneAuthRoute) {
-        res.send(util.retMsg(4001, "用户未登录或无权限，请重新登录"));            
+        res.send(util.retMsg(4001, "用户未登录或无权限，请重新登录"));         
       }else {
         return next();
       }
@@ -93,27 +93,29 @@ var index = {
 
             if(auth.length === 0) {
               res.send(util.retMsg(401, "无权限访问当前资源"));
-            }
-
-            var authList = auth[0].rightsList;
-
-            var hadAuth = false;
-            var AuthName = '';
-
-            for (var i = 0; i < authList.length; i++) {
-              var currentAuth = authList[i];
-              var router = currentAuth.router;
-
-              if(router == reqRoute) {
-                hadAuth  = true;
-                break;
-              }
-            };
-
-            if(!hadAuth) {
-              res.send(util.retMsg(401, "无权限访问当前资源"));
             }else {
-              next();
+
+              var authList = auth[0].rightsList;
+
+              var hadAuth = false;
+              var AuthName = '';
+
+              for (var i = 0; i < authList.length; i++) {
+                var currentAuth = authList[i];
+                var router = currentAuth.router;
+
+                if(router == reqRoute) {
+                  hadAuth  = true;
+                  break;
+                }
+              };
+
+              if(!hadAuth) {
+                res.send(util.retMsg(401, "无权限访问当前资源"));
+              }else {
+                next();
+              }
+
             }
 
           });

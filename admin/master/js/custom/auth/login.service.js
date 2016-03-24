@@ -87,6 +87,7 @@
               var g = group[i];
               if((g.name === 'root' && g.code === '100') || g.code === '101') {
                 isRoot = true;
+                console.log(isRoot);
                 break;
               }
             };
@@ -94,6 +95,8 @@
             if(isRoot) {
               localStorage.auth = true;
               localStorage.isRoot = true;
+            }else {
+              localStorage.isRoot = false;
             }
 
           }
