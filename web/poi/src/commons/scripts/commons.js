@@ -241,7 +241,7 @@ module.exports = {
 		localStorage.photo = real.photo;
 		localStorage.reLogin = true;
 		if(localStorage.photo == '') {
-			localStorage.photo = 'https://pic1.zhimg.com/da8e974dc_l.jpg';
+			localStorage.photo = 'http://image.poimoe.com/upload/default/photo.png';
 		}
 		localStorage.introduction = real.intro;
 		if(localStorage.introduction == '') {
