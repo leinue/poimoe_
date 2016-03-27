@@ -1,5 +1,5 @@
-h3 标签管理
-.container-md(style='max-width:100%' ng-controller="TagsController as tags")
+h3 房间管理
+.container-md(style='max-width:100%' ng-controller="RoomsController as rooms")
   .card(style='box-shadow:none')
     md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%;padding:0px')
       md-tabs(md-dynamic-height='', md-border-bottom='')
@@ -7,41 +7,41 @@ h3 标签管理
           md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;')
           // START panel
           .panel.panel-default
-            .panel-heading 标签管理 | 
-              small 标签基本信息管理
+            .panel-heading 房间管理 | 
+              small 房间基本信息管理
             .panel-body
               div
                 table.row-border.hover(datatable='ng')
                   thead
                     tr
-                      th 标签名
+                      th 房间名
                       th 描述
                       th 引用次数
                       th 创建时间
                       th 操作
                       th(check-all)
-                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.isSelectAll', ng-change="tags.toggleSelectAll()")
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='rooms.isSelectAll', ng-change="rooms.toggleSelectAll()")
                   tbody
-                    tr(ng-repeat="(key, tag) in tags.tagsList")
+                    tr(ng-repeat="(key, tag) in rooms.roomsList")
                       td {{tag.name}}
                       td {{tag.description}}
                       td {{tag.citeCount}}
                       td {{tag.createdAt}}
                       td
-                        md-select(ng-model='tags.tagsingleSelectCtrl.name[tag._id]', placeholder='操作')
-                          md-option(ng-repeat='name in tags.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, tag, key)") {{name.val}}                          
+                        md-select(ng-model='rooms.roomsingleSelectCtrl.name[tag._id]', placeholder='操作')
+                          md-option(ng-repeat='name in rooms.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, tag, key)") {{name.val}}                          
                       td
-                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.tagsSelected[tag._id]', ng-change="tags.selectThisTag(tag._id)")
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='rooms.roomsSelected[tag._id]', ng-change="rooms.selectThisTag(tag._id)")
             .panel-footer
               .row
                 .col-lg-10
                 .col-lg-2
                   .input-group.pull-right
-                    md-select(ng-model='tags.selectCtrl.name', placeholder='操作')
-                      md-option(ng-repeat='name in tags.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)", ng-hide='name.val == "编辑"') {{name.val}}
+                    md-select(ng-model='rooms.selectCtrl.name', placeholder='操作')
+                      md-option(ng-repeat='name in rooms.selectCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)", ng-hide='name.val == "编辑"') {{name.val}}
 
         // Dialog inline template for demo
-        script(type='text/ng-template', id='tags_detail.tmpl.html').
+        script(type='text/ng-template', id='rooms_detail.tmpl.html').
           <md-dialog aria-label="{{title}}">
           <form>
             <md-toolbar>
@@ -59,13 +59,13 @@ h3 标签管理
                   <div class="col-sm-12">
                      <div class="mda-form-group">
                         <input ng-model="tag.name" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
-                        <label>标签名</label>
+                        <label>房间名</label>
                      </div>
                   </div>
                   <div class="col-sm-12">
                      <div class="mda-form-group">
                         <input ng-model="tag.description" tabindex="0" aria-invalid="false" class="mda-form-control" />
-                        <label>标签描述</label>
+                        <label>房间描述</label>
                      </div>
                   </div>
                </div>
@@ -106,39 +106,39 @@ h3 标签管理
           </form>
           </md-dialog>
 
-        md-tab(label='被删标签')
+        md-tab(label='被删房间')
           md-content.md-padding(style='background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;')
           // START panel
           .panel.panel-default
-            .panel-heading 标签管理 | 
-              small 被删除标签信息管理
+            .panel-heading 房间管理 | 
+              small 被删除房间信息管理
             .panel-body
               div
                 table.row-border.hover(datatable='ng')
                   thead
                     tr
-                      th 标签名
+                      th 房间名
                       th 描述
                       th 引用次数
                       th 创建时间
                       th 操作
                       th(check-all)
-                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.isDeletedSelectAll', ng-change="tags.toggleSelectAllDeleted()")
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='rooms.isDeletedSelectAll', ng-change="rooms.toggleSelectAllDeleted()")
                   tbody
-                    tr(ng-repeat="(key, tag) in tags.tagsDeletedList")
+                    tr(ng-repeat="(key, tag) in rooms.roomsDeletedList")
                       td {{tag.name}}
                       td {{tag.description}}
                       td {{tag.citeCount}}
                       td {{tag.createdAt}}
                       td
-                        md-select(ng-model='tags.selectDeletedCtrl.name[tag._id]', placeholder='操作')
-                          md-option(ng-repeat='name in tags.selectDeletedCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, tag, key)") {{name.val}}                          
+                        md-select(ng-model='rooms.selectDeletedCtrl.name[tag._id]', placeholder='操作')
+                          md-option(ng-repeat='name in rooms.selectDeletedCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event, tag, key)") {{name.val}}                          
                       td
-                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='tags.tagsDeletedSelected[tag._id]', ng-change="tags.selectThisDeletedTag(tag._id)")
+                        md-checkbox.md-primary(md-no-ink='', aria-label='Checkbox No Ink', ng-model='rooms.roomsDeletedSelected[tag._id]', ng-change="rooms.selectThisDeletedTag(tag._id)")
             .panel-footer
               .row
                 .col-lg-10
                 .col-lg-2
                   .input-group.pull-right
-                    md-select(ng-model='tags.selectDeletedCtrl.name', placeholder='操作')
-                      md-option(ng-repeat='name in tags.selectDeletedCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)") {{name.val}}
+                    md-select(ng-model='rooms.selectDeletedCtrl.name', placeholder='操作')
+                      md-option(ng-repeat='name in rooms.selectDeletedCtrl.names', value='{{name.val}}', ng-click="name.onClicked($event)") {{name.val}}

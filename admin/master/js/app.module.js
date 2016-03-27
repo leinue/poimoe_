@@ -32,6 +32,7 @@
             'app.users',
             'app.themes',
             'app.tags',
+            'app.rooms',
             'auth.login',
             'auth.noAuth',
             'app.group',

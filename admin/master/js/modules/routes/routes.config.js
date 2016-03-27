@@ -128,7 +128,12 @@
             templateUrl: helper.basepath( 'data/tags.html' ),
             resolve: helper.resolveFor('datatables')
           })
-          //
+          .state('app.roomsmgr', {
+            url: '/rooms',
+            title: '房间管理',
+            templateUrl: helper.basepath( 'data/rooms.html' ),
+            resolve: helper.resolveFor('datatables')
+          })          //
           // 官网管理 
           // -----------------------------------
           .state('app.website', {

@@ -26,7 +26,8 @@
     "submenu": [
       {"text": "用户管理",     "sref": "app.usersmgr"},
       {"text": "投稿管理",     "sref": "app.themesmgr"},
-      {"text": "标签管理",     "sref": "app.tagsmgr"}
+      {"text": "标签管理",     "sref": "app.tagsmgr"},
+      {"text": "房间管理",     "sref": "app.roomsmgr"}
     ]
   },
   {
