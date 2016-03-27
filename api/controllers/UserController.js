@@ -175,7 +175,8 @@ var index = {
             email: thisEmail,
             username: util.randomString(6),
             password: thisPwd,
-            group: [groupId]
+            group: [groupId],
+            photo: 'http://image.poimoe.com/upload/default/photo.png'
           });
 
           user.save(function(err, u) {

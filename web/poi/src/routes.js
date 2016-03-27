@@ -39,6 +39,10 @@ module.exports = function(router){
 			name: 'login',
 			component: require('./components/users/login.vue')
 		},
+		'/login/:account': {
+			name: 'login',
+			component: require('./components/users/login.vue')
+		},
 		'/register': {
 			name: 'register',
 			component: require('./components/users/signin.vue')

@@ -138,6 +138,13 @@
 		},
 
 		created() {
+			var account = router._currentRoute.params.account;
+
+			if(account != undefined) {
+				this.$set('email', account);
+				this.$set('password', '');
+			}
+
 		}
 		
 	}

@@ -90,9 +90,9 @@
 				window.history.go(-1);
 			},
 
-			toLogin: function() {
+			toLogin: function(account) {
 				util.cancelActiveMenu();
-				router.go('/login');
+				router.go('/login/' + account);
 			},
 
 			toIndex: function() {
@@ -139,7 +139,7 @@
 
 					if(data.code === 200) {
 						util.messageBox(data.message + '，请登录');
-						_this.toLogin();
+						_this.toLogin(_this.email);
 						return false;
 					}
 
