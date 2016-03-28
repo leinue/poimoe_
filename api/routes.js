@@ -24,52 +24,52 @@ module.exports = {
 
     server.get('/send', function(req, res, next) {
 
-        var nodemailer = require('nodemailer');
+        // var nodemailer = require('nodemailer');
 
-        // create reusable transporter object using the default SMTP transport
-        var transporter = nodemailer.createTransport('smtps://user%40gmail.com:pass@smtp.gmail.com');
+        // // create reusable transporter object using the default SMTP transport
+        // var transporter = nodemailer.createTransport('smtps://user%40gmail.com:pass@smtp.gmail.com');
 
-        var smtpConfig = {
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true, // use SSL
-            auth: {
-                user: 'user@gmail.com',
-                pass: 'pass'
-            }
-        };
+        // var smtpConfig = {
+        //     host: 'smtp.gmail.com',
+        //     port: 465,
+        //     secure: true, // use SSL
+        //     auth: {
+        //         user: 'user@gmail.com',
+        //         pass: 'pass'
+        //     }
+        // };
 
-        var poolConfig = {
-            pool: true,
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true, // use SSL
-            auth: {
-                user: 'user@gmail.com',
-                pass: 'pass'
-            }
-        };
+        // var poolConfig = {
+        //     pool: true,
+        //     host: 'smtp.gmail.com',
+        //     port: 465,
+        //     secure: true, // use SSL
+        //     auth: {
+        //         user: 'user@gmail.com',
+        //         pass: 'pass'
+        //     }
+        // };
 
-        var directConfig = {
-            name: 'hostname' // must be the same that can be reverse resolved by DNS for your IP
-        };
+        // var directConfig = {
+        //     name: 'hostname' // must be the same that can be reverse resolved by DNS for your IP
+        // };
 
-        // setup e-mail data with unicode symbols
-        var mailOptions = {
-            from: '"Fred Foo 👥" <86705096@qq.com>', // sender address
-            to: 'bar@blurdybloop.com, 597055914@qq.com', // list of receivers
-            subject: 'Hello ✔', // Subject line
-            text: 'Hello world 🐴', // plaintext body
-            html: '<b>Hello world 🐴</b>' // html body
-        };
+        // // setup e-mail data with unicode symbols
+        // var mailOptions = {
+        //     from: '"Fred Foo 👥" <86705096@qq.com>', // sender address
+        //     to: 'bar@blurdybloop.com, 597055914@qq.com', // list of receivers
+        //     subject: 'Hello ✔', // Subject line
+        //     text: 'Hello world 🐴', // plaintext body
+        //     html: '<b>Hello world 🐴</b>' // html body
+        // };
 
-        // send mail with defined transport object
-        transporter.sendMail(mailOptions, function(error, info){
-            if(error){
-                return console.log(error);
-            }
-            console.log('Message sent: ' + info.response);
-        });
+        // // send mail with defined transport object
+        // transporter.sendMail(mailOptions, function(error, info){
+        //     if(error){
+        //         return console.log(error);
+        //     }
+        //     console.log('Message sent: ' + info.response);
+        // });
 
     });
 
