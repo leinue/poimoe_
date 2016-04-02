@@ -20,8 +20,12 @@
         <span class="glyphicon glyphicon-search"></span>
     </div>
 
-	<div v-show="isLogin == 'true'" title="发布CG" @click="pathToNewCGPage()" id="newcg-button" class="type-circle header-circle right">
+	<div v-show="isLogin == 'true'" title="上传CG" @click="pathToNewCGPage()" id="newcg-button" class="type-circle header-circle right">
         <span class="glyphicon glyphicon-plus"></span>
+    </div>
+
+	<div v-show="isLogin == 'true'" title="绘制CG" @click="pathToKaku()" id="drawcg-button" class="type-circle header-circle right">
+        <span class="glyphicon glyphicon-pencil"></span>
     </div>
 
 	<div v-show="isLogin == 'true'" @click="showMyProfile()" id="userprofile-button" class="type-circle header-circle right">
@@ -242,6 +246,10 @@
 			pathToNewCGPage: function() {
 				util.cancelActiveMenu();
 				router.go('/cg/new');
+			},
+
+			pathToKaku: function() {
+				window.location.href = 'http://kaku.poimoe.com';
 			},
 
 			toLogin: function() {
@@ -761,6 +769,11 @@
 
 	#newcg-button {
 		right: 170px!important;
+		top: 15px;
+	}
+
+	#drawcg-button {
+		right: 220px!important;
 		top: 15px;
 	}
 
