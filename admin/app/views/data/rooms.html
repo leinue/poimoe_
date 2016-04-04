@@ -1,0 +1,185 @@
+<h3>房间管理</h3>
+<div style="max-width:100%" ng-controller="RoomsController as rooms" class="container-md">
+   <div style="box-shadow:none" class="card">
+      <md-content style="background: rgb(245, 247, 250) none repeat scroll 0% 0%;padding:0px" class="md-padding">
+         <md-tabs md-dynamic-height="" md-border-bottom="">
+            <md-tab label="基本信息">
+               <md-content style="background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;" class="md-padding"></md-content>
+               <!-- START panel-->
+               <div class="panel panel-default">
+                  <div class="panel-heading">房间管理 |
+                     <small>房间基本信息管理</small>
+                  </div>
+                  <div class="panel-body">
+                     <div>
+                        <table datatable="ng" class="row-border hover">
+                           <thead>
+                              <tr>
+                                 <th>房间名</th>
+                                 <th>描述</th>
+                                 <th>引用次数</th>
+                                 <th>创建时间</th>
+                                 <th>操作</th>
+                                 <th check-all="check-all">
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="rooms.isSelectAll" ng-change="rooms.toggleSelectAll()" class="md-primary"></md-checkbox>
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr ng-repeat="(key, tag) in rooms.roomsList">
+                                 <td>{{tag.name}}</td>
+                                 <td>{{tag.description}}</td>
+                                 <td>{{tag.citeCount}}</td>
+                                 <td>{{tag.createdAt}}</td>
+                                 <td>
+                                    <md-select ng-model="rooms.roomsingleSelectCtrl.name[tag._id]" placeholder="操作">
+                                       <md-option ng-repeat="name in rooms.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, tag, key)">{{name.val}}</md-option>
+                                    </md-select>
+                                 </td>
+                                 <td>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="rooms.roomsSelected[tag._id]" ng-change="rooms.selectThisTag(tag._id)" class="md-primary"></md-checkbox>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+                  <div class="panel-footer">
+                     <div class="row">
+                        <div class="col-lg-10"></div>
+                        <div class="col-lg-2">
+                           <div class="input-group pull-right">
+                              <md-select ng-model="rooms.selectCtrl.name" placeholder="操作">
+                                 <md-option ng-repeat="name in rooms.selectCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)" ng-hide="name.val == &quot;编辑&quot;">{{name.val}}</md-option>
+                              </md-select>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </md-tab>
+            <!-- Dialog inline template for demo-->
+            <script type="text/ng-template" id="rooms_detail.tmpl.html">
+               <md-dialog aria-label="{{title}}">
+               <form>
+                 <md-toolbar>
+                   <div class="md-toolbar-tools">
+                     <h2>{{tag.tagname}} 的资料</h2>
+                     <span flex></span>
+                     <md-button class="md-icon-button" ng-click="answer('not applicable')">
+                       <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                     </md-button>
+                   </div>
+                 </md-toolbar>
+                 <md-dialog-content>
+                   <div class="card-body">
+                    <div class="row">
+                       <div class="col-sm-12">
+                          <div class="mda-form-group">
+                             <input ng-model="tag.name" required="" tabindex="0" aria-required="true" aria-invalid="false" class="mda-form-control" />
+                             <label>房间名</label>
+                          </div>
+                       </div>
+                       <div class="col-sm-12">
+                          <div class="mda-form-group">
+                             <input ng-model="tag.description" tabindex="0" aria-invalid="false" class="mda-form-control" />
+                             <label>房间描述</label>
+                          </div>
+                       </div>
+                    </div>
+                    <div class="row">
+                       <div class="col-sm-4">
+                          <div class="mda-form-group">
+                             <input ng-model="tag.citeCount" disabled tabindex="0" aria-invalid="false" class="mda-form-control" />
+                             <label>引用次数</label>
+                          </div>
+                       </div>
+                       <div class="col-sm-4">
+                          <div class="mda-form-group">
+                             <input ng-model="tag.createdAt" disabled tabindex="0" aria-invalid="false" class="mda-form-control" />
+                             <label>创建时间</label>
+                          </div>
+                       </div>
+                       <div class="col-sm-4">
+                          <div class="mda-form-group">
+                             <input ng-model="tag.updatedAt" disabled tabindex="0" aria-invalid="false" class="mda-form-control" />
+                             <label>更新时间</label>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+                 </md-dialog-content>
+                 <div class="md-actions" layout="row">
+                   <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" hide show-md>
+                     More on Wikipedia
+                   </md-button>
+                   <span flex></span>
+                   <md-button ng-click="cancel()" class="md-primary">
+                     关闭
+                   </md-button>
+                   <md-button ng-click="confirmToModifyThisTag()" class="md-primary">
+                     保存
+                   </md-button>
+                 </div>
+               </form>
+               </md-dialog>
+            </script>
+            <md-tab label="被删房间">
+               <md-content style="background: rgb(245, 247, 250) none repeat scroll 0% 0%; padding-left: 0px; padding-right: 0px;" class="md-padding"></md-content>
+               <!-- START panel-->
+               <div class="panel panel-default">
+                  <div class="panel-heading">房间管理 |
+                     <small>被删除房间信息管理</small>
+                  </div>
+                  <div class="panel-body">
+                     <div>
+                        <table datatable="ng" class="row-border hover">
+                           <thead>
+                              <tr>
+                                 <th>房间名</th>
+                                 <th>描述</th>
+                                 <th>引用次数</th>
+                                 <th>创建时间</th>
+                                 <th>操作</th>
+                                 <th check-all="check-all">
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="rooms.isDeletedSelectAll" ng-change="rooms.toggleSelectAllDeleted()" class="md-primary"></md-checkbox>
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr ng-repeat="(key, tag) in rooms.roomsDeletedList">
+                                 <td>{{tag.name}}</td>
+                                 <td>{{tag.description}}</td>
+                                 <td>{{tag.citeCount}}</td>
+                                 <td>{{tag.createdAt}}</td>
+                                 <td>
+                                    <md-select ng-model="rooms.selectDeletedCtrl.name[tag._id]" placeholder="操作">
+                                       <md-option ng-repeat="name in rooms.selectDeletedCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event, tag, key)">{{name.val}}</md-option>
+                                    </md-select>
+                                 </td>
+                                 <td>
+                                    <md-checkbox md-no-ink="" aria-label="Checkbox No Ink" ng-model="rooms.roomsDeletedSelected[tag._id]" ng-change="rooms.selectThisDeletedTag(tag._id)" class="md-primary"></md-checkbox>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+                  <div class="panel-footer">
+                     <div class="row">
+                        <div class="col-lg-10"></div>
+                        <div class="col-lg-2">
+                           <div class="input-group pull-right">
+                              <md-select ng-model="rooms.selectDeletedCtrl.name" placeholder="操作">
+                                 <md-option ng-repeat="name in rooms.selectDeletedCtrl.names" value="{{name.val}}" ng-click="name.onClicked($event)">{{name.val}}</md-option>
+                              </md-select>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </md-tab>
+         </md-tabs>
+      </md-content>
+   </div>
+</div>
