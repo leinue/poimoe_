@@ -209,8 +209,6 @@
 			};
 		},
 
-		//ze
-
 		methods: {
 			init: function() {
 				this.isLogin = localStorage.login;
@@ -581,31 +579,6 @@
 			}, 1);
 
 			setInterval(function() {
-
-				// var login = localStorage.login;
-
-				// console.log(login);
-
-				// if(login == 'true') {
-
-				// 	var pm = document.getElementById('profile-menu');
-
-				// 	var pmLi = pm.getElementsByTagName('li');
-
-				// 	for (var i = 0; i < pmLi.length; i++) {
-				// 		var curr = pmLi[i];
-
-				// 		var currStyle = curr.getAttribute('style');
-
-				// 		if(currStyle != null ){
-				// 			if(currStyle.indexOf('none') != -1) {
-				// 				curr.setAttribute('style', '');
-				// 			}
-				// 		}
-
-				// 	};
-
-				// }
 
 			}, 1000);
 		}
