@@ -209,6 +209,8 @@
 			};
 		},
 
+		//ze
+
 		methods: {
 			init: function() {
 				this.isLogin = localStorage.login;
