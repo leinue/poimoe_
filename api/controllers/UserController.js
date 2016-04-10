@@ -33,6 +33,8 @@ var index = {
         }
       };
 
+      //
+
       if(!isHasNoneAuthRoute) {
         res.send(util.retMsg(4001, "用户未登录或无权限，请重新登录"));         
       }else {
