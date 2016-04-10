@@ -108,7 +108,7 @@ var ColorPicker = function(options) {
         context.fill();
 
 
-        pickerCanvas.addEventListener( 'mousedown', function() {
+        pickerCanvas.addEventListener( 'mousedown', function( event ) {
 
             pickerMouseDown = true;
             var mousePos = component.getMousePosition( pickerCanvas, event ),
