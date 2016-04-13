@@ -857,6 +857,8 @@
 
         	},
 
+        	//
+
         	drawImageOnCanvas: function(src, canvas, cb) {
     			var image = new Image();
 
