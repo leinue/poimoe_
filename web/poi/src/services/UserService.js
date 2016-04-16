@@ -27,6 +27,8 @@ module.exports = {
 				return _this.$http.get(baseUrl + 'user/favourites/select/' + uid + '/' + page + '/' + count);
 			},
 
+			//
+
 			addFavourite: function(uid, tid) {
 				return _this.$http.get(baseUrl + 'user/favourites/add/' + uid + '/' + tid);
 			},
