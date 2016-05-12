@@ -131,6 +131,8 @@ router.beforeEach(function () {
 
 });
 
+//
+
 router.afterEach(function() {
 	var currentPath = router._currentRoute.path;
 });
