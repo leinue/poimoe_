@@ -17,22 +17,6 @@ db.once('open', function(callback) {
 
 });
 
-
-var clickFun = {
-	'click': function() {
-		console.log('click');
-	},
-
-	'dblClick': function() {
-		console.log('dblClick');
-	}
-}
-
-var clickType
-
-clickFun[clickType]();
-
-
 //创建restify服务器
 var server = restify.createServer({
 	name: 'poimoe'

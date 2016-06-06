@@ -1,1 +1,80 @@
-"use strict";!function(){function e(e,n,i,o){angular.forEach(n.split(" "),function(n){window.google.maps.event.addListener(i,n,function(i){o.triggerHandler("map-"+n,i),e.$$phase||e.$apply()})})}function n(n,o){i.directive(n,[function(){return{restrict:"A",link:function(i,c,a){i.$watch(a[n],function(n){n&&e(i,o,n,c)})}}}])}var i=angular.module("ui.map",["ui.event"]);i.value("uiMapConfig",{}).directive("uiMap",["uiMapConfig","$parse",function(n,i){var o="bounds_changed center_changed click dblclick drag dragend dragstart heading_changed idle maptypeid_changed mousemove mouseout mouseover projection_changed resize rightclick tilesloaded tilt_changed zoom_changed",c=n||{};return{restrict:"A",link:function(n,a,u){var d=angular.extend({},c,n.$eval(u.uiOptions)),t=new window.google.maps.Map(a[0],d),l=i(u.uiMap);l.assign(n,t),e(n,o,t,a)}}}]),i.value("uiMapInfoWindowConfig",{}).directive("uiMapInfoWindow",["uiMapInfoWindowConfig","$parse","$compile",function(n,i,o){var c="closeclick content_change domready position_changed zindex_changed",a=n||{};return{link:function(n,u,d){var t=angular.extend({},a,n.$eval(d.uiOptions));t.content=u[0];var l=i(d.uiMapInfoWindow),r=l(n);r||(r=new window.google.maps.InfoWindow(t),l.assign(n,r)),e(n,c,r,u),u.replaceWith("<div></div>");var g=r.open;r.open=function(e,i,c,a,d,t){o(u.contents())(n),g.call(r,e,i,c,a,d,t)}}}}]),n("uiMapMarker","animation_changed click clickable_changed cursor_changed dblclick drag dragend draggable_changed dragstart flat_changed icon_changed mousedown mouseout mouseover mouseup position_changed rightclick shadow_changed shape_changed title_changed visible_changed zindex_changed"),n("uiMapPolyline","click dblclick mousedown mousemove mouseout mouseover mouseup rightclick"),n("uiMapPolygon","click dblclick mousedown mousemove mouseout mouseover mouseup rightclick"),n("uiMapRectangle","bounds_changed click dblclick mousedown mousemove mouseout mouseover mouseup rightclick"),n("uiMapCircle","center_changed click dblclick mousedown mousemove mouseout mouseover mouseup radius_changed rightclick"),n("uiMapGroundOverlay","click dblclick")}();
+'use strict';
+(function () {
+  var app = angular.module('ui.map', ['ui.event']);
+  function bindMapEvents(scope, eventsStr, googleObject, element) {
+    angular.forEach(eventsStr.split(' '), function (eventName) {
+      window.google.maps.event.addListener(googleObject, eventName, function (event) {
+        element.triggerHandler('map-' + eventName, event);
+        if (!scope.$$phase) {
+          scope.$apply();
+        }
+      });
+    });
+  }
+  app.value('uiMapConfig', {}).directive('uiMap', [
+    'uiMapConfig',
+    '$parse',
+    function (uiMapConfig, $parse) {
+      var mapEvents = 'bounds_changed center_changed click dblclick drag dragend ' + 'dragstart heading_changed idle maptypeid_changed mousemove mouseout ' + 'mouseover projection_changed resize rightclick tilesloaded tilt_changed ' + 'zoom_changed';
+      var options = uiMapConfig || {};
+      return {
+        restrict: 'A',
+        link: function (scope, elm, attrs) {
+          var opts = angular.extend({}, options, scope.$eval(attrs.uiOptions));
+          var map = new window.google.maps.Map(elm[0], opts);
+          var model = $parse(attrs.uiMap);
+          model.assign(scope, map);
+          bindMapEvents(scope, mapEvents, map, elm);
+        }
+      };
+    }
+  ]);
+  app.value('uiMapInfoWindowConfig', {}).directive('uiMapInfoWindow', [
+    'uiMapInfoWindowConfig',
+    '$parse',
+    '$compile',
+    function (uiMapInfoWindowConfig, $parse, $compile) {
+      var infoWindowEvents = 'closeclick content_change domready ' + 'position_changed zindex_changed';
+      var options = uiMapInfoWindowConfig || {};
+      return {
+        link: function (scope, elm, attrs) {
+          var opts = angular.extend({}, options, scope.$eval(attrs.uiOptions));
+          opts.content = elm[0];
+          var model = $parse(attrs.uiMapInfoWindow);
+          var infoWindow = model(scope);
+          if (!infoWindow) {
+            infoWindow = new window.google.maps.InfoWindow(opts);
+            model.assign(scope, infoWindow);
+          }
+          bindMapEvents(scope, infoWindowEvents, infoWindow, elm);
+          elm.replaceWith('<div></div>');
+          var _open = infoWindow.open;
+          infoWindow.open = function open(a1, a2, a3, a4, a5, a6) {
+            $compile(elm.contents())(scope);
+            _open.call(infoWindow, a1, a2, a3, a4, a5, a6);
+          };
+        }
+      };
+    }
+  ]);
+  function mapOverlayDirective(directiveName, events) {
+    app.directive(directiveName, [function () {
+        return {
+          restrict: 'A',
+          link: function (scope, elm, attrs) {
+            scope.$watch(attrs[directiveName], function (newObject) {
+              if (newObject) {
+                bindMapEvents(scope, events, newObject, elm);
+              }
+            });
+          }
+        };
+      }]);
+  }
+  mapOverlayDirective('uiMapMarker', 'animation_changed click clickable_changed cursor_changed ' + 'dblclick drag dragend draggable_changed dragstart flat_changed icon_changed ' + 'mousedown mouseout mouseover mouseup position_changed rightclick ' + 'shadow_changed shape_changed title_changed visible_changed zindex_changed');
+  mapOverlayDirective('uiMapPolyline', 'click dblclick mousedown mousemove mouseout mouseover mouseup rightclick');
+  mapOverlayDirective('uiMapPolygon', 'click dblclick mousedown mousemove mouseout mouseover mouseup rightclick');
+  mapOverlayDirective('uiMapRectangle', 'bounds_changed click dblclick mousedown mousemove mouseout mouseover ' + 'mouseup rightclick');
+  mapOverlayDirective('uiMapCircle', 'center_changed click dblclick mousedown mousemove ' + 'mouseout mouseover mouseup radius_changed rightclick');
+  mapOverlayDirective('uiMapGroundOverlay', 'click dblclick');
+}());
