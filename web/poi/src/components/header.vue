@@ -519,7 +519,7 @@
 				};
 
 				es.onerror = function(e) {
-					util.handleError('comet服务出错');
+					util.messageBox('comet服务关闭');
 				};
 
 				es.onopen = function(e) {}
